@@ -1,0 +1,69 @@
+version: "3.8"
+
+services:
+
+  backend-app:
+    container_name: "backend-app"
+    build: ./backend/app 
+    command: python manage.py runserver 0.0.0.0:8001
+    volumes:
+      - ./backend/app/:/usr/src/app
+    ports:
+      - 8001:8001
+    env_file:
+      - ./backend/.envs/.app.dev
+    depends_on:
+      - db
+    # networks:
+    #   backend_network:
+    #     ipv4_address : 192.168.31.3 
+    hostname: appserver
+
+
+  db:
+    image: postgres:15-alpine
+    env_file: ./backend/.envs/.postgres.dev
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    # networks:
+    #   backend_network:
+    #     ipv4_address : 192.168.31.2
+    # hostname: databaseserver
+
+
+  # nginx:
+  #   container_name: "server-nginx"
+  #   build:
+  #       context: ./backend/nginx/
+  #       dockerfile: Dockerfile -t backend_nginx
+  #   ports:
+  #     - "8080:80" #puerto 8080 del anfitrion , puerto 80 del contenedor
+  #   depends_on:
+  #     - backend-app
+  #   volumes:
+  #     # Update this to wherever you want VS Code to mount the folder of your project
+  #     - .:/workspace:cached
+  #   networks:
+  #     frontend_network:
+  #       ipv4_address: 192.168.3.10
+  #     backend_network:
+  #       ipv4_address: 192.168.31.10
+  #   hostname: nginxserver
+
+
+
+
+# networks:
+#     backend_network:
+#         ipam:
+#             config:
+#                 - subnet: 192.168.31.0/24
+    # frontend_network:
+    #   ipam:
+    #     config:
+    #       - subnet: 192.168.3.0/24
+
+volumes:
+  postgres_data:
