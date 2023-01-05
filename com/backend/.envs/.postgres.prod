@@ -1,0 +1,3 @@
+POSTGRES_DB=patrocinio_prod
+POSTGRES_PASSWORD=R?2zFiAgsM@%w0WmK5iZ
+POSTGRES_USER=patrocinio_api
