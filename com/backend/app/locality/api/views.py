@@ -19,32 +19,31 @@ class LocalityApiViewSet(ModelViewSet):
     permission_classes = [ IsAuthenticated  ] #only authenticated users can access
 
     def get_serializer(self, *args, **kwargs): #select json format
-        if self.action == 'list': #by /api/locality/
+        if self.action == 'list' or self.action == 'create': #by /api/locality/
             return LocalityOneSerializer(*args, **kwargs)
         return LocalityFullSerializer(*args, **kwargs) #else, /api/locality/id
     
-    def get_queryset(self): #select the data from the table
+    def get_queryset(self): #select the detail data from the table
         queryset = super().get_queryset() 
-        if self.action == 'retrive': #by /api/locality/id
+        if self.action == 'retrieve': #by /api/locality/id
             #select_related is a method that allows you to select the data from the table
             queryset=queryset.select_related('province','province__nationality')
         #else is a "list" -> /api/locality/
-        return queryset #return SQL query  
+        return queryset #return SQL query   
         
         
 class ProvinceApiViewSet(ModelViewSet):
     queryset = Province.objects.all()
-    serializer_class = ProvinceFullSerializer
     permission_classes = [ IsAuthenticated  ]
 
     def get_serializer(self, *args, **kwargs):
-        if self.action == 'list':
+        if self.action == 'list' or self.action == 'create':
             return ProvinceOneSerializer(*args, **kwargs)
         return ProvinceFullSerializer(*args, **kwargs)
 
     def get_queryset(self): 
         queryset = super().get_queryset() 
-        if self.action == 'retrive':
+        if self.action == 'retrieve':
             queryset = queryset.prefetch_related( 
                 Prefetch('localities') 
             )
@@ -56,13 +55,13 @@ class NationalityApiViewSet(ModelViewSet):
     permission_classes = [ IsAuthenticated  ]
 
     def get_serializer(self, *args, **kwargs):
-        if self.action == 'list':
+        if self.action == 'list' or self.action == 'create'                 :
             return NationalityOneSerializer(*args, **kwargs)
         return NationalityFullSerializer(*args, **kwargs)
 
     def get_queryset(self): 
         queryset = super().get_queryset()
-        if self.action == 'list':
+        if self.action == 'retrieve':
             queryset = queryset.prefetch_related(
                 Prefetch('provinces') 
             )

@@ -11,7 +11,7 @@ class Nationality(models.Model):
 
 class Province(models.Model):
   
-    id = models.AutoField( primary_key=True)  
+    id = models.IntegerField( primary_key=True)  
     name = models.CharField( max_length=100, verbose_name='Provincia' )
     nationality = models.ForeignKey (Nationality, 
                                         on_delete=models.CASCADE,# on_delete attribute specifies the behavior to adopt when the referenced object is deleted.
@@ -21,7 +21,7 @@ class Province(models.Model):
  
   
 class Locality(models.Model):
-    id = models.AutoField( primary_key=True)  
+    id = models.IntegerField( primary_key=True)  
     name = models.CharField( max_length=100, verbose_name='Localidad' )
     province = models.ForeignKey(Province,
                                     related_name='localities',

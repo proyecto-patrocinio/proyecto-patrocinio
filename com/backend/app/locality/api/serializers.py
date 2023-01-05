@@ -15,37 +15,37 @@ class NationalityOneSerializer(ModelSerializer):
 class ProvinceOneSerializer(ModelSerializer):
     class Meta:
         model = Province
-        fields = ('id', 'name', )
+        fields = ('id', 'name', 'nationality',)
         
 
 class LocalityOneSerializer(ModelSerializer): 
     class Meta:
         model = Locality
-        fields = ('id', 'name',)
+        fields = ('id', 'name', 'province',)
 
 #Auxiliary serializers
-class ProvinceAndNationalitySerializer(ModelSerializer): #used in LocalityFullSerializer
-    nationality = NationalityOneSerializer(many=False, read_only=True) #formated json data
-    class Meta: 
-        model = Province 
-        fields = ('id', 'name', 'nationality',)  #fields to show
+# class ProvinceAndNationalitySerializer(ModelSerializer): #used in LocalityFullSerializer
+#     nationality = NationalityOneSerializer(many=False, read_only=True) #formated json data
+#     class Meta: 
+#         model = Province 
+#         fields = ('id', 'name', 'nationality',)  #fields to show
 
 #Details serializers (retrieve)
 class LocalityFullSerializer(ModelSerializer):
-    province = ProvinceAndNationalitySerializer(many=False, read_only=True)
+    province = ProvinceOneSerializer(many=False, read_only=True)
     class Meta:
         model = Locality
-        fields = ('id', 'name', 'province',) 
+        fields = ('id', 'name', 'province',)
 
 class ProvinceFullSerializer(ModelSerializer):
-    localities = LocalityOneSerializer(many=True,)  
+    localities = LocalityOneSerializer(many=True, read_only=True)  
     class Meta:
         model = Province
         fields = ('id', 'name', 'localities',)
         read_only_fields = ('localities',)
 
 class NationalityFullSerializer(ModelSerializer):
-    provinces = ProvinceOneSerializer(many=True)
+    provinces = ProvinceOneSerializer(many=True, read_only=True)
     class Meta:
         model = Nationality
         fields = ('id', 'name','provinces', )

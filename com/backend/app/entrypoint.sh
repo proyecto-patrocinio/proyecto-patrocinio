@@ -23,4 +23,7 @@ python manage.py loaddata locality/load_data/nationality.json
 python manage.py loaddata locality/load_data/province.json 
 python manage.py loaddata locality/load_data/locality.json 
 
+#run test
+python manage.py test
+
 exec "$@"  # execute the command that was passed to docker run
