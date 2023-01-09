@@ -67,7 +67,6 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
           image: proyectopatrocinio/patrocinio
-          tags: ${{ github.sha }}, ${{ github.ref_name }}-${{ github.run_id }}, latest
           registry: docker.io
           dockerfile: com/backend/app/Dockerfile
           directory: com/backend/app          
