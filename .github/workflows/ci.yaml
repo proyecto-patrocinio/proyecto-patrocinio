@@ -3,11 +3,6 @@ name: Continuous Integration
 
 # triggers for our workflow
 on:
-  # opening a pull request to master and develop branch will be a trigger
-  pull_request:
-    branches:
-      - dev
-      - main
   # any code pushed to master and develop branch will also be a trigger
   push:
     branches:
