@@ -43,8 +43,9 @@ jobs:
         
       - name: run test
         run: |
-          source  ./com/backend/app/env/bin/activate
-          python ./com/backend/app/manage.py test          
+          cd ./com/backend/app
+          source  ./env/bin/activate
+          python ./manage.py test          
         env: 
           DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1"
   
