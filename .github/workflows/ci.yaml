@@ -29,10 +29,6 @@ jobs:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }} 
     
-      - uses: actions/setup-python@v4
-        with:
-          python-version: '3.11' 
-
       - name: Set api environment
         run: |
           set > "com/backend/.envs/.app.dev"
