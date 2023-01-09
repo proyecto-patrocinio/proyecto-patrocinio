@@ -1,0 +1,10 @@
+DEBUG=1
+SECRET_KEY=e%ebfx1%5ot@^nqru7!i_705qq7*@30b3-ui5ztoi8$#$p^u1d
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1] db
+SQL_ENGINE=django.db.backends.postgresql
+SQL_DATABASE=patrocinio
+SQL_USER=patrocinio_api
+SQL_PASSWORD=patrocinio_password
+SQL_HOST=db
+SQL_PORT=5432
+DATABASE=postgres

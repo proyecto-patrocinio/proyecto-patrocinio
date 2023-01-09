@@ -1,0 +1,86 @@
+
+name: Continuous Integration
+
+# triggers for our workflow
+on:
+  # opening a pull request to master and develop branch will be a trigger
+  pull_request:
+    branches:
+      - dev
+      - main
+  # any code pushed to master and develop branch will also be a trigger
+  push:
+    branches:
+      - main
+      - dev
+
+
+jobs:
+  health-check-job: # health check job for testing and code formatting check
+    name: Run test
+    runs-on: ubuntu-22.04 # os for running the job
+    container:
+      python:3.11.1-alpine 
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          # Make sure the actual branch is checked out when running on pull requests
+          ref: ${{ github.head_ref }} 
+    
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11' 
+      
+      - name: Check Python version # checking the python version to see if 3.x is installed.
+        run: python --version
+
+      - name: Set api environment
+        run: |
+          set > "com/backend/.envs/.app.dev"
+      
+      - name: virtual environment
+        run: |
+          cd com/backend/app/
+          python -m  venv env
+      
+      - name: Install Dependencies
+        run: |
+          ls
+          cd com/backend/app/
+          source  env/bin/activate
+          python -m pip install --upgrade pip
+          cd com/backend/app/
+          pip install -r requirements.txt
+        
+      - name: run test
+        run: |
+          source  ./com/backend/app/env/bin/activate
+          python ./com/backend/app/manage.py test          
+        env: 
+          DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1"
+  
+
+  cd:
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          # Make sure the actual branch is checked out when running on pull requests
+          ref: ${{ github.head_ref }} 
+      - name: Build and Push
+        uses: mr-smithers-excellent/docker-build-push@v5
+        with:
+          image: proyectopatrocinio/patrocinio
+          tags: ${{ github.sha }}, ${{ github.ref_name }}-${{ github.run_id }}, latest
+          registry: docker.io
+          dockerfile: com/backend/app/Dockerfile
+          directory: com/backend/app          
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+          
+  
