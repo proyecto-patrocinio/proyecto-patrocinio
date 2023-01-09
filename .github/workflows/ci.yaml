@@ -44,7 +44,6 @@ jobs:
           cd com/backend/app/
           source  env/bin/activate
           python -m pip install --upgrade pip
-          cd com/backend/app/
           pip install -r requirements.txt
         
       - name: run test
