@@ -3,7 +3,7 @@ FROM python:3.11.1-alpine
 
 # set work directory
 WORKDIR /usr/src/app
-
+COPY . .
 # set environment variables
 #   - PYTHONDONTWRITEBYTECODE: Evita que Python escriba 
 #      archivos pyc en el disco (equivalente a la python -B opción )
@@ -25,7 +25,7 @@ RUN pip install -r requirements.txt
 
 
 # copy entrypoint.sh
-COPY ./entrypoint.sh .
+
 
 # if you are using windows, you need to run this command
 RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
@@ -35,7 +35,7 @@ RUN dos2unix /usr/src/app/entrypoint.sh
 RUN chmod +x /usr/src/app/entrypoint.sh
 
 # copy project files
-COPY . .
+
 
 
 # run entrypoint.sh
