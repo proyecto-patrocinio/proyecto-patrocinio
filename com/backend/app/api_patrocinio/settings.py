@@ -176,8 +176,8 @@ LOGIN_URL = 'http://localhost:8000/auth/login'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'prietojulieta1999@gmail.com'
-EMAIL_HOST_PASSWORD = 'ngjpuaiehgyxdkyk'
+EMAIL_HOST_USER = '!!!!!!SET-ACCOUNT@gmail.com'
+EMAIL_HOST_PASSWORD = 'SET-PASSWORD-FROM-GOOGLE-APP!!!!!!'
 EMAIL_PORT = 587
 
 # CORS- Cross-Origin
