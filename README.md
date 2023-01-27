@@ -7,7 +7,7 @@
 $ cd com\backend\app
 
 2- Cree una virtual environment de python<br />
-$ venv python -m <name_env> 
+$ python -m venv <name_env> 
 
 
 3- Active el entorno virtual<br />
@@ -21,6 +21,7 @@ $ source name_env/Script/activate (linux)
 
 5- Cree una nueva aplicacion Django<br />
 (name_env) $ python manage.py startapp <mi_aplicación>.
+(En este paso debera exportar manualmente las variable de entrono-> SET DJANGO_ALLOWED_HOSTS="localhost 127.0.0.1")
 
 
 6- Abre el archivo mi_proyecto/settings.py y asegúrate de incluir rest_framework en la lista de INSTALLED_APPS. <br />
@@ -70,7 +71,7 @@ class PeliculaViewSet(viewsets.ModelViewSet):
 </code></pre>
  
 
-10- Anañimos los Urls a urls.py <br />
+10- Añadimos los Urls a urls.py <br />
 Ejemplo:
 <pre><code>
 from django.contrib import admin
