@@ -1,4 +1,4 @@
-"""api_patrocinio URL Configuration
+"""Patrocinio URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -15,12 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from Clients.views import proof
-from .router import router
-
+from Patrocinio.views import proof, probandoTemplate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('clients/',include('Clients.urls')),
-    path('api/', include(router.urls))
+    path('clientes/', include('clientes.urls')),
+    path('saliuy/', proof),
+    path('saludo/', probandoTemplate),
 ]

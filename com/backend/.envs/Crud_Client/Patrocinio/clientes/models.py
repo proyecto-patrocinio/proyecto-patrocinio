@@ -1,15 +1,15 @@
 from django.db import models
-from .choices import *
-
-# Create your models here.
+from clientes.choices import marital_status, housing_type, studies, id_type,state_request,state_consult, sex
+    
+    
 class Client(models.Model):
     idclient = models.PositiveIntegerField( primary_key=True)  
     postal = models.PositiveIntegerField(null=False, verbose_name='Código postal')
-    adress = models.TextField(verbose_name='Dirección')
+    address = models.TextField(verbose_name='Dirección')
     marital_status = models.CharField(choices=marital_status, max_length=1, verbose_name='Estado civil',)
     housing_type = models.CharField( choices=housing_type ,max_length=2, verbose_name='Tipo de Vivienda')  
     studies_idstudies = models.CharField(choices=studies, max_length=2, verbose_name='nivel de educacion alcanzado' )  
-    #locality_idlocality = models.ForeignKey(Locality, on_delete=models.DO_NOTHING, )  
+#    locality_idlocality = models.ForeignKey(Locality, on_delete=models.DO_NOTHING, )  
 #    locality_province = models.ForeignKey('Locality', on_delete=models.DO_NOTHING, )  
 #    locality_nationality = models.ForeignKey('Locality', on_delete=models.DO_NOTHING, to_field='nationality')  
     email = models.EmailField( unique=True,  verbose_name='correo electronico')
@@ -20,11 +20,6 @@ class Client(models.Model):
     birth_date = models.DateField(verbose_name='Fecha de Nacimiento',)
     sex = models.CharField(choices=sex, max_length=1, default='F', verbose_name='Sexo')
 
-    def __str__(self) -> str:
-        return self.idclient, self.postal
-    
-    
-        
 
 class Patrimony(models.Model):
     client_user_id = models.OneToOneField(Client, on_delete=models.CASCADE,primary_key=True)  
@@ -48,7 +43,7 @@ class Family(models.Model):
 class Son(models.Model):
     idson = models.AutoField(primary_key=True)
     age = models.IntegerField(verbose_name='Edad')
-    #locality_idlocality = models.ForeignKey(Locality, on_delete=models.DO_NOTHING, verbose_name='Localidad')  
+   # locality_idlocality = models.ForeignKey(Locality, on_delete=models.DO_NOTHING, verbose_name='Localidad')  
    # locality_province = models.ForeignKey(Locality, on_delete=models.DO_NOTHING,    to_field='province')  
    # locality_nationality = models.ForeignKey(Locality, on_delete=models.DO_NOTHING, to_field='nationality')  
     adess = models.CharField(max_length=45, verbose_name='Dirección')
@@ -57,4 +52,4 @@ class Son(models.Model):
 class Tel(models.Model):
     idtel = models.AutoField( primary_key=True)  
     number = models.IntegerField(verbose_name='Número de Teléfono')
-    Client = models.ForeignKey(Client, on_delete=models.CASCADE, )  
+    Client = models.ForeignKey(Client, on_delete=models.CASCADE, )      
