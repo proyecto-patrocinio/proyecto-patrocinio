@@ -8,3 +8,7 @@ SQL_PASSWORD=secrete_password
 SQL_HOST=db
 SQL_PORT=5432
 DATABASE=postgres
+EMAIL_HOST_USER=patrociniouba1@gmail.com
+EMAIL_HOST_PASSWORD=woohhaievkrqclqv
+CORS_ALLOWED_ORIGINS=http://patrociniouba
+HOSTNAME=localhost:8000

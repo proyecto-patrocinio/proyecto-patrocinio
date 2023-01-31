@@ -20,14 +20,11 @@ from user.api.router import router_user
  
 from dj_rest_auth.registration.views import RegisterView, ConfirmEmailView, VerifyEmailView, ResendEmailVerificationView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
-from dj_rest_auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('auth/account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),
     path('register/', RegisterView.as_view(), name='register'),
     path('auth/', include('dj_rest_auth.urls')),
-    path('login/', LoginView.as_view(), name='login'),
-    path('logout/', LogoutView.as_view(), name='logout'),
     path('admin/', admin.site.urls),
     path('auth/verify-email/',VerifyEmailView.as_view(), name='rest_verify_email'),
     path('auth/confirm-email/', VerifyEmailView.as_view(), name='account_email_verification_sent'),

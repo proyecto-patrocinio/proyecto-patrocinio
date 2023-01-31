@@ -27,7 +27,7 @@ class TestNationality(TestSetUp):
         request_fail = self.factory.post(url,{"id": 1, "name": "Argentina" })
         view_fail =  NationalityApiViewSet.as_view({'post': 'create'})
         response_fail =view_fail(request_fail)
-        self.assertEqual( response_fail.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual( response_fail.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual( response_fail.data['detail'], 'Authentication credentials were not provided.')
     
     def test_get_negative_1(self):
@@ -36,7 +36,7 @@ class TestNationality(TestSetUp):
         request_fail = self.factory.get(url)
         view_fail =  NationalityApiViewSet.as_view({'get': 'list'})
         response_fail =view_fail(request_fail)
-        self.assertEqual( response_fail.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual( response_fail.status_code, status.HTTP_401_UNAUTHORIZED)
         self.assertEqual( response_fail.data['detail'], 'Authentication credentials were not provided.')
 
     def test_get_positive(self):
