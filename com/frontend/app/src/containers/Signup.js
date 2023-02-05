@@ -13,18 +13,71 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../components/Copyright';
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 const theme = createTheme();
 
-export default function SignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
+function Register() {
+const { enqueueSnackbar } = useSnackbar();
+
+  
+  //Conect to API
+  const handleValidation = (event) => {  
+    
+    //get data from form
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const data_username = data.get('username');
+    const data_password = data.get('password');
+    const data_password2 = data.get('password2');
+    const data_email = data.get('email');
+
+    //check if data is empty
+  if (data_username === "" || data_password === "" || data_email === "" || data_password2 === "") {
+    enqueueSnackbar("Complete all fields.", { variant: 'error' });
+  }else {
+   
+    //send data to API
+    const requestURL = 'http://127.0.0.1:8001/register/';
+    const request = new XMLHttpRequest();
+    request.open('POST', requestURL);
+    request.setRequestHeader( 'Content-Type', 'application/json')
+    
+    request.onreadystatechange = () => { // Call a function when the state changes.
+      if (request.readyState === XMLHttpRequest.DONE ) {
+        if( request.status === 201){
+          const mns = JSON.parse(request.response).detail;
+          enqueueSnackbar(mns, { variant: 'success' });
+        }
+        else { 
+          const data = JSON.parse(request.response);
+          if (data.username ) enqueueSnackbar(data.username, { variant: 'error' }) ;
+          if (data.email ) enqueueSnackbar(data.email, { variant: 'error' }) ;
+          if (data.password1 ) enqueueSnackbar(data.password1, { variant: 'error' });
+          if (data.password2 ) enqueueSnackbar(data.password2, { variant: 'error' });
+          if(data.non_field_errors) enqueueSnackbar(data.non_field_errors, { variant: 'error' });
+        }
+      }
+    }
+    request.send(
+        JSON.stringify({
+            "username": data_username,
+            "email": data_email,
+            "password1": data_password,
+            "password2": data_password2,
+        }));
+  
+  }
+  return () => {}
+}
+
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); 
+    handleValidation(event); 
+
+
   };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -46,25 +99,15 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
+              <Grid item xs={12} >
                 <TextField
                   autoComplete="given-name"
-                  name="firstName"
+                  name="username"
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id="username"
+                  label="Username"
                   autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
                 />
               </Grid>
               <Grid item xs={12}>
@@ -90,6 +133,17 @@ export default function SignUp() {
                 />
               </Grid>
               <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password2"
+                  label="repeat-password"
+                  type="password"
+                  id="password2"
+                  autoComplete="repeat-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="allowExtraEmails" color="primary" />}
                   label="I want to receive inspiration, marketing promotions and updates via email."
@@ -106,7 +160,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/" variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -116,5 +170,14 @@ export default function SignUp() {
         <Copyright sx={{ mt: 5 }} />
       </Container>
     </ThemeProvider>
+  );
+}
+
+
+export default function SignUp() {
+  return (
+    <SnackbarProvider maxSnack={4}>
+      <Register />
+    </SnackbarProvider>
   );
 }

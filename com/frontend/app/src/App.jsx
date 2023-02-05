@@ -7,6 +7,7 @@ import SignIn from "./containers/SignIn";
 import { Typography, CssBaseline, Container } from "@mui/material";
 import Dashboard from "./containers/Menu";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import SignUp from "./containers/SignUp";
 
 
 const Home = (props) => {
@@ -25,6 +26,7 @@ const App = () => {
         <Router>
             <Routes> 
                 <Route exact path="/"  element={<Home isLoggedIn={false}/>} />
+                <Route exact path="/signup/"  element={<SignUp/>} />
             </Routes>
         </Router>  
         </>

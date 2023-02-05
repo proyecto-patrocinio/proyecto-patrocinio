@@ -43,7 +43,7 @@ export default function SignIn() {
       setPassword(data_password);
       
       //send data to API
-      const requestURL = 'http://127.0.0.1:8080/auth/login/';
+      const requestURL = 'http://127.0.0.1:8001/auth/login/';
       const request = new XMLHttpRequest();
       request.open('POST', requestURL);
       request.setRequestHeader( 'Content-Type', 'application/json')
@@ -154,7 +154,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
