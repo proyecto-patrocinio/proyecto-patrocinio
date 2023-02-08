@@ -15,20 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-<<<<<<< HEAD
-from Clients.views import proof
-from .router import router
-
-
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('clients/',include('Clients.urls')),
-    path('api/', include(router.urls))
-=======
 from locality.api.router import router_locality
+from Clients.api.router import router_clients
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api/', include(router_clients.urls)),
     path('api/', include(router_locality.urls)), 
->>>>>>> 7a3e67a803c1c0f2d061f143d818fb4d87f411a6
+
 ]

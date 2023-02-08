@@ -1,5 +1,5 @@
-from .serializers import *
-from ..models import *
+from Clients.api.serializers import *
+from Clients.models import *
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -11,19 +11,12 @@ class ClientViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
-    
+
+    def get_serializer(self, *args, **kwargs): #select json format
+        if self.action == 'list' or self.action == 'create': #by /api/locality/
+            return ClientSerializer(*args, **kwargs)
     
 
-    # @action(methods=['GET','POST'], detail = False)
-    # def client_list(self,request):
-        
-    #     if request.method == 'GET':
-    #         clients = self.get_queryset()
-    #         serializer = self.get_serializer_class()(clients)
-    #         return Response(serializer.data)    
-        
-    #     if request.method == 'POST':
-    #         return Response('HOLA')
 
     
 class PatrimonyViewSet(viewsets.ModelViewSet):

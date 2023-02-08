@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from ..models import *
+from Clients.models import *
+from rest_framework.serializers import ModelSerializer
 
 
 
@@ -9,9 +10,13 @@ class ClientSerializer(serializers.ModelSerializer):
         model = Client
         fields = '__all__'
      
-    # def create(self, validated_data):
-    #     return Client.objects.create(**validated_data)
-  
+#   ('id','postal', 'address','marital_status','housing_type', 'studies', 'locality', 'email','id_type','id_number','first_name',last_name,birth_date,sex, )
+
+# class ClientFullSerializer(serializers.ModelSerializer):
+    
+#     class Meta:
+#         model = Client
+#         fields = '__all__'
 
 class PatrimonySerializer(serializers.ModelSerializer):
     
