@@ -8,6 +8,7 @@ from django.urls import reverse
 from django.test.client import  RequestFactory
 from rest_framework.test import APIClient
 from locality.test.utils import *
+from Clients.choices import *
 
 
 
@@ -34,16 +35,18 @@ class Test_clients(APITestCase):
         load_province(self, id=1, name="Buenos Aires",nationality=1)
         load_locality(self, id=1, name="LANUS",province=1)
         clients_data =  {"id": 5, "postal": 1212,"address": "avenida santa fe",
-                             "marital_status": 'soltero/a',
-                             "housing_type":'Departamento',"studies" :  'Universitario Completo',"locality" : 1,"email" : 'dsadsa@com.com',"id_type": "gfdgd","id_number" : 55,
-                             "first_name" : "asdasd","last_name" : "sdasd","birth_date" : "2025-10-11","sex" :  'Femenino',
+                             "marital_status": 'S',
+                             "housing_type":'Dp',"studies":'UC',"locality" : 1,"email" : 'dsadsa@com.com',"id_type": 'D',"id_number" : 55,
+                             "first_name" : "asdasd","last_name" : "sdasd", "birth_date" : '1995-10-10',"sex" : 'F',
                             }
+        
+        
         request = self.factory.post(self.url,clients_data)
         force_authenticate(request, user=self.user)
         view = ClientViewSet.as_view({'post':'create'})
         response = view(request)
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+       
 
 
     
