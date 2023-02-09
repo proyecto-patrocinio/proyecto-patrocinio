@@ -36,8 +36,7 @@ class Test_family(APITestCase):
         load_locality(self, id=1, name="LANUS",province=1)
         load_clients(self,id=1,postal=2255,address="santa fe",marital_status="S",housing_type="Dp",studies="UC",locality=1,email="das@sadsa.com",id_type="D",
                      id_number=5454555,first_name="sdasd",last_name="sad",birth_date="1995-10-10",sex="M")
-        fam_data =  {"id": 1,"client_user_id": 1, "partner_salary":150_000
-                            }
+        fam_data =  {"id": 1,"client_user_id": 1, "partner_salary":150_000}
         request = self.factory.post(self.url,fam_data)
         force_authenticate(request, user=self.user)
         view = FamilyViewSet.as_view({'post':'create'})

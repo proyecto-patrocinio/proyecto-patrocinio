@@ -23,113 +23,52 @@ def load_clients(self,id,postal,address,marital_status,housing_type,studies,loca
     response =view(request)
     return response
 
-# # def load_nationality(self,id,name):
-# #     nationality_data =  {  
-# #                          "id": id, 
-# #                          "name": name ,
-# #                         }
-# #     url= reverse('nationality-list')
-# #     request = self.factory.post(url,nationality_data)
-# #     force_authenticate(request, user=self.user)
-# #     view =  NationalityApiViewSet.as_view({'post': 'create'})
-# #     response =view(request)
-# #     return response
-# def load_nationality(self,id,name):
-#     nationality_data =  {  
-#                          "id": id, 
-#                          "name": name ,
-#                         }
-#     url= reverse('nationality-list')
-#     request = self.factory.post(url,nationality_data)
-#     force_authenticate(request, user=self.user)
-#     view =  NationalityApiViewSet.as_view({'post': 'create'})
-#     response =view(request)
-#     return response
-
-# def load_province(self,id,name,nationality):
-#     province_data =  {  
-#                          "id": id, 
-#                          "name": name ,
-#                          "nationality": nationality,
-#                         }
-#     url= reverse('province-list')
-#     request = self.factory.post(url,province_data)
-#     force_authenticate(request, user=self.user)
-#     view =  ProvinceApiViewSet.as_view({'post': 'create'})
-#     response =view(request)
-#     return response
-
-# def load_locality(self,id,name,province):
-#     locality_data =  {  
-#                          "id": id, 
-#                          "name": name ,
-#                          "province": province,
-#                         }
-#     url= reverse('locality-list')
-#     request = self.factory.post(url,locality_data)
-#     force_authenticate(request, user=self.user)
-#     view =  LocalityApiViewSet.as_view({'post': 'create'})
-#     response =view(request)
-#     return response
+def load_family(self,id,client_user_id,partner_salary):
+    family_data =  {  
+                         "id": id, 
+                         "client_user_id": client_user_id,
+                         "partner_salary": partner_salary
+                        }
+    url= reverse('family-list')
+    request = self.factory.post(url,family_data)
+    force_authenticate(request, user=self.user)
+    view =  FamilyViewSet.as_view({'post': 'create'})
+    response =view(request)
+    return response
 
 
-# def load_family(self,id,postal,address):
-#     nationality_data =  {  
-#                          "id": id, 
-#                          "postal": postal,
-#                          "address": address,
-#                         }
-#     url= reverse('clients-list')
-#     request = self.factory.post(url,nationality_data)
-#     force_authenticate(request, user=self.user)
-#     view =  ClientViewSet.as_view({'post': 'create'})
-#     response =view(request)
-#     return response
-
-# def load_patrimony(self,id,postal,address):
-#     nationality_data =  {  
-#                          "id": id, 
-#                          "postal": postal,
-#                          "address": address,
-#                         }
-#     url= reverse('clients-list')
-#     request = self.factory.post(url,nationality_data)
-#     force_authenticate(request, user=self.user)
-#     view =  ClientViewSet.as_view({'post': 'create'})
-#     response =view(request)
-#     return response
-
-# def load_son(self,id,postal,address):
-#     nationality_data =  {  
-#                          "id": id, 
-#                          "postal": postal,
-#                          "address": address,
-#                         }
-#     url= reverse('clients-list')
-#     request = self.factory.post(url,nationality_data)
-#     force_authenticate(request, user=self.user)
-#     view =  ClientViewSet.as_view({'post': 'create'})
-#     response =view(request)
-#     return response
-
-# def load_tel(self,id,postal,address):
-#     nationality_data =  {  
-#                          "id": id, 
-#                          "postal": postal,
-#                          "address": address,
-#                         }
-#     url= reverse('clients-list')
-#     request = self.factory.post(url,nationality_data)
-#     force_authenticate(request, user=self.user)
-#     view =  ClientViewSet.as_view({'post': 'create'})
-#     response =view(request)
-#     return response
+def load_son(self,id,age, id_locality,address,family_client_user):
+    son_data =  {"id": id, "age": age,"id_locality" : id_locality,"address": address,
+                                "family_client_user": family_client_user
+                                }
+    url= reverse('son-list')
+    request = self.factory.post(url,son_data)
+    force_authenticate(request, user=self.user)
+    view =  SonViewSet.as_view({'post': 'create'})
+    response =view(request)
+    return response
 
 
 
-# class TestSetUp(APITestCase):
-#     def setUp(self):
-#         self.factory = RequestFactory()
-#         self.client = APIClient()
-#         self.user = User.objects.create_superuser(username='admin',email='albertogsotelo9@gmail.com',password='',is_staff=True)
-#         self.user.save()
+
+def load_tel(self,id,phone_number,client):
+    tel_data =  {"id": id, "phone_number": phone_number, "client": client
+                                }
+    url= reverse('tel-list')
+    request = self.factory.post(url,tel_data)
+    force_authenticate(request, user=self.user)
+    view =  TelViewSet.as_view({'post': 'create'})
+    response =view(request)
+    return response
+
+
+def load_patrimony(self,id,client_user_id,employment,salary,other_income,amount_other_income,amount_retirement,amount_pension,vehicle):
+    pat_data =  {"id": id,"client_user_id": client_user_id, "employment":"employment","salary":salary, "other_income":other_income,"amount_other_income":amount_other_income,
+                     "amount_retirement":amount_retirement,"amount_pension":amount_pension,"vehicle":vehicle,
+                            }
+    url= reverse('patrimony-list')
+    request = self.factory.post(url,pat_data)
+    force_authenticate(request, user=self.user)
+    view =  PatrimonyViewSet.as_view({'post': 'create'})
+    response =view(request)
+    return response

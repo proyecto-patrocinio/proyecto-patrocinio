@@ -30,7 +30,7 @@ class Test_tel(APITestCase):
         response =self.view(request, pk=1)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         
-    def test_post_negative_tel(self):
+    def test_post_positive_tel(self):
         load_nationality(self,id=1,name="Argentina")
         load_province(self, id=1, name="Buenos Aires",nationality=1)
         load_locality(self, id=1, name="LANUS",province=1)
@@ -43,3 +43,20 @@ class Test_tel(APITestCase):
         view = TelViewSet.as_view({'post':'create'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        
+    def test_put_positive_tel(self):
+        load_nationality(self,id=1,name="Argentina")
+        load_province(self, id=1, name="Buenos Aires",nationality=1)
+        load_locality(self, id=1, name="LANUS",province=1)
+        load_clients(self,id=1,postal=2255,address="santa fe",marital_status="S",housing_type="Dp",studies="UC",locality=1,email="das@sadsa.com",id_type="D",
+                     id_number=5454555,first_name="sdasd",last_name="sad",birth_date="1991-11-11",sex="M")
+        
+        load_tel(self,id=1,phone_number=1165799975,client=1)
+        tel_data =  {"id": 5,"phone_number": 1165799572, "client":1
+                            }
+        request = self.factory.put(path=self.url, data=tel_data, format='json', content_type=None)
+        force_authenticate(request, user=self.user)
+        view = TelViewSet.as_view({'put':'update'})
+        response = view(request,pk=1)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)    
