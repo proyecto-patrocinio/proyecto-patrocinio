@@ -9,14 +9,6 @@ class ClientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = '__all__'
-     
-#   ('id','postal', 'address','marital_status','housing_type', 'studies', 'locality', 'email','id_type','id_number','first_name',last_name,birth_date,sex, )
-
-# class ClientFullSerializer(serializers.ModelSerializer):
-    
-#     class Meta:
-#         model = Client
-#         fields = '__all__'
 
 class PatrimonySerializer(serializers.ModelSerializer):
     

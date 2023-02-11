@@ -21,7 +21,7 @@ from Clients.api.router import router_clients
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router_clients.urls)),
-    path('api/', include(router_locality.urls)), 
+    path('api/clients/', include(router_clients.urls)),
+    path('api/geography/', include(router_locality.urls)), 
 
 ]

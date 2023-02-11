@@ -45,30 +45,3 @@ id_type = (
     ('D','Documento'),
     ('P','Pasaporte'), 
 )
-
-# permission = (
-
-#     ('R','Read'), 
-#     ('W','Write'), 
-#     ('C','Create'),
-#     ('D','Delete' )
-# )
-
-# rol=(
-#     ('R','Reader'),
-#     ('C','Commenter'),
-#     ('E','Editor'),
-#     ('A','Admin'),
-#     ('O','Owner')
-# )
-
-# action = (
-#     ('Crd', 'Card'),
-#     ('Brd', 'Board'),
-#     ('Pnl', 'Panel'),
-#     ('Cmn', 'Comment'),
-#     ('Cns', 'Consult'),
-#     ('Cli', 'Client'),
-#     ('Req', 'Request'),
-#     ('Usr', 'User'),
-# )
