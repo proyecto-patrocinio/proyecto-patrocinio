@@ -8,8 +8,7 @@ import { Typography, CssBaseline, Container } from "@mui/material";
 import Dashboard from "./containers/Dashboard";
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
 import SignUp from "./pages/SignUp"; 
-import { UserProvider } from "./context/UserContext";
-import Board from "./pages/Board";
+import { UserProvider } from "./context/UserContext"; 
 
 
 const Home = (props) => {
@@ -32,8 +31,7 @@ const App = () => {
         <Router>
             <Routes> 
                 <Route exact path="/"  element={<Home isLoggedIn={false}/>} />
-                <Route exact path="/signup/"  element={<SignUp/>} />
-                <Route exact path="/board/"  element={<Board/>} />
+                <Route exact path="/signup/"  element={<SignUp/>} /> 
             </Routes>
         </Router>  
         </>
