@@ -37,7 +37,7 @@ const { enqueueSnackbar } = useSnackbar();
   }else {
    
     //send data to API
-    const requestURL = 'http://127.0.0.1:8001/register/';
+    const requestURL = 'http://127.0.0.1:80/api/register/';
     const request = new XMLHttpRequest();
     request.open('POST', requestURL);
     request.setRequestHeader( 'Content-Type', 'application/json')

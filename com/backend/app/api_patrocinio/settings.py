@@ -45,8 +45,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'django.contrib.sites',
-    'allauth', 
-    'allauth.account', 
+    'allauth',
+    'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'locality',
@@ -133,10 +133,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = "/static/"
-# - Any request to http://localhost:8000/static/*
-#   will be served from the "staticfiles" directory:
-STATIC_ROOT = BASE_DIR / "staticfiles"
+MEDIA_URL = '/media/'
+STATIC_URL = "/django_static/"
+# - Any request to http://localhost:80/django_static/*
+#   will be served from the "django_static" directory:
+STATIC_ROOT = BASE_DIR / "django_static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -172,7 +173,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = "http://"+os.environ.get("HOSTNAME")+"/auth/login"
+LOGIN_URL = "http://" + os.environ.get("HOSTNAME")
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -183,4 +184,3 @@ EMAIL_PORT = 587
 # CORS- Cross-Origin
 # https://pypi.org/project/django-cors-headers/
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(' ')
-

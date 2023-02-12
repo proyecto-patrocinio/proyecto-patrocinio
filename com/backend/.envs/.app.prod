@@ -1,6 +1,6 @@
 DEBUG=0
 SECRET_KEY=qlz[43I@dG3[UwyYV*P0Gg:1me"F0mMauxn"ZTKPS4"$"?+s!2Fn
-DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1  192.168.31.2 databaseserver 192.168.31.10 nginxserver
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 databaseserver  nginxserver
 SQL_ENGINE=django.db.backends.postgresql
 SQL_DATABASE=patrocinio_prod
 SQL_USER=patrocinio_api
@@ -10,5 +10,5 @@ SQL_PORT=5432
 DATABASE=postgres
 EMAIL_HOST_USER=patrociniouba1@gmail.com
 EMAIL_HOST_PASSWORD=woohhaievkrqclqv
-CORS_ALLOWED_ORIGINS=http://patrociniouba
-HOSTNAME=localhost:8000
+CORS_ALLOWED_ORIGINS= http://localhost
+HOSTNAME=localhost
