@@ -1,3 +1,4 @@
 POSTGRES_DB=patrocinio_prod
-POSTGRES_PASSWORD=R?2zFiAgsM@%w0WmK5iZ
+POSTGRES_PASSWORD=secrete_password
 POSTGRES_USER=patrocinio_api
+PGDATA : /var/lib/postgresql/data
