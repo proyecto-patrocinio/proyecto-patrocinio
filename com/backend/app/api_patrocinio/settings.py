@@ -28,7 +28,8 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", '').split(" ")
 
 
 # Application definition
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'Clients',
     'locality',
     'user',
 ]
@@ -144,7 +146,6 @@ STATIC_ROOT = BASE_DIR / "django_static"
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Autenticacion and Login
 # https://coffeebytes.dev/login-con-django-rest-framework-drf/
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth
@@ -183,4 +184,4 @@ EMAIL_PORT = 587
 
 # CORS- Cross-Origin
 # https://pypi.org/project/django-cors-headers/
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS').split(' ')
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(' ')
