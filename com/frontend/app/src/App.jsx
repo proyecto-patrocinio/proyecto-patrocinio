@@ -12,13 +12,18 @@ import { UserProvider } from "./context/UserContext";
 
 
 const Home = (props) => {
-    const isLoggedIn = props.isLoggedIn;
+    const [isLoggedIn, setIsLoggedIn] = React.useState(props.isLoggedIn);
+
+    React.useEffect(() => {
+        setIsLoggedIn(props.isLoggedIn);
+    }, [props.isLoggedIn]);
+
     if (isLoggedIn) {
         return <Dashboard />;
     } else
     return (
         <UserProvider>
-            <SignIn />
+            <SignIn setIsLoggedIn={setIsLoggedIn}/>
         </UserProvider>
     );
 };

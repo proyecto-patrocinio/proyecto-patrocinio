@@ -17,7 +17,7 @@ import { UserContext } from '../context/UserContext';
 
 const theme = createTheme();
 
-export default function SignIn() {
+export default function SignIn( props) {
   const user =  useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
@@ -39,7 +39,7 @@ export default function SignIn() {
       setOpen(true);
     }else {      
       //send data to API
-      const requestURL = 'http://127.0.0.1:8001/auth/login/';
+      const requestURL = 'http://127.0.0.1:80/api/auth/login/';
       const request = new XMLHttpRequest();
       request.open('POST', requestURL);
       request.setRequestHeader( 'Content-Type', 'application/json');
@@ -48,7 +48,8 @@ export default function SignIn() {
           if( request.status === 200){
             setOpen(false); 
             //update user context 
-            user.setUser(request.response.user); 
+            user.setUser(JSON.parse( request.response).user);
+            props.setIsLoggedIn(true);
           }
           else if( request.status !== 400 ){
             setLoginError("Unable to login. Please try again later");

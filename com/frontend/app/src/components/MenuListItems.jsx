@@ -57,8 +57,8 @@ const ListItemCollapseButton = ( {text,sub_list} ) => {
     </ListItemButton>
     <Collapse in={open} timeout="auto" unmountOnExit>
       <List component="div" disablePadding>
-     { sub_list.map((item) => (
-          <ListItemIconButton  text={item}/>
+     { sub_list.map((item, index) => (
+          <ListItemIconButton  key={index} text={item}/>
         ))
       }
       </List>
