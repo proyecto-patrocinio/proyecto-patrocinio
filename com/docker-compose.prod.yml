@@ -7,51 +7,39 @@ services:
       context: ./backend/app/
       dockerfile: Dockerfile.prod
     volumes:
-      - static_volume:/home/app/web/staticfiles
-    command: gunicorn api_patrocinio.wsgi:application --bind 0.0.0.0:8000
+      - static_volume_prod:/usr/src/app/django_static
+    command: gunicorn api_patrocinio.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4
     expose:
-      - 8000 #port of the container
+      - 8000 
     env_file:
       - ./backend/.envs/.app.prod
     depends_on:
       - db
-    # networks:
-    #   backend_network:
-    #     ipv4_address : 192.168.31.3
     hostname: appserver
 
   db:
-    image: postgres:15-alpine
+    image: postgres:15-alpine 
     env_file: ./backend/.envs/.postgres.prod
     expose:
       - 5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    # networks:
-    #   backend_network:
-    #     ipv4_address : 192.168.31.2
+      - postgres_data_prod:/var/lib/postgresql/data
     hostname: databaseserver
 
-  nginx:
-    container_name: "server-nginx"
-    build: ./backend/nginx/
-    volumes:
-      - static_volume:/home/app/web/staticfiles
-    ports:
-      - "8080:80" #puerto 8080 del anfitrion , puerto 80 del contenedor
-    depends_on:
-      - backend-app 
-    # networks:
-    #   backend_network:
-    #     ipv4_address: 192.168.31.10
-    hostname: nginxserver
-
-# networks:
-#     backend_network:
-#         ipam:
-#             config:
-#                 - subnet: 192.168.31.0/24
+ 
+  nginx: 
+        restart: always
+        container_name: "nginx-frontend"
+        build: ./frontend/app
+        ports:
+            - 80:80
+        volumes:
+            - static_volume_prod:/usr/src/app/django_static/
+            - ./frontend/app/nginx:/etc/nginx/conf.d
+        depends_on: 
+            - backend-app
+        hostname: nginxserver
 
 volumes:
-  postgres_data:
-  static_volume:
+  postgres_data_prod:
+  static_volume_prod:

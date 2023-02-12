@@ -24,15 +24,15 @@ class LocalityOneSerializer(ModelSerializer):
         fields = ('id', 'name', 'province',)
 
 #Auxiliary serializers
-# class ProvinceAndNationalitySerializer(ModelSerializer): #used in LocalityFullSerializer
-#     nationality = NationalityOneSerializer(many=False, read_only=True) #formated json data
-#     class Meta: 
-#         model = Province 
-#         fields = ('id', 'name', 'nationality',)  #fields to show
+class ProvinceAndNationalitySerializer(ModelSerializer): #used in LocalityFullSerializer
+    nationality = NationalityOneSerializer(many=False, read_only=True) #formated json data
+    class Meta: 
+        model = Province 
+        fields = ('id', 'name', 'nationality',)  #fields to show
 
-#Details serializers (retrieve)
+# Details serializers (retrieve)
 class LocalityFullSerializer(ModelSerializer):
-    province = ProvinceOneSerializer(many=False, read_only=True)
+    province = ProvinceAndNationalitySerializer(many=False, read_only=True)
     class Meta:
         model = Locality
         fields = ('id', 'name', 'province',)
