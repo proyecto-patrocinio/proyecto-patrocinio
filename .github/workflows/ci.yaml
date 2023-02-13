@@ -25,7 +25,8 @@ jobs:
     
       - name: Set api environment
         run: |
-          set > "com/backend/.envs/.app.dev"
+          echo "${{ secrets.ENV_FILE }}" > com/backend/.envs/.app.dev
+          # set > "com/backend/.envs/.app.dev"
       
       - name: virtual environment
         run: |
@@ -43,7 +44,7 @@ jobs:
       - name: run test
         run: |
         
-          set > "com/backend/.envs/.app.dev"
+          echo "${{ secrets.ENV_FILE }}" > com/backend/.envs/.app.dev
           cd ./com/backend/app
           source  ./env/bin/activate
           python ./manage.py test          
