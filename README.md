@@ -5,13 +5,15 @@
 
 ## EJECUTAR ENTORNO
 - Primero <br />
-abro la terminal en la raiz del proyecto y me dirijo al directorio "com"
+Abro la terminal en la raiz del proyecto y me dirijo al directorio "com"
 $ cd com <br />
 - A- En desarrollo ejecute: <br />
 $ docker-compose up --build <br />
 - B- En produccion: <br />
 $ docker-compose -f docker-compose.prod.yml up -d --build <br />
-Luego ingrese al http://localhost
+
+- Segundo <br />
+Ingrese al http://localhost
 
 
 ### BIBLIOGRAFIA
