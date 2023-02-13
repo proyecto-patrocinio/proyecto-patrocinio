@@ -1,5 +1,9 @@
 asgiref==3.6.0
 Django==4.1.4
+dj-rest-auth==2.2.7
+django-allauth==0.52.0
+django-cors-headers==3.13.0
+djangorestframework-simplejwt==5.2.2
 djangorestframework==3.14.0
 docutils==0.19
 gunicorn==20.1.0
