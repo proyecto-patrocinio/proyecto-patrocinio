@@ -1,17 +1,22 @@
 # PROYECTO PATROCIONIO JURIDICO 
- Requerimientos previos: <br />
+Este software es una plataforma de gestión, la cual comprende una API rest, una base de datos y frontend para interactuar con el usuario.<br/>
+La plataforma busca permitir automatizar la asignación de casos a las distintas comisiones del Patrocinio con criterios cuantitativos y de acuerdo a la materia en la que interviene cada una. <br/>
+Facilitar el control y supervisión por parte de las personas que ejercen la dirección del Patrocinio. <br/>
+Facilitar el ingreso de datos a partir del uso de formularios amigables, simples y autogestionables. 
+
+## Requerimientos previos: <br/>
  Se requiere tener instalado python 3, docker, docker-compose o docker destktop con WSL2 
 
 ## CREAR UNA APLICACION DJANGO 
-1- Dirigase a la ruta de la App django<br />
+1- Dirigase a la ruta de la App django <br/>
 $ cd com\backend\app
 
-2- Cree una virtual environment de python<br />
+2- Cree una virtual environment de python <br/>
 $ python -m venv <name_env> 
 
 
-3- Active el entorno virtual<br />
-$ name_env/Script/activate (windows) <br />
+3- Active el entorno virtual<br/>
+$ name_env/Script/activate (windows) <br/>
 $ source name_env/Script/activate (linux)
 
 
@@ -106,35 +111,32 @@ REST_FRAMEWORK = {
 
 ## EJECUTAR DOCKER COMPOSE 
 - Primero:
-$ docker-compose build  <br />
-$ docker-compose up -d
+\$ docker-compose build  <br />
+\$ docker-compose up -d
 
 - Desarrollo:
-$ docker-compose -f docker-compose.yml down -v <br />
-$ docker-compose exec backend-app python manage.py flush --no-input <br />
-$ docker-compose exec backend-app python manage.py migrate
+\$ docker-compose -f docker-compose.yml down -v <br />
+\$ docker-compose exec backend-app python manage.py flush --no-input <br />
+\$ docker-compose exec backend-app python manage.py migrate
 
 - Produccion:
-$ docker-compose -f docker-compose.prod.yml down -v <br />
-$ docker-compose -f docker-compose.prod.yml up -d --build <br />
-$ docker-compose -f docker-compose.prod.yml exec backend-app python manage.py migrate --noinput <br />
-$ docker-compose -f docker-compose.prod.yml exec backend-app python manage.py collectstatic --no-input --clear
-
+\$ docker-compose -f docker-compose.prod.yml down -v <br />
+\$ docker-compose -f docker-compose.prod.yml up -d --build <br />
+\$ docker-compose -f docker-compose.prod.yml exec backend-app python manage.py migrate --noinput <br />
+\$ docker-compose -f docker-compose.prod.yml exec backend-app python manage.py collectstatic --no-input --clear
 
 ## CREAR UN SUPER USUARIO
-Luego de correr nuestro docker compose , ejecutamos el siguiente comando: <br />
-$ docker exec -ti backend-app sh <br />
-Una vez dentro, lanzamos el comando para crear el usuario: <br />
-$ python manage.py createsuperuser <br />
-$ exit
-( <br />
-        Ante algun error o cambio del modelo, se pude hacer la migracion manualmente. <br />
-        Es posible que ante si no funciona debas borrar los archivos de migraciones 001. 002 ... <br />
-        O reiniciar el contenedor. <br />
-    - docker exec -ti backend-app sh <br />
-    - python manage.py makemigrations && python manage.py migrate <br />
-    - python manage.py createsuperuser <br />
-)
+Luego de correr nuestro docker compose , ejecutamos el siguiente comando: <br/>
+\$ docker exec -ti backend-app sh <br/>
+Una vez dentro, lanzamos el comando para crear el usuario: <br/>
+\$ python manage.py createsuperuser <br/>
+\$ exit() <br />
+        Ante algun error o cambio del modelo, se pude hacer la migracion manualmente. <br/>
+        Es posible que ante si no funciona debas borrar los archivos de migraciones 001. 002 ... <br/>
+        O reiniciar el contenedor. <br/>
+    - docker exec -ti backend-app sh <br/>
+    - python manage.py makemigrations && python manage.py migrate <br/>
+    - python manage.py createsuperuser <br/>
 
 
 
