@@ -20,7 +20,8 @@ class Client(models.Model):
     sex = models.CharField(choices=sex, max_length=1, default='F', verbose_name='Sexo')
 
     
-    
+    def __str__(self) -> str:
+        return f'{self.locality}'    
     
         
 
@@ -50,9 +51,15 @@ class Son(models.Model):
     age = models.IntegerField(verbose_name='Edad')
     id_locality = models.ForeignKey(Locality, on_delete=models.DO_NOTHING, verbose_name='Localidad')
     address = models.CharField(max_length=45, verbose_name='Dirección')
-    family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE)  
+    family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE)
+    
+    def __str__(self) -> str:
+        return f'{self.id_locality}'   
  
 class Tel(models.Model):
     id = models.IntegerField( primary_key=True)  
     phone_number = models.IntegerField(verbose_name='Número de Teléfono')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, )  
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, )
+    
+    def __str__(self) -> str:
+        return f'{self.client}'   

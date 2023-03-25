@@ -29,5 +29,9 @@ class Locality(models.Model):
                                     verbose_name='Provincia')   
     
     
+    def __str__(self) -> str:
+        return f'{self.name}'    
+    
+    
 
  
