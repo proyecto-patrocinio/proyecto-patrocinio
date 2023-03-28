@@ -1,42 +1,47 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import SignIn from "./pages/SignIn";
-import { Typography, CssBaseline, Container } from "@mui/material";
-import Dashboard from "./containers/Dashboard";
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import { CssBaseline } from "@mui/material";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import SignUp from "./pages/SignUp"; 
-import { UserProvider } from "./context/UserContext"; 
+import { UserContext, UserProvider } from "./context/UserContext";
+import HomePage from "./pages/HomePage";
+import CaseTaker from "./pages/CaseTakerPage";
+import Cookies from "js-cookie";
 
-
-const Home = (props) => {
-    const [isLoggedIn, setIsLoggedIn] = React.useState(props.isLoggedIn);
-
-    React.useEffect(() => {
-        setIsLoggedIn(props.isLoggedIn);
-    }, [props.isLoggedIn]);
-
-    if (isLoggedIn) {
-        return <Dashboard />;
-    } else
-    return (
-        <UserProvider>
-            <SignIn setIsLoggedIn={setIsLoggedIn}/>
-        </UserProvider>
-    );
-};
 
 const App = () => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+        //TODO: conectar al backend y consultar si removemos la coockie 
+        // Comprobar si la cookie existe y establecer el estado de inicio de sesión en consecuencia
+        const isLoggedInCookie = Cookies.get("isLoggedIn");
+        if(isLoggedInCookie === "true"){
+            setIsLoggedIn(true);
+        }
+    }, []);
+  
+    const getPage  = ( children) => {
+        return (
+            <UserProvider>
+            {isLoggedIn ? children :<SignIn setIsLoggedIn={setIsLoggedIn} />}
+            </UserProvider>
+        );
+    };
+
     return ( 
         <>
 
         <CssBaseline/>
         <Router>
             <Routes> 
-                <Route exact path="/"  element={<Home isLoggedIn={false}/>} />
+                <Route exact path="/"  element={getPage(<HomePage/>)} />
                 <Route exact path="/signup/"  element={<SignUp/>} /> 
+                <Route exact path="/case-taker/"  element={getPage(<CaseTaker/>)} /> 
+                
             </Routes>
         </Router>  
         </>

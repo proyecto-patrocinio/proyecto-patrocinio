@@ -1,0 +1,231 @@
+/**
+ In this component, we are using the DragDropContext component from react-beautiful-dnd to handle drag and drop across the board.
+  We are also using the Droppable component to make the dashboard a drop zone for dragging and dropping panels.
+  In the onDragEnd method, we can implement the logic to reorder the cards.
+*/
+import React, { useState } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import Panel from './Panel';
+import styled from '@emotion/styled';
+import { Stack } from '@mui/material';
+
+const BoardContainer = styled.div`
+  display: flex;
+  overflow-x: auto;
+  padding: 20px;
+  flex-grow: 1;
+`;
+
+const Board = () => {
+  const [board, setBoard] = useState({
+    id: '1',
+    title: 'My Board',
+    panels: [
+      {
+        id: '1',
+        title: 'Sin Asignar',
+        cards: [
+          {
+            id: '1',
+            title: 'Caso 1',
+            content: 'Do something',
+          },
+          {
+            id: '2',
+            title: 'Caso 2',
+            content: 'Do something else',
+          },
+        ],
+      },
+      {
+        id: '2',
+        title: 'Cátedra 2',
+        cards: [
+          {
+            id: '3',
+            title: 'Caso 3',
+            content: 'Do something else again',
+          },
+        ],
+      },
+      {
+        id: '3',
+        title: 'Cátedra 3',
+        cards: [
+          {
+            id: '4',
+            title: 'Caso 4',
+            content: 'Do something completely different',
+          },
+        ],
+      },
+      {
+        id: '4',
+        title: 'Cátedra 4',
+        cards: [
+          {
+            id: '5',
+            title: 'Caso 5',
+            content: 'Do something completely different',
+          },
+        ],
+      },
+      {
+        id: '5',
+        title: 'Cátedra 5',
+        cards: [
+          {
+            id: '6',
+            title: 'Caso 6',
+            content: 'Do something completely different',
+          },
+        ],
+      },
+      {
+        id: '6',
+        title: 'Cátedra 6',
+        cards: [
+          {
+            id: '7',
+            title: 'Caso 7',
+            content: 'Do something completely different',
+          },
+        ],
+      },
+    ],
+  });
+
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+
+    // If the user drops the card outside of a droppable area,
+    // destination will be null, so we should return early.
+    if (!destination) {
+      return;
+    }
+
+    // If the user drops the card back in its original location,
+    // source.index and destination.index will be the same, so we should.
+    // return early
+    if (
+      source.droppableId === destination.droppableId &&
+      source.index === destination.index
+    ) {
+      return;
+    }
+    
+    // If destination.droppableId == source.droppableId, the panel is 
+    // updated with the destination panel.
+    if (destination.droppableId === source.droppableId) {
+      const panel = board.panels.find(
+        (panel) => panel.id === destination.droppableId
+      );
+      // Remove the card from the source index. And add it to the destination index.
+      const cards = [...panel.cards];
+      const [removedCard] = cards.splice(source.index, 1);
+      cards.splice(destination.index, 0, removedCard);
+      const updatedPanel = {
+        ...panel,
+        cards,
+      };
+      // Update the board state with the updated panel.
+      const updatedPanels = board.panels.map((panel) => {
+        if (panel.id === destination.droppableId) {
+          return updatedPanel;
+        }
+        return panel;
+      });
+      setBoard({
+        ...board,
+        panels: updatedPanels,
+      });
+
+    // If destination.droppableId != source.droppableId
+    } else {
+      // Find the panel that corresponds to the source droppableId.
+      const sourcePanel = board.panels.find(
+        (panel) => panel.id === source.droppableId
+      );
+
+      // Remove the card from the source panel.
+      const sourceCards = [...sourcePanel.cards];
+      const [removedCard] = sourceCards.splice(source.index, 1);
+      const updatedSourcePanel = {
+        ...sourcePanel,
+        cards: sourceCards,
+      };
+
+      // Find the panel that corresponds to the destination droppableId.
+      const destinationPanel = board.panels.find(
+        (panel) => panel.id === destination.droppableId
+      );
+
+      // Add the card to the destination panel.
+      const destinationCards = [...destinationPanel.cards];
+      destinationCards.splice(destination.index, 0, removedCard);
+      const updatedDestinationPanel = {
+        ...destinationPanel,
+        cards: destinationCards,
+      };
+
+      // Update the board state with the updated source and destination panels.
+      const updatedPanels = board.panels.map((panel) => {
+        if (panel.id === destination.droppableId) {
+          return updatedDestinationPanel;
+        }
+        if (panel.id === source.droppableId) {
+          return updatedSourcePanel;
+        }
+        return panel;
+      });
+
+      setBoard({
+        ...board,
+        panels: updatedPanels,
+      });
+    }
+  };
+
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <Droppable droppableId="board" direction="horizontal">
+        {(provided) => (
+          <BoardContainer
+            ref={provided.innerRef}
+            {...provided.droppableProps}
+          >
+          <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={2}>
+          {/*panel-0: cards without assigned chair  */}
+            <div style={{ position: "sticky", left: 0, zIndex: 1}}>
+                <Panel
+                key={'0'}
+                index={'0'}
+                panel={board.panels[0]}
+                />
+            </div>
+            {/*rest of panels: cards with chair request  */}
+            {board.panels.map((panel, index) => (
+                index === 0 ? null: (
+                    <Panel
+                    key={panel.id}
+                    index={index}
+                    panel={panel}
+                    />
+                )
+            ))}
+          {provided.placeholder}
+          </Stack>
+          </BoardContainer>
+        )}
+    </Droppable>
+</DragDropContext>
+);
+};
+
+export default Board;
+
+

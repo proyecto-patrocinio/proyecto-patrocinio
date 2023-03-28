@@ -11,6 +11,7 @@ import TableChartIcon from '@mui/icons-material/TableChart';
 import TuneIcon from '@mui/icons-material/Tune';
 import InputIcon from '@mui/icons-material/Input';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import  Link  from '@mui/material/Link'
 
 
  
@@ -77,11 +78,18 @@ const ListItemCollapseButton = ( {text,sub_list} ) => {
 
   <List component="nav">
    <React.Fragment>
-    <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
-    <ListItemCollapseButton text="Dashboards" sub_list={["Board1","Board2"]}/>
-    <ListItemIconButton icon={<InputIcon />} text="Case Taker" />
-    <ListItemIconButton icon={<TuneIcon />} text="Control Panel" />
-    <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Sign Out" />
+   <Link href="/# " style={{ color: 'inherit', textDecoration: 'none' }}>
+      <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
+    </Link>
+    <Link href="/case-taker" style={{ color: 'inherit', textDecoration: 'none' }}>
+      <ListItemIconButton icon={<InputIcon />} text="Case Taker" />
+    </Link>
+    <Link href="#" style={{ color: 'inherit', textDecoration: 'none' }}>
+      <ListItemIconButton icon={<TuneIcon />} text="Control Panel" />
+    </Link>
+    <Link href="#" style={{ color: 'inherit', textDecoration: 'none' }}>
+      <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Sign Out" />
+    </Link>
   </React.Fragment>
   </List>
   );

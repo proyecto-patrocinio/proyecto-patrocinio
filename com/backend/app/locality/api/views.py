@@ -55,7 +55,7 @@ class NationalityApiViewSet(ModelViewSet):
     permission_classes = [ IsAuthenticated  ]
 
     def get_serializer(self, *args, **kwargs):
-        if self.action == 'list' or self.action == 'create'                 :
+        if self.action == 'list' or self.action == 'create':
             return NationalityOneSerializer(*args, **kwargs)
         return NationalityFullSerializer(*args, **kwargs)
 

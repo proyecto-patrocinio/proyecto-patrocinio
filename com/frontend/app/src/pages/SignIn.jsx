@@ -14,6 +14,7 @@ import Copyright from '../components/Copyright';
 import  Alert  from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
 import { UserContext } from '../context/UserContext';
+import Cookies from "js-cookie";
 
 const theme = createTheme();
 
@@ -49,6 +50,7 @@ export default function SignIn( props) {
             setOpen(false); 
             //update user context 
             user.setUser(JSON.parse( request.response).user);
+            Cookies.set("isLoggedIn", true);
             props.setIsLoggedIn(true);
           }
           else if( request.status !== 400 ){
