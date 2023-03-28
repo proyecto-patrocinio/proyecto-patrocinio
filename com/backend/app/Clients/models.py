@@ -21,7 +21,7 @@ class Client(models.Model):
 
     
     def __str__(self) -> str:
-        return f'{self.locality}'    
+        return f'{self.id, self.first_name}'    
     
         
 
@@ -36,14 +36,17 @@ class Patrimony(models.Model):
     amount_pension = models.IntegerField( verbose_name='Monto de Pensión')
     vehicle = models.CharField(max_length=125,  verbose_name='Vehículo')
  
-  
+    def __str__(self) -> str:
+            return f'{self.id}'   
 
 
 class Family(models.Model):
     id = models.IntegerField( primary_key=True)  
     client_user_id = models.OneToOneField(Client, on_delete=models.CASCADE)  
     partner_salary = models.IntegerField()
- 
+    
+    def __str__(self) -> str:
+            return f'{self.id, self.partner_salary}'  
 
 
 class Son(models.Model):
@@ -54,7 +57,7 @@ class Son(models.Model):
     family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE)
     
     def __str__(self) -> str:
-        return f'{self.id_locality}'   
+            return f'{self.id}'  
  
 class Tel(models.Model):
     id = models.IntegerField( primary_key=True)  
@@ -62,4 +65,4 @@ class Tel(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE, )
     
     def __str__(self) -> str:
-        return f'{self.client}'   
+            return f'{self.id, self.phone_number}'
