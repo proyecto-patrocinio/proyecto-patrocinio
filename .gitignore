@@ -60,6 +60,7 @@ docs/_build/
 
 # PyBuilder
 target/
+*.lock
 
 /dist/
 /node_modules/
