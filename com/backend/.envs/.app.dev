@@ -1,5 +1,6 @@
 DEBUG=1
-SECRET_KEY='{e%ebfx1%5ot@^nqru7!i_705qq7*@30b3-ui5ztoi8$#$p^u1d}'
+
+SECRET_KEY=qlz[43I@dG3[UwyYV*P0Gg:1me"F0mMauxn"ZTKPS4"$"?+s!2Fn
 DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 0.0.0.0 databaseserver db nginxserver
 SQL_ENGINE=django.db.backends.postgresql
 SQL_DATABASE=patrocinio
