@@ -20,7 +20,8 @@ class Client(models.Model):
     sex = models.CharField(choices=sex, max_length=1, default='F', verbose_name='Sexo')
 
     
-    
+    def __str__(self) -> str:
+        return f'{self.id, self.first_name, self.last_name}'    
     
         
 
@@ -35,14 +36,17 @@ class Patrimony(models.Model):
     amount_pension = models.IntegerField( verbose_name='Monto de Pensión')
     vehicle = models.CharField(max_length=125,  verbose_name='Vehículo')
  
-  
+    def __str__(self) -> str:
+            return f'{self.id}'   
 
 
 class Family(models.Model):
     id = models.IntegerField( primary_key=True)  
     client_user_id = models.OneToOneField(Client, on_delete=models.CASCADE)  
     partner_salary = models.IntegerField()
- 
+    
+    def __str__(self) -> str:
+            return f'{self.id, self.partner_salary}'  
 
 
 class Son(models.Model):
@@ -50,9 +54,15 @@ class Son(models.Model):
     age = models.IntegerField(verbose_name='Edad')
     id_locality = models.ForeignKey(Locality, on_delete=models.DO_NOTHING, verbose_name='Localidad')
     address = models.CharField(max_length=45, verbose_name='Dirección')
-    family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE)  
+    family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE)
+    
+    def __str__(self) -> str:
+            return f'{self.id}'  
  
 class Tel(models.Model):
     id = models.IntegerField( primary_key=True)  
     phone_number = models.IntegerField(verbose_name='Número de Teléfono')
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, )  
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, )
+    
+    def __str__(self) -> str:
+            return f'{self.id, self.phone_number}'

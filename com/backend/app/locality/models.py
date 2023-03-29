@@ -8,6 +8,8 @@ class Nationality(models.Model):
     id = models.IntegerField(  primary_key=True)  
     name = models.CharField( max_length=100, verbose_name='Nacionalidad')
 
+    def __str__(self) -> str:
+        return f'{self.name}'  
 
 class Province(models.Model):
   
@@ -18,7 +20,8 @@ class Province(models.Model):
                                         related_name="provinces",# related_name attribute specifies the name of the reverse relation  
                                         verbose_name='Nacionalidad'# from the User model back to this model.
                                         )  
- 
+    def __str__(self) -> str:
+        return f'{self.name}'  
   
 class Locality(models.Model):
     id = models.IntegerField( primary_key=True)  
@@ -27,6 +30,10 @@ class Locality(models.Model):
                                     related_name='localities',
                                     on_delete=models.CASCADE, 
                                     verbose_name='Provincia')   
+    
+    
+    def __str__(self) -> str:
+        return f'{self.name}'    
     
     
 
