@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'Clients',
     'locality',
     'user',
+    'Panel',
+    'Card',
+    
 ]
 
 MIDDLEWARE = [

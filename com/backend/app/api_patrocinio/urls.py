@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from locality.api.router import router_locality
 from user.api.router import router_user
 from Clients.api.router import router_clients
+from Card.api.router import router_card
 from dj_rest_auth.registration.views import RegisterView, ConfirmEmailView, VerifyEmailView, ResendEmailVerificationView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 
@@ -35,4 +36,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/clients/', include(router_clients.urls)),
     path('api/geography/', include(router_locality.urls)),
+    path('api/card/', include(router_card.urls)),
 ]
