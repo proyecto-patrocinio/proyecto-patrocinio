@@ -8,7 +8,7 @@ from Panel.api.serializers import PanelSerializer
 class PanelViewSet(ModelViewSet):
     queryset = Panel.objects.all()
     serializer_class = PanelSerializer
-    permission_classes = [ AllowAny  ]
+    permission_classes = [ IsAuthenticated ]
     # idealmente es IsAuthenticated
     #permission_classes = [ IsAuthenticated ]
     
