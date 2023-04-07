@@ -5,8 +5,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 from django.db.models import Prefetch
 
-from user.api.serializers import UserSerializer, UserDetailSerializer
-from user.models import User
+from BoardUSer.api.serializers import BoardUserSerializer
+from BoardUSer.models import BoardUser
 from rest_framework import viewsets, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -15,12 +15,12 @@ from rest_framework import mixins
 
 
 
-class UserApiViewSet(ModelViewSet): 
-    queryset = User.objects.all() #all the data in the table 
+class BoardUserViewSet(ModelViewSet): 
+    queryset = BoardUser.objects.all() #all the data in the table 
     permission_classes = [ IsAuthenticated  ] #only authenticated users can access
 
     def get_serializer(self, *args, **kwargs): #select json format
         if self.action == 'list' or self.action == 'create': #by /api/user/
-           return UserSerializer(*args, **kwargs)
+           return BoardUserSerializer(*args, **kwargs)
         #return UserDetailSerializer(*args, **kwargs) #else, /api/user/id 
 
