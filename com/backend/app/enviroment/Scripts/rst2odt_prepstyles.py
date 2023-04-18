@@ -1,4 +1,4 @@
-#!C:\Users\Nico\proyecto_patrocinio\proyecto-patrocinio\com\backend\App\enviroment\Scripts\python.exe
+#!C:\Users\Nico\Patrocinio_14_04\proyecto-patrocinio\com\backend\app\enviroment\Scripts\python.exe
 
 # $Id: rst2odt_prepstyles.py 8932 2022-01-05 14:59:31Z milde $
 # Author: Dave Kuhlman <dkuhlman@rexx.com>

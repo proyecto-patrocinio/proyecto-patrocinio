@@ -1,4 +1,4 @@
-#!C:\Users\Nico\proyecto_patrocinio\proyecto-patrocinio\com\backend\App\enviroment\Scripts\python.exe
+#!C:\Users\Nico\Patrocinio_14_04\proyecto-patrocinio\com\backend\app\enviroment\Scripts\python.exe
 # :Copyright: © 2015 Günter Milde.
 # :License: Released under the terms of the `2-Clause BSD license`_, in short:
 #

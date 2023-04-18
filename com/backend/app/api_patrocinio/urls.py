@@ -35,7 +35,7 @@ urlpatterns = [
     path('api/users/', include(router_user.urls)),
     path('admin/', admin.site.urls),
     path('api/clients/', include(router_clients.urls)),
-    path('api/panel/', include(router_panel.urls)),
+    path('api/panels/', include(router_panel.urls)),
     path('api/geography/', include(router_locality.urls)),
     
 ]

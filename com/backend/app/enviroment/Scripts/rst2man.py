@@ -1,4 +1,4 @@
-#!C:\Users\Nico\proyecto_patrocinio\proyecto-patrocinio\com\backend\App\enviroment\Scripts\python.exe
+#!C:\Users\Nico\Patrocinio_14_04\proyecto-patrocinio\com\backend\app\enviroment\Scripts\python.exe
 
 # Author:
 # Contact: grubert@users.sf.net

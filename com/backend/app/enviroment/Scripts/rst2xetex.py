@@ -1,4 +1,4 @@
-#!C:\Users\Nico\proyecto_patrocinio\proyecto-patrocinio\com\backend\App\enviroment\Scripts\python.exe
+#!C:\Users\Nico\Patrocinio_14_04\proyecto-patrocinio\com\backend\app\enviroment\Scripts\python.exe
 
 # $Id: rst2xetex.py 8956 2022-01-20 10:11:44Z milde $
 # Author: Guenter Milde

@@ -1,4 +1,4 @@
-#!C:\Users\Nico\proyecto_patrocinio\proyecto-patrocinio\com\backend\App\enviroment\Scripts\python.exe
+#!C:\Users\Nico\Patrocinio_14_04\proyecto-patrocinio\com\backend\app\enviroment\Scripts\python.exe
 
 # $Id: rst2odt.py 8994 2022-01-29 16:28:17Z milde $
 # Author: Dave Kuhlman <dkuhlman@rexx.com>

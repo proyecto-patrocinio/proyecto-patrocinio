@@ -1,4 +1,4 @@
-#!C:\Users\Nico\proyecto_patrocinio\proyecto-patrocinio\com\backend\App\enviroment\Scripts\python.exe
+#!C:\Users\Nico\Patrocinio_14_04\proyecto-patrocinio\com\backend\app\enviroment\Scripts\python.exe
 
 # $Id: rst2s5.py 8927 2022-01-03 23:50:05Z milde $
 # Author: Chris Liechti <cliechti@gmx.net>
