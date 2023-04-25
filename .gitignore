@@ -3,6 +3,7 @@
 *.pot
 *.pyc
 media/
+proyecto-patrocinio\com\backend\app\enviroment
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
