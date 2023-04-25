@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'locality',
     'user',
     'Card',
-    
+    'BoardUSer',
 ]
 
 MIDDLEWARE = [
