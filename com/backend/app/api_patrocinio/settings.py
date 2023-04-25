@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'Clients',
     'locality',
     'user',
+    'Card',
     'BoardUSer',
 ]
 
