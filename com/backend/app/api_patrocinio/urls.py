@@ -36,5 +36,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/clients/', include(router_clients.urls)),
     path('api/geography/', include(router_locality.urls)),
-    path('api/card/', include(router_card.urls)),
+    path('api/cards/', include(router_card.urls)),
 ]
