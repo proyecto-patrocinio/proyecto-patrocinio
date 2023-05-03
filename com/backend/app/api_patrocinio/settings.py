@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'user',
     'Card',
     'BoardUSer',
+    'Panel',
+    'Board',
 ]
 
 MIDDLEWARE = [
