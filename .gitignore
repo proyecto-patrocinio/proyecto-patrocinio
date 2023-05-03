@@ -4,6 +4,7 @@
 *.pyc
 media/
 proyecto-patrocinio\com\backend\app\enviroment
+proyecto-patrocinio\enviroment
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
