@@ -69,5 +69,5 @@ target/
 
 com/backend/app/env/*
 gherkin.feature
-com\backend\app\Panel\migrations\*
+com/backend/app/Panel/migrations/*
 com/backend/app/enviroment/*
