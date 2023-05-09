@@ -68,6 +68,5 @@ target/
 /node_modules/
 
 com/backend/app/env/*
-gherkin.feature
-com/backend/app/Panel/migrations/*
 com/backend/app/enviroment/*
+gherkin.feature

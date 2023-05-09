@@ -1,16 +1,20 @@
 from django.db import models
-from user.models import *
-# from board.models import *
+from django.contrib.auth.models import User
+from Board.models import Board
 
 class BoardUser(models.Model):
-    id = models.IntegerField(primary_key=True)  
-    user_id  = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-   # board_id =  models.ForeignKey(Board, on_delete=models.DO_NOTHING)
-    
-
-    
+    user  = models.ForeignKey(User,
+                                 on_delete=models.CASCADE,
+                                 verbose_name='User',
+                                 related_name="boardusers",
+                                 null=False,
+                                 )
+    board =  models.ForeignKey(Board,
+                                  on_delete=models.CASCADE,
+                                  verbose_name='Board',
+                                  related_name="boardusers",
+                                  null=False,
+                                  )
+    created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self) -> str:
-        return f'{self.id, self.user_id, self.user}'    
-
- 
-
+        return f'{self.user}_{self.board}'

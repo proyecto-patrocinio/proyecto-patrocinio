@@ -16,7 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include, re_path
 from locality.api.router import router_locality
-from user.api.router import router_user
 from Clients.api.router import router_clients
 from Card.api.router import router_card
 from BoardUSer.api.router import router_boardUser
@@ -35,7 +34,6 @@ urlpatterns = [
     path('api/auth/resend-email/', ResendEmailVerificationView.as_view(), name='resend-email-verification'),
     path('api/auth/password/reset/', PasswordResetView.as_view()),
     path('api/auth/password/reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('api/users/', include(router_user.urls)),
     path('admin/', admin.site.urls),
     path('api/clients/', include(router_clients.urls)),
     path('api/panels/', include(router_panel.urls)),
