@@ -9,5 +9,5 @@ class BoardUserSerializer(ModelSerializer):
 
     class Meta:
         model = BoardUser
-        fields = ["id", "user_id", "board_id"]
-        read_only_field = ["id", "user_id", "board_id"]
+        fields = '__all__'
+        read_only_field = ["id","board","user"]

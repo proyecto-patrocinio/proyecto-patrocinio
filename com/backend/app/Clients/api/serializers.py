@@ -10,30 +10,25 @@ class ClientSerializer(ModelSerializer):
         fields = '__all__'
 
 class PatrimonySerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Patrimony
         fields = '__all__'
 
 class ClientPatrimonySerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Patrimony
         fields = ('id', 'employment', 'salary', 'other_income', 'amount_other_income','amount_retirement', 'amount_pension', 'vehicle')
 
 class FamilySerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Family
-        fields = '__all__'    
+        fields = '__all__'
         
 class SonSerializer(serializers.ModelSerializer):
-    
     class Meta:
         model = Son
-        fields = '__all__'    
-        
-        
+        fields = '__all__'
+
 class TelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tel
