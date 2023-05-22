@@ -1,4 +1,5 @@
 DEBUG=1
+
 SECRET_KEY=qlz[43I@dG3[UwyYV*P0Gg:1me"F0mMauxn"ZTKPS4"$"?+s!2Fn
 DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 0.0.0.0 databaseserver db nginxserver
 SQL_ENGINE=django.db.backends.postgresql
