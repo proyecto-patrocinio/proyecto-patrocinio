@@ -73,3 +73,4 @@ gherkin.feature
 
 #static files
 com/backend/app/django_static/*
+com/backend/app/db.sqlite3
