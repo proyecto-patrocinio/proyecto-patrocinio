@@ -9,12 +9,14 @@ class BoardUser(models.Model):
                                  related_name="boardusers",
                                  null=False,
                                  )
+
     board =  models.ForeignKey(Board,
                                   on_delete=models.CASCADE,
                                   verbose_name='Board',
                                   related_name="boardusers",
                                   null=False,
                                   )
+
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self) -> str:
         return f'{self.user}_{self.board}'

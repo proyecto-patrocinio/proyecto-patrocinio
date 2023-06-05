@@ -187,4 +187,4 @@ EMAIL_PORT = 587
 
 # CORS- Cross-Origin
 # https://pypi.org/project/django-cors-headers/
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(' ')
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://0.0.0.0').split(' ')

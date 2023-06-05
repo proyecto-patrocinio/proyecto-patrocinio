@@ -1,7 +1,6 @@
 from rest_framework import viewsets
 from Board.api.serializers import BoardSerializer, BoardFullSerializer
 from Board.models import Board
-from rest_framework import viewsets
 from django.db.models import Prefetch
 
 class BoardViewSet(viewsets.ModelViewSet):
