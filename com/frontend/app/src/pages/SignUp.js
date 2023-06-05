@@ -37,7 +37,8 @@ const { enqueueSnackbar } = useSnackbar();
   }else {
    
     //send data to API
-    const requestURL = 'http://127.0.0.1:80/api/register/';
+    const requestURL = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                     + process.env.REACT_APP_PATH_SIGNUP;
     const request = new XMLHttpRequest();
     request.open('POST', requestURL);
     request.setRequestHeader( 'Content-Type', 'application/json')
