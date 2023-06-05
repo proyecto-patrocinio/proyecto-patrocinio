@@ -3,7 +3,7 @@
   We are also using the Droppable component to make the dashboard a drop zone for dragging and dropping panels.
   In the onDragEnd method, we can implement the logic to reorder the cards.
 */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Panel from './Panel';
 import styled from '@emotion/styled';
@@ -16,84 +16,42 @@ const BoardContainer = styled.div`
   flex-grow: 1;
 `;
 
-const Board = () => {
-  const [board, setBoard] = useState({
-    id: '1',
-    title: 'My Board',
-    panels: [
-      {
-        id: '1',
-        title: 'Sin Asignar',
-        cards: [
-          {
-            id: '1',
-            title: 'Caso 1',
-            content: 'Do something',
-          },
-          {
-            id: '2',
-            title: 'Caso 2',
-            content: 'Do something else',
-          },
-        ],
-      },
-      {
-        id: '2',
-        title: 'Cátedra 2',
-        cards: [
-          {
-            id: '3',
-            title: 'Caso 3',
-            content: 'Do something else again',
-          },
-        ],
-      },
-      {
-        id: '3',
-        title: 'Cátedra 3',
-        cards: [
-          {
-            id: '4',
-            title: 'Caso 4',
-            content: 'Do something completely different',
-          },
-        ],
-      },
-      {
-        id: '4',
-        title: 'Cátedra 4',
-        cards: [
-          {
-            id: '5',
-            title: 'Caso 5',
-            content: 'Do something completely different',
-          },
-        ],
-      },
-      {
-        id: '5',
-        title: 'Cátedra 5',
-        cards: [
-          {
-            id: '6',
-            title: 'Caso 6',
-            content: 'Do something completely different',
-          },
-        ],
-      },
-      {
-        id: '6',
-        title: 'Cátedra 6',
-        cards: [
-          {
-            id: '7',
-            title: 'Caso 7',
-            content: 'Do something completely different',
-          },
-        ],
-      },
-    ],
-  });
+const Board = ({id}) => {
+  const [board, setBoard] = useState(null);
+
+  useEffect(() => {
+    const fetchBoard = async () => {
+      try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                  + process.env.REACT_APP_PATH_BOARD
+                  + id;
+        const response = await fetch(url);
+        if (response.ok) {
+          const data = await response.json();
+          setBoard(data);
+          console.log(data);
+        } else {
+          console.error('Failed to fetch board:', response.status);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchBoard();
+  }, [id]);
+
+  if (!board) {
+    return <div>No board.</div>;
+  }
+
+
+
+
+
+
+
+  /************************************************************ */
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
