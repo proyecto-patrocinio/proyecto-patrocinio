@@ -7,7 +7,7 @@ import SignIn from "./pages/SignIn";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import SignUp from "./pages/SignUp"; 
-import { UserContext, UserProvider } from "./context/UserContext";
+import { UserProvider } from "./context/UserContext";
 import HomePage from "./pages/HomePage";
 import CaseTaker from "./pages/CaseTakerPage";
 import Cookies from "js-cookie";
@@ -16,7 +16,7 @@ import Cookies from "js-cookie";
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     useEffect(() => {
-        //TODO: conectar al backend y consultar si removemos la coockie 
+        //TODO: conectar al backend y consultar si removemos la cookie 
         // Comprobar si la cookie existe y establecer el estado de inicio de sesión en consecuencia
         const isLoggedInCookie = Cookies.get("isLoggedIn");
         if(isLoggedInCookie === "true"){
@@ -24,11 +24,11 @@ const App = () => {
         }
     }, []);
   
-    const getPage  = ( children) => {
+    const getPage  = (children) => {
         return (
-            <UserProvider>
+            <div>
             {isLoggedIn ? children :<SignIn setIsLoggedIn={setIsLoggedIn} />}
-            </UserProvider>
+            </div>
         );
     };
 
@@ -36,14 +36,16 @@ const App = () => {
         <>
 
         <CssBaseline/>
+        <UserProvider>
         <Router>
             <Routes> 
                 <Route exact path="/"  element={getPage(<HomePage/>)} />
                 <Route exact path="/signup/"  element={<SignUp/>} /> 
-                <Route exact path="/case-taker/"  element={getPage(<CaseTaker/>)} /> 
+                <Route exact path="/case-taker/"  element={getPage(<CaseTaker/>)} />
                 
             </Routes>
         </Router>  
+        </UserProvider>
         </>
     );
 };
