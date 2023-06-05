@@ -13,6 +13,9 @@ import Title from './Title';
 import { Paper } from '@mui/material';
 
 const Panel = ({ panel, index }) => {
+  if (!panel) {
+    return <div>No panels.</div>;
+  }
 
   return (
     <Droppable droppableId={panel.id} index={index} direction="vertical">
