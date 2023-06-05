@@ -17,6 +17,7 @@ fi
 python manage.py makemigrations 
 python manage.py flush --no-input
 python manage.py migrate
+python manage.py collectstatic --no-input --clear
 
 #load initial data (the order is important)
 python manage.py loaddata locality/load_data/nationality.json 
