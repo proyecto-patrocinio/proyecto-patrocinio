@@ -9,7 +9,7 @@ export default function Consultancy( ) {
     return (
         <ThemeProvider theme={theme}>
             <Dashboard title={"TOMADOR DE CASO"}>
-                <Board/>
+                <Board  id={1} />
             </Dashboard>
         </ThemeProvider>
     );
