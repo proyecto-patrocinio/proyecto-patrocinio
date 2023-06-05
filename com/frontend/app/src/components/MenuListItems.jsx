@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import List from '@mui/material/List';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -12,6 +12,7 @@ import TuneIcon from '@mui/icons-material/Tune';
 import InputIcon from '@mui/icons-material/Input';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import  Link  from '@mui/material/Link'
+import { useUserContext } from '../context/UserContext';
 
 
  
@@ -33,14 +34,46 @@ const ListItemIconButton = ( {icon, text} ) => {
 }
  
 
+  const ListBoards = ( ) => {
+  const userContext = useUserContext();
+  const [boards, setBoards] = useState([]);
 
+
+  useEffect(() => {
+    console.log("menu, boards: ", boards)
+    const fetchBoard = async () => {
+      try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                  + process.env.REACT_APP_PATH_USERBOARD_BY_USER
+                  + userContext.user.pk;
+        const response = await fetch(url);
+        if (response.ok) {
+          const data = await response.json()
+          const boards = data.map(item => item.board);
+          console.log(boards);
+          setBoards(boards);
+        } else {
+          console.error('Failed to fetch board-user:', response.status);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchBoard();
+  }, [userContext.user.pk]);
+
+  return (
+    <ListItemCollapseButton text="Boards" sub_list={boards}/>
+  );
+}
 /**
  * Item with Icon and Text and a Collapse Button
  ** text: text to be displayed
  ** sub_list: list of sub items to be displayed
  *  @returns json object 
  */
-const ListItemCollapseButton = ( {text,sub_list} ) => {
+const ListItemCollapseButton = ( {text, sub_list} ) => {
 
 
   const [open, setOpen] = React.useState(true);
@@ -74,6 +107,7 @@ const ListItemCollapseButton = ( {text,sub_list} ) => {
  * @returns json object with all the menu items
  */
  const MenuListItems = ()=>{
+ 
   return (
 
   <List component="nav">
@@ -90,6 +124,7 @@ const ListItemCollapseButton = ( {text,sub_list} ) => {
     <Link href="#" style={{ color: 'inherit', textDecoration: 'none' }}>
       <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Sign Out" />
     </Link>
+    <ListBoards />
   </React.Fragment>
   </List>
   );
