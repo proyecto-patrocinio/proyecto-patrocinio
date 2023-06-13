@@ -27,4 +27,7 @@ python manage.py loaddata locality/load_data/locality.json
 #run test
 python manage.py test
 
+#create superuser
+python manage.py createsuperuser --no-input
+
 exec "$@"  # execute the command that was passed to docker run
