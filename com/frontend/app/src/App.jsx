@@ -11,6 +11,7 @@ import { UserProvider } from "./context/UserContext";
 import HomePage from "./pages/HomePage";
 import CaseTaker from "./pages/CaseTakerPage";
 import Cookies from "js-cookie";
+import BoardPage from "./pages/BoardPage";
 
 
 const App = () => {
@@ -42,7 +43,7 @@ const App = () => {
                 <Route exact path="/"  element={getPage(<HomePage/>)} />
                 <Route exact path="/signup/"  element={<SignUp/>} /> 
                 <Route exact path="/case-taker/"  element={getPage(<CaseTaker/>)} />
-                
+                <Route exact path="/board/:id_board/" element={getPage(<BoardPage/>)} />
             </Routes>
         </Router>  
         </UserProvider>

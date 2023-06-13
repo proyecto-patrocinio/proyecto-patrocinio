@@ -29,7 +29,6 @@ const Board = ({id}) => {
         if (response.ok) {
           const data = await response.json();
           setBoard(data);
-          console.log(data);
         } else {
           console.error('Failed to fetch board:', response.status);
         }
@@ -146,7 +145,7 @@ const Board = ({id}) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="board" direction="horizontal">
+      <Droppable droppableId={"board"+String(id)} direction="horizontal">
         {(provided) => (
           <BoardContainer
             ref={provided.innerRef}

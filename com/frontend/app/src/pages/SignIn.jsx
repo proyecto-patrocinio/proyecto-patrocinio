@@ -23,10 +23,6 @@ export default function SignIn( props) {
   const [open, setOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
 
-  useEffect(() => {
-    console.log("User updated:", userContext.user.pk);
-  }, [userContext.user.pk]);
-
   //Conect to API
   const handleValidation = (event) => {  
     

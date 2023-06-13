@@ -19,7 +19,6 @@ export const UserProvider = ({ children }) => {
       // Comprobar si el estado del usuario ha cambiado y actualizar la cookie
         if( userState === initialState && Cookies.get("isLoggedIn") === "true"){
           const a = Cookies.get("user");
-          console.log("UserContext: ", JSON.parse(a));
           setUserState( JSON.parse(a));
         }
     }, []);
