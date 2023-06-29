@@ -12,19 +12,23 @@ import HomePage from "./pages/HomePage";
 import CaseTaker from "./pages/CaseTakerPage";
 import Cookies from "js-cookie";
 import BoardPage from "./pages/BoardPage";
+import LogoutPage from "./pages/LogoutPage";
 
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     useEffect(() => {
-        //TODO: conectar al backend y consultar si removemos la cookie 
+        //TODO: conectar al backend (crear/obtener token?) y consultar si removemos la cookie 
         // Comprobar si la cookie existe y establecer el estado de inicio de sesión en consecuencia
         const isLoggedInCookie = Cookies.get("isLoggedIn");
         if(isLoggedInCookie === "true"){
             setIsLoggedIn(true);
         }
+        else{
+            setIsLoggedIn(false);
+        }
     }, []);
-  
+
     const getPage  = (children) => {
         return (
             <div>
@@ -44,6 +48,7 @@ const App = () => {
                 <Route exact path="/signup/"  element={<SignUp/>} /> 
                 <Route exact path="/case-taker/"  element={getPage(<CaseTaker/>)} />
                 <Route exact path="/board/:id_board/" element={getPage(<BoardPage/>)} />
+                <Route exact path="/logout/" element={<LogoutPage  setIsLoggedIn={setIsLoggedIn}/> } />
             </Routes>
         </Router>  
         </UserProvider>

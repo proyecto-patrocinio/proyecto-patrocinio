@@ -121,8 +121,8 @@ const ListItemCollapseButton = ( {text, sub_list} ) => {
     <Link href="#" style={{ color: 'inherit', textDecoration: 'none' }}>
       <ListItemIconButton icon={<TuneIcon />} text="Control Panel" />
     </Link>
-    <Link href="#" style={{ color: 'inherit', textDecoration: 'none' }}>
-      <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Sign Out" />
+    <Link href="/logout" style={{ color: 'inherit', textDecoration: 'none' }}>
+      <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Logout"/>
     </Link>
     <ListBoards />
   </React.Fragment>
