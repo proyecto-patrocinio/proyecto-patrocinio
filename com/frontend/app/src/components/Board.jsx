@@ -8,7 +8,7 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Panel from './Panel';
 import styled from '@emotion/styled';
 import { Stack } from '@mui/material';
-
+import moveCard from './utils/card';
 const BoardContainer = styled.div`
   display: flex;
   overflow-x: auto;
@@ -99,6 +99,12 @@ const Board = ({id}) => {
 
     // If destination.droppableId != source.droppableId
     } else {
+      //move card in backend.
+      const card_to_move = board.panels[source.index];
+      const id_card_to_move = String(card_to_move.id);
+      const id_new_panel =String(destination.droppableId);
+      moveCard(id_card_to_move, id_new_panel);
+
       // Find the panel that corresponds to the source droppableId.
       const sourcePanel = board.panels.find(
         (panel) => panel.id === source.droppableId

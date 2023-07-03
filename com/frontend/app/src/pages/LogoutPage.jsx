@@ -6,7 +6,7 @@ import { Route, Routes, useNavigate } from 'react-router-dom';
 const LogoutPage = () => {
 
     //TODO: Eliminar token(?) en backend
-    //TODO: Eliminar usercontext
+    //TODO: Eliminar usercontext(?)
   const removeCookies = () => {
     Cookies.remove("isLoggedIn");
     Cookies.remove("user");
@@ -18,7 +18,7 @@ const LogoutPage = () => {
   useEffect(() => {
     setTimeout(() => {
       navigate('/', { replace: true });
-    }, 1000);
+    }, 500);
   }, []);
 
   return <div>Loading...</div>;
