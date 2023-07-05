@@ -159,7 +159,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        #  'rest_framework.authentication.SessionAuthentication',
+        #  'rest_framework.authentication.SessionAuthentication', #TODO:
         #  'rest_framework.authentication.TokenAuthentication',
        # 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
@@ -187,4 +187,4 @@ EMAIL_PORT = 587
 
 # CORS- Cross-Origin
 # https://pypi.org/project/django-cors-headers/
-CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '').split(' ')
+CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://0.0.0.0').split(' ')

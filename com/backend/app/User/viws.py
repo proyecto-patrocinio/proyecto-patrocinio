@@ -1,18 +1,15 @@
+from  serializers import UserSerializer
+from  serializers import UserFullSerializer
+from django.contrib.auth.models import User
 from rest_framework import viewsets
-from Board.api.serializers import BoardSerializer, BoardFullSerializer
-from Board.models import Board
 from django.db.models import Prefetch
 
 class BoardViewSet(viewsets.ModelViewSet):
-  queryset = Board.objects.all()
-  serializer_class = BoardSerializer
-
+  queryset = User.objects.all()
+  serializer_class = UserSerializer
   def retrieve(self, request, *args, **kwargs):
-        self.serializer_class = BoardFullSerializer
+        self.serializer_class = UserFullSerializer
         self.queryset = self.queryset.prefetch_related( 
                         Prefetch('boardusers')
-        )
-        self.queryset = self.queryset.prefetch_related( 
-                        'panels__cards'
         )
         return super().retrieve(request, *args, **kwargs)

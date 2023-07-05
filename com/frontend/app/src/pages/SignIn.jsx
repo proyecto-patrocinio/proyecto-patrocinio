@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,17 +13,15 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../components/Copyright';
 import  Alert  from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
-import { UserContext } from '../context/UserContext';
+import { useUserContext } from '../context/UserContext';
+import Cookies from "js-cookie";
 
 const theme = createTheme();
 
 export default function SignIn( props) {
-  const user =  useContext(UserContext);
+  const userContext =  useUserContext();
   const [open, setOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
-
-
-  
 
   //Conect to API
   const handleValidation = (event) => {  
@@ -39,7 +37,8 @@ export default function SignIn( props) {
       setOpen(true);
     }else {      
       //send data to API
-      const requestURL = 'http://127.0.0.1:80/api/auth/login/';
+      const requestURL = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                       + process.env.REACT_APP_PATH_LOGIN ;
       const request = new XMLHttpRequest();
       request.open('POST', requestURL);
       request.setRequestHeader( 'Content-Type', 'application/json');
@@ -48,7 +47,8 @@ export default function SignIn( props) {
           if( request.status === 200){
             setOpen(false); 
             //update user context 
-            user.setUser(JSON.parse( request.response).user);
+            userContext.setUser(JSON.parse( request.response).user);
+            Cookies.set("isLoggedIn", true);
             props.setIsLoggedIn(true);
           }
           else if( request.status !== 400 ){

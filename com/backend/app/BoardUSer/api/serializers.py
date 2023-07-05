@@ -3,10 +3,7 @@
 '''
 from BoardUSer.models import *
 from rest_framework.serializers import ModelSerializer
-
-
 class BoardUserSerializer(ModelSerializer):
-
     class Meta:
         model = BoardUser
         fields = '__all__'
