@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'BoardUSer',
     'Panel',
     'Board',
+    'Consultation',
 ]
 
 MIDDLEWARE = [
