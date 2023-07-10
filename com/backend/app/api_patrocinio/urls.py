@@ -21,6 +21,7 @@ from Card.api.router import router_card
 from BoardUSer.api.router import router_boardUser
 from Panel.api.router import router_panel
 from Board.api.router import router_board
+from Consultation.api.router import router_consultation
 from dj_rest_auth.registration.views import RegisterView, ConfirmEmailView, VerifyEmailView, ResendEmailVerificationView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 
@@ -39,6 +40,7 @@ urlpatterns = [
     path('api/panels/', include(router_panel.urls)),
     path('api/geography/', include(router_locality.urls)),
     path('api/cards/', include(router_card.urls)),
-    path('api/boardUser/', include(router_boardUser.urls)),    
+    path('api/boardUser/', include(router_boardUser.urls)),
     path('api/boards/', include(router_board.urls)),
+    path('api/consultations/', include(router_consultation.urls)),
 ]
