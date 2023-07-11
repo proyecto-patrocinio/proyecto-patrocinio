@@ -2,12 +2,12 @@ from django.db import models
 from Panel.models import Panel
 from Consultation.models import Consultation
 
-# Create your models here.
 class Card(models.Model):
-  consultation = models.OneToOneField( Consultation,
+  consultation = models.OneToOneField(Consultation,
                                       on_delete= models.CASCADE,
                                       related_name="cards",
                                       verbose_name="Consultation",
+                                      primary_key=True
                                       )
   tag = models.CharField(max_length=256)
   panel = models.ForeignKey(Panel,
