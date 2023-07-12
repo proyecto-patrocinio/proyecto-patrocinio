@@ -1,6 +1,7 @@
 from django.db import models
 from Consultation.choices import CONSULTATION_STATES
 from Clients.models import Client
+from Board.models import Board
 
 class Consultation(models.Model):
     id = models.AutoField(primary_key=True)
@@ -16,4 +17,30 @@ class Consultation(models.Model):
     opponent =  models.CharField(max_length=500)
 
     def __str__(self):
-        return f'{self.client}_{self.id}'
+        return f'{self.client}/{self.id}'.replace(" ", "_")
+
+
+class RequestConsultation(models.Model):
+
+    id = models.AutoField(primary_key=True)
+    consultation = models.OneToOneField(
+        Consultation,
+        verbose_name=("Consultation"),
+        on_delete=models.CASCADE,
+        null=False,
+    )
+    destiny_board = models.ForeignKey(
+        Board,
+        null=False,
+        on_delete = models.CASCADE,
+    )
+
+    class Meta:
+        verbose_name = ("RequestConsultation")
+        verbose_name_plural = ("RequestConsultations")
+
+    def __str__(self):
+        return f'req_consultation/{self.consultation}'.replace(" ", "_")
+
+    def get_absolute_url(self):
+        return reverse("RequestConsultation_detail", kwargs={"pk": self.id})
