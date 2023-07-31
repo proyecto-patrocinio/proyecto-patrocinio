@@ -1,5 +1,5 @@
 /**
- In this component, we are using the DragDropContext component from react-beautiful-dnd to handle drag and drop across the board.
+  In this component, we are using the DragDropContext component from react-beautiful-dnd to handle drag and drop across the board.
   We are also using the Droppable component to make the dashboard a drop zone for dragging and dropping panels.
   In the onDragEnd method, we can implement the logic to reorder the cards.
 */
