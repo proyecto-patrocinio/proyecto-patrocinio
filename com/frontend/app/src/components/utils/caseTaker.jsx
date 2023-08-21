@@ -1,10 +1,10 @@
 import { List } from "@mui/material";
 
-const getConsultationsWithOutCards = async () => {
+const getConsultationsToAssign = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                + process.env.REACT_APP_PATH_CONSULTATIONS_FILTER
-                + process.env.REACT_APP_FILTER_CONSULTATIONS_WITH_OUT_CARD;
+                + process.env.REACT_APP_FILTER_CONSULTATIONS_WITH_STATUS
+                + "REGISTERED";
         const response = await fetch(url);
         if (response.ok) {
         const data = await response.json();
