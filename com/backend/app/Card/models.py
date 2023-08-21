@@ -1,7 +1,7 @@
 from django.db import models
 from Panel.models import Panel
 from Consultation.models import Consultation
-
+from Card.choices import CARD_STATES
 
 class Card(models.Model):
     consultation = models.OneToOneField(
@@ -18,6 +18,12 @@ class Card(models.Model):
       on_delete=models.CASCADE,  # on_delete attribute specifies the behavior to adopt when the referenced object is deleted.
       related_name="cards",  # related_name attribute specifies the name of the reverse relation  
       verbose_name='Panel',  # from the User model back to this model.
+    )
+    state = models.CharField(
+        max_length=12,
+        choices=CARD_STATES,
+        default="CREATED",
+        verbose_name="Estado"
     )
 
     def __str__(self):

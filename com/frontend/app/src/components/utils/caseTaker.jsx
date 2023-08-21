@@ -1,24 +1,24 @@
 import { List } from "@mui/material";
 
 /**
- * Fetches consultations that are to be assigned based on REGISTERED status.
+ * Fetches cards that are to be assigned based on CREATED status.
  * @returns {Promise} A promise that resolves to the fetched data or an error.
  */
-const getConsultationsToAssign = async () => {
+const getCardsToAssign = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                + process.env.REACT_APP_FILTER_CONSULTATIONS_WITH_STATUS
-                + "REGISTERED";
+                + process.env.REACT_APP_FILTER_CARD_WITH_STATUS
+                + "CREATED";
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json();
             return data;
         } else {
-            console.error('Failed in fetch Consultations:', response.status);
+            console.error('Failed in fetch Cards with status CREATED:', response.status);
             return null;
         }
     } catch (error) {
-        console.error('Failed in fetch Consultations:', response.status);
+        console.error('Failed in fetch Cards with status CREATED:', response.status);
         console.debug(error);
         throw error;
     }

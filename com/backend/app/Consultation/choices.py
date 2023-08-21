@@ -1,7 +1,5 @@
 CONSULTATION_STATES = (
-    ('REGISTERED', 'Registered'),
-    ('PENDING', 'Pending Assignment'),
-    ('ASSIGNED', 'Assigned'),
+    ('PENDING', 'Pending'),
     ('IN_PROGRESS', 'In Progress'),
     ('DONE', 'Done'),
     ('REJECTED', 'Rejected'),
