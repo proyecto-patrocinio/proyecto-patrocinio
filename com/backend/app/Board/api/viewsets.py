@@ -18,9 +18,7 @@ class BoardViewSet(viewsets.ModelViewSet):
         return super().retrieve(request, *args, **kwargs)
 
   def list(self, request, *args, **kwargs):
-        self.queryset = Board.objects.prefetch_related(
-            Prefetch('boardusers')
-        ).annotate(
+        self.queryset = Board.objects.annotate(
             number_cards=Count('panels__cards', distinct=True)
         )
         self.serializer_class = BoardListSerializer

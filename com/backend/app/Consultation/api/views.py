@@ -5,7 +5,9 @@ from Consultation.api.serializers import (
 )
 from Consultation.models import Consultation,  RequestConsultation
 from rest_framework.response import Response
-
+from Board.models import Board
+from Board.api.serializers import BoardSerializer
+from django.db.models import Prefetch, Sum, Count
 
 class ConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on Consultation objects."""
@@ -31,27 +33,28 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     serializer_class = RequestConsultationSerializer
 
     def list(self, request, *args, **kwargs):
-        """Custom list view that handles special cross-board filtering.
+        """Custom list view that handles special group-board filtering.
 
-        If 'cross' parameter is in the request's GET parameters, it performs
-        filtering based on the cross-board query parameter. If 'cross' is set
-        to 'all_boards', it returns a dictionary grouping requests by destiny board.
+        If 'group_by' parameter is in the request's GET parameters, it performs
+        filtering based on the group-board query parameter. If 'group_by' is set
+        to 'board', it returns a dictionary grouping requests by destiny board.
         Otherwise, it calls the parent class's list method to handle standard listing.
         """
-        if 'cross' in request.GET:
-            filter_string = request.GET['cross']
-            if filter_string == "all_boards":
+        if 'group_by' in request.GET:
+            filter_string = request.GET['group_by']
+            if filter_string == 'board':
                 request_consultations = RequestConsultation.objects.all()
                 serializer = RequestConsultationSerializer(
                     request_consultations, many=True
                 )
                 request_consultations_data = serializer.data
-                request_cross_board_dict = {}
+                request_group_board_dict = {}
+                query_boards = Board.objects.all()
+                board_list = BoardSerializer(query_boards, many=True).data
+                for board in board_list:
+                    request_group_board_dict[board['id']] = []
                 for request in request_consultations_data:
                     board = request['destiny_board']
-                    if board in request_cross_board_dict:
-                        request_cross_board_dict[board].append(request)
-                    else:
-                        request_cross_board_dict[board] = [request]
-                return Response(request_cross_board_dict)
+                    request_group_board_dict[board].append(request)
+                return Response(request_group_board_dict)
         return super().list(request, *args, **kwargs)
