@@ -1,6 +1,7 @@
 from Card.api.serializers import CardSerializer, CardCreateSerializer
 from Card.models import Card
 from rest_framework import viewsets
+from django.db.models import Count
 # list, create, retrieve, update, partial_update, destroy
 
 
@@ -21,14 +22,3 @@ class CardViewSet(viewsets.ModelViewSet):
         self.serializer_class = CardCreateSerializer
         return super().create(request, *args, **kwargs)
 
-    def list(self, request, *args, **kwargs):
-        """Custom list view that handles filtering based on the 'state' query parameter.
-
-        If 'state' parameter is present in the request's GET parameters, it filters
-        the queryset to include only cards with the specified state. Then, it calls
-        the parent class's list method to handle standard listing.
-        """
-        state_filter = self.request.query_params.get('state')
-        if state_filter:
-            self.queryset = Card.objects.filter(state=state_filter)
-        return super().list(request, *args, **kwargs)
