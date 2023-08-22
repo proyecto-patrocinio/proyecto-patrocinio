@@ -1,15 +1,15 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Dashboard from '../containers/Dashboard';
-import Board from '../components/Board';
+import Consultancy from '../components/Consultancy';
 
 const theme = createTheme();
-export default function Consultancy( ) {
+export default function CaseTaker( ) {
 
     return (
         <ThemeProvider theme={theme}>
-            <Dashboard title={"TOMADOR DE CASO"}>
-                <Board  id={1} />
+            <Dashboard title={"CONSULTORÍA"}>
+                <Consultancy/>
             </Dashboard>
         </ThemeProvider>
     );
