@@ -8,7 +8,7 @@ class Consultation(models.Model):
     id = models.AutoField(primary_key=True)
     state = models.CharField(
         max_length=12, choices=CONSULTATION_STATES,
-        default="PENDING",
+        default="CREATED",
         verbose_name="Estado"
     )
     time_stamp = models.DateTimeField(auto_now_add=True)
@@ -21,9 +21,10 @@ class Consultation(models.Model):
         null=False
     )
     opponent = models.CharField(max_length=500)
+    tag = models.CharField(max_length=30)
 
     def __str__(self):
-        return f'{self.client}/{self.id}'.replace(" ", "_")
+        return f'{self.client}/{self.id}/{self.tag}'.replace(" ", "_")
 
 
 class RequestConsultation(models.Model):
