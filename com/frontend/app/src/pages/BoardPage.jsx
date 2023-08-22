@@ -19,7 +19,7 @@ export default function BoardPage( ) {
             } catch (error) {
                 console.error('Error:', error);
                 throw error;
-          };
+            };
         };
         fetchBoardTitle();
     }, [id_board]);

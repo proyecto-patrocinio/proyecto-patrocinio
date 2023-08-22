@@ -9,48 +9,69 @@ import Panel from './Panel';
 import styled from '@emotion/styled';
 import { Stack } from '@mui/material';
 import moveCard from './utils/card';
-const BoardContainer = styled.div`
+import { getConsultationsToAssign, getListBoard, getRequestConsultations} from './utils/caseTaker'
+
+const ConsultancyContainer = styled.div`
   display: flex;
   overflow-x: auto;
   padding: 20px;
   flex-grow: 1;
 `;
 
-const Board = ({id}) => {
-  const [board, setBoard] = useState(null);
+
+const Consultancy = () => {
+  const [consultancy, setConsultancy] = useState( { 'title': 'Consultoria', 'panels': []})
 
   useEffect(() => {
-    const fetchBoard = async () => {
-      try {
-        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                  + process.env.REACT_APP_PATH_BOARD
-                  + id;
-        const response = await fetch(url);
-        if (response.ok) {
-          const data = await response.json();
-          setBoard(data);
-        } else {
-          console.error('Failed to fetch board:', response.status);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
+    const fetchConsultancy = async () => {
+		try {
+			// Get the required information
+			const boards = await getListBoard()
+			const inputConsultations = await getConsultationsToAssign()
+			const allConsultationRequests = await getRequestConsultations()
 
-    fetchBoard();
-  }, [id]);
+			// Create Consultancy
+			const consultancyDict = { 'title': 'Consultoria', 'panels': []}
 
-  if (!board) {
-    return <div>No board.</div>;
-  }
+			const inputPanel = { 
+				'id': 0,
+				'title': 'Nuevas Consultas',
+				'number_cards': inputConsultations.length,
+				'cards': inputConsultations}
+			consultancyDict.panels.push(inputPanel)
 
+			for (const board of boards) {
+				const requestListForBoard = allConsultationRequests.filter(
+          request => request.destiny_board === board.id
+        );
+				const requestPanel = {
+					'id': board.id,
+					'title': board.title,
+					'number_cards': board.number_cards,
+					'cards': requestListForBoard 
+				}
+				consultancyDict.panels.push(requestPanel)
+			}
 
+      setConsultancy(consultancyDict)
 
+		} catch (error) {
+			console.error("Failed to fetch cards in Consultancy.");
+			console.debug(error);
+		}
+		};
 
-
+	fetchConsultancy();
+  }, []);
 
 
   /************************************************************ */
+  /** 
+   * TODO: Cambar los estados de las Consultas cundo se mueve a 
+   *   un  panel distinto al de inputConsultations. Y generar una Request.
+   *   Por otro lado, se debe eliminar la request y devolver
+   *   el estado a CREATED si se vuelve al panel inputConsultations.
+   * */
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
@@ -74,7 +95,7 @@ const Board = ({id}) => {
     // If destination.droppableId == source.droppableId, the panel is 
     // updated with the destination panel.
     if (destination.droppableId === source.droppableId) {
-      const panel = board.panels.find(
+      const panel = consultancy.panels.find(
         (panel) => panel.id === destination.droppableId
       );
       // Remove the card from the source index. And add it to the destination index.
@@ -85,28 +106,28 @@ const Board = ({id}) => {
         ...panel,
         cards,
       };
-      // Update the board state with the updated panel.
-      const updatedPanels = board.panels.map((panel) => {
+      // Update the consultancy state with the updated panel.
+      const updatedPanels = consultancy.panels.map((panel) => {
         if (panel.id === destination.droppableId) {
           return updatedPanel;
         }
         return panel;
       });
-      setBoard({
-        ...board,
+      setConsultancy({
+        ...consultancy,
         panels: updatedPanels,
       });
 
     // If destination.droppableId != source.droppableId
     } else {
       //move card in backend.
-      const card_to_move = board.panels[source.index];
+      const card_to_move = consultancy.panels[source.index];
       const id_card_to_move = String(card_to_move.id);
       const id_new_panel =String(destination.droppableId);
       moveCard(id_card_to_move, id_new_panel);
 
       // Find the panel that corresponds to the source droppableId.
-      const sourcePanel = board.panels.find(
+      const sourcePanel = consultancy.panels.find(
         (panel) => panel.id === source.droppableId
       );
 
@@ -119,7 +140,7 @@ const Board = ({id}) => {
       };
 
       // Find the panel that corresponds to the destination droppableId.
-      const destinationPanel = board.panels.find(
+      const destinationPanel = consultancy.panels.find(
         (panel) => panel.id === destination.droppableId
       );
 
@@ -131,8 +152,8 @@ const Board = ({id}) => {
         cards: destinationCards,
       };
 
-      // Update the board state with the updated source and destination panels.
-      const updatedPanels = board.panels.map((panel) => {
+      // Update the consultancy state with the updated source and destination panels.
+      const updatedPanels = consultancy.panels.map((panel) => {
         if (panel.id === destination.droppableId) {
           return updatedDestinationPanel;
         }
@@ -142,8 +163,8 @@ const Board = ({id}) => {
         return panel;
       });
 
-      setBoard({
-        ...board,
+      setConsultancy({
+        ...consultancy,
         panels: updatedPanels,
       });
     }
@@ -151,9 +172,9 @@ const Board = ({id}) => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId={"board"+String(id)} direction="horizontal">
+      <Droppable droppableId={"consultancy-1"} direction="horizontal">
         {(provided) => (
-          <BoardContainer
+          <ConsultancyContainer
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
@@ -167,11 +188,11 @@ const Board = ({id}) => {
                 <Panel
                 key={'0'}
                 index={'0'}
-                panel={board.panels[0]}
+                panel={consultancy.panels[0]}
                 />
             </div>
             {/*rest of panels: cards with chair request  */}
-            {board.panels.map((panel, index) => (
+            {consultancy.panels.map((panel, index) => (
                 index === 0 ? null: (
                     <Panel
                     key={panel.id}
@@ -182,13 +203,13 @@ const Board = ({id}) => {
             ))}
           {provided.placeholder}
           </Stack>
-          </BoardContainer>
+          </ConsultancyContainer>
         )}
-    </Droppable>
-</DragDropContext>
-);
+      </Droppable>
+    </DragDropContext>
+  );
 };
 
-export default Board;
+export default Consultancy;
 
 

@@ -16,4 +16,4 @@ async function getDataBoard(id_board) {
     throw error;
   }
 }
-  export default getDataBoard;
+export default getDataBoard;

@@ -1,7 +1,7 @@
 async function moveCard(id_card, id_new_panel) {
     try {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-        + process.env.REACT_APP_CARDS
+        + process.env.REACT_APP_PATH_CARDS
         + id_card
         + "/";
 
