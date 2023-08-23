@@ -43,6 +43,16 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation.save()
         return response
 
+    def destroy(self, request, *args, **kwargs):
+        """Delete a Consultation and update its state to "CREATED"."""
+        response = super().destroy(request, *args, **kwargs)
+        if response.status_code == 204:
+            consultation_id = request.POST.get('consultation')
+            consultation = Consultation.objects.get(id=consultation_id)
+            consultation.state = "CREATED"
+            consultation.save()
+        return response
+
     def list(self, request, *args, **kwargs):
         """Custom list view that handles special group-board filtering.
 
