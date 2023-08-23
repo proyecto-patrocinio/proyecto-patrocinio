@@ -9,6 +9,7 @@ from Board.models import Board
 from Board.api.serializers import BoardSerializer
 from django.db.models import Prefetch, Sum, Count
 
+
 class ConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on Consultation objects."""
     queryset = Consultation.objects.all()
@@ -31,6 +32,16 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on RequestConsultation objects."""
     queryset = RequestConsultation.objects.all()
     serializer_class = RequestConsultationSerializer
+
+    def create(self, request, *args, **kwargs):
+        """Create a new Consultation and set its state to "PENDING"."""
+        response = super().create(request, *args, **kwargs)
+        if response.status_code == 201:
+            consultation_id = request.POST.get('consultation')
+            consultation = Consultation.objects.get(id=consultation_id)
+            consultation.state = "PENDING"
+            consultation.save()
+        return response
 
     def list(self, request, *args, **kwargs):
         """Custom list view that handles special group-board filtering.
