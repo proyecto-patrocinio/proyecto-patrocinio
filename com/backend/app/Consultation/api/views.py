@@ -44,13 +44,18 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         return response
 
     def destroy(self, request, *args, **kwargs):
-        """Delete a Consultation and update its state to "CREATED"."""
+        """Delete a Consultation and update its state to "CREATED"."""  
+        request_id = self.get_object().pk
+        request = RequestConsultation.objects.get(id=request_id)
+        consultation_id = request.consultation.id
+
         response = super().destroy(request, *args, **kwargs)
+
         if response.status_code == 204:
-            consultation_id = request.POST.get('consultation')
             consultation = Consultation.objects.get(id=consultation_id)
             consultation.state = "CREATED"
             consultation.save()
+
         return response
 
     def list(self, request, *args, **kwargs):
