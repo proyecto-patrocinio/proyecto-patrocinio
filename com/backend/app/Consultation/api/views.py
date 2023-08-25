@@ -2,18 +2,27 @@ from rest_framework import viewsets
 from Consultation.api.serializers import (
     ConsultationSerializer,
     RequestConsultationSerializer,
+    ConsultationCreateSerializer
 )
 from Consultation.models import Consultation,  RequestConsultation
 from rest_framework.response import Response
 from Board.models import Board
 from Board.api.serializers import BoardSerializer
-from django.db.models import Prefetch, Sum, Count
+import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 class ConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on Consultation objects."""
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
+
+    def create(self, request, *args, **kwargs):
+        """Custom create view that uses the ConsultationCreateSerializer."""
+        self.serializer_class = ConsultationCreateSerializer
+        return super().create(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
         """Custom list view that handles filtering based on the 'state' query parameter.
@@ -37,17 +46,19 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         """Create a new Consultation and set its state to "PENDING"."""
         response = super().create(request, *args, **kwargs)
         if response.status_code == 201:
-            consultation_id = request.POST.get('consultation')
+            consultation_id = response.data['consultation']
             consultation = Consultation.objects.get(id=consultation_id)
             consultation.state = "PENDING"
             consultation.save()
+            logger.info(f"Consultation {consultation_id} created.")
+        else:
+            logger.error(f"Error creating consultation with ID {consultation_id}.")
+            logger.debug(f"Response: {response.data}")
         return response
 
     def destroy(self, request, *args, **kwargs):
         """Delete a Consultation and update its state to "CREATED"."""  
-        request_id = self.get_object().pk
-        request = RequestConsultation.objects.get(id=request_id)
-        consultation_id = request.consultation.id
+        consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
 
         response = super().destroy(request, *args, **kwargs)
 
@@ -55,6 +66,10 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation = Consultation.objects.get(id=consultation_id)
             consultation.state = "CREATED"
             consultation.save()
+            logger.info(f"Consultation {consultation_id} deleted.")
+        else:
+            logger.error(f"Error deleting consultation with ID {consultation_id}.")
+            logger.debug(f"Response: {response.data}")
 
         return response
 

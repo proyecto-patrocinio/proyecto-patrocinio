@@ -2,6 +2,13 @@ from Consultation.models import Consultation, RequestConsultation
 from rest_framework import serializers
 
 
+class ConsultationCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Consultation
+        fields = '__all__'
+        read_only_fields = ['id', 'state']
+
+
 class ConsultationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consultation

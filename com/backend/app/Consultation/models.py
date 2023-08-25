@@ -29,13 +29,13 @@ class Consultation(models.Model):
 
 class RequestConsultation(models.Model):
 
-    id = models.AutoField(primary_key=True)
     consultation = models.OneToOneField(
         Consultation,
         verbose_name="Consulta",
         related_name="request_consultations",
         on_delete=models.CASCADE,
         null=False,
+        primary_key=True
     )
     destiny_board = models.ForeignKey(
         Board,
