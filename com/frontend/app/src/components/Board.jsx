@@ -1,8 +1,11 @@
-/**
-  In this component, we are using the DragDropContext component from react-beautiful-dnd to handle drag and drop across the board.
-  We are also using the Droppable component to make the dashboard a drop zone for dragging and dropping panels.
-  In the onDragEnd method, we can implement the logic to reorder the cards.
-*/
+/*****************************************************************************************
+*  In this component, we are using the DragDropContext component from react-beautiful-dnd *
+*  to handle drag and drop across the board.                                              *
+*  We are also using the Droppable component to make the dashboard a drop zone for        *
+*  dragging and dropping panels.                                                          *
+*  In the onDragEnd method, we can implement the logic to reorder the cards.              *
+******************************************************************************************/
+
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Panel from './Panel';
@@ -16,8 +19,10 @@ const BoardContainer = styled.div`
   flex-grow: 1;
 `;
 
+
 const Board = ({id}) => {
   const [board, setBoard] = useState(null);
+
 
   useEffect(() => {
     const fetchBoard = async () => {
@@ -70,12 +75,12 @@ const Board = ({id}) => {
     ) {
       return;
     }
-    
+
     // If destination.droppableId == source.droppableId, the panel is 
     // updated with the destination panel.
     if (destination.droppableId === source.droppableId) {
       const panel = board.panels.find(
-        (panel) => panel.id === destination.droppableId
+        (panel) => panel.id === Number(destination.droppableId)
       );
       // Remove the card from the source index. And add it to the destination index.
       const cards = [...panel.cards];
@@ -87,7 +92,7 @@ const Board = ({id}) => {
       };
       // Update the board state with the updated panel.
       const updatedPanels = board.panels.map((panel) => {
-        if (panel.id === destination.droppableId) {
+        if (panel.id === Number(destination.droppableId)) {
           return updatedPanel;
         }
         return panel;
@@ -102,12 +107,12 @@ const Board = ({id}) => {
       //move card in backend.
       const card_to_move = board.panels[source.index];
       const id_card_to_move = String(card_to_move.id);
-      const id_new_panel =String(destination.droppableId);
+      const id_new_panel = String(destination.droppableId);
       moveCard(id_card_to_move, id_new_panel);
 
       // Find the panel that corresponds to the source droppableId.
       const sourcePanel = board.panels.find(
-        (panel) => panel.id === source.droppableId
+        (panel) => panel.id === Number(source.droppableId)
       );
 
       // Remove the card from the source panel.
@@ -120,7 +125,7 @@ const Board = ({id}) => {
 
       // Find the panel that corresponds to the destination droppableId.
       const destinationPanel = board.panels.find(
-        (panel) => panel.id === destination.droppableId
+        (panel) => panel.id === Number(destination.droppableId)
       );
 
       // Add the card to the destination panel.
@@ -133,10 +138,10 @@ const Board = ({id}) => {
 
       // Update the board state with the updated source and destination panels.
       const updatedPanels = board.panels.map((panel) => {
-        if (panel.id === destination.droppableId) {
+        if (panel.id === Number(destination.droppableId)) {
           return updatedDestinationPanel;
         }
-        if (panel.id === source.droppableId) {
+        if (panel.id === Number(source.droppableId)) {
           return updatedSourcePanel;
         }
         return panel;

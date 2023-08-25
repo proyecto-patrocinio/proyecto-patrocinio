@@ -1,10 +1,9 @@
-/*
-In this component, we are using the Droppable component
-from react-beautiful-dnd to make the panel a drop zone for drag and drop cards.
-We are also passing the droppableId and index properties to Droppable.
-
-Also, we are using the CustomCard component to render each card within the panel.
-*/
+/*********************************************************************************
+* In this component, we are using the Droppable component                          *
+* from react-beautiful-dnd to make the panel a drop zone for drag and drop cards.  *
+* We are also passing the droppableId and index properties to Droppable.           *
+* Also, we are using the CustomCard component to render each card within the panel.*
+***********************************************************************************/
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Grid from '@mui/material/Grid';
@@ -18,7 +17,7 @@ const Panel = ({ panel, index }) => {
   }
 
   return (
-    <Droppable droppableId={panel.id} index={index} direction="vertical">
+    <Droppable droppableId={String(panel.id)} index={index} direction="vertical">
       {(provided) => (
         <Paper ref={provided.innerRef} {...provided.droppableProps}  style={{  backgroundColor: 'lightskyblue' , textAlign: 'center'}}>
             <Title>{panel.title}</Title>
