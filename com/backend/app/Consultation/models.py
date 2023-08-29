@@ -40,6 +40,8 @@ class RequestConsultation(models.Model):
     destiny_board = models.ForeignKey(
         Board,
         null=False,
+        verbose_name="Tablero de destino",
+        related_name="request_consultations",
         on_delete=models.CASCADE,
     )
 
