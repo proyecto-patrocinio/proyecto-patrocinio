@@ -15,6 +15,9 @@ class BoardViewSet(viewsets.ModelViewSet):
         self.queryset = self.queryset.prefetch_related(
                         'panels__cards'
         )
+        self.queryset = self.queryset.prefetch_related(
+                        'request_consultations'
+        )
         return super().retrieve(request, *args, **kwargs)
 
   def list(self, request, *args, **kwargs):

@@ -11,7 +11,7 @@ async function moveCard(id_card, id_new_panel) {
       request.onreadystatechange = () => { // Call a function when the state changes.
         if (request.readyState === XMLHttpRequest.DONE ) {
           if( request.status !== 200){
-            console.error('Failed to PATCH card:', request.status);
+            console.error('Failed to PATCH card, with ID',id_card, ". Status: ", request.status);
             throw new Error('Failed to PATCH card');
           }
         }

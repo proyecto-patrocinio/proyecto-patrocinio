@@ -43,7 +43,8 @@ const Consultancy = () => {
 				'id': PANEL_INPUT_CONSULTATION_ID,
 				'title': 'Nuevas Consultas',
 				'number_cards': inputConsultations.length,
-				'cards': inputConsultations}
+				'cards': inputConsultations
+      }
 			consultancyDict.panels.push(inputPanel)
 
 			for (const board of boards) {
@@ -197,7 +198,7 @@ const Consultancy = () => {
           justifyContent="center"
           alignItems="stretch"
           spacing={2}>
-          {/*panel-0: cards without assigned chair  */}
+          {/*panel-0: Input Coonsultations.*/}
             <div style={{ position: "sticky", left: 0, zIndex: 1}}>
                 <Panel
                 key={"0"}
@@ -205,7 +206,7 @@ const Consultancy = () => {
                 panel={consultancy.panels[0]}
                 />
             </div>
-            {/*rest of panels: cards with chair request  */}
+            {/*rest of panels: One panel for each BOARD containing its request cards.*/}
             {consultancy.panels.map((panel, index) => (
                 index === 0 ? null: (
                     <Panel

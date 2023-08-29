@@ -19,7 +19,7 @@ export const getConsultationsToAssign = async () => {
                 consultation: item.id
             }));
         } else {
-            throw new ('Failed in fetch Consultations with status CREATED. Status Code:', response.status);
+            throw new Error('Failed in fetch Consultations with status CREATED. Status Code:', response.status);
         }
     } catch (error) {
         console.error('Failed in fetch Consultations with status CREATED.');
@@ -94,7 +94,7 @@ const getConsultation = async (id) => {
             const data = await response.json();
             return data;
         } else {
-            throw new ("Failed in fetch Consultation with ID " + id +". Status Code:" + response.status);
+            throw new Error("Failed in fetch Consultation with ID " + id +". Status Code:" + response.status);
         }
     } catch (error) {
         console.error("Failed in fetch Consultation with ID " + id);

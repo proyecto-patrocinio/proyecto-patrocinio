@@ -23,8 +23,8 @@ const Panel = ({ panel, index }) => {
             <Title>{panel.title}</Title>
             <Grid container  columns={12} spacing={2}  style={{  width: '200px',backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
                 {panel.cards.map((card, index) => (
-                    <Grid item xs={12} sm={6} md={11} key={card.id} >
-                    <CustomCard card={card} index={index} key={card.id}/>
+                    <Grid item xs={12} sm={6} md={11} key={card.consultation} >
+                    <CustomCard card={card} index={index} key={card.consultation}/>
                     </Grid>
                 ))}
                 {provided.placeholder}
