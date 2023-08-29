@@ -11,11 +11,11 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
 const CustomCard = ({ card, index }) => {
-  if (!card) {
+  if (card == null || card.length === 0) {
     return <div>No cards.</div>;
   }
   return (
-    <Draggable draggableId={String(card.id)} index={index}>
+    <Draggable draggableId={String(card.consultation)} index={index}>
       {(provided) => (
         <div
           ref={provided.innerRef}
