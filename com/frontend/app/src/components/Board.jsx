@@ -12,6 +12,9 @@ import Panel from './Panel';
 import styled from '@emotion/styled';
 import { Stack } from '@mui/material';
 import moveCard from './utils/card';
+import getDataBoard from './utils/board';
+
+
 const BoardContainer = styled.div`
   display: flex;
   overflow-x: auto;
@@ -20,26 +23,24 @@ const BoardContainer = styled.div`
 `;
 
 
+const PANEL_INPUT_REQUEST_CARDS_ID = 0
+
+
 const Board = ({id}) => {
   const [board, setBoard] = useState(null);
 
 
   useEffect(() => {
+
     const fetchBoard = async () => {
-      try {
-        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                  + process.env.REACT_APP_PATH_BOARD
-                  + id;
-        const response = await fetch(url);
-        if (response.ok) {
-          const data = await response.json();
-          setBoard(data);
-        } else {
-          console.error('Failed to fetch board:', response.status);
-        }
-      } catch (error) {
-        console.error('Error:', error);
+      const board_data = await getDataBoard(id);
+      const inputPanel = { 
+        'id': PANEL_INPUT_REQUEST_CARDS_ID,
+        'title': 'Nuevas Solicitudes',
+        'cards': board_data.request_consultations
       }
+      board_data.panels.unshift(inputPanel)
+      setBoard(board_data);
     };
 
     fetchBoard();
@@ -62,7 +63,7 @@ const Board = ({id}) => {
 
     // If the user drops the card outside of a droppable area,
     // destination will be null, so we should return early.
-    if (!destination) {
+    if (destination == null) {
       return;
     }
 
@@ -78,7 +79,7 @@ const Board = ({id}) => {
 
     // If destination.droppableId == source.droppableId, the panel is 
     // updated with the destination panel.
-    if (destination.droppableId === source.droppableId) {
+    if (Number(destination.droppableId) === Number(source.droppableId)) {
       const panel = board.panels.find(
         (panel) => panel.id === Number(destination.droppableId)
       );
@@ -105,9 +106,10 @@ const Board = ({id}) => {
     // If destination.droppableId != source.droppableId
     } else {
       //move card in backend.
-      const card_to_move = board.panels[source.index];
-      const id_card_to_move = String(card_to_move.id);
-      const id_new_panel = String(destination.droppableId);
+      const panel_source = board.panels[Number(source.droppableId)]
+      const card_to_move = panel_source.cards[source.index];
+      const id_card_to_move = String(card_to_move.consultation);
+      const id_new_panel = String(Number(destination.droppableId));
       moveCard(id_card_to_move, id_new_panel);
 
       // Find the panel that corresponds to the source droppableId.
@@ -167,19 +169,19 @@ const Board = ({id}) => {
           justifyContent="center"
           alignItems="stretch"
           spacing={2}>
-          {/*panel-0: cards without assigned chair  */}
+          {/*panel-0: Input Request Cards.*/}
             <div style={{ position: "sticky", left: 0, zIndex: 1}}>
                 <Panel
-                key={'0'}
-                index={'0'}
+                key={"0"}
+                index={0}
                 panel={board.panels[0]}
                 />
             </div>
-            {/*rest of panels: cards with chair request  */}
+            {/*rest of panels: Panels with cards. */}
             {board.panels.map((panel, index) => (
                 index === 0 ? null: (
                     <Panel
-                    key={panel.id}
+                    key={String(panel.id)}
                     index={index}
                     panel={panel}
                     />
