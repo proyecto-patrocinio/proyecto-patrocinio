@@ -1,17 +1,25 @@
-from rest_framework import viewsets
+import logging
+
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+
+from Board.models import Board
+from Board.api.serializers import BoardSerializer
+from Card.models import Card
+from Card.api.serializers import CardCreateSerializer
 from Consultation.api.serializers import (
     ConsultationSerializer,
     RequestConsultationSerializer,
-    ConsultationCreateSerializer
+    ConsultationCreateSerializer,
+    RequestConsultationAceptedSerializer
 )
 from Consultation.models import Consultation,  RequestConsultation
-from rest_framework.response import Response
-from Board.models import Board
-from Board.api.serializers import BoardSerializer
-import logging
+from Panel.models import Panel
 
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 
 class ConsultationViewSet(viewsets.ModelViewSet):
@@ -99,3 +107,77 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                     request_group_board_dict[board].append(request)
                 return Response(request_group_board_dict)
         return super().list(request, *args, **kwargs)
+
+    @action(detail=True, methods=['POST'])
+    def accepted(self, request, *args, **kwargs):
+        """Mark a Request Consultation as accepted and update its state to "ASSIGNED"."""
+        consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
+        logger.info(f"Accepting consultation {consultation_id}...")
+        try:
+            # Get Consultation and Panel Density
+            consultation = Consultation.objects.get(id=consultation_id)
+            panel_density_id = request.data.get('panel_density')
+            if panel_density_id is None:
+                logger.error(f"Error accepting consultation {consultation_id}.")
+                logger.error("Missing 'panel_density' query parameter.")
+                logger.debug(f"Request query params: {request.query_params}")
+                return Response(
+                    "Missing 'panel_density' query parameter.",
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            panel_denstiny = Panel.objects.get(id=panel_density_id)
+            if panel_denstiny is None:
+                logger.error(f"Error accepting consultation {consultation_id}.")
+                logger.error(f"Panel Denstity {panel_density_id} does not exist.")
+                return Response(
+                    f"Panel Density {panel_density_id} does not exist.",
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Create New Card
+            # new_card = Card.objects.create(
+            #     consultation = consultation,
+            #     panel = panel_denstiny,
+            #     tag= consultation.tag
+            # )
+            new_card ={
+                "consultation": consultation_id,
+                "panel": panel_density_id,
+                "tag": consultation.tag
+            }
+            # card_serializer = CardCreateSerializer(new_card, many=False)
+            card_serializer = CardCreateSerializer(data=new_card, many=False)
+            if card_serializer.is_valid():
+                card_serializer.save()
+                logger.info(f"Card {consultation_id} created successfully.")
+            else:
+                logger.error(f"Error creating new card for consultation {consultation_id}.")
+                logger.debug(f"Serializer errors: {card_serializer.errors}")
+                return Response(card_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Delete Request Consultation
+            response = super().destroy(request, *args, **kwargs)
+            if response.status_code == status.HTTP_204_NO_CONTENT:
+                logger.info(f"Request Consultation {consultation_id} deleted.")
+            else:
+                logger.error(f"Error deleting request consultation {consultation_id}.")
+                logger.debug(f"Response: {response.data}")
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            # Update Consultation State
+            consultation.state = "ASSIGNED"
+            consultation.save()
+            logger.info(f"Updated consultation {consultation_id} state to ASSIGNED.")
+
+            # Save transaction
+
+            # Return response
+            response = Response(status=status.HTTP_200_OK)
+            response.content_type = "application/json"
+            response.data = card_serializer.data
+            return response
+
+        except Exception as e:
+            logger.error(f"Error accepting consultation {consultation_id}.")
+            logger.debug(f"Exception: {e}")
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": str(e)})
