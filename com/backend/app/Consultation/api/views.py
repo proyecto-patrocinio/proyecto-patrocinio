@@ -110,32 +110,33 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def accepted(self, request, *args, **kwargs):
+        self.serializer_class = RequestConsultationAceptedSerializer
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
         logger.info(f"Accepting consultation {consultation_id}...")
         try:
-            # Get Consultation and Panel Denstiny
+            # Get Consultation and Panel destiny
             consultation = Consultation.objects.get(id=consultation_id)
-            denstiny_panel_id = request.data.get('denstiny_panel')
-            if denstiny_panel_id is None:
+            destiny_panel_id = request.data.get('destiny_panel')
+            if destiny_panel_id is None:
                 logger.error(f"Error accepting consultation {consultation_id}.")
-                logger.error("Missing 'denstiny_panel' query parameter.")
+                logger.error("Missing 'destiny_panel' query parameter.")
                 logger.debug(f"Request query params: {request.query_params}")
                 return Response(
-                    "Missing 'denstiny_panel' query parameter.",
+                    "Missing 'destiny_panel' query parameter.",
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            denstiny_panel = Panel.objects.get(id=denstiny_panel_id)
-            if denstiny_panel is None:
+            destiny_panel = Panel.objects.get(id=destiny_panel_id)
+            if destiny_panel is None:
                 logger.error(f"Error accepting consultation {consultation_id}.")
-                logger.error(f"Panel Denstity {denstiny_panel_id} does not exist.")
+                logger.error(f"Panel Denstity {destiny_panel_id} does not exist.")
                 return Response(
-                    f"Panel denstiny {denstiny_panel_id} does not exist.",
+                    f"Panel destiny {destiny_panel_id} does not exist.",
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
             new_card ={
                 "consultation": consultation_id,
-                "panel": denstiny_panel_id,
+                "panel": destiny_panel_id,
                 "tag": consultation.tag
             }
             card_serializer = CardCreateSerializer(data=new_card, many=False)
