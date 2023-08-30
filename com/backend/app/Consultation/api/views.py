@@ -110,45 +110,36 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def accepted(self, request, *args, **kwargs):
-        """Mark a Request Consultation as accepted and update its state to "ASSIGNED"."""
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
         logger.info(f"Accepting consultation {consultation_id}...")
         try:
-            # Get Consultation and Panel Density
+            # Get Consultation and Panel Denstiny
             consultation = Consultation.objects.get(id=consultation_id)
-            panel_density_id = request.data.get('panel_density')
-            if panel_density_id is None:
+            denstiny_panel_id = request.data.get('denstiny_panel')
+            if denstiny_panel_id is None:
                 logger.error(f"Error accepting consultation {consultation_id}.")
-                logger.error("Missing 'panel_density' query parameter.")
+                logger.error("Missing 'denstiny_panel' query parameter.")
                 logger.debug(f"Request query params: {request.query_params}")
                 return Response(
-                    "Missing 'panel_density' query parameter.",
+                    "Missing 'denstiny_panel' query parameter.",
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            panel_denstiny = Panel.objects.get(id=panel_density_id)
-            if panel_denstiny is None:
+            denstiny_panel = Panel.objects.get(id=denstiny_panel_id)
+            if denstiny_panel is None:
                 logger.error(f"Error accepting consultation {consultation_id}.")
-                logger.error(f"Panel Denstity {panel_density_id} does not exist.")
+                logger.error(f"Panel Denstity {denstiny_panel_id} does not exist.")
                 return Response(
-                    f"Panel Density {panel_density_id} does not exist.",
+                    f"Panel denstiny {denstiny_panel_id} does not exist.",
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            # Create New Card
-            # new_card = Card.objects.create(
-            #     consultation = consultation,
-            #     panel = panel_denstiny,
-            #     tag= consultation.tag
-            # )
             new_card ={
                 "consultation": consultation_id,
-                "panel": panel_density_id,
+                "panel": denstiny_panel_id,
                 "tag": consultation.tag
             }
-            # card_serializer = CardCreateSerializer(new_card, many=False)
             card_serializer = CardCreateSerializer(data=new_card, many=False)
             if card_serializer.is_valid():
-                card_serializer.save()
                 logger.info(f"Card {consultation_id} created successfully.")
             else:
                 logger.error(f"Error creating new card for consultation {consultation_id}.")
@@ -162,20 +153,17 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             else:
                 logger.error(f"Error deleting request consultation {consultation_id}.")
                 logger.debug(f"Response: {response.data}")
+                card_serializer.delete()
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
             # Update Consultation State
             consultation.state = "ASSIGNED"
-            consultation.save()
             logger.info(f"Updated consultation {consultation_id} state to ASSIGNED.")
 
             # Save transaction
-
-            # Return response
-            response = Response(status=status.HTTP_200_OK)
-            response.content_type = "application/json"
-            response.data = card_serializer.data
-            return response
+            card_serializer.save()
+            consultation.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
             logger.error(f"Error accepting consultation {consultation_id}.")
