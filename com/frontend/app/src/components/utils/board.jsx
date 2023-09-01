@@ -1,8 +1,8 @@
-async function getDataBoard(id_board) {
+async function getDataBoard(boardID) {
   try {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_BOARD
-      + id_board;
+      + boardID;
     const response = await fetch(url);
     if (response.ok) {
       const board = await response.json();
@@ -17,3 +17,33 @@ async function getDataBoard(id_board) {
   }
 }
 export default getDataBoard;
+
+export const acceptRequestCard = async(requestConsultationID, panelID) => {
+  try{
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+    + process.env.REACT_APP_PATH_REQUEST_CARDS
+    + String(requestConsultationID)
+    + process.env.REACT_APP_EXTRA_PATH_ACCEPT_REQUEST_CARDS;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "destiny_panel": panelID
+      })
+    });
+
+    if (response.ok) {
+      const successMessage = `Request Consultation ${requestConsultationID} accepted successfully`;
+      console.log(successMessage);
+    } else {
+      console.error("Failed to accept the consultation request: ", response.status);
+      throw new Error("Failed to accept the consultation request");
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
+}

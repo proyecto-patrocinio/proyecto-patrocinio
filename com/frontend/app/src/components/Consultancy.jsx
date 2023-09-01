@@ -123,29 +123,34 @@ const Consultancy = () => {
 
     // If destination.droppableId != source.droppableId
     } else {
-      /*** Update Backend ***/
-      const panel_source = consultancy.panels[Number(source.droppableId)];
-      const card_to_move = panel_source.cards[source.index];
-      const request_and_consultation_id = card_to_move.id;
-      const id_destiny_panel = consultancy.panels[Number(destination.droppableId)].id;
-      const id_origin_board = consultancy.panels[Number(source.droppableId)].id;
 
-      if(id_origin_board !== PANEL_INPUT_CONSULTATION_ID){
-        // Cancelete current Request Consultation.
-        await deleteRequest(request_and_consultation_id);
-      } // ELSE No have a current request consultation.
+      // Find the panel that corresponds to the destination droppableId.
+      const destinationPanel = consultancy.panels.find(
+        (panel) => panel.id === Number(destination.droppableId)
+      );
 
-      if( id_destiny_panel !== PANEL_INPUT_CONSULTATION_ID){
-        // Generate new Request Consultation
-        await createRequest(request_and_consultation_id, id_destiny_panel);
-      } // ELSE No generate a new request consultation.
-
-      /*** Update Frontend ***/
       // Find the panel that corresponds to the source droppableId.
       const sourcePanel = consultancy.panels.find(
         (panel) => panel.id === Number(source.droppableId)
       );
 
+      /*** Update Backend ***/
+      const cardToMove = sourcePanel.cards[source.index];
+      const requestAndConsultationID = cardToMove.id;
+      const destinyPanelID = destinationPanel.id; // Destination boards || input panel with the consultations.
+      const originPanelID = sourcePanel.id;
+
+      if(originPanelID !== PANEL_INPUT_CONSULTATION_ID){
+        // Canceler current Request Consultation.
+        await deleteRequest(requestAndConsultationID);
+      } // ELSE No have a current request consultation.
+
+      if( destinyPanelID !== PANEL_INPUT_CONSULTATION_ID){
+        // Generate new Request Consultation
+        await createRequest(requestAndConsultationID, destinyPanelID);
+      } // ELSE No generate a new request consultation.
+
+      /*** Update Frontend ***/
       // Remove the card from the source panel.
       const sourceCards = [...sourcePanel.cards];
       const [removedCard] = sourceCards.splice(source.index, 1);
@@ -153,11 +158,6 @@ const Consultancy = () => {
         ...sourcePanel,
         cards: sourceCards,
       };
-
-      // Find the panel that corresponds to the destination droppableId.
-      const destinationPanel = consultancy.panels.find(
-        (panel) => panel.id === Number(destination.droppableId)
-      );
 
       // Add the card to the destination panel.
       const destinationCards = [...destinationPanel.cards];
