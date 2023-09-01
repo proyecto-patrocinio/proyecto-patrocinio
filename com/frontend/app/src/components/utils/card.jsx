@@ -1,8 +1,8 @@
-async function moveCard(id_card, id_new_panel) {
+async function moveCard(cardID, destinyPanelID) {
     try {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
         + process.env.REACT_APP_PATH_CARDS
-        + String(id_card)
+        + String(cardID)
         + "/";
 
       const request = new XMLHttpRequest();
@@ -11,14 +11,14 @@ async function moveCard(id_card, id_new_panel) {
       request.onreadystatechange = () => { // Call a function when the state changes.
         if (request.readyState === XMLHttpRequest.DONE ) {
           if( request.status !== 200){
-            console.error('Failed to PATCH card, with ID',id_card, ". Status: ", request.status);
+            console.error('Failed to PATCH card, with ID',cardID, ". Status: ", request.status);
             throw new Error('Failed to PATCH card');
           }
         }
       }
       request.send(
         JSON.stringify({
-            "panel": id_new_panel,
+            "panel": destinyPanelID,
         })
       );
 

@@ -120,12 +120,12 @@ const Board = ({id}) => {
       );
 
       //move card in backend.
-      const card_to_move = sourcePanel.cards[source.index];
-      const id_card_to_move = card_to_move.consultation;
-      const id_new_panel = destinationPanel.id;
-      const id_origin_panel = sourcePanel.id;
+      const cardToMove = sourcePanel.cards[source.index];
+      const idCardToMove = cardToMove.consultation;
+      const idDestinyPanel = destinationPanel.id;
+      const idOriginPanel = sourcePanel.id;
 
-      if(id_new_panel === PANEL_INPUT_REQUEST_CARDS_ID){
+      if(idDestinyPanel === PANEL_INPUT_REQUEST_CARDS_ID){
         // It's not possible to move a card to the input panel.
         console.error("Unable to send a card to input request.")
         setShowAlert(true)
@@ -134,13 +134,12 @@ const Board = ({id}) => {
         }, 5000);
 
       } else {
-        if(id_origin_panel === PANEL_INPUT_REQUEST_CARDS_ID){
-          acceptRequestCard(id_card_to_move, id_new_panel)
+        if(idOriginPanel === PANEL_INPUT_REQUEST_CARDS_ID){
+          acceptRequestCard(idCardToMove, idDestinyPanel)
         }
         else { // Move Card from Panel to other normal panel.
-          moveCard(id_card_to_move, id_new_panel);
+          moveCard(idCardToMove, idDestinyPanel);
         }
-
 
         // Remove the card from the source panel.
         const sourceCards = [...sourcePanel.cards];

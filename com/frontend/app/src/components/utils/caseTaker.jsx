@@ -39,8 +39,8 @@ export const getListBoard = async () => {
                     + process.env.REACT_APP_PATH_BOARD;
         const response = await fetch(url);
         if (response.ok) {
-            const board_list = await response.json();
-            return board_list;
+            const boardList = await response.json();
+            return boardList;
         } else {
             throw new Error('Failed to fetch board. Status Code: ' , response.status);
         }
@@ -62,8 +62,8 @@ export const getRequestConsultations = async () => {
                     + process.env.REACT_APP_PATH_REQUEST_CARDS;
         const response = await fetch(url);
         if (response.ok) {
-            const request_consultations_list = await response.json();
-            return request_consultations_list.map(item => ({
+            const requestConsultationsList = await response.json();
+            return requestConsultationsList.map(item => ({
                 ...item,
                 tag: getConsultation(item.consultation).tag,
                 id: item.consultation
@@ -80,7 +80,7 @@ export const getRequestConsultations = async () => {
 
 
 /**
- * Fetch Conultation.
+ * Fetch Consultation.
  * @returns {Promise} A promise that resolves to the fetched consultation or an error.
  */
 const getConsultation = async (id) => {
@@ -106,13 +106,13 @@ const getConsultation = async (id) => {
 
 /**
  * Delete a Request Consultation.
- * @param {int} request consultation id 
+ * @param {int} requestID request consultation id.
  */
-export async function deleteRequest(request_id) {
+export async function deleteRequest(requestID) {
   try {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_REQUEST_CARDS
-      + String(request_id)
+      + String(requestID)
       + "/"
 
       const response = await fetch(url, {
@@ -123,11 +123,11 @@ export async function deleteRequest(request_id) {
       })
 
       if (!response.ok) {
-          console.error('Failed to DELETE request Consultation', request_id ,'. Status code:', response.status);
+          console.error('Failed to DELETE request Consultation', requestID ,'. Status code:', response.status);
           throw new Error('Failed to DELETE request consultation.');
         }
 
-      console.log("Successful delete Reques for Consultatio ID:", request_id)
+      console.log("Successful delete Request for Consultation ID:", requestID)
   } catch (error) {
     console.error('Error in delete request consultation.');
     console.debug(error)
@@ -138,10 +138,10 @@ export async function deleteRequest(request_id) {
 
 /**
  * Create a request consultation for to send a consultation to a specified board.
- * @param {int} consultation id.
- * @param {int} destination board id.
+ * @param {int} consultationID consultation id to create Request.
+ * @param {int} destinationBoardID destination board id to send Consultation Request.
  */
-export async function createRequest(consultation_id, destination_board_id) {
+export async function createRequest(consultationID, destinationBoardID) {
   try {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_REQUEST_CARDS
@@ -152,16 +152,16 @@ export async function createRequest(consultation_id, destination_board_id) {
           'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "consultation": consultation_id,
-        "destiny_board": destination_board_id
+        "consultation": consultationID,
+        "destiny_board": destinationBoardID
       }),
     })
 
-    if( !response.ok) {
+    if(!response.ok) {
           console.error('Failed to POST request Consultation:', response.status);
           throw new Error('Failed to POST request consultation.');
     }
-    console.log("Successful Create Reques for Consultatio ID:", consultation_id)
+    console.log("Successfull Create Reques for Consultatio ID:", consultationID)
   } catch (error) {
     console.error('Error in create request consultation.');
     console.debug(error)
