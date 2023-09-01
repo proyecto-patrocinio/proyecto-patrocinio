@@ -10,10 +10,10 @@ import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Panel from './Panel';
 import styled from '@emotion/styled';
-import { Stack } from '@mui/material';
+import { Stack, Alert } from '@mui/material';
 import moveCard from './utils/card';
 import getDataBoard from './utils/board';
-
+import {acceptRequestCard} from './utils/board'
 
 const BoardContainer = styled.div`
   display: flex;
@@ -28,6 +28,7 @@ const PANEL_INPUT_REQUEST_CARDS_ID = 0
 
 const Board = ({id}) => {
   const [board, setBoard] = useState(null);
+  const [showAlert, setShowAlert] = useState(false);
 
 
   useEffect(() => {
@@ -64,6 +65,7 @@ const Board = ({id}) => {
     // If the user drops the card outside of a droppable area,
     // destination will be null, so we should return early.
     if (destination == null) {
+      console.debug('Droppable area outside of droppable area.');
       return;
     }
 
@@ -74,6 +76,7 @@ const Board = ({id}) => {
       source.droppableId === destination.droppableId &&
       source.index === destination.index
     ) {
+      console.debug('Destiny area is the same.')
       return;
     }
 
@@ -105,59 +108,80 @@ const Board = ({id}) => {
 
     // If destination.droppableId != source.droppableId
     } else {
-      //move card in backend.
-      const panel_source = board.panels[Number(source.droppableId)]
-      const card_to_move = panel_source.cards[source.index];
-      const id_card_to_move = String(card_to_move.consultation);
-      const id_new_panel = String(Number(destination.droppableId));
-      moveCard(id_card_to_move, id_new_panel);
 
       // Find the panel that corresponds to the source droppableId.
       const sourcePanel = board.panels.find(
         (panel) => panel.id === Number(source.droppableId)
       );
 
-      // Remove the card from the source panel.
-      const sourceCards = [...sourcePanel.cards];
-      const [removedCard] = sourceCards.splice(source.index, 1);
-      const updatedSourcePanel = {
-        ...sourcePanel,
-        cards: sourceCards,
-      };
-
       // Find the panel that corresponds to the destination droppableId.
       const destinationPanel = board.panels.find(
         (panel) => panel.id === Number(destination.droppableId)
       );
 
-      // Add the card to the destination panel.
-      const destinationCards = [...destinationPanel.cards];
-      destinationCards.splice(destination.index, 0, removedCard);
-      const updatedDestinationPanel = {
-        ...destinationPanel,
-        cards: destinationCards,
-      };
+      //move card in backend.
+      const card_to_move = sourcePanel.cards[source.index];
+      const id_card_to_move = card_to_move.consultation;
+      const id_new_panel = destinationPanel.id;
+      const id_origin_panel = sourcePanel.id;
 
-      // Update the board state with the updated source and destination panels.
-      const updatedPanels = board.panels.map((panel) => {
-        if (panel.id === Number(destination.droppableId)) {
-          return updatedDestinationPanel;
-        }
-        if (panel.id === Number(source.droppableId)) {
-          return updatedSourcePanel;
-        }
-        return panel;
-      });
+      if(id_new_panel === PANEL_INPUT_REQUEST_CARDS_ID){
+        // It's not possible to move a card to the input panel.
+        console.error("Unable to send a card to input request.")
+        setShowAlert(true)
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 5000);
 
-      setBoard({
-        ...board,
-        panels: updatedPanels,
-      });
+      } else {
+        if(id_origin_panel === PANEL_INPUT_REQUEST_CARDS_ID){
+          acceptRequestCard(id_card_to_move, id_new_panel)
+        }
+        else { // Move Card from Panel to other normal panel.
+          moveCard(id_card_to_move, id_new_panel);
+        }
+
+
+        // Remove the card from the source panel.
+        const sourceCards = [...sourcePanel.cards];
+        const [removedCard] = sourceCards.splice(source.index, 1);
+        const updatedSourcePanel = {
+          ...sourcePanel,
+          cards: sourceCards,
+        };
+
+        // Add the card to the destination panel.
+        const destinationCards = [...destinationPanel.cards];
+        destinationCards.splice(destination.index, 0, removedCard);
+        const updatedDestinationPanel = {
+          ...destinationPanel,
+          cards: destinationCards,
+        };
+
+        // Update the board state with the updated source and destination panels.
+        const updatedPanels = board.panels.map((panel) => {
+          if (panel.id === Number(destination.droppableId)) {
+            return updatedDestinationPanel;
+          }
+          if (panel.id === Number(source.droppableId)) {
+            return updatedSourcePanel;
+          }
+          return panel;
+        });
+
+        setBoard({
+          ...board,
+          panels: updatedPanels,
+        });
+      }
     }
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      {showAlert && (
+        <Alert severity="error">No es posible mover una carta al panel de entrada.</Alert>
+      )}
       <Droppable droppableId={"board"+String(id)} direction="horizontal">
         {(provided) => (
           <BoardContainer
@@ -182,8 +206,8 @@ const Board = ({id}) => {
                 index === 0 ? null: (
                     <Panel
                     key={String(panel.id)}
-                    index={index}
                     panel={panel}
+                    index={index}
                     />
                 )
             ))}

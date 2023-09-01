@@ -9,7 +9,7 @@
 export const getConsultationsToAssign = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                + process.env.REACT_APP_FILTER_CONSULTATIONS_WITH_STATUS
+                + process.env.REACT_APP_PATH_FILTER_CONSULTATIONS_WITH_STATUS
                 + "CREATED";
         const response = await fetch(url);
         if (response.ok) {

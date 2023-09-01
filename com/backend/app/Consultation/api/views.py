@@ -117,12 +117,12 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             # Get Consultation and Panel destiny
             consultation = Consultation.objects.get(id=consultation_id)
             destiny_panel_id = request.data.get('destiny_panel')
-            if destiny_panel_id is None:
+            if destiny_panel_id is None or destiny_panel_id == 0:
                 logger.error(f"Error accepting consultation {consultation_id}.")
                 logger.error("Missing 'destiny_panel' query parameter.")
                 logger.debug(f"Request query params: {request.query_params}")
                 return Response(
-                    "Missing 'destiny_panel' query parameter.",
+                    data="Missing 'destiny_panel' query parameter.",
                     status=status.HTTP_400_BAD_REQUEST
                 )
             destiny_panel = Panel.objects.get(id=destiny_panel_id)
