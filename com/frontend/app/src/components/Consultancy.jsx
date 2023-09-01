@@ -123,14 +123,24 @@ const Consultancy = () => {
 
     // If destination.droppableId != source.droppableId
     } else {
-      /*** Update Backend ***/
-      const panel_source = consultancy.panels[Number(source.droppableId)];
-      const card_to_move = panel_source.cards[source.index];
-      const request_and_consultation_id = card_to_move.id;
-      const id_destiny_panel = consultancy.panels[Number(destination.droppableId)].id;
-      const id_origin_board = consultancy.panels[Number(source.droppableId)].id;
 
-      if(id_origin_board !== PANEL_INPUT_CONSULTATION_ID){
+      // Find the panel that corresponds to the destination droppableId.
+      const destinationPanel = consultancy.panels.find(
+        (panel) => panel.id === Number(destination.droppableId)
+      );
+
+      // Find the panel that corresponds to the source droppableId.
+      const sourcePanel = consultancy.panels.find(
+        (panel) => panel.id === Number(source.droppableId)
+      );
+
+      /*** Update Backend ***/
+      const card_to_move = sourcePanel.cards[source.index];
+      const request_and_consultation_id = card_to_move.id;
+      const id_destiny_panel = destinationPanel.id; // Destination boards || input panel with the consultations.
+      const id_origin_panel = sourcePanel.id;
+
+      if(id_origin_panel !== PANEL_INPUT_CONSULTATION_ID){
         // Cancelete current Request Consultation.
         await deleteRequest(request_and_consultation_id);
       } // ELSE No have a current request consultation.
@@ -141,11 +151,6 @@ const Consultancy = () => {
       } // ELSE No generate a new request consultation.
 
       /*** Update Frontend ***/
-      // Find the panel that corresponds to the source droppableId.
-      const sourcePanel = consultancy.panels.find(
-        (panel) => panel.id === Number(source.droppableId)
-      );
-
       // Remove the card from the source panel.
       const sourceCards = [...sourcePanel.cards];
       const [removedCard] = sourceCards.splice(source.index, 1);
@@ -153,11 +158,6 @@ const Consultancy = () => {
         ...sourcePanel,
         cards: sourceCards,
       };
-
-      // Find the panel that corresponds to the destination droppableId.
-      const destinationPanel = consultancy.panels.find(
-        (panel) => panel.id === Number(destination.droppableId)
-      );
 
       // Add the card to the destination panel.
       const destinationCards = [...destinationPanel.cards];
