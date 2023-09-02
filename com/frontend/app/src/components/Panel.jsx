@@ -20,7 +20,7 @@ const Panel = ({ panel, index }) => {
     <Droppable droppableId={String(panel.id)} index={index} direction="vertical">
       {(provided) => (
         <Paper ref={provided.innerRef} {...provided.droppableProps}  style={{  backgroundColor: 'lightskyblue' , textAlign: 'center'}}>
-            <Badge color="info" badgeContent={panel.number_cards}>
+            <Badge color="info" badgeContent={panel.number_cards !== 0? panel.number_cards : "0"}>
               <Title>{panel.title}</Title>
             </Badge>
             <Grid container  columns={12} spacing={2}  style={{  width: '200px',backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
