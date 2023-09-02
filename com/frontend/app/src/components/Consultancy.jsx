@@ -226,5 +226,3 @@ const Consultancy = () => {
 };
 
 export default Consultancy;
-
-
