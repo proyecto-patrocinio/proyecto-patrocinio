@@ -11,7 +11,12 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Panel from './Panel';
 import styled from '@emotion/styled';
 import { Stack } from '@mui/material';
-import { createRequest, deleteRequest, getConsultationsToAssign, getListBoard, getRequestConsultations} from './utils/caseTaker'
+import {
+  createRequest,
+  deleteRequest,
+  getConsultationsToAssign,
+  getAllBoardWithRequests
+} from './utils/caseTaker'
 
 
 const ConsultancyContainer = styled.div`
@@ -32,9 +37,8 @@ const Consultancy = () => {
 		const fetchConsultancy = async () => {
 		try {
 			// Get the required information
-			const boards = await getListBoard()
 			const inputConsultations = await getConsultationsToAssign()
-			const allConsultationRequests = await getRequestConsultations()
+			const allBoardWithRequests = await getAllBoardWithRequests()
 
 			// Create Consultancy
 			const consultancyDict = { 'title': 'Consultoria', 'panels': []}
@@ -47,17 +51,8 @@ const Consultancy = () => {
       }
 			consultancyDict.panels.push(inputPanel)
 
-			for (const board of boards) {
-				const requestListForBoard = allConsultationRequests.filter(
-          request => request.destiny_board === board.id
-        );
-				const requestPanel = {
-					'id': board.id,
-					'title': board.title,
-					'number_cards': board.number_cards,
-					'cards': requestListForBoard 
-				}
-				consultancyDict.panels.push(requestPanel)
+			for (const board of allBoardWithRequests) {
+				consultancyDict.panels.push(board)
 			}
 
       setConsultancy(consultancyDict)
@@ -136,7 +131,7 @@ const Consultancy = () => {
 
       /*** Update Backend ***/
       const cardToMove = sourcePanel.cards[source.index];
-      const requestAndConsultationID = cardToMove.id;
+      const requestAndConsultationID = cardToMove.consultation;
       const destinyPanelID = destinationPanel.id; // Destination boards || input panel with the consultations.
       const originPanelID = sourcePanel.id;
 

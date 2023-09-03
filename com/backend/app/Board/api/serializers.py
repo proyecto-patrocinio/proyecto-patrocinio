@@ -25,3 +25,11 @@ class BoardListSerializer(serializers.ModelSerializer):
     model = Board
     fields = ['id', 'title', 'number_cards']
     read_only_fields = ("number_cards",)
+
+class ConsultancyListSerializer(serializers.ModelSerializer):
+  number_cards = serializers.IntegerField()
+  cards = RequestConsultationSerializer(many = True, read_only = True)
+  class Meta:
+    model = Board
+    fields = ['id', 'title', 'number_cards', 'cards']
+    read_only_fields = ("number_cards", "cards")
