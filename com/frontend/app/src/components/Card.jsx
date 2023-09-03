@@ -23,15 +23,12 @@ const CustomCard = ({ card, index }) => {
           {...provided.dragHandleProps}
         >
           <Card>
-            <CardContent >
+            <CardContent>
               <Typography
                 color="textSecondary"
                 gutterBottom
               >
                 {card.tag}
-              </Typography>
-              <Typography variant="body2" component="p">
-                {card.consultation}
               </Typography>
             </CardContent>
           </Card>

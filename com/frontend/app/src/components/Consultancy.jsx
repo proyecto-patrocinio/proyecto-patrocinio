@@ -11,7 +11,12 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Panel from './Panel';
 import styled from '@emotion/styled';
 import { Stack } from '@mui/material';
-import { createRequest, deleteRequest, getConsultationsToAssign, getListBoard, getRequestConsultations} from './utils/caseTaker'
+import {
+  createRequest,
+  deleteRequest,
+  getConsultationsToAssign,
+  getConsultancyBoard
+} from './utils/caseTaker'
 
 
 const ConsultancyContainer = styled.div`
@@ -32,33 +37,21 @@ const Consultancy = () => {
 		const fetchConsultancy = async () => {
 		try {
 			// Get the required information
-			const boards = await getListBoard()
 			const inputConsultations = await getConsultationsToAssign()
-			const allConsultationRequests = await getRequestConsultations()
+			const allConsultancyData = await getConsultancyBoard()
 
 			// Create Consultancy
-			const consultancyDict = { 'title': 'Consultoria', 'panels': []}
-
 			const inputPanel = { 
 				'id': PANEL_INPUT_CONSULTATION_ID,
 				'title': 'Nuevas Consultas',
 				'number_cards': inputConsultations.length,
 				'cards': inputConsultations
       }
-			consultancyDict.panels.push(inputPanel)
 
-			for (const board of boards) {
-				const requestListForBoard = allConsultationRequests.filter(
-          request => request.destiny_board === board.id
-        );
-				const requestPanel = {
-					'id': board.id,
-					'title': board.title,
-					'number_cards': board.number_cards,
-					'cards': requestListForBoard 
-				}
-				consultancyDict.panels.push(requestPanel)
-			}
+      const consultancyDict = {
+        ...allConsultancyData,
+        panels: [inputPanel, ...allConsultancyData.panels]
+      };
 
       setConsultancy(consultancyDict)
 
@@ -136,7 +129,7 @@ const Consultancy = () => {
 
       /*** Update Backend ***/
       const cardToMove = sourcePanel.cards[source.index];
-      const requestAndConsultationID = cardToMove.id;
+      const requestAndConsultationID = cardToMove.consultation;
       const destinyPanelID = destinationPanel.id; // Destination boards || input panel with the consultations.
       const originPanelID = sourcePanel.id;
 
