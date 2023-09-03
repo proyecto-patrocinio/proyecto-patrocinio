@@ -1,3 +1,4 @@
+import os
 from requests import Response
 from rest_framework import viewsets
 from Board.api.serializers import BoardSerializer, BoardFullSerializer, BoardListSerializer, ConsultancyListSerializer
@@ -22,7 +23,15 @@ class BoardViewSet(viewsets.ModelViewSet):
         self.queryset = self.queryset.prefetch_related(
             'request_consultations'
         )
-        return super().retrieve(request, *args, **kwargs)
+        board = super().retrieve(request, *args, **kwargs)
+
+        # Add tag to requests
+        request_list = board.data["request_consultations"]
+        for request_consultation in request_list:
+            request_consultation["tag"] = Consultation.objects.get(id=request_consultation["consultation"]).tag
+        board.data["request_consultations"] = request_list
+
+        return board
 
     def list(self, request, *args, **kwargs):
         self.queryset = Board.objects.annotate(
@@ -40,19 +49,18 @@ class BoardViewSet(viewsets.ModelViewSet):
             number_cards=Count('panels__cards', distinct=True)
         )
         self.serializer_class = ConsultancyListSerializer
-        consultancy_data = super().list(request, *args, **kwargs)
-        return self.add_tag_to_consultations(consultancy_data)
+        consultancy = super().list(request, *args, **kwargs)
+        consultancy_panels = consultancy.data
+        consultancy_data = {
+            "id": 0,
+            "title": os.environ.get('CONSULTANCY_BOARD_NAME', 'Consultancy'),
+            "panels": consultancy_panels
+        }
+        consultancy.data = consultancy_data
 
-    def add_tag_to_consultations(self, consultancy_data: Response) -> Response:
-        """Add tags to consultancy data.
-
-        Args:
-            consultancy_data (Response): The consultancy data response.
-
-        Returns:
-            Response: The response with added tags to consultations.
-        """
-        for panel in consultancy_data.data:
+        # Add tag to requests consultancies
+        for panel in consultancy.data["panels"]:
             for request_consultation in panel["cards"]:
                 request_consultation["tag"] = Consultation.objects.get(id=request_consultation["consultation"]).tag
-        return consultancy_data
+
+        return consultancy

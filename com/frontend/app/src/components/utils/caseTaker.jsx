@@ -53,10 +53,10 @@ export const getListBoard = async () => {
 
 
 /**
- * Fetches the list of boards with your request consultations.
+ * Fetches Consultancy data, this contains information about the all boards with your consultations.
  * @returns {Promise} A promise that resolves to the fetched request card list or an error.
  */
-export const getAllBoardWithRequests = async () => {
+export const getConsultancyBoard = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                     + process.env.REACT_APP_PATH_REQUEST_CONSULTANCY_BOARD;

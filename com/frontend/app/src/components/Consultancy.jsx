@@ -15,7 +15,7 @@ import {
   createRequest,
   deleteRequest,
   getConsultationsToAssign,
-  getAllBoardWithRequests
+  getConsultancyBoard
 } from './utils/caseTaker'
 
 
@@ -38,22 +38,20 @@ const Consultancy = () => {
 		try {
 			// Get the required information
 			const inputConsultations = await getConsultationsToAssign()
-			const allBoardWithRequests = await getAllBoardWithRequests()
+			const allConsultancyData = await getConsultancyBoard()
 
 			// Create Consultancy
-			const consultancyDict = { 'title': 'Consultoria', 'panels': []}
-
 			const inputPanel = { 
 				'id': PANEL_INPUT_CONSULTATION_ID,
 				'title': 'Nuevas Consultas',
 				'number_cards': inputConsultations.length,
 				'cards': inputConsultations
       }
-			consultancyDict.panels.push(inputPanel)
 
-			for (const board of allBoardWithRequests) {
-				consultancyDict.panels.push(board)
-			}
+      const consultancyDict = {
+        ...allConsultancyData,
+        panels: [inputPanel, ...allConsultancyData.panels]
+      };
 
       setConsultancy(consultancyDict)
 

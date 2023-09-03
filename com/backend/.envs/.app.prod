@@ -12,3 +12,4 @@ EMAIL_HOST_USER=patrociniouba1@gmail.com
 EMAIL_HOST_PASSWORD=woohhaievkrqclqv
 CORS_ALLOWED_ORIGINS=http://localhost
 HOSTNAME=localhost www.patrocinio.com
+CONSULTANCY_BOARD_NAME=Consultorio
