@@ -17,6 +17,7 @@ const Panel = ({ panel, index }) => {
     backgroundColor: panel.id === 0 ? '#87cefaab' : 'lightskyblue',
     textAlign: 'center',
     height: '75vh',
+    width: '20vw',
   };
 
   if (!panel) {
@@ -26,19 +27,19 @@ const Panel = ({ panel, index }) => {
   return (
     <Droppable droppableId={String(panel.id)} index={index} direction="vertical">
       {(provided) => (
-        <Paper ref={provided.innerRef} {...provided.droppableProps}  style={panelStyle}>
-            <Badge color="info" badgeContent={panel.number_cards !== 0? panel.number_cards : "0"}>
-              <Title>{panel.title}</Title>
-            </Badge>
-            <Grid container  columns={12} spacing={2}  style={{width: '200px', backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
-                {panel.cards.map((card, index) => (
-                    <Grid item xs={12} sm={6} md={11} key={card.consultation} >
-                    <CustomCard card={card} index={index} key={card.consultation}/>
-                    </Grid>
-                ))}
-                {provided.placeholder}
-            </Grid>
-        </Paper>
+        <Badge color="info" badgeContent={panel.number_cards !== 0? panel.number_cards : "0"}>
+          <Paper ref={provided.innerRef} {...provided.droppableProps}  style={panelStyle}>
+                <Title>{panel.title}</Title>
+              <Grid container  columns={12} spacing={2}  style={{width: '20vw', backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
+                  {panel.cards.map((card, index) => (
+                      <Grid item xs={12} sm={6} md={11} key={card.consultation} >
+                      <CustomCard card={card} index={index} key={card.consultation}/>
+                      </Grid>
+                  ))}
+                  {provided.placeholder}
+              </Grid>
+          </Paper>
+        </Badge>
       )}
     </Droppable>
   );

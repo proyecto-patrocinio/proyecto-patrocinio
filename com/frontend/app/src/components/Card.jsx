@@ -22,7 +22,7 @@ const CustomCard = ({ card, index }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Card>
+          <Card style={{width: '15vw', margin: '0 auto' }}>
             <CardContent>
               <Typography
                 color="textSecondary"

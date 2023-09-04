@@ -188,7 +188,8 @@ const Consultancy = () => {
           direction="row"
           justifyContent="center"
           alignItems="stretch"
-          spacing={2}>
+          spacing={2}
+          >
           {/*panel-0: Input Coonsultations.*/}
             <div style={{ position: "sticky", left: 0, zIndex: 1}}>
                 <Panel
