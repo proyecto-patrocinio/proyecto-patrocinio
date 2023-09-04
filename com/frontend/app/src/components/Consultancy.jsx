@@ -31,7 +31,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
 
 
 const Consultancy = () => {
-	const [consultancy, setConsultancy] = useState( { 'title': 'Consultoria', 'panels': []})
+	const [consultancy, setConsultancy] = useState( { 'title': 'Consultoria', 'panels': [{'id':0, 'title': 'Nuevas Consultas', 'number_cards':0 , 'cards': [] }]})
 
 	useEffect(() => {
 		const fetchConsultancy = async () => {
@@ -39,30 +39,29 @@ const Consultancy = () => {
 			// Get the required information
 			const inputConsultations = await getConsultationsToAssign()
 			const allConsultancyData = await getConsultancyBoard()
-
 			// Create Consultancy
 			const inputPanel = { 
-				'id': PANEL_INPUT_CONSULTATION_ID,
+        'id': PANEL_INPUT_CONSULTATION_ID,
 				'title': 'Nuevas Consultas',
 				'number_cards': inputConsultations.length,
 				'cards': inputConsultations
       }
-
-      const consultancyDict = {
-        ...allConsultancyData,
-        panels: [inputPanel, ...allConsultancyData.panels]
-      };
-
-      setConsultancy(consultancyDict)
-
+      allConsultancyData.panels.unshift(inputPanel);
+      setConsultancy(allConsultancyData)
+      console.log(allConsultancyData)
+      
 		} catch (error) {
-			console.error("Failed to fetch cards in Consultancy.");
+      console.error("Failed to fetch cards in Consultancy.");
 			console.debug(error);
 		}
-		};
-
-		fetchConsultancy();
+  };
+  
+  fetchConsultancy();
   }, []);
+
+  if(!consultancy){
+    return <div>No data.</div>
+  }
 
 
   /************************************************************ */
@@ -204,8 +203,8 @@ const Consultancy = () => {
                 index === 0 ? null: (
                     <Panel
                     key={String(panel.id)}
-                    index={index}
                     panel={panel}
+                    index={index}
                     />
                 )
             ))}

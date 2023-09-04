@@ -12,6 +12,13 @@ import Title from './Title';
 import { Paper, Badge } from '@mui/material';
 
 const Panel = ({ panel, index }) => {
+
+  const panelStyle = {
+    backgroundColor: panel.id === 0 ? '#87cefaab' : 'lightskyblue',
+    textAlign: 'center',
+    height: '75vh',
+  };
+
   if (!panel) {
     return <div>No panels.</div>;
   }
@@ -19,11 +26,11 @@ const Panel = ({ panel, index }) => {
   return (
     <Droppable droppableId={String(panel.id)} index={index} direction="vertical">
       {(provided) => (
-        <Paper ref={provided.innerRef} {...provided.droppableProps}  style={{  backgroundColor: 'lightskyblue' , textAlign: 'center'}}>
+        <Paper ref={provided.innerRef} {...provided.droppableProps}  style={panelStyle}>
             <Badge color="info" badgeContent={panel.number_cards !== 0? panel.number_cards : "0"}>
               <Title>{panel.title}</Title>
             </Badge>
-            <Grid container  columns={12} spacing={2}  style={{  width: '200px',backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
+            <Grid container  columns={12} spacing={2}  style={{width: '200px', backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
                 {panel.cards.map((card, index) => (
                     <Grid item xs={12} sm={6} md={11} key={card.consultation} >
                     <CustomCard card={card} index={index} key={card.consultation}/>
