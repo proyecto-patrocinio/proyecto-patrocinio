@@ -48,8 +48,7 @@ const Consultancy = () => {
       }
       allConsultancyData.panels.unshift(inputPanel);
       setConsultancy(allConsultancyData)
-      console.log(allConsultancyData)
-      
+
 		} catch (error) {
       console.error("Failed to fetch cards in Consultancy.");
 			console.debug(error);
