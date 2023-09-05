@@ -18,5 +18,9 @@ class BoardUser(models.Model):
                                   )
 
     created_at = models.DateTimeField(auto_now_add=True)
+
     def __str__(self) -> str:
         return f'{self.user}_{self.board}'
+
+    class Meta:
+        unique_together = ('user', 'board')
