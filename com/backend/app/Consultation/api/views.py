@@ -1,3 +1,4 @@
+import json
 import logging
 
 from rest_framework import viewsets, status
@@ -51,21 +52,55 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     serializer_class = RequestConsultationSerializer
 
     def create(self, request, *args, **kwargs):
-        """Create a new Consultation and set its state to "PENDING"."""
-        response = super().create(request, *args, **kwargs)
-        if response.status_code == 201:
-            consultation_id = response.data['consultation']
+        """Create a new Consultation and set its state to "PENDING" if it meets the conditions.
+
+        This method handles the creation of a new Consultation instance, updating its state to "PENDING"
+        if it's eligible. It performs checks to ensure that the Consultation doesn't already exist
+        or have pending requests.
+        """
+        # Get content from Body
+        body_content = request.body.decode('utf-8')
+        data_dict = json.loads(body_content)
+        if not ("consultation" in data_dict):
+            mns = 'The key "consultation" is not present in the JSON.'
+            logger.error('Error creating request: ', mns)
+            return Response(data={'error': mns}, status=400)
+
+        # Check if Consultation exists
+        consultation_id = data_dict["consultation"]
+        try:
             consultation = Consultation.objects.get(id=consultation_id)
+        except Consultation.DoesNotExist:
+            mns = f'Consultation not found with ID {consultation_id}.'
+            logger.error('Error creating request: ' + mns)
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': mns})
+
+        # Check if Consultation is not already assigned or has pending requests
+        is_created = consultation.state == "CREATED"
+        if not is_created:
+            mns = f'Consultation {consultation_id} is already assigned or there exists a pending request'
+            logger.error(mns)
+            return Response(status=status.HTTP_409_CONFLICT, data={'error': mns})
+
+        # Create a new Request Consultation
+        response = super().create(request, *args, **kwargs)
+
+        if response.status_code == 201:
             consultation.state = "PENDING"
             consultation.save()
             logger.info(f"Consultation {consultation_id} created.")
         else:
             logger.error(f"Error creating consultation with ID {consultation_id}.")
             logger.debug(f"Response: {response.data}")
+
         return response
 
     def destroy(self, request, *args, **kwargs):
-        """Delete a Consultation and update its state to "CREATED"."""  
+        """Delete a Consultation and update its state to "CREATED".
+
+        This method handles the deletion of a Consultation instance and,
+        updates its state to "CREATED" to indicate the cancellation of the request.
+        """
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
 
         response = super().destroy(request, *args, **kwargs)
@@ -74,7 +109,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation = Consultation.objects.get(id=consultation_id)
             consultation.state = "CREATED"
             consultation.save()
-            logger.info(f"Consultation {consultation_id} deleted.")
+            logger.info(f"Request Consultation {consultation_id} deleted.")
         else:
             logger.error(f"Error deleting consultation with ID {consultation_id}.")
             logger.debug(f"Response: {response.data}")
@@ -122,7 +157,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 logger.error("Missing 'destiny_panel' query parameter.")
                 logger.debug(f"Request query params: {request.query_params}")
                 return Response(
-                    data="Missing 'destiny_panel' query parameter.",
+                    data={'error':"Missing 'destiny_panel' query parameter."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
             destiny_panel = Panel.objects.get(id=destiny_panel_id)
