@@ -49,10 +49,18 @@ const Board = ({id}) => {
 
   if (!board) {
     return <div>No board.</div>;
-  }
+  };
 
 
-
+  const addNewPanel = (id, title) => {
+    const newPanel = { 
+      'id': id,
+      'title': title,
+      'cards': []
+    }
+    const newBoard = board.panels.push(newPanel)
+    setBoard(newBoard);
+  };
 
 
 
@@ -199,10 +207,11 @@ const Board = ({id}) => {
                 index={0}
                 panel={board.panels[0]}
                 />
-            </div>
-            {/*rest of panels: Panels with cards. */}
-            {board.panels.map((panel, index) => (
-                index === 0 ? null: (
+              </div>
+              <PanelTemplate  key={"panel-template"} boardID={id} addPanel={addNewPanel}/>
+                {/*rest of panels: Panels with cards. */}
+                {board.panels.map((panel, index) => (
+                  index === 0 ? null: (
                     <Panel
                     key={String(panel.id)}
                     panel={panel}
