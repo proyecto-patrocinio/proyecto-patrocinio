@@ -14,6 +14,8 @@ import { Stack, Alert } from '@mui/material';
 import moveCard from './utils/card';
 import getDataBoard from './utils/board';
 import {acceptRequestCard} from './utils/board'
+import PanelTemplate from './PanelTemplate';
+
 
 const BoardContainer = styled.div`
   display: flex;

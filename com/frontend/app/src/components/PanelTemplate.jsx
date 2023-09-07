@@ -44,7 +44,6 @@ function PanelTemplate({boardID, addPanel}) {
       setOpen(false);
       setError('');
       const response = await createPanel(title, boardID);
-      console.log(response);
       if (response.state === true) {
         const panel = response.data
         addPanel(panel.title, panel.id);
