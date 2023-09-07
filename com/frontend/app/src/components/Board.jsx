@@ -14,6 +14,7 @@ import { Stack, Alert } from '@mui/material';
 import moveCard from './utils/card';
 import getDataBoard from './utils/board';
 import {acceptRequestCard} from './utils/board'
+import PanelTemplate from './PanelTemplate';
 
 const BoardContainer = styled.div`
   display: flex;
@@ -177,46 +178,50 @@ const Board = ({id}) => {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      {showAlert && (
-        <Alert severity="error">No es posible mover una carta al panel de entrada.</Alert>
-      )}
-      <Droppable droppableId={"board"+String(id)} direction="horizontal">
-        {(provided) => (
-          <BoardContainer
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-          <Stack
-          direction="row"
-          justifyContent="center"
-          alignItems="stretch"
-          spacing={2}>
-          {/*panel-0: Input Request Cards.*/}
-            <div style={{ position: "sticky", left: 0, zIndex: 1}}>
+    <div>
+      <DragDropContext onDragEnd={onDragEnd}>
+        {showAlert && (
+          <Alert severity="error">No es posible mover una carta al panel de entrada.</Alert>
+        )}
+        <Droppable droppableId={"board"+String(id)} direction="horizontal">
+          {(provided) => (
+            <BoardContainer
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+            >
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="stretch"
+              spacing={2}
+            >
+              {/*panel-0: Input Request Cards.*/}
+              <div style={{ position: "sticky", left: 0, zIndex: 1}}>
                 <Panel
-                key={"0"}
-                index={0}
-                panel={board.panels[0]}
+                  key={"0"}
+                  index={0}
+                  panel={board.panels[0]}
                 />
-            </div>
-            {/*rest of panels: Panels with cards. */}
-            {board.panels.map((panel, index) => (
-                index === 0 ? null: (
+              </div>
+              <PanelTemplate/>
+                {/*rest of panels: Panels with cards. */}
+                {board.panels.map((panel, index) => (
+                  index === 0 ? null: (
                     <Panel
-                    key={String(panel.id)}
-                    panel={panel}
-                    index={index}
+                      key={String(panel.id)}
+                      panel={panel}
+                      index={index}
                     />
-                )
-            ))}
-          {provided.placeholder}
-          </Stack>
+                  )
+                ))}
+                {provided.placeholder}
+            </Stack>
           </BoardContainer>
         )}
-    </Droppable>
-</DragDropContext>
-);
+        </Droppable>
+      </DragDropContext>
+    </div>
+  );
 };
 
 export default Board;
