@@ -16,6 +16,7 @@ import getDataBoard from './utils/board';
 import {acceptRequestCard} from './utils/board'
 import PanelTemplate from './PanelTemplate';
 
+
 const BoardContainer = styled.div`
   display: flex;
   overflow-x: auto;
@@ -30,6 +31,7 @@ const PANEL_INPUT_REQUEST_CARDS_ID = 0
 const Board = ({id}) => {
   const [board, setBoard] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
 
 
   useEffect(() => {
@@ -50,10 +52,19 @@ const Board = ({id}) => {
 
   if (!board) {
     return <div>No board.</div>;
-  }
+  };
 
 
-
+  const addNewPanel = (id, title) => {
+    const newPanel = { 
+      'id': id,
+      'title': title,
+      'cards': []
+    }
+    board.panels.push(newPanel)
+    setBoard(board);
+    setUpdateCounter(updateCounter + 1);  // force view refresh
+  };
 
 
 
@@ -203,7 +214,7 @@ const Board = ({id}) => {
                   panel={board.panels[0]}
                 />
               </div>
-              <PanelTemplate/>
+              <PanelTemplate  key={"panel-template"} boardID={id} addPanel={addNewPanel}/>
                 {/*rest of panels: Panels with cards. */}
                 {board.panels.map((panel, index) => (
                   index === 0 ? null: (

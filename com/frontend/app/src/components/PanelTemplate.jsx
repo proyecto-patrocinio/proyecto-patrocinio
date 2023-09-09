@@ -18,11 +18,16 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button } from '@mui/material';
+import createPanel from './utils/panel';
+import { Snackbar, Alert } from '@mui/material';
 
-function PanelTemplate() {
+
+function PanelTemplate({boardID, addPanel}) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
 
   // Function to open the dialog
   const handleClickOpen = () => {
@@ -36,13 +41,22 @@ function PanelTemplate() {
   };
 
   // Function to handle the 'Accept' button click
-  const handleAccept = () => {
+  const handleAccept = async () => {
     if (title.trim() === '') {
       setError('The title cannot be empty.');
     } else {
       setOpen(false);
       setError('');
-      createPanel(title);
+      const response = await createPanel(title, boardID);
+      if (response.state === true) {
+        const panel = response.data
+        addPanel(panel.id, panel.title);
+        // Show a success notification
+        setSuccess(true);
+      } else {
+        // Show an error notification
+        setError('Failed to create panel. Please try again later.');
+      }
     }
   };
 
@@ -51,10 +65,9 @@ function PanelTemplate() {
     setTitle(event.target.value);
   };
 
-  // Function to create a panel with the provided title
-  const createPanel = (title) => {
-    // TODO: comunicar con el Backend
-    console.info(`A panel was created with the title: ${title}`);
+  // Function to close the success Snackbar
+  const handleCloseSuccessSnackbar = () => {
+    setSuccess(false);
   };
 
   return (
@@ -94,6 +107,16 @@ function PanelTemplate() {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Snackbar for success notification */}
+      <Snackbar
+        open={success}
+        autoHideDuration={3000} // Auto-closes in 3 seconds
+        onClose={handleCloseSuccessSnackbar}
+      >
+        <Alert onClose={handleCloseSuccessSnackbar} severity="success">
+          Panel created successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

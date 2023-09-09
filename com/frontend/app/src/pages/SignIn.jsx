@@ -1,4 +1,4 @@
-import React,{useContext, useEffect, useState} from 'react';
+import React,{useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -52,11 +52,11 @@ export default function SignIn( props) {
             props.setIsLoggedIn(true);
           }
           else if( request.status !== 400 ){
-            setLoginError("Unable to login. Please try again later");
+            setLoginError("Unable to login. Please try again later.");
             setOpen(true);
           }
           else {
-            setLoginError("The username or password is incorrect");
+            setLoginError("The username or password is incorrect.");
             setOpen(true);
           }
         }
