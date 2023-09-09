@@ -60,8 +60,8 @@ const Board = ({id}) => {
       'title': title,
       'cards': []
     }
-    const newBoard = board.panels.push(newPanel)
-    setBoard(newBoard);
+    board.panels.push(newPanel)
+    setBoard(board);
   };
 
 

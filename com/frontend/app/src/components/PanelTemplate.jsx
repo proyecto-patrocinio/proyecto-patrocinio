@@ -19,11 +19,15 @@ import Tooltip from '@mui/material/Tooltip';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button } from '@mui/material';
 import createPanel from './utils/panel';
+import { Snackbar, Alert } from '@mui/material';
+
 
 function PanelTemplate({boardID, addPanel}) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+
 
   // Function to open the dialog
   const handleClickOpen = () => {
@@ -47,6 +51,11 @@ function PanelTemplate({boardID, addPanel}) {
       if (response.state === true) {
         const panel = response.data
         addPanel(panel.title, panel.id);
+        // Show a success notification
+        setSuccess(true);
+      } else {
+        // Show an error notification
+        setError('Failed to create panel. Please try again later.');
       }
     }
   };
@@ -54,6 +63,11 @@ function PanelTemplate({boardID, addPanel}) {
   // Function to handle title input change
   const handleChangeTitle = (event) => {
     setTitle(event.target.value);
+  };
+
+  // Function to close the success Snackbar
+  const handleCloseSuccessSnackbar = () => {
+    setSuccess(false);
   };
 
   return (
@@ -93,6 +107,16 @@ function PanelTemplate({boardID, addPanel}) {
           </Button>
         </DialogActions>
       </Dialog>
+      {/* Snackbar for success notification */}
+      <Snackbar
+        open={success}
+        autoHideDuration={3000} // Auto-closes in 3 seconds
+        onClose={handleCloseSuccessSnackbar}
+      >
+        <Alert onClose={handleCloseSuccessSnackbar} severity="success">
+          Panel created successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
