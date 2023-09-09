@@ -50,7 +50,7 @@ function PanelTemplate({boardID, addPanel}) {
       const response = await createPanel(title, boardID);
       if (response.state === true) {
         const panel = response.data
-        addPanel(panel.title, panel.id);
+        addPanel(panel.id, panel.title);
         // Show a success notification
         setSuccess(true);
       } else {

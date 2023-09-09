@@ -31,6 +31,7 @@ const PANEL_INPUT_REQUEST_CARDS_ID = 0
 const Board = ({id}) => {
   const [board, setBoard] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
+  const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
 
 
   useEffect(() => {
@@ -62,6 +63,7 @@ const Board = ({id}) => {
     }
     board.panels.push(newPanel)
     setBoard(board);
+    setUpdateCounter(updateCounter + 1);  // force view refresh
   };
 
 
