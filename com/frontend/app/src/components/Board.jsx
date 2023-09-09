@@ -14,7 +14,7 @@ import { Stack, Alert } from '@mui/material';
 import moveCard from './utils/card';
 import getDataBoard from './utils/board';
 import {acceptRequestCard} from './utils/board'
-import PanelTemplate from './PanelTemplate';
+import CreatePanelButton from './CreatePanelButton';
 
 
 const BoardContainer = styled.div`
@@ -214,7 +214,7 @@ const Board = ({id}) => {
                   panel={board.panels[0]}
                 />
               </div>
-              <PanelTemplate  key={"panel-template"} boardID={id} addPanel={addNewPanel}/>
+              <CreatePanelButton key={"panel-template"} boardID={id} addPanel={addNewPanel}/>
                 {/*rest of panels: Panels with cards. */}
                 {board.panels.map((panel, index) => (
                   index === 0 ? null: (

@@ -1,11 +1,11 @@
 /**
- * PanelTemplate Component
+ * CreatePanelButton Component
  *
  * This component provides a user interface for creating a panel by entering a title.
  * It includes an IconButton that opens a dialog when clicked, allowing the user
  * to input a title and create a panel.
  *
- * @component PanelTemplate
+ * @component CreatePanelButton
  */
 import React, { useState } from 'react';
 import IconButton from '@mui/material/IconButton';
@@ -22,7 +22,7 @@ import createPanel from './utils/panel';
 import { Snackbar, Alert } from '@mui/material';
 
 
-function PanelTemplate({boardID, addPanel}) {
+function CreatePanelButton({boardID, addPanel}) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [error, setError] = useState('');
@@ -121,4 +121,4 @@ function PanelTemplate({boardID, addPanel}) {
   );
 }
 
-export default PanelTemplate;
+export default CreatePanelButton;
