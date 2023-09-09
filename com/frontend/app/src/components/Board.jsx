@@ -40,7 +40,7 @@ const Board = ({id}) => {
       const board_data = await getDataBoard(id);
       const inputPanel = { 
         'id': PANEL_INPUT_REQUEST_CARDS_ID,
-        'title': 'Nuevas Solicitudes',
+        'title': 'New Requests',
         'cards': board_data.request_consultations
       }
       board_data.panels.unshift(inputPanel)

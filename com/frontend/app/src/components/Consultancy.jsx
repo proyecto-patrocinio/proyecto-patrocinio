@@ -31,7 +31,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
 
 
 const Consultancy = () => {
-	const [consultancy, setConsultancy] = useState( { 'title': 'Consultoria', 'panels': [{'id':0, 'title': 'Nuevas Consultas', 'number_cards':0 , 'cards': [] }]})
+	const [consultancy, setConsultancy] = useState( { 'title': 'Consultoria', 'panels': [{'id':0, 'title': 'New Consultations', 'number_cards':0 , 'cards': [] }]})
 
 	useEffect(() => {
 		const fetchConsultancy = async () => {
@@ -42,7 +42,7 @@ const Consultancy = () => {
 			// Create Consultancy
 			const inputPanel = { 
         'id': PANEL_INPUT_CONSULTATION_ID,
-				'title': 'Nuevas Consultas',
+				'title': 'New Consultations',
 				'number_cards': inputConsultations.length,
 				'cards': inputConsultations
       }
