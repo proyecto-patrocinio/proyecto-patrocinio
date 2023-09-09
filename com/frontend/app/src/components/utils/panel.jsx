@@ -5,11 +5,9 @@
  * @returns {Promise} A promise that resolves when the request. [Message(str), Status(bool)]
  */
 async function createPanel(titlePanel, boardID) {
-    const boardIntID = Number(boardID)
-    console.log("ola, ",boardID)
-    console.log("ola, ",boardIntID)
+    const boardIntID = Number(boardID);
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-    + process.env.REACT_APP_PATH_PANELS
+    + process.env.REACT_APP_PATH_PANELS;
     console.log(titlePanel, boardID)
     try {
         const response = await fetch(url, {
