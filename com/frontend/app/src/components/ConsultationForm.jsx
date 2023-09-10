@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { TextField, Button, Grid, Paper, Typography } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import IconButton from '@mui/material/IconButton';
+
 
 /**
  * Component to render a form for loading data with specified fields.
  *
  * @component
  */
-const LoadForm = () => {
+const ConsultationFormButton = () => {
   const [formData, setFormData] = useState({
     description: '',
     opponent: '',
@@ -37,10 +41,12 @@ const LoadForm = () => {
 
   return (
     <div>
-      <Button variant="outlined" color="primary" onClick={handleShowForm}>
-        Mostrar formulario
-      </Button>
-
+      {/* Tooltip to provide a hint for the IconButton */}
+      <Tooltip title="Add New Consultation">
+        <IconButton aria-label="delete" color='primary' onClick={handleShowForm}>
+          <AddCircleIcon />
+        </IconButton>
+      </Tooltip>
       {/* Renderizar el formulario solo si isFormVisible es true */}
       {isFormVisible && (
         <Paper elevation={3} style={{ padding: '20px', maxWidth: '400px', margin: '0 auto' }}>
@@ -107,4 +113,4 @@ const LoadForm = () => {
   );
 };
 
-export default LoadForm;
+export default ConsultationFormButton;

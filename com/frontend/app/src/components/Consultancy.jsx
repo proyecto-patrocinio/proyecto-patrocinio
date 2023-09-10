@@ -17,7 +17,7 @@ import {
   getConsultationsToAssign,
   getConsultancyBoard
 } from './utils/caseTaker'
-
+import ConsultationFormButton from './ConsultationForm'
 
 const ConsultancyContainer = styled.div`
 	display: flex;
@@ -198,6 +198,7 @@ const Consultancy = () => {
                 panel={consultancy.panels[0]}
                 />
             </div>
+            <ConsultationFormButton/>
             {/*rest of panels: One panel for each BOARD containing its request cards.*/}
             {consultancy.panels.map((panel, index) => (
                 index === 0 ? null: (
