@@ -73,8 +73,9 @@ const ConsultationFormButton = () => {
       hasError = true;
     }
 
-
-    if (!hasError) {
+    if (hasError) {
+      setError(newError);
+    } else {
 
       //Create Consultation in backend
       const response = await createConsultation(
@@ -85,8 +86,7 @@ const ConsultationFormButton = () => {
       )
 
       if (!response.success) {
-        newError.all = response.content
-        setError(newError);
+        setError(response.content);
 
       } else {
         console.debug('Form data submitted:', formData);

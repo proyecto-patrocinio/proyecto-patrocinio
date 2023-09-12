@@ -175,17 +175,17 @@ export async function createConsultation(description, opponent, tag, clientID) {
             body: JSON.stringify(newConsult),
         })
 
+        const responseData = await response.json();
         if(!response.ok) {
             console.error('Failed to POST Consultation:', response.status);
-            return { success: false, content: `Failed to create consultation: ${response.status}`};
+            return { success: false, content: responseData};
         }
-        const responseData = await response.json();
         console.info("Successfull Create Consultation with ID: ", responseData.id);
         return { success: true, content: responseData };
 
     } catch (error) {
         console.error('Unexpected error in create consultation.');
         console.debug(error)
-        return { success: false, content: 'Unexpected error occurred.' };
+        return { success: false, content: {'all': 'Unexpected error occurred.'} };
     }
 }
