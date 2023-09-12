@@ -65,6 +65,12 @@ const Consultancy = () => {
   }
 
 
+  /**
+   * Add a new consultation to the consultancy panels.
+   *
+   * @param {Object} consultation - The consultation object with
+   * id', 'state', 'time_stamp', 'description', 'opponent', 'tag', and 'client' fields.
+   */
   const addNewConsultation = (consultation) => {
     const newConsultation = {
       "id": consultation.id,
@@ -76,7 +82,7 @@ const Consultancy = () => {
       "client": consultation.client,
       "consultation": consultation.id
     }
-    consultancy.panels.push(newConsultation)
+    consultancy.panels[0].cards.push(newConsultation)
     setConsultancy(consultancy);
     setUpdateCounter(updateCounter + 1);  // force view refresh
   };
@@ -217,7 +223,7 @@ const Consultancy = () => {
                 panel={consultancy.panels[0]}
                 />
             </div>
-            <ConsultationFormButton/>
+            <ConsultationFormButton addNewConsultation={addNewConsultation}/>
             {/*rest of panels: One panel for each BOARD containing its request cards.*/}
             {consultancy.panels.map((panel, index) => (
                 index === 0 ? null: (

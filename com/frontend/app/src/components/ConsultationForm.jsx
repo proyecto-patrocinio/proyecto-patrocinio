@@ -31,7 +31,7 @@ import {createConsultation} from './utils/caseTaker'
  * 
  * @component ConsultationFormButton
  */
-const ConsultationFormButton = () => {
+const ConsultationFormButton = ({addNewConsultation}) => {
   const [formData, setFormData] = useState({
     description: '',
     opponent: '',
@@ -90,6 +90,7 @@ const ConsultationFormButton = () => {
 
       } else {
         console.debug('Form data submitted:', formData);
+        addNewConsultation(response.content)
         setFormData({
           description: '',
           opponent: '',
