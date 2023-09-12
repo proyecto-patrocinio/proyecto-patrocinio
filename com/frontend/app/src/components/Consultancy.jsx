@@ -32,6 +32,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
 
 const Consultancy = () => {
 	const [consultancy, setConsultancy] = useState( { 'title': 'Consultoria', 'panels': [{'id':0, 'title': 'New Consultations', 'number_cards':0 , 'cards': [] }]})
+  const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
 
 	useEffect(() => {
 		const fetchConsultancy = async () => {
@@ -58,9 +59,27 @@ const Consultancy = () => {
   fetchConsultancy();
   }, []);
 
+
   if(!consultancy){
     return <div>No data.</div>
   }
+
+
+  const addNewConsultation = (consultation) => {
+    const newConsultation = {
+      "id": consultation.id,
+      "state": consultation.state,
+      "time_stamp": consultation.time_stamp,
+      "description": consultation.description,
+      "opponent": consultation.opponent,
+      "tag": consultation.tag,
+      "client": consultation.client,
+      "consultation": consultation.id
+    }
+    consultancy.panels.push(newConsultation)
+    setConsultancy(consultancy);
+    setUpdateCounter(updateCounter + 1);  // force view refresh
+  };
 
 
   /************************************************************ */
