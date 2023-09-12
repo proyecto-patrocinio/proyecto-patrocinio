@@ -203,7 +203,7 @@ const Consultancy = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId={"consultancy"} direction="horizontal">
+      <Droppable key={"droppeable-consultancy"} droppableId={"consultancy"} direction="horizontal">
         {(provided) => (
           <ConsultancyContainer
             ref={provided.innerRef}
@@ -214,6 +214,7 @@ const Consultancy = () => {
           justifyContent="center"
           alignItems="stretch"
           spacing={2}
+          key={"stack-container"}
           >
           {/*panel-0: Input Coonsultations.*/}
             <div style={{ position: "sticky", left: 0, zIndex: 1}}>
