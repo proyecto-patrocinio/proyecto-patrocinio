@@ -113,7 +113,7 @@ const Consultancy = () => {
     
     // If destination.droppableId == source.droppableId, the panel is 
     // updated with the destination panel.
-    if (destination.droppableId === source.droppableId) {
+    if (Number(destination.droppableId) === Number(source.droppableId)) {
       const panel = consultancy.panels.find(
         (panel) => panel.id === Number(destination.droppableId)
       );
@@ -223,7 +223,7 @@ const Consultancy = () => {
                 panel={consultancy.panels[0]}
                 />
             </div>
-            <ConsultationFormButton addNewConsultation={addNewConsultation}/>
+            <ConsultationFormButton  key={"consultation-form"} addNewConsultation={addNewConsultation}/>
             {/*rest of panels: One panel for each BOARD containing its request cards.*/}
             {consultancy.panels.map((panel, index) => (
                 index === 0 ? null: (
