@@ -153,7 +153,8 @@ export async function createRequest(consultationID, destinationBoardID) {
  * @param {string} opponent - The name of the opponent in the consultation.
  * @param {string} tag - The tag associated with the consultation.
  * @param {number} clientID - The ID of the client associated with the consultation.
- * @returns {boolean} true if successfully created, false otherwise.
+ * @returns {Promise<{success: boolean, content?: any}>} An object containing the success status,
+ * an optional message, and the response data.
  */
 export async function createConsultation(description, opponent, tag, clientID) {
     try {
@@ -176,14 +177,15 @@ export async function createConsultation(description, opponent, tag, clientID) {
 
         if(!response.ok) {
             console.error('Failed to POST Consultation:', response.status);
-            return false;
+            return { success: false, content: `Failed to create consultation: ${response.status}`};
         }
-        console.log("Successfull Create Consultation with ID: ", response.data.id);
-        return true;
+        const responseData = await response.json();
+        console.info("Successfull Create Consultation with ID: ", responseData.id);
+        return { success: true, content: responseData };
 
     } catch (error) {
         console.error('Unexpected error in create consultation.');
         console.debug(error)
-        return false;
+        return { success: false, content: 'Unexpected error occurred.' };
     }
 }

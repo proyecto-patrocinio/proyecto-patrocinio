@@ -73,38 +73,39 @@ const ConsultationFormButton = () => {
       hasError = true;
     }
 
-    //Create Consultation in backend
-    const isCreated = await createConsultation(
-      formData['description'],
-      formData['opponent'],
-      formData['tag'],
-      formData['client']
-    )
-    if (!isCreated) {
-      hasError = true;
-      newError.all = 'Error in Form data.'
-    }
 
-    if (hasError) {
-      newError.all = 'Error in Form data.'
-      setError(newError);
-    } else {
-      console.debug('Form data submitted:', formData);
-      setFormData({
-        description: '',
-        opponent: '',
-        tag: '',
-        client: '',
-        all: '',
-      });
-      setIsDialogOpen(false);
-      setError({
-        description: '',
-        opponent: '',
-        tag: '',
-        client: '',
-        all: '',
-      });
+    if (!hasError) {
+
+      //Create Consultation in backend
+      const response = await createConsultation(
+        formData['description'],
+        formData['opponent'],
+        formData['tag'],
+        formData['client']
+      )
+
+      if (!response.success) {
+        newError.all = response.content
+        setError(newError);
+
+      } else {
+        console.debug('Form data submitted:', formData);
+        setFormData({
+          description: '',
+          opponent: '',
+          tag: '',
+          client: '',
+          all: '',
+        });
+        setIsDialogOpen(false);
+        setError({
+          description: '',
+          opponent: '',
+          tag: '',
+          client: '',
+          all: '',
+        });
+      }
     }
   };
 
