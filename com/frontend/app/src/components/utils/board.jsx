@@ -1,3 +1,15 @@
+/**************************************************************************
+* This module houses essential functions for interacting with board data. *
+***************************************************************************/
+
+
+/**
+ * Fetches data for a specific board from the API.
+ *
+ * @param {number} boardID - The ID of the board to retrieve data for.
+ * @returns {Promise<Object>} A Promise that resolves with the board data if the request is successful.
+ * @throws {Error} Throws an error if the request to the API fails.
+ */
 async function getDataBoard(boardID) {
   try {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
@@ -18,6 +30,14 @@ async function getDataBoard(boardID) {
 }
 export default getDataBoard;
 
+
+/**
+ * Accepts a consultation request by sending a POST request to the API.
+ *
+ * @param {number} requestConsultationID - The ID of the consultation request to accept.
+ * @param {number} panelID - The ID of the panel where the consultation request will be accepted.
+ * @throws {Error} Throws an error if the request to the API fails.
+ */
 export const acceptRequestCard = async(requestConsultationID, panelID) => {
   try{
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
@@ -45,5 +65,29 @@ export const acceptRequestCard = async(requestConsultationID, panelID) => {
   } catch (error) {
     console.error('Error:', error);
     throw error;
+  }
+}
+
+
+/**
+ * Fetches the list of boards.
+ * @returns {Promise} A promise that resolves to the fetched board list or an error.
+ * @throws {Error} Throws an error if the request to the API fails.
+ */
+export const getListBoard = async () => {
+  try {
+      const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                  + process.env.REACT_APP_PATH_BOARD;
+      const response = await fetch(url);
+      if (response.ok) {
+          const boardList = await response.json();
+          return boardList;
+      } else {
+          throw new Error('Failed to fetch board. Status Code: ' , response.status);
+      }
+  } catch (error) {
+      console.error('Failed to fetch board.');
+      console.debug(error);
+      throw error;
   }
 }

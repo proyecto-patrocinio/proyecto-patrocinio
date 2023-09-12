@@ -12,6 +12,7 @@ import { TextField, Button, Grid, Dialog, DialogTitle, DialogContent, DialogActi
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
+import {createConsultation} from './utils/caseTaker'
 
 
 /**
@@ -30,7 +31,7 @@ import Typography from '@mui/material/Typography';
  * 
  * @component ConsultationFormButton
  */
-const ConsultationFormButton = () => {
+const ConsultationFormButton = ({addNewConsultation}) => {
   const [formData, setFormData] = useState({
     description: '',
     opponent: '',
@@ -52,7 +53,7 @@ const ConsultationFormButton = () => {
     setError({ ...error, [name]: '' }); // Clear error when modifying the field
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     let hasError = false;
 
@@ -73,25 +74,39 @@ const ConsultationFormButton = () => {
     }
 
     if (hasError) {
-      newError.all = 'Form data submitted'
       setError(newError);
     } else {
-      console.debug('Form data submitted:', formData);
-      setFormData({
-        description: '',
-        opponent: '',
-        tag: '',
-        client: '',
-        all: '',
-      });
-      setIsDialogOpen(false);
-      setError({
-        description: '',
-        opponent: '',
-        tag: '',
-        client: '',
-        all: '',
-      });
+
+      //Create Consultation in backend
+      const response = await createConsultation(
+        formData['description'],
+        formData['opponent'],
+        formData['tag'],
+        formData['client']
+      )
+
+      if (!response.success) {
+        setError(response.content);
+
+      } else {
+        console.debug('Form data submitted:', formData);
+        addNewConsultation(response.content)
+        setFormData({
+          description: '',
+          opponent: '',
+          tag: '',
+          client: '',
+          all: '',
+        });
+        setIsDialogOpen(false);
+        setError({
+          description: '',
+          opponent: '',
+          tag: '',
+          client: '',
+          all: '',
+        });
+      }
     }
   };
 

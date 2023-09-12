@@ -32,6 +32,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
 
 const Consultancy = () => {
 	const [consultancy, setConsultancy] = useState( { 'title': 'Consultoria', 'panels': [{'id':0, 'title': 'New Consultations', 'number_cards':0 , 'cards': [] }]})
+  const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
 
 	useEffect(() => {
 		const fetchConsultancy = async () => {
@@ -58,9 +59,33 @@ const Consultancy = () => {
   fetchConsultancy();
   }, []);
 
+
   if(!consultancy){
     return <div>No data.</div>
   }
+
+
+  /**
+   * Add a new consultation to the consultancy panels.
+   *
+   * @param {Object} consultation - The consultation object with
+   * id', 'state', 'time_stamp', 'description', 'opponent', 'tag', and 'client' fields.
+   */
+  const addNewConsultation = (consultation) => {
+    const newConsultation = {
+      "id": consultation.id,
+      "state": consultation.state,
+      "time_stamp": consultation.time_stamp,
+      "description": consultation.description,
+      "opponent": consultation.opponent,
+      "tag": consultation.tag,
+      "client": consultation.client,
+      "consultation": consultation.id
+    }
+    consultancy.panels[0].cards.push(newConsultation)
+    setConsultancy(consultancy);
+    setUpdateCounter(updateCounter + 1);  // force view refresh
+  };
 
 
   /************************************************************ */
@@ -88,7 +113,7 @@ const Consultancy = () => {
     
     // If destination.droppableId == source.droppableId, the panel is 
     // updated with the destination panel.
-    if (destination.droppableId === source.droppableId) {
+    if (Number(destination.droppableId) === Number(source.droppableId)) {
       const panel = consultancy.panels.find(
         (panel) => panel.id === Number(destination.droppableId)
       );
@@ -178,7 +203,7 @@ const Consultancy = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId={"consultancy"} direction="horizontal">
+      <Droppable key={"droppeable-consultancy"} droppableId={"consultancy"} direction="horizontal">
         {(provided) => (
           <ConsultancyContainer
             ref={provided.innerRef}
@@ -189,6 +214,7 @@ const Consultancy = () => {
           justifyContent="center"
           alignItems="stretch"
           spacing={2}
+          key={"stack-container"}
           >
           {/*panel-0: Input Coonsultations.*/}
             <div style={{ position: "sticky", left: 0, zIndex: 1}}>
@@ -198,7 +224,7 @@ const Consultancy = () => {
                 panel={consultancy.panels[0]}
                 />
             </div>
-            <ConsultationFormButton/>
+            <ConsultationFormButton  key={"consultation-form"} addNewConsultation={addNewConsultation}/>
             {/*rest of panels: One panel for each BOARD containing its request cards.*/}
             {consultancy.panels.map((panel, index) => (
                 index === 0 ? null: (

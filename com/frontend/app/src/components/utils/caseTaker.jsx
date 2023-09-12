@@ -2,6 +2,7 @@
  * This Module contains functions for the Consultancy Page.*
  ***********************************************************/
 
+/********************** CONSULTATIONS ************************/
 /**
  * Fetches Consultations that are to be assigned based on CREATED status.
  * @returns {Promise} A promise that resolves to the fetched data or an error.
@@ -27,29 +28,6 @@ export const getConsultationsToAssign = async () => {
         throw error;
     }
 };
-
-
-/**
- * Fetches the list of boards.
- * @returns {Promise} A promise that resolves to the fetched board list or an error.
- */
-export const getListBoard = async () => {
-    try {
-        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                    + process.env.REACT_APP_PATH_BOARD;
-        const response = await fetch(url);
-        if (response.ok) {
-            const boardList = await response.json();
-            return boardList;
-        } else {
-            throw new Error('Failed to fetch board. Status Code: ' , response.status);
-        }
-    } catch (error) {
-        console.error('Failed to fetch board.');
-        console.debug(error);
-        throw error;
-    }
-}
 
 
 /**
@@ -100,6 +78,8 @@ const getConsultation = async (id) => {
     }
 };
 
+
+/********************** CONSULTATION REQUEST *************************/
 
 /**
  * Delete a Request Consultation.
@@ -163,5 +143,49 @@ export async function createRequest(consultationID, destinationBoardID) {
         console.error('Error in create request consultation.');
         console.debug(error)
         throw error;
+    }
+}
+
+
+/**
+ * Create new consultation.
+ * @param {string} description - The description of the consultation.
+ * @param {string} opponent - The name of the opponent in the consultation.
+ * @param {string} tag - The tag associated with the consultation.
+ * @param {number} clientID - The ID of the client associated with the consultation.
+ * @returns {Promise<{success: boolean, content?: any}>} An object containing the success status,
+ * an optional message, and the response data.
+ */
+export async function createConsultation(description, opponent, tag, clientID) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+        + process.env.REACT_APP_PATH_CONSULTATIONS
+        const newConsult = {
+            "description": description,
+            "opponent": opponent,
+            "tag": tag,
+            "client": clientID
+        }
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newConsult),
+        })
+
+        const responseData = await response.json();
+        if(!response.ok) {
+            console.error('Failed to POST Consultation:', response.status);
+            return { success: false, content: responseData};
+        }
+        console.info("Successfull Create Consultation with ID: ", responseData.id);
+        return { success: true, content: responseData };
+
+    } catch (error) {
+        console.error('Unexpected error in create consultation.');
+        console.debug(error)
+        return { success: false, content: {'all': 'Unexpected error occurred.'} };
     }
 }
