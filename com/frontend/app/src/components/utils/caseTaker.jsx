@@ -2,6 +2,7 @@
  * This Module contains functions for the Consultancy Page.*
  ***********************************************************/
 
+/********************** CONSULTATIONS ************************/
 /**
  * Fetches Consultations that are to be assigned based on CREATED status.
  * @returns {Promise} A promise that resolves to the fetched data or an error.
@@ -27,29 +28,6 @@ export const getConsultationsToAssign = async () => {
         throw error;
     }
 };
-
-
-/**
- * Fetches the list of boards.
- * @returns {Promise} A promise that resolves to the fetched board list or an error.
- */
-export const getListBoard = async () => {
-    try {
-        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                    + process.env.REACT_APP_PATH_BOARD;
-        const response = await fetch(url);
-        if (response.ok) {
-            const boardList = await response.json();
-            return boardList;
-        } else {
-            throw new Error('Failed to fetch board. Status Code: ' , response.status);
-        }
-    } catch (error) {
-        console.error('Failed to fetch board.');
-        console.debug(error);
-        throw error;
-    }
-}
 
 
 /**
@@ -100,6 +78,8 @@ const getConsultation = async (id) => {
     }
 };
 
+
+/********************** CONSULTATION REQUEST *************************/
 
 /**
  * Delete a Request Consultation.
