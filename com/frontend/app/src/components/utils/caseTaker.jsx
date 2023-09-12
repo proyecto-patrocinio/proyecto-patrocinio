@@ -145,3 +145,45 @@ export async function createRequest(consultationID, destinationBoardID) {
         throw error;
     }
 }
+
+
+/**
+ * Create new consultation.
+ * @param {string} description - The description of the consultation.
+ * @param {string} opponent - The name of the opponent in the consultation.
+ * @param {string} tag - The tag associated with the consultation.
+ * @param {number} clientID - The ID of the client associated with the consultation.
+ * @returns {boolean} true if successfully created, false otherwise.
+ */
+export async function createConsultation(description, opponent, tag, clientID) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+        + process.env.REACT_APP_PATH_CONSULTATIONS
+        const newConsult = {
+            "description": description,
+            "opponent": opponent,
+            "tag": tag,
+            "client": clientID
+        }
+
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newConsult),
+        })
+
+        if(!response.ok) {
+            console.error('Failed to POST Consultation:', response.status);
+            return false;
+        }
+        console.log("Successfull Create Consultation with ID: ", response.data.id);
+        return true;
+
+    } catch (error) {
+        console.error('Unexpected error in create consultation.');
+        console.debug(error)
+        return false;
+    }
+}

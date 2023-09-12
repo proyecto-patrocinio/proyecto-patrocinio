@@ -12,6 +12,7 @@ import { TextField, Button, Grid, Dialog, DialogTitle, DialogContent, DialogActi
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
+import {createConsultation} from './utils/caseTaker'
 
 
 /**
@@ -52,7 +53,7 @@ const ConsultationFormButton = () => {
     setError({ ...error, [name]: '' }); // Clear error when modifying the field
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
     let hasError = false;
 
@@ -72,8 +73,20 @@ const ConsultationFormButton = () => {
       hasError = true;
     }
 
+    //Create Consultation in backend
+    const isCreated = await createConsultation(
+      formData['description'],
+      formData['opponent'],
+      formData['tag'],
+      formData['client']
+    )
+    if (!isCreated) {
+      hasError = true;
+      newError.all = 'Error in Form data.'
+    }
+
     if (hasError) {
-      newError.all = 'Form data submitted'
+      newError.all = 'Error in Form data.'
       setError(newError);
     } else {
       console.debug('Form data submitted:', formData);
