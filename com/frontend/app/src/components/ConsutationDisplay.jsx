@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import {formatTimestamp} from './utils/format.jsx';
 import {getConsultation} from './utils/caseTaker.jsx';
+import ClientDisplay from './ClientDisplay.jsx';
 
 
 const ConsutationDisplay = ({consultation, open, onClose }) => {
@@ -16,13 +17,8 @@ const ConsutationDisplay = ({consultation, open, onClose }) => {
 	useEffect(() => {
 		const fetchConsultancy = async () => {
 		try {
-            if (consultation.client) {
-                // Get Client information
-                //TODO: get clietn data
-            } else { // Don't have Data in Consultation
-                // Get Data Consultation from Backend
+            if (!consultation.client) {
                 const consultationResponse = await getConsultation(consultation.consultation)
-                //TODO: get clietn data
                 setConsultation(consultationResponse)
             }
 
@@ -30,17 +26,17 @@ const ConsutationDisplay = ({consultation, open, onClose }) => {
             console.error("Failed to fetch Consultation in Card.");
 			console.debug(error);
 		}
-  };
-  
-  fetchConsultancy();
-  }, []);
+    };
+    
+    fetchConsultancy();
+    }, [consultation]);
 
     const handleClose = () => {
         onClose();
     };
 
     return (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog open={open} onClose={handleClose} >
         <DialogTitle variant="h5">Consultation Details</DialogTitle>
         <DialogContent>
 
@@ -48,17 +44,14 @@ const ConsutationDisplay = ({consultation, open, onClose }) => {
 
         <div elevation={3} style={{ padding: '20px' }}>
 
-        <TableContainer>
+        <TableContainer style={{width: '800px'}}>
             <Table>
             <TableBody>
                 <TableRow>
                 <TableCell>Tag:</TableCell>
                 <TableCell>{consultationData.tag}</TableCell>
                 </TableRow>
-                <TableRow>
-                <TableCell>Client:</TableCell>
-                <TableCell>{consultationData.client}</TableCell>
-                </TableRow>
+                <ClientDisplay clientID={consultationData.client}/>
                 <TableRow>
                 <TableCell>Opponent:</TableCell>
                 <TableCell>{consultationData.opponent}</TableCell>
@@ -75,7 +68,6 @@ const ConsutationDisplay = ({consultation, open, onClose }) => {
                 <TableCell>Creation time stamp:</TableCell>
                 <TableCell>{formatTimestamp(consultationData.time_stamp)}</TableCell>
                 </TableRow>
-                {/* Agrega más filas de tabla según los datos de tu consulta */}
             </TableBody>
             </Table>
         </TableContainer>
@@ -84,7 +76,7 @@ const ConsutationDisplay = ({consultation, open, onClose }) => {
 
         </DialogContent>
         <Button onClick={handleClose} color="primary">
-            Cerrar
+            Close
         </Button>
         </Dialog>
     );
