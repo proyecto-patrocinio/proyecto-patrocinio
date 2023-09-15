@@ -58,7 +58,7 @@ export const getConsultancyBoard = async () => {
  * Fetch Consultation.
  * @returns {Promise} A promise that resolves to the fetched consultation or an error.
  */
-const getConsultation = async (id) => {
+export const getConsultation = async (id) => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_CONSULTATIONS

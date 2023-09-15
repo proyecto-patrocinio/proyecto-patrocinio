@@ -13,7 +13,7 @@ import InputIcon from '@mui/icons-material/Input';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import  Link  from '@mui/material/Link'
 import { useUserContext } from '../context/UserContext';
-import getDataBoard from './utils/board';
+import getDataBoard from '../utils/board';
 
 
 /**
@@ -115,8 +115,8 @@ const ListItemCollapseButton = ( {text, sub_list} ) => {
    <Link href="/# " style={{ color: 'inherit', textDecoration: 'none' }}>
       <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
     </Link>
-    <Link href="/case-taker" style={{ color: 'inherit', textDecoration: 'none' }}>
-      <ListItemIconButton icon={<InputIcon />} text="Case Taker" />
+    <Link href="/consultancy" style={{ color: 'inherit', textDecoration: 'none' }}>
+      <ListItemIconButton icon={<InputIcon />} text="Consultancy" />
     </Link>
     <Link href="#" style={{ color: 'inherit', textDecoration: 'none' }}>
       <ListItemIconButton icon={<TuneIcon />} text="Control Panel" />

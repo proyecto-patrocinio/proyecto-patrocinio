@@ -18,7 +18,7 @@ import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Button } from '@mui/material';
-import createPanel from './utils/panel';
+import createPanel from '../utils/panel';
 import { Snackbar, Alert } from '@mui/material';
 
 

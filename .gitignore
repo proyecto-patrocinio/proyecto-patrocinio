@@ -74,3 +74,8 @@ gherkin.feature
 #static files
 com/backend/app/django_static/*
 com/backend/app/db.sqlite3
+.idea/misc.xml
+.idea/proyecto_patrocinio.iml
+.gitignore
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/vcs.xml

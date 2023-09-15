@@ -11,10 +11,10 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Panel from './Panel';
 import styled from '@emotion/styled';
 import { Stack, Alert } from '@mui/material';
-import moveCard from './utils/card';
-import getDataBoard from './utils/board';
-import {acceptRequestCard} from './utils/board'
-import CreatePanelButton from './CreatePanelButton';
+import moveCard from '../utils/card';
+import getDataBoard from '../utils/board';
+import {acceptRequestCard} from '../utils/board'
+import CreatePanelButton from '../components/CreatePanelButton';
 
 
 const BoardContainer = styled.div`
@@ -192,7 +192,7 @@ const Board = ({id}) => {
     <div>
       <DragDropContext onDragEnd={onDragEnd}>
         {showAlert && (
-          <Alert severity="error">No es posible mover una carta al panel de entrada.</Alert>
+          <Alert severity="error">It is not possible to move a card to the input panel.</Alert>
         )}
         <Droppable droppableId={"board"+String(id)} direction="horizontal">
           {(provided) => (

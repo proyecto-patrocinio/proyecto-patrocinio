@@ -16,8 +16,8 @@ import {
   deleteRequest,
   getConsultationsToAssign,
   getConsultancyBoard
-} from './utils/caseTaker'
-import ConsultationFormButton from './ConsultationForm'
+} from '../utils/caseTaker'
+import ConsultationFormButton from '../components/ConsultationFormButton'
 
 const ConsultancyContainer = styled.div`
 	display: flex;

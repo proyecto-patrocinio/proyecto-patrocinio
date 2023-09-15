@@ -1,47 +1,34 @@
 sex = (
-    ('M', 'Masculino'),
-    ('F', 'Femenino'),
+    ('MALE', 'Male'),
+    ('FEMALE', 'Female'),
 )
 
 marital_status = (
-    ('S', 'soltero/a'),
-    ('C', 'Casado/a'),
-    ('D', 'Divorciado/a'),
-    ('V', 'Viudo'),
+    ('SINGLE', 'single'),
+    ('MARRIED', 'Married'),
+    ('DIVORCED', 'Divorced'),
+    ('WIDOWER', 'Widower'),
 )
- 
+
 housing_type = (
-    ('Ca','Casa'),
-    ('Dp','Departamento'),
-    ('CR', 'Casa Rodante'),
-    ('SC', 'Situacion de Calle'),
+    ('HOUSE','House'),
+    ('DEPARTMENT','Department'),
+    ('TRAILER', 'Trailer'),
+    ('STREET_SITUATION', 'Street Situation'),
 )
+
 studies = (
-    ('PI', 'Primario Incompleto'),
-    ('PC', 'Primario Completo'),
-    ('SI', 'Secundario Incompleto'),
-    ('SC', 'Secundario Completo'),
-    ('TI', 'Terciario Incompleto'),
-    ('TC', 'Terciario Completo'),
-    ('UI', 'Universitario Incompleto'),
-    ('UC', 'Universitario Completo'),
+    ('INCOMPLETE_PRIMARY', 'Primario Incompleto'),
+    ('COMPLETE_PRIMARY', 'Primario Completo'),
+    ('INCOMPLETE_SECONDARY', 'Secundario Incompleto'),
+    ('COMPLETE_SECONDARY', 'Secundario Completo'),
+    ('INCOMPLETE_TERTIARY', 'Terciario Incompleto'),
+    ('COMPLETE_TERTIARY', 'Terciario Completo'),
+    ('INCOMPLETE_UNIVERSITY', 'Universitario Incompleto'),
+    ('COMPLETE_UNIVERSITY', 'Universitario Completo'),
 )
-
-state_consult = (
-    ('A','Aceptado'), 
-    ('E','Enviado en Espera'), 
-    ('R', 'Rechazado'),
-    ('C','Cancelado'),
-)
-
-state_request = (
-    ('A','Aceptado'),   
-    ('P','Procesando'),
-    ('R', 'Rechazado'),
-)
-
 
 id_type = (
-    ('D','Documento'),
-    ('P','Pasaporte'), 
+    ('DOCUMENT','Document'),
+    ('PASSPORT','Passport'), 
 )
