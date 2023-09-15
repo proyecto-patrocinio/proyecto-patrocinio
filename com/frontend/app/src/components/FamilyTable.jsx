@@ -21,7 +21,7 @@ const FamilyTable = ({clientData}) => {
         return (
             <TableRow>
             <TableCell>Family:</TableCell>
-            <TableCell>-</TableCell>
+            <TableCell>{"-"}</TableCell>
             </TableRow>
         );
     }

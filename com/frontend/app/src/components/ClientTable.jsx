@@ -39,7 +39,12 @@ const ClientTable = ({clientID}) => {
      * Toggle the expansion state of the client information.
      */
     if (clientData == null) {
-        return " - ";
+        return (
+            <TableRow>
+                <TableCell>Client:</TableCell>
+                <TableCell>{"-"}</TableCell>
+            </TableRow>
+        );
     }
 
     const toggleExpansion = () => {
