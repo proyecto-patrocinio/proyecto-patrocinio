@@ -39,7 +39,7 @@ const ClientDisplay = ({clientID}) => {
      * Toggle the expansion state of the client information.
      */
     if (clientData == null) {
-        return "";
+        return " - ";
     }
 
     const toggleExpansion = () => {
@@ -55,7 +55,6 @@ const ClientDisplay = ({clientID}) => {
         {isExpanded ? (
             <div>
 
-                <FamilyTable clientData={clientData}/>
                 <TableRow>
                 <TableCell>First Name:</TableCell>
                 <TableCell>{clientData.first_name}</TableCell>
@@ -84,6 +83,7 @@ const ClientDisplay = ({clientID}) => {
                 <TableCell>Email:</TableCell>
                 <TableCell>{clientData.email}</TableCell>
                 </TableRow>
+                <FamilyTable clientData={clientData}/>
 
                 <TableRow>
                 <TableCell>Telephones:</TableCell>
@@ -95,7 +95,7 @@ const ClientDisplay = ({clientID}) => {
                         ))}
                     </ul>
                     ) : (
-                    ""
+                    " - "
                 )}
                 </TableCell>
                 </TableRow>

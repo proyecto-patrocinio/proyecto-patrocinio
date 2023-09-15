@@ -18,7 +18,12 @@ const FamilyTable = ({clientData}) => {
 
     // If there is no family information, return an empty string.
     if (family === null){
-        return "";
+        return (
+            <TableRow>
+            <TableCell>Family:</TableCell>
+            <TableCell>" - "</TableCell>
+            </TableRow>
+        );
     }
 
     /**
