@@ -11,10 +11,10 @@ import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import Panel from './Panel';
 import styled from '@emotion/styled';
 import { Stack, Alert } from '@mui/material';
-import moveCard from './utils/card';
-import getDataBoard from './utils/board';
-import {acceptRequestCard} from './utils/board'
-import CreatePanelButton from './CreatePanelButton';
+import moveCard from '../utils/card';
+import getDataBoard from '../utils/board';
+import {acceptRequestCard} from '../utils/board'
+import CreatePanelButton from '../components/CreatePanelButton';
 
 
 const BoardContainer = styled.div`

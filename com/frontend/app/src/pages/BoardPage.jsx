@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Dashboard from '../containers/Dashboard';
-import Board from '../components/Board';
+import Board from '../containers/Board';
 import { useParams } from 'react-router-dom';
-import getDataBoard from '../components/utils/board';
+import getDataBoard from '../utils/board';
 
 const theme = createTheme();
 export default function BoardPage( ) {

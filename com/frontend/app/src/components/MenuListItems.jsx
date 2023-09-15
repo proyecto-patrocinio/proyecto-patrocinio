@@ -13,7 +13,7 @@ import InputIcon from '@mui/icons-material/Input';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import  Link  from '@mui/material/Link'
 import { useUserContext } from '../context/UserContext';
-import getDataBoard from './utils/board';
+import getDataBoard from '../utils/board';
 
 
 /**

@@ -6,9 +6,9 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import {formatTimestamp} from './utils/format.jsx';
-import {getConsultation} from './utils/caseTaker.jsx';
-import ClientDisplay from './ClientDisplay.jsx';
+import {formatTimestamp} from '../utils/format.jsx';
+import {getConsultation} from '../utils/caseTaker.jsx';
+import ClientTable from './ClientTable.jsx';
 
 
 /**
@@ -66,7 +66,7 @@ const ConsutationDisplay = ({consultation, open, onClose }) => {
                 <TableCell>Tag:</TableCell>
                 <TableCell>{consultationData.tag}</TableCell>
                 </TableRow>
-                <ClientDisplay clientID={consultationData.client}/>
+                <ClientTable clientID={consultationData.client}/>
                 <TableRow>
                 <TableCell>Opponent:</TableCell>
                 <TableCell>{consultationData.opponent}</TableCell>

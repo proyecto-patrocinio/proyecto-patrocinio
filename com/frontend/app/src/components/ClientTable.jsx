@@ -2,7 +2,7 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import {getDataClient} from './utils/client.jsx';
+import {getDataClient} from '../utils/client.jsx';
 import FamilyTable from './FamilyTable.jsx';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -13,9 +13,9 @@ import Button from '@mui/material/Button';
  * Functional component for displaying client information in a table row.
  * 
  * @param {string} clientID - The ID of the client to display.
- * @returns {JSX.Element} - The ClientDisplay component JSX.
+ * @returns {JSX.Element} - The ClientTable component JSX.
  */
-const ClientDisplay = ({clientID}) => {
+const ClientTable = ({clientID}) => {
     const [clientData, setClient] = useState(null)
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -146,4 +146,4 @@ const ClientDisplay = ({clientID}) => {
     );
 };
 
-export default ClientDisplay;
+export default ClientTable;

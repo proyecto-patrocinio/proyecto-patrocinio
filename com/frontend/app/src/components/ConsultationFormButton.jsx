@@ -12,7 +12,7 @@ import { TextField, Button, Grid, Dialog, DialogTitle, DialogContent, DialogActi
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
-import {createConsultation} from './utils/caseTaker'
+import {createConsultation} from '../utils/caseTaker'
 
 
 /**

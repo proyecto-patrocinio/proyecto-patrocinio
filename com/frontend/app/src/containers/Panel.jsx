@@ -8,7 +8,7 @@ import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Grid from '@mui/material/Grid';
 import CustomCard from './Card';
-import Title from './Title';
+import Title from '../components/Title';
 import { Paper, Badge } from '@mui/material';
 
 const Panel = ({ panel, index }) => {
