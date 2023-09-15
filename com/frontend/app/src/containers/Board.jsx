@@ -192,7 +192,7 @@ const Board = ({id}) => {
     <div>
       <DragDropContext onDragEnd={onDragEnd}>
         {showAlert && (
-          <Alert severity="error">No es posible mover una carta al panel de entrada.</Alert>
+          <Alert severity="error">It is not possible to move a card to the input panel.</Alert>
         )}
         <Droppable droppableId={"board"+String(id)} direction="horizontal">
           {(provided) => (

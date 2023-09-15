@@ -20,10 +20,10 @@ const theme = createTheme();
 function Register() {
 const { enqueueSnackbar } = useSnackbar();
 
-  
+
   //Conect to API
   const handleValidation = (event) => {  
-    
+
     //get data from form
     const data = new FormData(event.currentTarget);
     const data_username = data.get('username');
@@ -35,14 +35,14 @@ const { enqueueSnackbar } = useSnackbar();
   if (data_username === "" || data_password === "" || data_email === "" || data_password2 === "") {
     enqueueSnackbar("Complete all fields.", { variant: 'error' });
   }else {
-   
+
     //send data to API
     const requestURL = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                     + process.env.REACT_APP_PATH_SIGNUP;
+                      + process.env.REACT_APP_PATH_SIGNUP;
     const request = new XMLHttpRequest();
     request.open('POST', requestURL);
     request.setRequestHeader( 'Content-Type', 'application/json')
-    
+
     request.onreadystatechange = () => { // Call a function when the state changes.
       if (request.readyState === XMLHttpRequest.DONE ) {
         if( request.status === 201){
@@ -66,7 +66,7 @@ const { enqueueSnackbar } = useSnackbar();
             "password1": data_password,
             "password2": data_password2,
         }));
-  
+
   }
   return () => {}
 }
@@ -148,8 +148,8 @@ const { enqueueSnackbar } = useSnackbar();
               <Grid item xs={12}>
                 <FormControlLabel
                   control={<Checkbox value="termAndCond" color="primary" />}
-                  label="He leído y acepto los términos y condiciones."
-                />                 
+                  label="I have read and accept the terms and conditions."
+                />
               </Grid>
             </Grid>
             <Button
