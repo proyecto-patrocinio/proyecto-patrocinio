@@ -6,14 +6,24 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 
+/**
+ * Functional component for displaying family information in a table row.
+ * 
+ * @param {Dict} clientData - The client's data containing family information.
+ * @returns {JSX.Element} - The FamilyTable component JSX. (In TableRow)
+ */
 const FamilyTable = ({clientData}) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const family = clientData.family;
 
+    // If there is no family information, return an empty string.
     if (family === null){
         return "";
     }
 
+    /**
+     * Toggle the expansion state of the family information.
+     */
     const toggleExpansion = () => {
         setIsExpanded(!isExpanded);
     };

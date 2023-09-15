@@ -11,29 +11,44 @@ import {getConsultation} from './utils/caseTaker.jsx';
 import ClientDisplay from './ClientDisplay.jsx';
 
 
+/**
+ * Functional component for displaying consultation details in a dialog.
+ * 
+ * @param {Object} consultation - The consultation data to display.
+ * @param {boolean} open - Boolean indicating whether the dialog is open.
+ * @param {Function} onClose - Function to close the dialog.
+ * @returns {JSX.Element} - The ConsultationDisplay component JSX.
+ */
 const ConsutationDisplay = ({consultation, open, onClose }) => {
     const [consultationData, setConsultation] = useState(consultation)
 
+    /**
+     * Fetch consultation data if client data is not available.
+     */
 	useEffect(() => {
 		const fetchConsultancy = async () => {
-		try {
-            if (!consultation.client) {
-                const consultationResponse = await getConsultation(consultation.consultation)
-                setConsultation(consultationResponse)
+            try {
+                if (!consultation.client) {
+                    const consultationResponse = await getConsultation(consultation.consultation)
+                    setConsultation(consultationResponse)
+                }
+            } catch (error) {
+                console.error("Failed to fetch Consultation in Card.");
+                console.debug(error);
             }
+        };
 
-		} catch (error) {
-            console.error("Failed to fetch Consultation in Card.");
-			console.debug(error);
-		}
-    };
-    
-    fetchConsultancy();
+        fetchConsultancy();
+
     }, [consultation]);
 
+    /**
+     * Close the dialog.
+     */
     const handleClose = () => {
         onClose();
     };
+
 
     return (
         <Dialog open={open} onClose={handleClose} >

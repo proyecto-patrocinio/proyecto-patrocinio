@@ -9,21 +9,35 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
 
 
+/**
+ * Functional component for displaying client information in a table row.
+ * 
+ * @param {string} clientID - The ID of the client to display.
+ * @returns {JSX.Element} - The ClientDisplay component JSX.
+ */
 const ClientDisplay = ({clientID}) => {
     const [clientData, setClient] = useState(null)
     const [isExpanded, setIsExpanded] = useState(false);
 
 
+    /**
+     * Fetch client data based on the provided client ID.
+     */
 	useEffect(() => {
 		const fetchConsultancy = async () => {
             const clientResponse = await getDataClient(clientID)
             setClient(clientResponse)
             console.log(clientResponse)
         };
-    fetchConsultancy();
+
+        fetchConsultancy();
+
     }, [clientID]);
 
 
+    /**
+     * Toggle the expansion state of the client information.
+     */
     if (clientData == null) {
         return "";
     }
