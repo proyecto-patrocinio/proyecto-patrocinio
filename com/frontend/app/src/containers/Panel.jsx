@@ -30,7 +30,7 @@ const Panel = ({ panel, index }) => {
         <Paper ref={provided.innerRef} {...provided.droppableProps}  style={panelStyle}>
             <Box style={{ position: 'relative' }}>
               <Title>{panel.title}</Title>
-              <Tooltip title={`Contains ${panel.number_cards} cards`}>
+              <Tooltip title={`Contains ${panel.number_cards} tickets`}>
                 {/*Badge with number of cards in the panel*/}
                 <Badge
                   key={"badge-"+String(panel.id)}
