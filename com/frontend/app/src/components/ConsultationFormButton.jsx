@@ -7,12 +7,14 @@
 * @component ConsultationFormButton
 */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Grid, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Tooltip } from '@mui/material';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
 import {createConsultation} from '../utils/caseTaker'
+import { getClientList } from '../utils/client';
 
 
 /**
@@ -32,6 +34,7 @@ import {createConsultation} from '../utils/caseTaker'
  * @component ConsultationFormButton
  */
 const ConsultationFormButton = ({addNewConsultation}) => {
+  const [clientDNI2ID, setClientDNI2ID] = useState([])
   const [formData, setFormData] = useState({
     description: '',
     opponent: '',
@@ -47,8 +50,28 @@ const ConsultationFormButton = ({addNewConsultation}) => {
     all: '',
   });
 
+
+  /**
+   * Fetch client list.
+   */
+  useEffect(() => {
+    const fetchConsultancy = async () => {
+            const clients = await getClientList()
+            const clientDNItoIdMapping = {};
+            clients.forEach((client) => {
+              clientDNItoIdMapping[client.id_number] = client.id;
+            });
+            setClientDNI2ID(clientDNItoIdMapping);
+        };
+
+        fetchConsultancy();
+
+  }, []);
+
+
   const handleChange = (event) => {
     const { name, value } = event.target;
+    console.log(name, value);
     setFormData({ ...formData, [name]: value });
     setError({ ...error, [name]: '' }); // Clear error when modifying the field
   };
@@ -69,8 +92,12 @@ const ConsultationFormButton = ({addNewConsultation}) => {
     });
 
     if (isNaN(formData.client)) {
-      newError.client = 'Must be a valid number';
+      newError.client = 'Must be a valid DNI number';
       hasError = true;
+    } else if (!clientDNI2ID[formData.client]) {
+      newError.client = 'Client ID does not exist';
+    } else {
+      formData.client = clientDNI2ID[formData.client] // Set ID of the client
     }
 
     if (hasError) {
@@ -184,18 +211,26 @@ const ConsultationFormButton = ({addNewConsultation}) => {
                 />
               </Grid>
               <Grid item xs={12}>
-                <TextField
-                  fullWidth
-                  label="Client"
-                  name="client"
-                  variant="outlined"
-                  type="number"
-                  value={formData.client}
-                  onChange={handleChange}
-                  required
-                  error={!!error.client}
-                  helperText={error.client}
-                />
+              <Autocomplete
+                fullWidth
+                options={Object.keys(clientDNI2ID)} // DNI client list options
+                value={formData.client} // Selected Client DNI
+                onChange={(event, newDNIValue) => {
+                  const selectedId = newDNIValue;
+                  handleChange({ target: { name: 'client', value: selectedId || '' } });
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Client"
+                    name="client"
+                    variant="outlined"
+                    required
+                    error={!!error.client}
+                    helperText={error.client}
+                  />
+                )}
+              />
               </Grid>
             {/*Show Top Error message*/}
             </Grid>

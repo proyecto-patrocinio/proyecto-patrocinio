@@ -28,3 +28,28 @@ export async function getDataClient(clientID) {
       throw error;
     }
   }
+
+
+/**
+ * Fetches all clients from the API.
+ *
+ * @returns {Promise<Object>} A Promise that resolves with the list of clients if the request is successful.
+ * @throws {Error} Throws an error if the request to the API fails.
+ */
+export async function getClientList() {
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_CLIENTS;
+    const response = await fetch(url);
+    if (response.ok) {
+      const board = await response.json();
+      return board;
+    } else {
+      console.error('Failed to fetch list of client:', response.status);
+      throw new Error('Failed to fetch list of client');
+    }
+  } catch (error) {
+    console.error('Error while try to get list of client:', error);
+    throw error;
+  }
+}
