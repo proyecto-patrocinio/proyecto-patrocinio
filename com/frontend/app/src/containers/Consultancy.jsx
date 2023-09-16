@@ -156,15 +156,23 @@ const Consultancy = () => {
       const destinyPanelID = destinationPanel.id; // Destination boards || input panel with the consultations.
       const originPanelID = sourcePanel.id;
 
-      if(originPanelID !== PANEL_INPUT_CONSULTATION_ID){
+      if (originPanelID !== PANEL_INPUT_CONSULTATION_ID){
         // Canceler current Request Consultation.
         await deleteRequest(requestAndConsultationID);
-      } // ELSE No have a current request consultation.
+      } else {
+        // ELSE No have a current request consultation.
+        consultancy.panels[0].number_cards --;
+        setConsultancy(consultancy);
+      }
 
       if( destinyPanelID !== PANEL_INPUT_CONSULTATION_ID){
         // Generate new Request Consultation
         await createRequest(requestAndConsultationID, destinyPanelID);
-      } // ELSE No generate a new request consultation.
+      } else {
+        // ELSE No generate a new request consultation.
+        consultancy.panels[0].number_cards ++;
+        setConsultancy(consultancy);
+      }
 
       /*** Update Frontend ***/
       // Remove the card from the source panel.

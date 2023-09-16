@@ -9,7 +9,7 @@ import { Droppable } from 'react-beautiful-dnd';
 import Grid from '@mui/material/Grid';
 import CustomCard from './Card';
 import Title from '../components/Title';
-import { Paper, Badge } from '@mui/material';
+import { Paper, Badge, Tooltip, Box } from '@mui/material';
 
 const Panel = ({ panel, index }) => {
 
@@ -27,22 +27,28 @@ const Panel = ({ panel, index }) => {
   return (
     <Droppable key={"droppeable-panel-"+String(panel.id)} droppableId={String(panel.id)} index={index} direction="vertical">
       {(provided) => (
-        <Badge key={"badge-"+String(panel.id)} color="info" badgeContent={panel.number_cards !== 0? panel.number_cards : "0"}>
-          {/*Badge with number of cards in the panel*/}
-
-          <Paper ref={provided.innerRef} {...provided.droppableProps}  style={panelStyle}>
+        <Paper ref={provided.innerRef} {...provided.droppableProps}  style={panelStyle}>
+            <Box style={{ position: 'relative' }}>
               <Title>{panel.title}</Title>
-              <Grid container  columns={12} spacing={2}  style={{width: '20vw', backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
-                  {panel.cards.map((card, index) => (
-                      <Grid item xs={12} sm={6} md={11} key={card.consultation} >
-                      <CustomCard card={card} index={index} key={card.consultation}/>
-                      </Grid>
-                  ))}
-                  {provided.placeholder}
-              </Grid>
-          </Paper>
-
-        </Badge>
+              <Tooltip title={`Contains ${panel.number_cards} tickets`}>
+                {/*Badge with number of cards in the panel*/}
+                <Badge
+                  key={"badge-"+String(panel.id)}
+                  color="info"
+                  badgeContent={panel.number_cards !== 0? panel.number_cards : "0"}
+                  style={{ position: 'absolute', top: 0, right: 0 }}
+                />
+              </Tooltip>
+            </Box>
+            <Grid container  columns={12} spacing={2}  style={{width: '20vw', backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
+                {panel.cards.map((card, index) => (
+                    <Grid item xs={12} sm={6} md={11} key={card.consultation} >
+                    <CustomCard card={card} index={index} key={card.consultation}/>
+                    </Grid>
+                ))}
+                {provided.placeholder}
+            </Grid>
+        </Paper>
       )}
     </Droppable>
   );
