@@ -15,6 +15,7 @@ import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
 
 const CustomCard = ({ card, index }) => {
   const [openDialog, setOpenDialog] = useState(false);
+  const [tag, setTag] = useState(card.tag);
 
   if (card == null || card.length === 0) {
     return <div>No cards.</div>;
@@ -42,11 +43,11 @@ const CustomCard = ({ card, index }) => {
                 color="textSecondary"
                 gutterBottom
               >
-                {card.tag}
+                {tag}
               </Typography>
             </CardContent>
           </Card>
-          <ConsutationDisplay consultation={card} open={openDialog} onClose={closeConsultationHandler}/>
+          <ConsutationDisplay consultation={card} open={openDialog} onClose={closeConsultationHandler} updateViewTag={setTag}/>
         </div>
       )}
     </Draggable>

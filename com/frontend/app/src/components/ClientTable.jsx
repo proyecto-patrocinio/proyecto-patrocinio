@@ -27,7 +27,6 @@ const ClientTable = ({clientID}) => {
 		const fetchConsultancy = async () => {
             const clientResponse = await getDataClient(clientID)
             setClient(clientResponse)
-            console.log(clientResponse)
         };
 
         fetchConsultancy();
