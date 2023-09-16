@@ -51,7 +51,7 @@ export const getConsultancyBoard = async () => {
         console.debug(error);
         throw error;
     }
-}
+};
 
 
 /**
@@ -73,6 +73,46 @@ export const getConsultation = async (id) => {
         }
     } catch (error) {
         console.error("Failed in fetch Consultation with ID " + id);
+        console.debug(error);
+        throw error;
+    }
+};
+
+
+/**
+ * Makes a PATCH request to update a specific field of a consultation.
+ * @param {string} id - The ID of the consultation to be updated.
+ * @param {string} fieldName - The name of the field to be updated.
+ * @param {any} fieldValue - The new value to be assigned to the field.
+ * @returns {Promise} - A promise that resolves with the new value in the field.
+ * @throws {Error} - If the PATCH request is not successful.
+ */
+export const updateConsultationField = async (id, fieldName, fieldValue) => {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                    + process.env.REACT_APP_PATH_CONSULTATIONS
+                    + String(id)
+                    + "/";
+
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                [fieldName]: fieldValue
+            }),
+            })
+
+        if (response.ok) {
+            const requestConsultation = await response.json();
+            return requestConsultation[fieldName];
+
+        } else {
+            throw new Error(`Failed to update the '${fieldName}' field.`);
+        }
+    } catch (error) {
+        console.error(`Error while making the PATCH request for the '${fieldName}' field:`, error.message);
         console.debug(error);
         throw error;
     }
