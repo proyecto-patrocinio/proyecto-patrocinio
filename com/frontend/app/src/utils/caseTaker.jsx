@@ -2,6 +2,8 @@
  * This Module contains functions for the Consultancy Page.*
  ***********************************************************/
 
+import {updateCardField} from "./card";
+
 /********************** CONSULTATIONS ************************/
 /**
  * Fetches Consultations that are to be assigned based on CREATED status.
@@ -84,7 +86,7 @@ export const getConsultation = async (id) => {
  * @param {string} id - The ID of the consultation to be updated.
  * @param {string} fieldName - The name of the field to be updated.
  * @param {any} fieldValue - The new value to be assigned to the field.
- * @returns {Promise} - A promise that resolves with the new value in the field.
+ * @returns {Promise} - A promise that resolves with the new value in the field. On rejects returns null.
  * @throws {Error} - If the PATCH request is not successful.
  */
 export const updateConsultationField = async (id, fieldName, fieldValue) => {
@@ -106,13 +108,19 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
 
         if (response.ok) {
             const requestConsultation = await response.json();
+
+            if (fieldName === 'tag') {
+                // Update Card Tag if it exists. Otherwise ignore.
+                updateCardField(id, 'tag', fieldValue)
+            }
             return requestConsultation[fieldName];
 
         } else {
-            throw new Error(`Failed to update the '${fieldName}' field.`);
+            console.warn(`Failed to update the '${fieldName}' field of Consultation.`);
+            return null;
         }
     } catch (error) {
-        console.error(`Error while making the PATCH request for the '${fieldName}' field:`, error.message);
+        console.error(`Error while making the PATCH request for the '${fieldName}' field of Consultation:`, error.message);
         console.debug(error);
         throw error;
     }
