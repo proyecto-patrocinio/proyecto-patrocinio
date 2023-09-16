@@ -18,9 +18,10 @@ import EditableFieldRow from './EditableFieldRow.jsx';
  * @param {Object} consultation - The consultation data to display.
  * @param {boolean} open - Boolean indicating whether the dialog is open.
  * @param {Function} onClose - Function to close the dialog.
+ * @param {Function} updateViewTag - Function to update the view tag in CardView.
  * @returns {JSX.Element} - The ConsultationDisplay component JSX.
  */
-const ConsutationDisplay = ({consultation, open, onClose }) => {
+const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
     const [consultationData, setConsultation] = useState(consultation)
     const [updateViewCounter, setUpdateViewCounter] = useState(0); // Force update View
     const [isFieldsEditing, setIsFieldsEditing] = useState({
@@ -80,6 +81,9 @@ const ConsutationDisplay = ({consultation, open, onClose }) => {
                 }));
                 isFieldsEditing[fieldKey] = false;
                 setIsFieldsEditing(isFieldsEditing);
+                if (fieldKey === "tag") {
+                    updateViewTag(editedFields.tag)
+                }
             }
         }
         setUpdateViewCounter(updateViewCounter + 1);
