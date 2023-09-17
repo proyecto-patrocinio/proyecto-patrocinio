@@ -15,6 +15,7 @@ import moveCard from '../utils/card';
 import getDataBoard from '../utils/board';
 import {acceptRequestCard} from '../utils/board'
 import CreatePanelButton from '../components/CreatePanelButton';
+import onDragEnd from '../utils/dragAndDrop';
 
 
 const BoardContainer = styled.div`
@@ -34,8 +35,11 @@ const Board = ({id}) => {
   const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
 
 
+/**
+ * Fetch board data from the backend and initialize the board state.
+ * This useEffect hook is triggered when the 'id' dependency changes.
+ */
   useEffect(() => {
-
     const fetchBoard = async () => {
       const board_data = await getDataBoard(id);
       const inputPanel = { 
@@ -46,15 +50,16 @@ const Board = ({id}) => {
       board_data.panels.unshift(inputPanel)
       setBoard(board_data);
     };
-
     fetchBoard();
   }, [id]);
 
-  if (!board) {
-    return <div>No board.</div>;
-  };
 
-
+  /**
+  * Add a new panel with the specified ID and title to the board.
+  *
+  * @param {number} id - The ID of the new panel.
+  * @param {string} title - The title of the new panel.
+  */
   const addNewPanel = (id, title) => {
     const newPanel = { 
       'id': id,
@@ -67,130 +72,56 @@ const Board = ({id}) => {
   };
 
 
-
-
-  /************************************************************ */
-
-  const onDragEnd = (result) => {
-    const { source, destination } = result;
-
-    // If the user drops the card outside of a droppable area,
-    // destination will be null, so we should return early.
-    if (destination == null) {
-      console.debug('Droppable area outside of droppable area.');
-      return;
+  /**
+   * Update the backend when moving a card from one panel to another.
+  *
+  * @param {Object} sourcePanel - The source panel from which the card is being moved.
+  * @param {Object} destinationPanel - The destination panel to which the card will be moved.
+  * @param {number} sourceCardIndex - The index of the card in the source panel.
+  * @returns {Promise<boolean>} - A Promise that resolves to `true` if the card was moved successfully, or `false` if there was an error.
+  */
+  const updateBackend = async (sourcePanel, destinationPanel, sourceCardIndex ) => {
+    const cardToMove = sourcePanel.cards[sourceCardIndex];
+    const idCardToMove = cardToMove.consultation;
+    const idDestinyPanel = destinationPanel.id;
+    const idOriginPanel = sourcePanel.id;
+    
+    if(idDestinyPanel === PANEL_INPUT_REQUEST_CARDS_ID){
+      // It's not possible to move a card to the input panel.
+      console.error("Unable to send a card to input request.")
+      setShowAlert(true)
+      setTimeout(() => {
+        setShowAlert(false);
+      }, 5000);
+      return false;
     }
-
-    // If the user drops the card back in its original location,
-    // source.index and destination.index will be the same, so we should.
-    // return early
-    if (
-      source.droppableId === destination.droppableId &&
-      source.index === destination.index
-    ) {
-      console.debug('Destiny area is the same.')
-      return;
+    if(idOriginPanel === PANEL_INPUT_REQUEST_CARDS_ID){
+      const isAccept = await acceptRequestCard(idCardToMove, idDestinyPanel);
+      return isAccept;
+    } else { // Move Card from Panel to other normal panel.
+      const isMoved = await moveCard(idCardToMove, idDestinyPanel);
+      return isMoved
     }
+  };
 
-    // If destination.droppableId == source.droppableId, the panel is 
-    // updated with the destination panel.
-    if (Number(destination.droppableId) === Number(source.droppableId)) {
-      const panel = board.panels.find(
-        (panel) => panel.id === Number(destination.droppableId)
-      );
-      // Remove the card from the source index. And add it to the destination index.
-      const cards = [...panel.cards];
-      const [removedCard] = cards.splice(source.index, 1);
-      cards.splice(destination.index, 0, removedCard);
-      const updatedPanel = {
-        ...panel,
-        cards,
-      };
-      // Update the board state with the updated panel.
-      const updatedPanels = board.panels.map((panel) => {
-        if (panel.id === Number(destination.droppableId)) {
-          return updatedPanel;
-        }
-        return panel;
-      });
-      setBoard({
-        ...board,
-        panels: updatedPanels,
-      });
 
-    // If destination.droppableId != source.droppableId
-    } else {
+  /**
+   * Handle the drag-and-drop event of a card.
+   *
+   * @param {Object} result - The result of the card's drag-and-drop event.
+   */
+  const handleOnDragEnd = (result) => {
+    onDragEnd(result, setBoard, updateBackend);
+  }
 
-      // Find the panel that corresponds to the source droppableId.
-      const sourcePanel = board.panels.find(
-        (panel) => panel.id === Number(source.droppableId)
-      );
 
-      // Find the panel that corresponds to the destination droppableId.
-      const destinationPanel = board.panels.find(
-        (panel) => panel.id === Number(destination.droppableId)
-      );
-
-      //move card in backend.
-      const cardToMove = sourcePanel.cards[source.index];
-      const idCardToMove = cardToMove.consultation;
-      const idDestinyPanel = destinationPanel.id;
-      const idOriginPanel = sourcePanel.id;
-
-      if(idDestinyPanel === PANEL_INPUT_REQUEST_CARDS_ID){
-        // It's not possible to move a card to the input panel.
-        console.error("Unable to send a card to input request.")
-        setShowAlert(true)
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 5000);
-
-      } else {
-        if(idOriginPanel === PANEL_INPUT_REQUEST_CARDS_ID){
-          acceptRequestCard(idCardToMove, idDestinyPanel)
-        }
-        else { // Move Card from Panel to other normal panel.
-          moveCard(idCardToMove, idDestinyPanel);
-        }
-
-        // Remove the card from the source panel.
-        const sourceCards = [...sourcePanel.cards];
-        const [removedCard] = sourceCards.splice(source.index, 1);
-        const updatedSourcePanel = {
-          ...sourcePanel,
-          cards: sourceCards,
-        };
-
-        // Add the card to the destination panel.
-        const destinationCards = [...destinationPanel.cards];
-        destinationCards.splice(destination.index, 0, removedCard);
-        const updatedDestinationPanel = {
-          ...destinationPanel,
-          cards: destinationCards,
-        };
-
-        // Update the board state with the updated source and destination panels.
-        const updatedPanels = board.panels.map((panel) => {
-          if (panel.id === Number(destination.droppableId)) {
-            return updatedDestinationPanel;
-          }
-          if (panel.id === Number(source.droppableId)) {
-            return updatedSourcePanel;
-          }
-          return panel;
-        });
-
-        setBoard({
-          ...board,
-          panels: updatedPanels,
-        });
-      }
-    }
+  if (!board) {
+    return <div>No board.</div>;
   };
 
   return (
     <div>
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
         {showAlert && (
           <Alert severity="error">It is not possible to move a card to the input panel.</Alert>
         )}
@@ -236,5 +167,3 @@ const Board = ({id}) => {
 };
 
 export default Board;
-
-
