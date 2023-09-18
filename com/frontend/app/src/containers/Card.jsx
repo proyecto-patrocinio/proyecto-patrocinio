@@ -1,9 +1,8 @@
-/*
-
-in this Card component: We're using react-beautiful-dnd's Draggable 
-component to make the card draggable. We are also passing 
-the properties " draggableId " and "index" to a "Draggable".
-*/
+/**************************************************************************
+ * In this Card component: We're using react-beautiful-dnd's Draggable    *
+ * component to make the card draggable. We are also passing              *
+ * the properties "draggableId " and "index" to a "Draggable".            *
+ **************************************************************************/
 import React from 'react';
 import {useState} from 'react';
 import { Draggable } from 'react-beautiful-dnd';
@@ -13,6 +12,17 @@ import Typography from '@mui/material/Typography';
 import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
 
 
+/**
+ * Custom Card Component
+ *
+ * This component represents a custom card that can be dragged and displayed in a draggable list.
+ * It displays information from the provided 'card' object, including a tag. It also supports opening
+ * a consultation dialog on double click.
+ *
+ * @param {Object} card - The card object containing information to display.
+ * @param {number} index - The index of the card in the list.
+ * @returns {JSX.Element} - The JSX element representing the custom card.
+ */
 const CustomCard = ({ card, index }) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [tag, setTag] = useState(card.tag);

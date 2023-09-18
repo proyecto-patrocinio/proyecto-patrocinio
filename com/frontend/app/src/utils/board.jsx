@@ -36,7 +36,7 @@ export default getDataBoard;
  *
  * @param {number} requestConsultationID - The ID of the consultation request to accept.
  * @param {number} panelID - The ID of the panel where the consultation request will be accepted.
- * @throws {Error} Throws an error if the request to the API fails.
+ * @return {boolean} True if the request was accepted, false otherwise.
  */
 export const acceptRequestCard = async(requestConsultationID, panelID) => {
   try{
@@ -58,13 +58,14 @@ export const acceptRequestCard = async(requestConsultationID, panelID) => {
     if (response.ok) {
       const successMessage = `Request Consultation ${requestConsultationID} accepted successfully`;
       console.log(successMessage);
+      return true;
     } else {
       console.error("Failed to accept the consultation request: ", response.status);
-      throw new Error("Failed to accept the consultation request");
+      return false;
     }
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    console.error('Unexpected error when try to accept the consultation request:', error);
+    return false;
   }
 }
 

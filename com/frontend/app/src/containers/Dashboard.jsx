@@ -1,3 +1,11 @@
+/************************************************************************************************************
+ * Dashboard Component                                                                                      *
+ *                                                                                                          *
+ * This file contains the definition of the Dashboard component, which serves as the main layout            *
+ * for the application. It includes a responsive app bar, a collapsible drawer, and a content area          *
+ * for displaying the application's main content.                                                           *
+ *                                                                                                          *
+ ************************************************************************************************************/
 import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -18,6 +26,7 @@ import Copyright from '../components/Copyright';
 
 const drawerWidth = 240;
 
+/******************************** STYLES **************************************/
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -64,6 +73,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
+/**************************** COMPONENT *************************************/
+
+/**
+ * Dashboard component that represents the main layout of the application.
+ *
+ * @param {string} title - The title of the dashboard.
+ * @param {React.ReactNode} children - The content to be displayed inside the dashboard.
+ * @returns {React.ReactNode} - The Dashboard component.
+ */
 const  Dashboard = ({title,  children}) => {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {

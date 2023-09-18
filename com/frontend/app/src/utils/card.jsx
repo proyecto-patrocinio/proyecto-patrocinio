@@ -1,32 +1,47 @@
+/**
+ * Move a card to a different panel by sending a PATCH request to the backend API.
+ *
+ * @param {number} cardID - The ID of the card to be moved.
+ * @param {number} destinyPanelID - The ID of the destination panel where the card should be moved.
+ * @returns {Promise<boolean>} - A Promise that resolves to `true` if the card was successfully moved, and `false` if there was an error.
+ */
 async function moveCard(cardID, destinyPanelID) {
-    try {
-      const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-        + process.env.REACT_APP_PATH_CARDS
-        + String(cardID)
-        + "/";
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_CARDS
+      + String(cardID)
+      + "/";
 
-      const request = new XMLHttpRequest();
-      request.open('PATCH', url);
-      request.setRequestHeader( 'Content-Type', 'application/json');
-      request.onreadystatechange = () => { // Call a function when the state changes.
-        if (request.readyState === XMLHttpRequest.DONE ) {
-          if( request.status !== 200){
-            console.error('Failed to PATCH card, with ID',cardID, ". Status: ", request.status);
-            throw new Error('Failed to PATCH card');
+    const request = new XMLHttpRequest();
+    request.open('PATCH', url);
+    request.setRequestHeader( 'Content-Type', 'application/json');
+
+    const promise = new Promise((resolve, reject) => {
+      request.onreadystatechange = () => {// Call a function when the state changes.
+        if (request.readyState === XMLHttpRequest.DONE) {
+          if (request.status === 200) {
+            resolve(true);
+          } else {
+            console.error('Failed to PATCH card, with ID', cardID, '. Status: ', request.status);
+            resolve(false);
           }
         }
-      }
-      request.send(
-        JSON.stringify({
-            "panel": destinyPanelID,
-        })
-      );
+      };
+    });
 
-    } catch (error) {
-      console.error('Error in moveCard: ', error);
-      throw error;
-    }
+    request.send(
+      JSON.stringify({
+          "panel": destinyPanelID,
+      })
+    );
+
+    return await promise;
+
+  } catch (error) {
+    console.error('Error in moveCard: ', error);
+    return false;
   }
+};
 
 export default moveCard;
 
