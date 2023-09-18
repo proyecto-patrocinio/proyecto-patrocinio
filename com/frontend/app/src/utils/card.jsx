@@ -15,20 +15,27 @@ async function moveCard(cardID, destinyPanelID) {
     const request = new XMLHttpRequest();
     request.open('PATCH', url);
     request.setRequestHeader( 'Content-Type', 'application/json');
-    request.onreadystatechange = () => { // Call a function when the state changes.
-      if (request.readyState === XMLHttpRequest.DONE ) {
-        if( request.status !== 200){
-          console.error('Failed to PATCH card, with ID',cardID, ". Status: ", request.status);
-          return false;
+
+    const promise = new Promise((resolve, reject) => {
+      request.onreadystatechange = () => {// Call a function when the state changes.
+        if (request.readyState === XMLHttpRequest.DONE) {
+          if (request.status === 200) {
+            resolve(true);
+          } else {
+            console.error('Failed to PATCH card, with ID', cardID, '. Status: ', request.status);
+            resolve(false);
+          }
         }
-        return true;
-      }
-    }
+      };
+    });
+
     request.send(
       JSON.stringify({
           "panel": destinyPanelID,
       })
     );
+
+    return await promise;
 
   } catch (error) {
     console.error('Error in moveCard: ', error);

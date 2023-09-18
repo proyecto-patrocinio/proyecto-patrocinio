@@ -100,7 +100,7 @@ const Board = ({id}) => {
       return isAccept;
     } else { // Move Card from Panel to other normal panel.
       const isMoved = await moveCard(idCardToMove, idDestinyPanel);
-      return isMoved
+      return isMoved;
     }
   };
 
@@ -111,7 +111,7 @@ const Board = ({id}) => {
    * @param {Object} result - The result of the card's drag-and-drop event.
    */
   const handleOnDragEnd = (result) => {
-    onDragEnd(result, setBoard, updateBackend);
+    onDragEnd(result, board, setBoard, updateBackend);
   }
 
 
