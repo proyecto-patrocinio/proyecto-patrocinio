@@ -1,5 +1,5 @@
 import React from 'react';
-import { Snackbar, Alert } from '@material-ui/core';
+import { Snackbar, Alert } from '@mui/material';
 
 /**
  * SuccessSnackbar Component
@@ -9,7 +9,7 @@ import { Snackbar, Alert } from '@material-ui/core';
  * @component SuccessSnackbar
  * @param {boolean} isSuccess - A boolean indicating whether the success Snackbar is open or closed.
  * @param {function} onClose - The function to close the success Snackbar.
- * @param {string} message - (Optional) The success message to be displayed in the Snackbar.
+ * @param {string} message - The success message to be displayed in the Snackbar.
  */
 function SuccessSnackbar({ isSuccess, onClose, message }) {
   return (
@@ -19,7 +19,7 @@ function SuccessSnackbar({ isSuccess, onClose, message }) {
       onClose={onClose}
     >
       <Alert onClose={onClose} severity="success">
-        {message} ? {message} : Operation completed successfully!!
+        {message}
       </Alert>
     </Snackbar>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
-import { Tooltip, IconButton } from '@material-ui/core';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import IconButton from '@mui/material/IconButton';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * AddButton Component

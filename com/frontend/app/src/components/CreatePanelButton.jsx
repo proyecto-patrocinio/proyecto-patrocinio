@@ -88,7 +88,7 @@ function CreatePanelButton({boardID, addPanel}) {
       </SimpleDialog>
       <SuccessSnackbar
           isSuccess={success}
-          message={"BoardPanel created successfully!"}
+          message={"Panel created successfully!"}
           onClose={handleCloseSuccessSnackbar}
       />
     </div>
