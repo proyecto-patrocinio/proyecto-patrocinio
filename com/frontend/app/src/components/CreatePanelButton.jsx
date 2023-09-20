@@ -8,18 +8,11 @@
  * @component CreatePanelButton
  */
 import React, { useState } from 'react';
-import IconButton from '@mui/material/IconButton';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Button } from '@mui/material';
 import createPanel from '../utils/panel';
-import { Snackbar, Alert } from '@mui/material';
+import AddButton from "./AddButton";
+import SimpleDialog from "./SimpleDialog";
+import SuccessSnackbar from "./SuccessSnackbar";
 
 
 function CreatePanelButton({boardID, addPanel}) {
@@ -73,19 +66,15 @@ function CreatePanelButton({boardID, addPanel}) {
   return (
     <div>
       {/* Tooltip to provide a hint for the IconButton */}
-      <Tooltip title="Create Panel">
-        <IconButton aria-label="delete" color='primary' onClick={handleClickOpen}>
-          <AddCircleIcon />
-        </IconButton>
-      </Tooltip>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Create Panel</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please enter a title and click 'Accept' to create a panel.
-          </DialogContentText>
-          {/* Input field for entering the title */}
-          <TextField
+      <AddButton title={"Create BoardPanel"} onClick={handleClickOpen}/>
+      <SimpleDialog
+          title={"Create BoardPanel"}
+          description={"Please enter a title and click 'Accept' to create a panel."}
+          isOpen={open}
+          onAccept={handleAccept}
+          onClose={handleClose}
+      >
+        <TextField
             autoFocus
             margin="dense"
             label="Title"
@@ -95,28 +84,13 @@ function CreatePanelButton({boardID, addPanel}) {
             onChange={handleChangeTitle}
             error={!!error}
             helperText={error}
-          />
-        </DialogContent>
-        {/* Actions in the dialog */}
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleAccept} color="primary">
-            Accept
-          </Button>
-        </DialogActions>
-      </Dialog>
-      {/* Snackbar for success notification */}
-      <Snackbar
-        open={success}
-        autoHideDuration={3000} // Auto-closes in 3 seconds
-        onClose={handleCloseSuccessSnackbar}
-      >
-        <Alert onClose={handleCloseSuccessSnackbar} severity="success">
-          Panel created successfully!
-        </Alert>
-      </Snackbar>
+        />
+      </SimpleDialog>
+      <SuccessSnackbar
+          isSuccess={success}
+          message={"BoardPanel created successfully!"}
+          onClose={handleCloseSuccessSnackbar}
+      />
     </div>
   );
 }
