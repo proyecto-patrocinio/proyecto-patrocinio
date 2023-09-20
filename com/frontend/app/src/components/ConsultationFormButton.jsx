@@ -117,7 +117,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
 
       } else {
         console.debug('Form data submitted:', formData);
-        addNewConsultation(response.content)
+        addNewConsultation(response.content);
         setFormData({
           description: '',
           opponent: '',

@@ -133,6 +133,7 @@ const Consultancy = () => {
       "consultation": consultation.id
     }
     consultancy.panels[0].cards.push(newConsultation)
+    consultancy.panels[0].number_cards ++;
     setConsultancy(consultancy);
     setUpdateCounter(updateCounter + 1);  // force view refresh
   };
