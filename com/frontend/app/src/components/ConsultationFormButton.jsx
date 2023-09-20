@@ -8,13 +8,13 @@
 */
 
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Grid, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Tooltip } from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import DialogContentText from '@mui/material/DialogContentText';
+import { TextField, Grid} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import {createConsultation} from '../utils/caseTaker'
 import { getClientList } from '../utils/client';
+import AddButton from './AddButton';
+import SimpleDialog from './SimpleDialog';
 
 
 /**
@@ -155,20 +155,16 @@ const ConsultationFormButton = ({addNewConsultation}) => {
   return (
     <div>
       {/* Button to open the dialog */}
-      <Tooltip title="Add New Consultation">
-        <IconButton aria-label="show-form" color="primary" onClick={handleOpenDialog}>
-          <AddCircleIcon />
-        </IconButton>
-      </Tooltip>
-
+      <AddButton title={"Add New Consultation"} onClick={handleOpenDialog}/>
+      <SimpleDialog
+        title={"Load New Consultation"}
+        description={"Please enter the following details to load the form:"}
+        onClose={handleCloseDialog}
+        onAccept={handleSubmit}
+        isOpen={isDialogOpen}
+      >
+      <br/>
        {/* Form dialog */}
-      <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
-        <DialogTitle>Load New Consultation</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Please enter the following details to load the form:
-          </DialogContentText>
-          <br/>
           <form onSubmit={handleSubmit}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -240,17 +236,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
               </Typography>
             )}
           </form>
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleSubmit} color="primary">
-            Accept
-          </Button>
-        </DialogActions>
-      </Dialog>
+      </SimpleDialog>
     </div>
   );
 };
