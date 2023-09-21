@@ -41,3 +41,44 @@ async function createPanel(titlePanel, boardID) {
 }
 
 export default createPanel
+
+
+/**
+ * Updates the title of a panel by sending a PATCH request to the API.
+ *
+ * @param {number} id - The ID of the panel to update.
+ * @param {string} newTitle - The new title to set for the panel.
+ * @returns {Promise<string|null>} - A promise that resolves to the updated title if successful, or null if there was an error.
+ */
+export const updatPanelTitle = async (id, newTitle) => {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                    + process.env.REACT_APP_PATH_PANELS
+                    + String(id)
+                    + "/";
+
+        const response = await fetch(url, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                "title": newTitle
+            }),
+            })
+
+        if (response.ok) {
+            const requestPanel = await response.json();
+
+            return requestPanel['title'];
+
+        } else {
+            console.warn(`Failed to update the Title field of Panel.`);
+            return null;
+        }
+    } catch (error) {
+        console.error(`Error while making the PATCH request for the Title field of Panel:`, error.message);
+        console.debug(error);
+        throw error;
+    }
+};

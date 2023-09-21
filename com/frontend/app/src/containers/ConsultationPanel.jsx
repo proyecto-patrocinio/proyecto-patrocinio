@@ -7,19 +7,19 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Grid from '@mui/material/Grid';
-import BoardCard from './BoardCard';
 import { Paper } from '@mui/material';
 import TitlePanel from '../components/TitlePanel';
+import ConsultationTicket from './ConsultationTicket';
 
 
 /**
- * ConsultancyPanel component represents a panel within a consultancy board, displaying a title and a list of cards.
+ * ConsultationPanel component represents a panel within a consultancy board, displaying a title and a list of cards.
  *
  * @param {Object} panel - The panel object containing information about the panel, including its title and cards.
  * @param {number} index - The index of the panel within the consultancy board.
- * @returns {JSX.Element} - A React element representing the ConsultancyPanel.
+ * @returns {JSX.Element} - A React element representing the ConsultationPanel.
  */
-const ConsultancyPanel = ({ panel, index }) => {
+const ConsultationPanel = ({ panel, index }) => {
 
   const panelStyle = {
     backgroundColor: panel.id === 0 ? '#87cefaab' : 'lightskyblue',
@@ -40,7 +40,7 @@ const ConsultancyPanel = ({ panel, index }) => {
             <Grid container  columns={12} spacing={2}  style={{width: '20vw', backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
                 {panel.cards.map((card, index) => (
                     <Grid item xs={12} sm={6} md={11} key={card.consultation} >
-                    <BoardCard card={card} index={index} key={card.consultation}/>
+                    <ConsultationTicket card={card} index={index} key={card.consultation}/>
                     </Grid>
                 ))}
                 {provided.placeholder}
@@ -52,4 +52,4 @@ const ConsultancyPanel = ({ panel, index }) => {
 };
 
 
-export default ConsultancyPanel;
+export default ConsultationPanel;

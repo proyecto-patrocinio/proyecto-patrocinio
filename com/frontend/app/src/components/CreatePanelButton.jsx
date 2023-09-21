@@ -66,9 +66,9 @@ function CreatePanelButton({boardID, addPanel}) {
   return (
     <div>
       {/* Tooltip to provide a hint for the IconButton */}
-      <AddButton title={"Create BoardPanel"} onClick={handleClickOpen}/>
+      <AddButton title={"Create CardPanel"} onClick={handleClickOpen}/>
       <SimpleDialog
-          title={"Create BoardPanel"}
+          title={"Create CardPanel"}
           description={"Please enter a title and click 'Accept' to create a panel."}
           isOpen={open}
           onAccept={handleAccept}
