@@ -7,11 +7,19 @@
 import React from 'react';
 import { Droppable } from 'react-beautiful-dnd';
 import Grid from '@mui/material/Grid';
-import CustomCard from './Card';
-import Title from '../components/Title';
-import { Paper, Badge, Tooltip, Box } from '@mui/material';
+import BoardCard from './BoardCard';
+import { Paper } from '@mui/material';
+import TitlePanel from '../components/TitlePanel';
 
-const Panel = ({ panel, index }) => {
+
+/**
+ * ConsultancyPanel component represents a panel within a consultancy board, displaying a title and a list of cards.
+ *
+ * @param {Object} panel - The panel object containing information about the panel, including its title and cards.
+ * @param {number} index - The index of the panel within the consultancy board.
+ * @returns {JSX.Element} - A React element representing the ConsultancyPanel.
+ */
+const ConsultancyPanel = ({ panel, index }) => {
 
   const panelStyle = {
     backgroundColor: panel.id === 0 ? '#87cefaab' : 'lightskyblue',
@@ -28,22 +36,11 @@ const Panel = ({ panel, index }) => {
     <Droppable key={"droppeable-panel-"+String(panel.id)} droppableId={String(panel.id)} index={index} direction="vertical">
       {(provided) => (
         <Paper ref={provided.innerRef} {...provided.droppableProps}  style={panelStyle}>
-            <Box style={{ position: 'relative' }}>
-              <Title>{panel.title}</Title>
-              <Tooltip title={`Contains ${panel.number_cards} tickets`}>
-                {/*Badge with number of cards in the panel*/}
-                <Badge
-                  key={"badge-"+String(panel.id)}
-                  color="info"
-                  badgeContent={panel.number_cards !== 0? panel.number_cards : "0"}
-                  style={{ position: 'absolute', top: 0, right: 0 }}
-                />
-              </Tooltip>
-            </Box>
+            <TitlePanel panel={panel}/>
             <Grid container  columns={12} spacing={2}  style={{width: '20vw', backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
                 {panel.cards.map((card, index) => (
                     <Grid item xs={12} sm={6} md={11} key={card.consultation} >
-                    <CustomCard card={card} index={index} key={card.consultation}/>
+                    <BoardCard card={card} index={index} key={card.consultation}/>
                     </Grid>
                 ))}
                 {provided.placeholder}
@@ -55,4 +52,4 @@ const Panel = ({ panel, index }) => {
 };
 
 
-export default Panel;
+export default ConsultancyPanel;

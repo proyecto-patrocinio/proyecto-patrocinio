@@ -8,7 +8,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import Panel from './Panel';
+import BoardPanel from './BoardPanel';
 import styled from '@emotion/styled';
 import { Stack } from '@mui/material';
 import {
@@ -19,6 +19,7 @@ import {
 } from '../utils/caseTaker'
 import ConsultationFormButton from '../components/ConsultationFormButton'
 import onDragEnd from '../utils/dragAndDrop';
+import ConsultancyPanel from './ConsultancyPanel';
 
 const ConsultancyContainer = styled.div`
 	display: flex;
@@ -171,7 +172,7 @@ const Consultancy = () => {
           >
           {/*panel-0: Input Coonsultations.*/}
             <div style={{ position: "sticky", left: 0, zIndex: 1}}>
-                <Panel
+                <ConsultancyPanel
                 key={"0"}
                 index={0}
                 panel={consultancy.panels[0]}
@@ -181,7 +182,7 @@ const Consultancy = () => {
             {/*rest of panels: One panel for each BOARD containing its request cards.*/}
             {consultancy.panels.map((panel, index) => (
                 index === 0 ? null: (
-                    <Panel
+                    <ConsultancyPanel
                     key={String(panel.id)}
                     panel={panel}
                     index={index}

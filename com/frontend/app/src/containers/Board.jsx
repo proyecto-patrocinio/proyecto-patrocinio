@@ -8,7 +8,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import Panel from './Panel';
+import Panel from './BoardPanel';
 import styled from '@emotion/styled';
 import { Stack, Alert } from '@mui/material';
 import moveCard from '../utils/card';
