@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Title from '../components/Title';
 import { Badge, Tooltip, Box } from '@mui/material';
 import TextField from '@mui/material/TextField';
+import { updatPanelTitle } from '../utils/panel';
 
 const titleStyle = {
     style: {
@@ -21,9 +22,11 @@ const titleStyle = {
 const TitlePanel = ({panel, isEditable=false}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedTitle, setEditedTitle] = useState(panel.title);
+    const [title, setTitle] = useState(panel.title);
 
     const handleDoubleClick = () => {
         if (isEditable) {
+            setEditedTitle(title);
             setIsEditing(true);
         }
     };
@@ -32,9 +35,12 @@ const TitlePanel = ({panel, isEditable=false}) => {
         setEditedTitle(event.target.value);
     };
 
-    const handleTitleBlur = () => {
+    const handleTitleBlur = async () => {
+        const newTitle = await updatPanelTitle(panel.id, editedTitle);
+        if (newTitle !== null && newTitle !== undefined) {
+            setTitle(newTitle);
+        }
         setIsEditing(false);
-        //TODO: Update in the backend
     };
 
     return (
@@ -50,7 +56,7 @@ const TitlePanel = ({panel, isEditable=false}) => {
                 InputProps={titleStyle}
                 />
             ) : (
-                <Title onDoubleClick={handleDoubleClick}>{editedTitle}</Title>
+                <Title onDoubleClick={handleDoubleClick}>{title}</Title>
             )}
             <Tooltip title={`Contains ${panel.number_cards} tickets`}>
             {/*Badge with number of cards in the panel*/}
