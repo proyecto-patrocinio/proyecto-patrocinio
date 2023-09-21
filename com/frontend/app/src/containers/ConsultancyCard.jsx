@@ -13,7 +13,7 @@ import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
 
 
 /**
- * Custom Card Component
+ * Consultancy Card Component
  *
  * This component represents a custom card that can be dragged and displayed in a draggable list.
  * It displays information from the provided 'card' object, including a tag. It also supports opening
@@ -23,7 +23,7 @@ import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
  * @param {number} index - The index of the card in the list.
  * @returns {JSX.Element} - The JSX element representing the custom card.
  */
-const CustomCard = ({ card, index }) => {
+const ConsultancyCard = ({card,index}) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [tag, setTag] = useState(card.tag);
 
@@ -64,4 +64,4 @@ const CustomCard = ({ card, index }) => {
   );
 };
 
-export default CustomCard;
+export default ConsultancyCard;
