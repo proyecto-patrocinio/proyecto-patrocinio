@@ -20,6 +20,7 @@ import {
 import ConsultationFormButton from '../components/ConsultationFormButton'
 import onDragEnd from '../utils/dragAndDrop';
 import ConsultationPanel from './ConsultationPanel';
+import RequestPanel from './RequestPanel';
 
 const ConsultancyContainer = styled.div`
 	display: flex;
@@ -182,7 +183,7 @@ const Consultancy = () => {
             {/*rest of panels: One panel for each BOARD containing its request cards.*/}
             {consultancy.panels.map((panel, index) => (
                 index === 0 ? null: (
-                    <ConsultationPanel
+                    <RequestPanel
                     key={String(panel.id)}
                     panel={panel}
                     index={index}

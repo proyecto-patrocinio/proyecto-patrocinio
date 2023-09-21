@@ -8,7 +8,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import Panel from './CardPanel';
+import CardPanel from './CardPanel';
 import styled from '@emotion/styled';
 import { Stack, Alert } from '@mui/material';
 import moveCard from '../utils/card';
@@ -16,6 +16,7 @@ import getDataBoard from '../utils/board';
 import {acceptRequestCard} from '../utils/board'
 import CreatePanelButton from '../components/CreatePanelButton';
 import onDragEnd from '../utils/dragAndDrop';
+import RequestPanel from './RequestPanel';
 
 
 const BoardContainer = styled.div`
@@ -98,7 +99,7 @@ const Board = ({id}) => {
     if(idOriginPanel === PANEL_INPUT_REQUEST_CARDS_ID){
       const isAccept = await acceptRequestCard(idCardToMove, idDestinyPanel);
       return isAccept;
-    } else { // Move Card from Panel to other normal panel.
+    } else { // Move Card from CardPanel to other normal panel.
       const isMoved = await moveCard(idCardToMove, idDestinyPanel);
       return isMoved;
     }
@@ -139,7 +140,7 @@ const Board = ({id}) => {
             >
               {/*panel-0: Input Request Cards.*/}
               <div style={{ position: "sticky", left: 0, zIndex: 1}}>
-                <Panel
+                <RequestPanel
                   key={"0"}
                   index={0}
                   panel={board.panels[0]}
@@ -149,7 +150,7 @@ const Board = ({id}) => {
                 {/*rest of panels: Panels with cards. */}
                 {board.panels.map((panel, index) => (
                   index === 0 ? null: (
-                    <Panel
+                    <CardPanel
                       key={String(panel.id)}
                       panel={panel}
                       index={index}
