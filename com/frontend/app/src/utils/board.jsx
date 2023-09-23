@@ -71,6 +71,45 @@ export const acceptRequestCard = async(requestConsultationID, panelID) => {
 
 
 /**
+ * Rejects a consultation request by sending a POST request to the API.
+ *
+ * @param {number} requestConsultationID - The ID of the consultation request to reject.
+ * @param {number} panelID - The ID of the panel where the consultation request will be rejected.
+ * @return {boolean} True if the request was rejected, false otherwise.
+ */
+export const rejectRequestCard = async(requestConsultationID, panelID) => {
+  try{
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+    + process.env.REACT_APP_PATH_REQUEST_CARDS
+    + String(requestConsultationID)
+    + process.env.REACT_APP_EXTRA_PATH_REJECTED_REQUEST_CARDS;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "destiny_panel": panelID
+      })
+    });
+
+    if (response.ok) {
+      const successMessage = `Request Consultation ${requestConsultationID} rejected successfully`;
+      console.log(successMessage);
+      return true;
+    } else {
+      console.error("Failed to reject the consultation request: ", response.status);
+      return false;
+    }
+  } catch (error) {
+    console.error('Unexpected error when try to reject  the consultation request:', error);
+    return false;
+  }
+}
+
+
+/**
  * Fetches the list of boards.
  * @returns {Promise} A promise that resolves to the fetched board list or an error.
  * @throws {Error} Throws an error if the request to the API fails.
