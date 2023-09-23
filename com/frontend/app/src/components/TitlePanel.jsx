@@ -1,16 +1,8 @@
 import React, { useState } from 'react';
 import Title from '../components/Title';
 import { Badge, Tooltip, Box } from '@mui/material';
-import TextField from '@mui/material/TextField';
 import { updatPanelTitle } from '../utils/panel';
-
-const titleStyle = {
-    style: {
-      fontSize: '1.5rem', // Adjust the font size as needed
-      color: 'white',    // Text color
-    },
-}
-
+import TitleEditable from './TitleEditable';
 
 /**
  * TitlePanel component displays the title of a panel and a badge with the number of cards it contains.
@@ -20,44 +12,22 @@ const titleStyle = {
  * @returns {JSX.Element} - A React element representing the TitlePanel.
  */
 const TitlePanel = ({panel, isEditable=false}) => {
-    const [isEditing, setIsEditing] = useState(false);
-    const [editedTitle, setEditedTitle] = useState(panel.title);
     const [title, setTitle] = useState(panel.title);
 
-    const handleDoubleClick = () => {
-        if (isEditable) {
-            setEditedTitle(title);
-            setIsEditing(true);
-        }
-    };
 
-    const handleTitleChange = (event) => {
-        setEditedTitle(event.target.value);
-    };
-
-    const handleTitleBlur = async () => {
-        const newTitle = await updatPanelTitle(panel.id, editedTitle);
-        if (newTitle !== null && newTitle !== undefined) {
-            setTitle(newTitle);
+    const saveTitle = async (newTitle) => {
+        const titleResponse = await updatPanelTitle(panel.id, newTitle);
+        if (titleResponse !== null && titleResponse !== undefined) {
+            setTitle(titleResponse);
         }
-        setIsEditing(false);
     };
 
     return (
         <Box style={{ position: 'relative' }}>
-            {isEditing ? (
-            <TextField
-                value={editedTitle}
-                onChange={handleTitleChange}
-                onBlur={handleTitleBlur}
-                autoFocus
-                fullWidth
-                variant="outlined"
-                InputProps={titleStyle}
-                />
-            ) : (
-                <Title onDoubleClick={handleDoubleClick}>{title}</Title>
-            )}
+            {isEditable? 
+                (<TitleEditable title={title} saveTitle={saveTitle}/>):
+                ( <Title> {title}</Title>)
+            }
             <Tooltip title={`Contains ${panel.number_cards} tickets`}>
             {/*Badge with number of cards in the panel*/}
             <Badge
