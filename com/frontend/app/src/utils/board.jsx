@@ -92,3 +92,44 @@ export const getListBoard = async () => {
       throw error;
   }
 }
+
+
+/**
+ * Updates the title of a Board by sending a PATCH request to the API.
+ *
+ * @param {number} id - The ID of the Board to update.
+ * @param {string} newTitle - The new title to set for the Board.
+ * @returns {Promise<string|null>} - A promise that resolves to the updated title if successful, or null if there was an error.
+ */
+export const updatBoardTitle = async (id, newTitle) => {
+  try {
+      const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                  + process.env.REACT_APP_PATH_BOARD
+                  + String(id)
+                  + "/";
+
+      const response = await fetch(url, {
+          method: 'PATCH',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              "title": newTitle
+          }),
+      })
+
+      if (response.ok) {
+          const requestPanel = await response.json();
+
+          return requestPanel['title'];
+
+      } else {
+          console.warn(`Failed to update the Title field of Board.`);
+          return null;
+      }
+  } catch (error) {
+      console.error(`Error while making the PATCH request for the Title field of Board:`, error.message);
+      console.debug(error);
+      throw error;
+  }
+};
