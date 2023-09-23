@@ -42,7 +42,7 @@ const ConsultationPanel = ({ panel, index }) => {
    * Reduces the number of cards in the panel and updates the state.
    */
   const reduce_number_cards = () => {
-    panelData.number_cards = panelData.number_cards - 1;
+    panelData.number_cards --;
     setPanelData(panelData);
     setTitleUpdateCount(titleUpdateCount + 1);
   };

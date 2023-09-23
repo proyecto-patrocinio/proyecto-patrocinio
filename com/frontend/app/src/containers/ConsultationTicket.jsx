@@ -10,11 +10,9 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
-import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { deleteConsultation } from '../utils/caseTaker.jsx';
+import TicketMenu from '../components/TicketMenu.jsx';
 
 
 /**
@@ -32,7 +30,6 @@ import { deleteConsultation } from '../utils/caseTaker.jsx';
 const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [tag, setTag] = useState(card.tag);
-  const [anchorEl, setAnchorEl] = useState(null);
   const [showMenu,setShowMenu] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false);
 
@@ -56,21 +53,12 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
     setOpenDialog(false)
   }
 
-  const handleMenuClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
   const handleDeleteClick = async() => {
     const deleted = await deleteConsultation(card.consultation);
-    setAnchorEl(null);
     if (deleted) {
       setIsDeleted(true);
       reduce_number_cards();
     }
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
   };
 
   return (
@@ -86,29 +74,10 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
               onMouseEnter={() => setShowMenu(true)}
               onMouseLeave={() => setShowMenu(false)}
             >
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  visibility: showMenu ? 'visible' : 'hidden',
-                }}
-              >
-                <IconButton aria-label="menu-ticket" onClick={handleMenuClick}>
-                  <MoreHorizIcon/>
-                </IconButton>
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                >
-                  <MenuItem onClick={handleDeleteClick}>Delete Consultation</MenuItem>
-                </Menu>
-              </div>
-              <Typography
-                color="textSecondary"
-                gutterBottom
-              >
+              <TicketMenu showMenu={showMenu}>
+                <MenuItem onClick={handleDeleteClick}>Delete Consultation</MenuItem>
+              </TicketMenu>
+              <Typography color="textSecondary" gutterBottom>
                 {tag}
               </Typography>
             </CardContent>
