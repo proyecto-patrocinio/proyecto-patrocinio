@@ -4,7 +4,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
-import { TextField} from '@mui/material';
+import { TextareaAutosize } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
 
@@ -39,14 +39,16 @@ const EditableFieldRow = ({ tittle, isEditing, value, onEdit, onSave, onChange, 
         <TableCell>{tittle}</TableCell>
         <TableCell>
             {isEditing ? (
-            <TextField
+            <TextareaAutosize
+                rowsMin={3}
                 value={value}
                 onChange={(event) => onChange(event, fieldKey)}
                 error={!!error}
                 helperText={error}
+                style={{ width: '100%' }}
             />
             ) : (
-            <span>
+            <span style={{ whiteSpace: 'pre-line' }}>
                 {value}
             </span>
             )}
