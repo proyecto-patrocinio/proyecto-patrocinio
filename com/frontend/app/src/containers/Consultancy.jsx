@@ -8,7 +8,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
-import CardPanel from './CardPanel';
 import styled from '@emotion/styled';
 import { Stack } from '@mui/material';
 import {

@@ -10,6 +10,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 
 /**
@@ -26,6 +30,8 @@ import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
 const ConsultationTicket = ({card,index}) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [tag, setTag] = useState(card.tag);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [showMenu,setShowMenu] = useState(false)
 
   if (card == null || card.length === 0) {
     return <div>No cards.</div>;
@@ -39,6 +45,20 @@ const ConsultationTicket = ({card,index}) => {
     setOpenDialog(false)
   }
 
+  const handleMenuClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleDeleteClick = () => {
+    //TODO: Llama a la función deleteConsultation aquí
+    console.log('Deleting');
+    setAnchorEl(null);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Draggable draggableId={String(card.consultation)} index={index}>
       {(provided) => (
@@ -47,8 +67,30 @@ const ConsultationTicket = ({card,index}) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Card style={{width: '15vw', margin: '0 auto' }} onDoubleClick={showConsultationHandler}>
-            <CardContent>
+          <Card style={{width: '15vw', margin: '0 auto' , position: 'relative'}} onDoubleClick={showConsultationHandler}>
+            <CardContent
+              onMouseEnter={() => setShowMenu(true)}
+              onMouseLeave={() => setShowMenu(false)}
+            >
+              <div
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  visibility: showMenu ? 'visible' : 'hidden',
+                }}
+              >
+                <IconButton aria-label="menu-ticket" onClick={handleMenuClick}>
+                  <MoreHorizIcon/>
+                </IconButton>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                >
+                  <MenuItem onClick={handleDeleteClick}>Delete Consultation</MenuItem>
+                </Menu>
+              </div>
               <Typography
                 color="textSecondary"
                 gutterBottom
