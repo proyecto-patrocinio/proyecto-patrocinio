@@ -25,3 +25,9 @@ class RequestConsultationAceptedSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestConsultation
         fields = ['destiny_panel',]
+
+class RequestConsultationRejectedSerializer(serializers.ModelSerializer):
+    destiny_panel = serializers.IntegerField()
+    class Meta:
+        model = RequestConsultation
+        fields = ['destiny_panel',]

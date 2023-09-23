@@ -7,13 +7,13 @@ from rest_framework.response import Response
 
 from Board.models import Board
 from Board.api.serializers import BoardSerializer
-from Card.models import Card
 from Card.api.serializers import CardCreateSerializer
 from Consultation.api.serializers import (
     ConsultationSerializer,
     RequestConsultationSerializer,
     ConsultationCreateSerializer,
-    RequestConsultationAceptedSerializer
+    RequestConsultationAceptedSerializer,
+    RequestConsultationRejectedSerializer
 )
 from Consultation.models import Consultation,  RequestConsultation
 from Panel.models import Panel
@@ -169,6 +169,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
+            # Create a new Card
             new_card ={
                 "consultation": consultation_id,
                 "panel": destiny_panel_id,
@@ -203,5 +204,54 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
         except Exception as e:
             logger.error(f"Error accepting consultation {consultation_id}.")
+            logger.debug(f"Exception: {e}")
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": str(e)})
+
+
+    @action(detail=True, methods=['POST'])
+    def rejected(self, request, *args, **kwargs):
+        self.serializer_class = RequestConsultationRejectedSerializer
+        consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
+        logger.info(f"Rejecting consultation {consultation_id}...")
+        try:
+            # Get Consultation and Panel destiny
+            consultation = Consultation.objects.get(id=consultation_id)
+            destiny_panel_id = request.data.get('destiny_panel')
+            if destiny_panel_id is None or destiny_panel_id == 0:
+                logger.error(f"Error rejecting consultation {consultation_id}.")
+                logger.error("Missing 'destiny_panel' query parameter.")
+                logger.debug(f"Request query params: {request.query_params}")
+                return Response(
+                    data={'error':"Missing 'destiny_panel' query parameter."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            destiny_panel = Panel.objects.get(id=destiny_panel_id)
+            if destiny_panel is None:
+                logger.error(f"Error rejecting consultation {consultation_id}.")
+                logger.error(f"Panel Denstity {destiny_panel_id} does not exist.")
+                return Response(
+                    f"Panel destiny {destiny_panel_id} does not exist.",
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Delete Request Consultation
+            response = super().destroy(request, *args, **kwargs)
+            if response.status_code == status.HTTP_204_NO_CONTENT:
+                logger.info(f"Request Consultation {consultation_id} deleted.")
+            else:
+                logger.error(f"Error deleting request consultation {consultation_id}.")
+                logger.debug(f"Response: {response.data}")
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
+            # Update Consultation State
+            consultation.state = "REJECTED"
+            logger.info(f"Updated consultation {consultation_id} state to REJECTED.")
+
+            # Save transaction
+            consultation.save()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        except Exception as e:
+            logger.error(f"Error rejecting consultation {consultation_id}.")
             logger.debug(f"Exception: {e}")
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": str(e)})
