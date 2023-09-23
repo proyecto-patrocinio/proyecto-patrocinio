@@ -26,9 +26,10 @@ import { deleteConsultation } from '../utils/caseTaker.jsx';
  *
  * @param {Object} card - The card object containing information to display.
  * @param {number} index - The index of the card in the list.
+ * @param {function} callback - Update Panel View with the new number of cards.
  * @returns {JSX.Element} - The JSX element representing the custom card.
  */
-const ConsultationTicket = ({card,index}) => {
+const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [tag, setTag] = useState(card.tag);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -64,7 +65,7 @@ const ConsultationTicket = ({card,index}) => {
     setAnchorEl(null);
     if (deleted) {
       setIsDeleted(true);
-      console.log(deleted)
+      reduce_number_cards();
     }
   };
 
