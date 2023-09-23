@@ -3,7 +3,7 @@
  * component to make the card draggable. We are also passing              *
  * the properties "draggableId " and "index" to a "Draggable".            *
  **************************************************************************/
-import React from 'react';
+import React, { useEffect } from 'react';
 import {useState} from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import Card from '@mui/material/Card';
@@ -14,6 +14,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { deleteConsultation } from '../utils/caseTaker.jsx';
 
 
 /**
@@ -32,9 +33,18 @@ const ConsultationTicket = ({card,index}) => {
   const [tag, setTag] = useState(card.tag);
   const [anchorEl, setAnchorEl] = useState(null);
   const [showMenu,setShowMenu] = useState(false)
+  const [isDeleted, setIsDeleted] = useState(false);
+
+
+  useEffect(() => {
+  }, [isDeleted]);
 
   if (card == null || card.length === 0) {
     return <div>No cards.</div>;
+  }
+
+  if (isDeleted) {
+    return null;
   }
 
   const showConsultationHandler = () => {
@@ -49,10 +59,13 @@ const ConsultationTicket = ({card,index}) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleDeleteClick = () => {
-    //TODO: Llama a la función deleteConsultation aquí
-    console.log('Deleting');
+  const handleDeleteClick = async() => {
+    const deleted = await deleteConsultation(card.consultation);
     setAnchorEl(null);
+    if (deleted) {
+      setIsDeleted(true);
+      console.log(deleted)
+    }
   };
 
   const handleMenuClose = () => {

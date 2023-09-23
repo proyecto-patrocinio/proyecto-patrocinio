@@ -127,6 +127,40 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
 };
 
 
+/**
+ * Delete a Consultation.
+ * @param {int} consultationID - consultation id.
+ * @returns {Promise<boolean>} True if successfully deleted the Consultation. Otherwise false.
+ */
+export async function deleteConsultation(consultationID) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+        + process.env.REACT_APP_PATH_CONSULTATIONS
+        + String(consultationID)
+        + "/"
+
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+
+        if (!response.ok) {
+            console.error('Failed to DELETE Consultation', consultationID ,'. Status code:', response.status);
+            return false;
+            }
+
+        console.log("Successful delete Consultation ID:", consultationID)
+        return true;
+    } catch (error) {
+        console.error('Error in delete consultation.');
+        console.debug(error)
+        throw error;
+    }
+}
+
+
 /********************** CONSULTATION REQUEST *************************/
 
 /**
