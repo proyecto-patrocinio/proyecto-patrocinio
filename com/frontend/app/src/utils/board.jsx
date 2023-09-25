@@ -38,7 +38,7 @@ export default getDataBoard;
  * @param {number} panelID - The ID of the panel where the consultation request will be accepted.
  * @return {boolean} True if the request was accepted, false otherwise.
  */
-export const acceptRequestCard = async(requestConsultationID, panelID) => {
+export const acceptRequestConsult = async(requestConsultationID, panelID) => {
   try{
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
     + process.env.REACT_APP_PATH_REQUEST_CARDS
@@ -73,29 +73,20 @@ export const acceptRequestCard = async(requestConsultationID, panelID) => {
 /**
  * Rejects a consultation request by sending a POST request to the API.
  *
- * @param {number} requestConsultationID - The ID of the consultation request to reject.
- * @param {number} panelID - The ID of the panel where the consultation request will be rejected.
+ * @param {number} id - The ID of the request Consultation to reject.
  * @return {boolean} True if the request was rejected, false otherwise.
  */
-export const rejectRequestCard = async(requestConsultationID, panelID) => {
+export const rejectRequestConsult = async(id) => {
   try{
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
     + process.env.REACT_APP_PATH_REQUEST_CARDS
-    + String(requestConsultationID)
+    + String(id)
     + process.env.REACT_APP_EXTRA_PATH_REJECTED_REQUEST_CARDS;
 
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        "destiny_panel": panelID
-      })
-    });
+    const response = await fetch(url, {method: 'POST'});
 
     if (response.ok) {
-      const successMessage = `Request Consultation ${requestConsultationID} rejected successfully`;
+      const successMessage = `Request Consultation ${id} rejected successfully`;
       console.log(successMessage);
       return true;
     } else {

@@ -13,10 +13,10 @@ import styled from '@emotion/styled';
 import { Stack, Alert } from '@mui/material';
 import moveCard from '../utils/card';
 import getDataBoard from '../utils/board';
-import {acceptRequestCard} from '../utils/board'
+import {acceptRequestConsult} from '../utils/board'
 import CreatePanelButton from '../components/CreatePanelButton';
 import onDragEnd from '../utils/dragAndDrop';
-import RequestPanel from './RequestPanel';
+import InputRequestPanel from './InputRequestPanel';
 
 
 const BoardContainer = styled.div`
@@ -97,7 +97,7 @@ const Board = ({id}) => {
       return false;
     }
     if(idOriginPanel === PANEL_INPUT_REQUEST_CARDS_ID){
-      const isAccept = await acceptRequestCard(idCardToMove, idDestinyPanel);
+      const isAccept = await acceptRequestConsult(idCardToMove, idDestinyPanel);
       return isAccept;
     } else { // Move Card from CardPanel to other normal panel.
       const isMoved = await moveCard(idCardToMove, idDestinyPanel);
@@ -140,7 +140,7 @@ const Board = ({id}) => {
             >
               {/*panel-0: Input Request Cards.*/}
               <div style={{ position: "sticky", left: 0, zIndex: 1}}>
-                <RequestPanel
+                <InputRequestPanel
                   key={"0"}
                   index={0}
                   panel={board.panels[0]}
