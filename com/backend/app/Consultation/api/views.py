@@ -4,6 +4,7 @@ import logging
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.db.models import Q
 
 from Board.models import Board
 from Board.api.serializers import BoardSerializer
@@ -37,12 +38,22 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         """Custom list view that handles filtering based on the 'state' query parameter.
 
         If 'state' parameter is present in the request's GET parameters, it filters
-        the queryset to include only consultations with the specified state. Then, it
-        calls the parent class's list method to handle standard listing.
+        the queryset to include consultations based on the specified state(s) using AND or OR.
+        Then, it calls the parent class's list method to handle standard listing.
+
+        Example:
+            'GET /consultations/?state=REJECTED,PENDING'
         """
         state_filter = self.request.query_params.get('state')
         if state_filter:
-            self.queryset = Consultation.objects.filter(state=state_filter)
+            state_list = state_filter.split(',')
+            filter_query = Q()
+            
+            for state in state_list:
+                filter_query |= Q(state=state)
+
+            self.queryset = Consultation.objects.filter(filter_query)
+
         return super().list(request, *args, **kwargs)
 
 
