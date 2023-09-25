@@ -71,7 +71,6 @@ const ConsultationFormButton = ({addNewConsultation}) => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(name, value);
     setFormData({ ...formData, [name]: value });
     setError({ ...error, [name]: '' }); // Clear error when modifying the field
   };
