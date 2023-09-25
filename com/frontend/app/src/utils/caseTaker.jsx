@@ -13,7 +13,7 @@ export const getConsultationsToAssign = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_FILTER_CONSULTATIONS_WITH_STATUS
-                + "CREATED";
+                + "CREATED,REJECTED";
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json();
