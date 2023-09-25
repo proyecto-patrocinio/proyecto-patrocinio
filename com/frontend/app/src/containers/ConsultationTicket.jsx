@@ -30,7 +30,7 @@ import TicketMenu from '../components/TicketMenu.jsx';
 const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [tag, setTag] = useState(card.tag);
-  const [showMenu,setShowMenu] = useState(false)
+  const [showMenu, setShowMenu] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false);
 
 
