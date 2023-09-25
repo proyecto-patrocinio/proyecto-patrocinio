@@ -217,6 +217,15 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             # Get Consultation and Panel destiny
             consultation = Consultation.objects.get(id=consultation_id)
 
+            # Delete Request Consultation
+            response = super().destroy(request, *args, **kwargs)
+            if response.status_code == status.HTTP_204_NO_CONTENT:
+                logger.info(f"Request Consultation {consultation_id} deleted.")
+            else:
+                logger.error(f"Error deleting request consultation {consultation_id}.")
+                logger.debug(f"Response: {response.data}")
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+
             # Update Consultation State
             consultation.state = "REJECTED"
             consultation.save()

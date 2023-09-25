@@ -83,7 +83,12 @@ export const rejectRequestConsult = async(id) => {
     + String(id)
     + process.env.REACT_APP_EXTRA_PATH_REJECTED_REQUEST_CARDS;
 
-    const response = await fetch(url, {method: 'POST'});
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
     if (response.ok) {
       const successMessage = `Request Consultation ${id} rejected successfully`;
