@@ -97,7 +97,6 @@ const Consultancy = () => {
       } else {
         // ELSE No have a current request consultation.
         consultancy.panels[0].number_cards --;
-        setConsultancy(consultancy);
       }
 
       if( destinyPanelID !== PANEL_INPUT_CONSULTATION_ID){
@@ -106,8 +105,8 @@ const Consultancy = () => {
       } else {
         // ELSE No generate a new request consultation.
         consultancy.panels[0].number_cards ++;
-        setConsultancy(consultancy);
       }
+      setConsultancy(consultancy);
       return true;
     } catch (e) {
       console.error("Error moving request/card: " + e.message);
