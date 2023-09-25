@@ -88,7 +88,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
         # Check if Consultation is not already assigned or has pending requests
         is_created = consultation.state == "CREATED"
-        if not is_created:
+        is_rejected = consultation.state == "REJECTED"
+        if (not is_created) and (not is_rejected):
             mns = f'Consultation {consultation_id} is already assigned or there exists a pending request'
             logger.error(mns)
             return Response(status=status.HTTP_409_CONFLICT, data={'error': mns})
