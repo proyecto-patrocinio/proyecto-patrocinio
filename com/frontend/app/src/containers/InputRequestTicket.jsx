@@ -65,7 +65,7 @@ const InputRequestTicket = ({card,index}) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          <Card style={{width: '15vw', margin: '0 auto' }} onDoubleClick={showConsultationHandler}>
+          <Card style={{width: '15vw', margin: '0 auto', position: 'relative'}} onDoubleClick={showConsultationHandler}>
             <CardContent
               onMouseEnter={() => setShowMenu(true)}
               onMouseLeave={() => setShowMenu(false)}
