@@ -15,7 +15,13 @@ import { MenuItem } from '@mui/material';
 import { rejectRequestConsult } from '../utils/board.jsx';
 
 
-
+/**
+ * InputRequestTicket is a component that represents a ticket with input request in Input Request Panel.
+ *
+ * @param {Object} card - The object containing information about the request consultation, including its tag and consultation details.
+ * @param {number} index - The index of the card in the list of request consultation.
+ * @returns {JSX.Element|null} - A JSX element representing the ticket card or null if the request is rejected.
+ */
 const InputRequestTicket = ({card,index}) => {
   const [openDialog, setOpenDialog] = useState(false);
   const [tag, setTag] = useState(card.tag);
