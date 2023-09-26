@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import CardTicket from './CardTicket';
 import TitlePanel from '../components/TitlePanel';
@@ -18,11 +18,21 @@ import { deletePanel } from '../utils/panel';
 const CardPanel = ({ panel, index }) => {
   const [showMenu, setShowMenu] = useState(false);
   const title = TitlePanel({panel:panel, isEditable: true});
+  const [isDeleted, setIsDeleted] = useState(false);
+
+  useEffect(() => {
+  }, [isDeleted]);
+
+  if(isDeleted) {
+    return null;
+  }
 
   const handleDeleteClick = () => {
-    deletePanel(panel.id);
-    setShowMenu(false)
-    //TODO: actualizar vista
+    deletePanel(panel.id).then((deleted) => {
+      if(deleted){
+        setIsDeleted(true);
+      }
+    });
   };
 
   const menuComponent = (
