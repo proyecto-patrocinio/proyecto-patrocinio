@@ -1,18 +1,9 @@
-/**************************************************************************
- * In this Card component: We're using react-beautiful-dnd's Draggable    *
- * component to make the card draggable. We are also passing              *
- * the properties "draggableId " and "index" to a "Draggable".            *
- **************************************************************************/
 import React, { useEffect } from 'react';
 import {useState} from 'react';
-import { Draggable } from 'react-beautiful-dnd';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
 import MenuItem from '@mui/material/MenuItem';
 import { deleteConsultation } from '../utils/caseTaker.jsx';
 import TicketMenu from '../components/TicketMenu.jsx';
+import BaseTicket from '../components/BaseTicket.jsx';
 
 
 /**
@@ -28,8 +19,6 @@ import TicketMenu from '../components/TicketMenu.jsx';
  * @returns {JSX.Element} - The JSX element representing the custom card.
  */
 const ConsultationTicket = ({card, index, reduce_number_cards}) => {
-  const [openDialog, setOpenDialog] = useState(false);
-  const [tag, setTag] = useState(card.tag);
   const [showMenu, setShowMenu] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false);
 
@@ -37,20 +26,8 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   useEffect(() => {
   }, [isDeleted]);
 
-  if (card == null || card.length === 0) {
-    return <div>No cards.</div>;
-  }
-
   if (isDeleted) {
     return null;
-  }
-
-  const showConsultationHandler = () => {
-    setOpenDialog(true)
-  }
-
-  const closeConsultationHandler = () => {
-    setOpenDialog(false)
   }
 
   const handleDeleteClick = async() => {
@@ -61,31 +38,17 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
     }
   };
 
+    const cardContentProps = {
+      "onMouseEnter": ()=> setShowMenu(true),
+      "onMouseLeave": ()=> setIsDeleted(false)
+    }
+
   return (
-    <Draggable draggableId={String(card.consultation)} index={index}>
-      {(provided) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <Card style={{width: '15vw', margin: '0 auto' , position: 'relative'}} onDoubleClick={showConsultationHandler}>
-            <CardContent
-              onMouseEnter={() => setShowMenu(true)}
-              onMouseLeave={() => setShowMenu(false)}
-            >
-              <TicketMenu showMenu={showMenu}>
-                <MenuItem onClick={handleDeleteClick}>Delete Consultation</MenuItem>
-              </TicketMenu>
-              <Typography color="textSecondary" gutterBottom>
-                {tag}
-              </Typography>
-            </CardContent>
-          </Card>
-          <ConsutationDisplay consultation={card} open={openDialog} onClose={closeConsultationHandler} updateViewTag={setTag}/>
-        </div>
-      )}
-    </Draggable>
+    <BaseTicket ticket={card} index={index} cardContentProps={cardContentProps}>
+      <TicketMenu showMenu={showMenu}>
+        <MenuItem onClick={handleDeleteClick}>Delete Consultation</MenuItem>
+      </TicketMenu>
+    </BaseTicket>
   );
 };
 
