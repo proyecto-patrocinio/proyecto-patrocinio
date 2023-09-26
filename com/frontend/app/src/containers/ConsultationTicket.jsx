@@ -40,7 +40,7 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
 
     const cardContentProps = {
       "onMouseEnter": ()=> setShowMenu(true),
-      "onMouseLeave": ()=> setIsDeleted(false)
+      "onMouseLeave": ()=> setShowMenu(false)
     }
 
   return (
