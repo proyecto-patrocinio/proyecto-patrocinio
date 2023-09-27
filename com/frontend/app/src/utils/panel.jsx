@@ -85,11 +85,13 @@ export const updatPanelTitle = async (id, newTitle) => {
 
 
 /**
- * Delete a panel from the REST API.
+ * Deletes a panel by making a DELETE request to the REST API.
  *
- * @param {number} id - The ID of the panel to delete.
- * @returns {Promise<boolean>} - A promise that resolves to true if the panel is deleted successfully, or false otherwise.
- * @throws {Error} - Throws an error if there's an issue with the deletion process.
+ * @param {string|number} id - The ID of the panel to be deleted.
+ * @returns {Promise} A promise that resolves to an object with information about the deletion result.
+ *                    - success (boolean): true if the deletion was successful, false otherwise.
+ *                    - message (string): A message related to the deletion.
+ * @throws {Error} If an error occurs during the deletion request.
  */
 export const deletePanel = async(id) => {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
@@ -105,13 +107,14 @@ export const deletePanel = async(id) => {
             },
         });
 
+        const responseData = await response.json();
         if (!response.ok) {
             console.error(`Failed to DELETE Panel: ${response.statusText}`);
-            return false;
+            return {success: false, message: responseData.message};
         }
 
         console.info("Panel deleted successfully..")
-        return true
+        return {success: true, message: responseData.message};
 
     } catch (error) {
         console.error('Error deleting panel:', error.message);

@@ -23,25 +23,11 @@ const CardPanel = ({ panel, index }) => {
   const [showMenu, setShowMenu] = useState(false);
   const title = TitlePanel({panel:panel, isEditable: true});
   const [isDeleted, setIsDeleted] = useState(false);
-  const [deleteError, setDeleteError] = useState(null);
+  const [alertMessage, setAlertMessage] = useState(null);
 
 
   useEffect(() => {
   }, [isDeleted]);
-
-    useEffect(() => {
-      // Borra el mensaje de error después de 5 segundos
-      if (deleteError) {
-        const timer = setTimeout(() => {
-          setDeleteError(null);
-        }, 5000); // 5000 milisegundos = 5 segundos
-  
-        return () => {
-          clearTimeout(timer); // Limpia el temporizador si el componente se desmonta antes
-        };
-      }
-    }, [deleteError]);
-
 
   if(isDeleted) {
     return null;
@@ -50,21 +36,18 @@ const CardPanel = ({ panel, index }) => {
   /**
    * Handles the click event on the delete button.
    * Deletes the panel if it contains no cards.
+   * Show message when the panel is not deleted.
    */
   const handleDeleteClick = () => {
-    if (panel.cards.length === 0){
-      deletePanel(panel.id).then((deleted) => {
-        if(deleted){
-          setIsDeleted(true);
-        } else {
-          setDeleteError("No se pudo eliminar el panel por algún motivo...");
-        }
-      }).catch((error) => {
-        setDeleteError("No se pudo eliminar el panel debido a un error en la solicitud.");
-      });
-    } else {
-      setDeleteError("No se pudo eliminar el panel por algún motivo...");
-    }
+    deletePanel(panel.id).then((response) => {
+      if(response.success){
+        setIsDeleted(true);
+      } else {
+        setAlertMessage(response.message);
+      }
+    }).catch((error) => {
+      setAlertMessage(error);
+    });
   };
 
   const menuComponent = (
@@ -85,31 +68,27 @@ const CardPanel = ({ panel, index }) => {
 
   return (
     <div>
-          <Snackbar open={!!deleteError} autoHideDuration={5000} onClose={() => setDeleteError(null)}>
-
-
-        {/* {deleteError && ( */}
+      <Snackbar open={!!alertMessage} autoHideDuration={5000} onClose={() => setAlertMessage(null)}>
         <Alert severity="error" key={"delete-error"}>
           <AlertTitle>Error</AlertTitle>
-          {deleteError}
+          {alertMessage}
         </Alert>
-      {/* )} */}
-          </Snackbar>
-    <div
-      onMouseEnter={()=> setShowMenu(true)}
-      onMouseLeave={()=> setShowMenu(false)}
-      style={{position: 'relative'}}
-      key={"title-panel"}
-    >
-        <BasePanel panel={panel} index={index} title={title}>
-                    {panel.cards.map((card, index) => (
-                        <Grid item xs={12} sm={6} md={11} key={card.consultation} >
-                        <CardTicket card={card} index={index} key={card.consultation}/>
-                        </Grid>
-                    ))}
-        </BasePanel>
-        {menuComponent}
-    </div>
+      </Snackbar>
+      <div
+        onMouseEnter={()=> setShowMenu(true)}
+        onMouseLeave={()=> setShowMenu(false)}
+        style={{position: 'relative'}}
+        key={"title-panel"}
+      >
+          <BasePanel panel={panel} index={index} title={title}>
+                      {panel.cards.map((card, index) => (
+                          <Grid item xs={12} sm={6} md={11} key={card.consultation} >
+                          <CardTicket card={card} index={index} key={card.consultation}/>
+                          </Grid>
+                      ))}
+          </BasePanel>
+          {menuComponent}
+      </div>
     </div>
   );
 };
