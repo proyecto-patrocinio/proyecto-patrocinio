@@ -6,6 +6,10 @@ import BasePanel from '../components/BasePanel';
 import TicketMenu from '../components/TicketMenu';
 import { MenuItem } from '@mui/material';
 import { deletePanel } from '../utils/panel';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Snackbar from '@mui/material/Snackbar';
+
 
 
 /**
@@ -19,9 +23,25 @@ const CardPanel = ({ panel, index }) => {
   const [showMenu, setShowMenu] = useState(false);
   const title = TitlePanel({panel:panel, isEditable: true});
   const [isDeleted, setIsDeleted] = useState(false);
+  const [deleteError, setDeleteError] = useState(null);
+
 
   useEffect(() => {
   }, [isDeleted]);
+
+    useEffect(() => {
+      // Borra el mensaje de error después de 5 segundos
+      if (deleteError) {
+        const timer = setTimeout(() => {
+          setDeleteError(null);
+        }, 5000); // 5000 milisegundos = 5 segundos
+  
+        return () => {
+          clearTimeout(timer); // Limpia el temporizador si el componente se desmonta antes
+        };
+      }
+    }, [deleteError]);
+
 
   if(isDeleted) {
     return null;
@@ -36,8 +56,14 @@ const CardPanel = ({ panel, index }) => {
       deletePanel(panel.id).then((deleted) => {
         if(deleted){
           setIsDeleted(true);
+        } else {
+          setDeleteError("No se pudo eliminar el panel por algún motivo...");
         }
+      }).catch((error) => {
+        setDeleteError("No se pudo eliminar el panel debido a un error en la solicitud.");
       });
+    } else {
+      setDeleteError("No se pudo eliminar el panel por algún motivo...");
     }
   };
 
@@ -58,6 +84,17 @@ const CardPanel = ({ panel, index }) => {
 
 
   return (
+    <div>
+          <Snackbar open={!!deleteError} autoHideDuration={5000} onClose={() => setDeleteError(null)}>
+
+
+        {/* {deleteError && ( */}
+        <Alert severity="error" key={"delete-error"}>
+          <AlertTitle>Error</AlertTitle>
+          {deleteError}
+        </Alert>
+      {/* )} */}
+          </Snackbar>
     <div
       onMouseEnter={()=> setShowMenu(true)}
       onMouseLeave={()=> setShowMenu(false)}
@@ -72,6 +109,7 @@ const CardPanel = ({ panel, index }) => {
                     ))}
         </BasePanel>
         {menuComponent}
+    </div>
     </div>
   );
 };
