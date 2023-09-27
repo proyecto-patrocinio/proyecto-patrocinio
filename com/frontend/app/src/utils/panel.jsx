@@ -23,7 +23,7 @@ async function createPanel(titlePanel, boardID) {
 
         let status_response = true;
         if (!response.ok) {
-            console.error(`Error: ${response.statusText}`);
+            console.error(`Failed to POST Panel: ${response.statusText}`);
             status_response = false;
         }
 
@@ -79,6 +79,45 @@ export const updatPanelTitle = async (id, newTitle) => {
     } catch (error) {
         console.error(`Error while making the PATCH request for the Title field of Panel:`, error.message);
         console.debug(error);
+        throw error;
+    }
+};
+
+
+/**
+ * Deletes a panel by making a DELETE request to the REST API.
+ *
+ * @param {string|number} id - The ID of the panel to be deleted.
+ * @returns {Promise} A promise that resolves to an object with information about the deletion result.
+ *                    - success (boolean): true if the deletion was successful, false otherwise.
+ *                    - message (string): A message related to the deletion.
+ * @throws {Error} If an error occurs during the deletion request.
+ */
+export const deletePanel = async(id) => {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+    + process.env.REACT_APP_PATH_PANELS
+    + String(id)
+    + "/";
+
+    try {
+        const response = await fetch(url, {
+            method: 'DELETE',
+            headers: {
+            'Content-Type': 'application/json',
+            },
+        });
+
+        const responseData = await response.json();
+        if (!response.ok) {
+            console.error(`Failed to DELETE Panel: ${response.statusText}`);
+            return {success: false, message: responseData.message};
+        }
+
+        console.info("Panel deleted successfully..")
+        return {success: true, message: responseData.message};
+
+    } catch (error) {
+        console.error('Error deleting panel:', error.message);
         throw error;
     }
 };

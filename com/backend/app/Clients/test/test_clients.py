@@ -1,11 +1,10 @@
 from rest_framework.test import APITestCase, APIRequestFactory
-from django.urls import reverse, resolve
+from django.urls import reverse
 from rest_framework import status
 from django.contrib.auth.models import User
 from Clients.api.viewsets import *
 from rest_framework.test import force_authenticate
 from django.urls import reverse 
-from django.test.client import  RequestFactory
 from rest_framework.test import APIClient
 from locality.test.utils import *
 from Clients.choices import *
@@ -46,7 +45,3 @@ class Test_clients(APITestCase):
         view = ClientViewSet.as_view({'post':'create'})
         response = view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-       
-
-
-    
