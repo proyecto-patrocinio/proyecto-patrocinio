@@ -27,12 +27,18 @@ const CardPanel = ({ panel, index }) => {
     return null;
   }
 
+  /**
+   * Handles the click event on the delete button.
+   * Deletes the panel if it contains no cards.
+   */
   const handleDeleteClick = () => {
-    deletePanel(panel.id).then((deleted) => {
-      if(deleted){
-        setIsDeleted(true);
-      }
-    });
+    if (panel.cards.length === 0){
+      deletePanel(panel.id).then((deleted) => {
+        if(deleted){
+          setIsDeleted(true);
+        }
+      });
+    }
   };
 
   const menuComponent = (
