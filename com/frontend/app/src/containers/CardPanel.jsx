@@ -65,30 +65,32 @@ const CardPanel = ({ panel, index }) => {
     </div>
   );
 
+  const customAlert = (
+      <Snackbar open={!!alertMessage} autoHideDuration={5000} onClose={() => setAlertMessage(null)}>
+      <Alert severity="error" key={"delete-error"}>
+        <AlertTitle>Error</AlertTitle>
+        {alertMessage}
+      </Alert>
+    </Snackbar>
+  );
+
 
   return (
-    <div>
-      <Snackbar open={!!alertMessage} autoHideDuration={5000} onClose={() => setAlertMessage(null)}>
-        <Alert severity="error" key={"delete-error"}>
-          <AlertTitle>Error</AlertTitle>
-          {alertMessage}
-        </Alert>
-      </Snackbar>
-      <div
-        onMouseEnter={()=> setShowMenu(true)}
-        onMouseLeave={()=> setShowMenu(false)}
-        style={{position: 'relative'}}
-        key={"title-panel"}
-      >
-          <BasePanel panel={panel} index={index} title={title}>
-                      {panel.cards.map((card, index) => (
-                          <Grid item xs={12} sm={6} md={11} key={card.consultation} >
-                          <CardTicket card={card} index={index} key={card.consultation}/>
-                          </Grid>
-                      ))}
-          </BasePanel>
-          {menuComponent}
-      </div>
+    <div
+      onMouseEnter={()=> setShowMenu(true)}
+      onMouseLeave={()=> setShowMenu(false)}
+      style={{position: 'relative'}}
+      key={"title-panel"}
+    >
+        <BasePanel panel={panel} index={index} title={title}>
+                    {panel.cards.map((card, index) => (
+                        <Grid item xs={12} sm={6} md={11} key={card.consultation} >
+                        <CardTicket card={card} index={index} key={card.consultation}/>
+                        </Grid>
+                    ))}
+        </BasePanel>
+        {menuComponent}
+        {customAlert}
     </div>
   );
 };
