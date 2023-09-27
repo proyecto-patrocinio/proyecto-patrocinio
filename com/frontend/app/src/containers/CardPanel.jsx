@@ -6,9 +6,7 @@ import BasePanel from '../components/BasePanel';
 import TicketMenu from '../components/TicketMenu';
 import { MenuItem } from '@mui/material';
 import { deletePanel } from '../utils/panel';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
-import Snackbar from '@mui/material/Snackbar';
+import AlertSnackbar from '../components/AlertSnackbar';
 
 
 
@@ -65,15 +63,6 @@ const CardPanel = ({ panel, index }) => {
     </div>
   );
 
-  const customAlert = (
-      <Snackbar open={!!alertMessage} autoHideDuration={5000} onClose={() => setAlertMessage(null)}>
-      <Alert severity="error" key={"delete-error"}>
-        <AlertTitle>Error</AlertTitle>
-        {alertMessage}
-      </Alert>
-    </Snackbar>
-  );
-
 
   return (
     <div
@@ -90,7 +79,7 @@ const CardPanel = ({ panel, index }) => {
                     ))}
         </BasePanel>
         {menuComponent}
-        {customAlert}
+        <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>
     </div>
   );
 };
