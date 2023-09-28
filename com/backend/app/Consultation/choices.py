@@ -1,10 +1,14 @@
-CONSULTATION_STATES = (
-    ('CREATED', 'Created'),
-    ('PENDING', 'Pending Assignment'),
-    ('ASSIGNED', 'Assigned'),
+PROGRESS_STATES = (
+    ('TODO', 'To Do'),
     ('IN_PROGRESS', 'In Progress'),
     ('DONE', 'Done'),
-    ('REJECTED', 'Rejected'),
     ('PAUSED', 'Paused'),
     ('BLOCKED', 'Blocked'),
+)
+
+AVAILABILITY_STATES = (
+    ('CREATED', 'Unassigned Created'),
+    ('PENDING', 'Pending Assignment Request'),
+    ('ASSIGNED', 'Assigned'),
+    ('REJECTED', 'Unassigned Rejected'),
 )

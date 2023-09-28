@@ -1,12 +1,11 @@
 from Consultation.models import Consultation, RequestConsultation
 from rest_framework import serializers
-from Card.api.serializers import CardSerializer
 
 class ConsultationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consultation
         fields = '__all__'
-        read_only_fields = ['id', 'state']
+        read_only_fields = ['id', 'availability_state', 'progress_state']
 
 
 class ConsultationSerializer(serializers.ModelSerializer):
