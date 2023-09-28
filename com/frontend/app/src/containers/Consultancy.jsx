@@ -40,7 +40,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
  * card movement with drag-and-drop, and initializing consultancy data.
  */
 const Consultancy = () => {
-	const [consultancy, setConsultancy] = useState( { 'title': 'Consultoria', 'panels': [{'id':0, 'title': 'New Consultations', 'number_cards':0 , 'cards': [] }]})
+	const [consultancy, setConsultancy] = useState( { 'title': 'Consultancy', 'panels': [{'id':0, 'title': 'Available Consultations', 'number_cards':0 , 'cards': [] }]})
   const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
 
 
@@ -54,7 +54,7 @@ const Consultancy = () => {
 			// Create Consultancy
 			const inputPanel = { 
         'id': PANEL_INPUT_CONSULTATION_ID,
-				'title': 'New Consultations',
+				'title': 'Available Consultations',
 				'number_cards': inputConsultations.length,
 				'cards': inputConsultations
       }
@@ -119,12 +119,13 @@ const Consultancy = () => {
   * Add a new consultation to the consultancy panels.
   *
   * @param {Object} consultation - The consultation object with
-  * id', 'state', 'time_stamp', 'description', 'opponent', 'tag', and 'client' fields.
+  * id', 'availability_state', 'progress_state', 'time_stamp', 'description', 'opponent', 'tag', and 'client' fields.
   */
   const addNewConsultation = (consultation) => {
     const newConsultation = {
       "id": consultation.id,
-      "state": consultation.state,
+      "availability_state": consultation.availability_state,
+      "progress_state": consultation.progress_state,
       "time_stamp": consultation.time_stamp,
       "description": consultation.description,
       "opponent": consultation.opponent,

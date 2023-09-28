@@ -29,19 +29,19 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
         "description": false,
         "tag": false,
         "opponent": false,
-        "state": false,
+        "progress_state": false,
     });
     const [editedFields, setEditedFields] = useState({
         "description": consultationData.description,
         "tag": consultationData.tag,
         "opponent": consultationData.opponent,
-        "state": consultationData.state,
+        "progress_state": consultationData.progress_state,
     });
     const [fieldsError, setFieldsError] = useState({
         "description": "",
         tag: "",
         "opponent": "",
-        "state": "",
+        "progress_state": "",
     });
 
     /**
@@ -183,17 +183,21 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
                     error={fieldsError.opponent}
                     fieldKey={"opponent"}
                 />
+                <TableRow>
+                <TableCell>Availability State:</TableCell>
+                <TableCell>{consultationData.availability_state}</TableCell>
+                </TableRow>
                 <EditableChoiceRow
-                    title={"State:"}
-                    isEditing={isFieldsEditing.state}
-                    value={consultationData.state}
+                    title={"Progress State:"}
+                    isEditing={isFieldsEditing.progress_state}
+                    value={consultationData.progress_state}
                     onEdit={handleEditClick}
                     onSave={handleSaveClick}
                     onChange={handleOnChange}
                     onCancel={handleOnCancel}
-                    error={fieldsError.state}
-                    fieldKey={"state"}
-                    options={["ASSIGNED", "IN_PROGRESS", "DONE", "PAUSED", "BLOCKED"]}
+                    error={fieldsError.progress_state}
+                    fieldKey={"progress_state"}
+                    options={["TODO", "IN_PROGRESS", "DONE", "PAUSED", "BLOCKED"]}
                 />
                 <EditableFieldRow
                     tittle={"Description:"}

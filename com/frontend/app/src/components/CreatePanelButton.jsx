@@ -41,7 +41,7 @@ function CreatePanelButton({boardID, addPanel}) {
       setOpen(false);
       setError('');
       const response = await createPanel(title, boardID);
-      if (response.state === true) {
+      if (response.status === true) {
         const panel = response.data
         addPanel(panel.id, panel.title);
         // Show a success notification
