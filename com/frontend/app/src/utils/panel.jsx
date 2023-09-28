@@ -2,7 +2,7 @@
  * Creates a new panel by sending a POST request to the specified URL.
  * @param {string} titlePanel - The title of the panel to be created.
  * @param {int} boardID - The ID of the board where the panel will be created.
- * @returns {Promise} A promise that resolves when the request. [Message(str), Status(bool)]
+ * @returns {Promise} A promise that resolves when the request. [message(str), status(bool)]
  */
 async function createPanel(titlePanel, boardID) {
     const boardIntID = Number(boardID);
@@ -30,7 +30,7 @@ async function createPanel(titlePanel, boardID) {
         const data = await response.json();
         const responseDict = {
             "data": data,
-            "state": status_response
+            "status": status_response
         };
         return responseDict
 

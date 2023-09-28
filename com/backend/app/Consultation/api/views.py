@@ -35,22 +35,22 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         return super().create(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        """Custom list view that handles filtering based on the 'state' query parameter.
+        """Custom list view that handles filtering based on the 'availability_state' query parameter.
 
-        If 'state' parameter is present in the request's GET parameters, it filters
+        If 'availability_state' parameter is present in the request's GET parameters, it filters
         the queryset to include consultations based on the specified state(s) using AND or OR.
         Then, it calls the parent class's list method to handle standard listing.
 
         Example:
-            'GET /consultations/?state=REJECTED,PENDING'
+            'GET /consultations/?availability_state=REJECTED,PENDING'
         """
-        state_filter = self.request.query_params.get('state')
+        state_filter = self.request.query_params.get('availability_state')
         if state_filter:
             state_list = state_filter.split(',')
             filter_query = Q()
             
-            for state in state_list:
-                filter_query |= Q(state=state)
+            for availability_state in state_list:
+                filter_query |= Q(availability_state=availability_state)
 
             self.queryset = Consultation.objects.filter(filter_query)
 
@@ -63,9 +63,9 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     serializer_class = RequestConsultationSerializer
 
     def create(self, request, *args, **kwargs):
-        """Create a new Consultation and set its state to "PENDING" if it meets the conditions.
+        """Create a new Consultation and set its availability_state to "PENDING" if it meets the conditions.
 
-        This method handles the creation of a new Consultation instance, updating its state to "PENDING"
+        This method handles the creation of a new Consultation instance, updating its availability_state to "PENDING"
         if it's eligible. It performs checks to ensure that the Consultation doesn't already exist
         or have pending requests.
         """
@@ -87,8 +87,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': mns})
 
         # Check if Consultation is not already assigned or has pending requests
-        is_created = consultation.state == "CREATED"
-        is_rejected = consultation.state == "REJECTED"
+        is_created = consultation.availability_state == "CREATED"
+        is_rejected = consultation.availability_state == "REJECTED"
         if (not is_created) and (not is_rejected):
             mns = f'Consultation {consultation_id} is already assigned or there exists a pending request'
             logger.error(mns)
@@ -98,7 +98,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         response = super().create(request, *args, **kwargs)
 
         if response.status_code == 201:
-            consultation.state = "PENDING"
+            consultation.availability_state = "PENDING"
             consultation.save()
             logger.info(f"Consultation {consultation_id} created.")
         else:
@@ -108,10 +108,10 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         return response
 
     def destroy(self, request, *args, **kwargs):
-        """Delete a Consultation and update its state to "CREATED".
+        """Delete a Consultation and update its availability_state to "CREATED".
 
         This method handles the deletion of a Consultation instance and,
-        updates its state to "CREATED" to indicate the cancellation of the request.
+        updates its availability_state to "CREATED" to indicate the cancellation of the request.
         """
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
 
@@ -119,7 +119,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
         if response.status_code == 204:
             consultation = Consultation.objects.get(id=consultation_id)
-            consultation.state = "CREATED"
+            consultation.availability_state = "CREATED"
             consultation.save()
             logger.info(f"Request Consultation {consultation_id} deleted.")
         else:
@@ -205,9 +205,9 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 card_serializer.delete()
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            # Update Consultation State
-            consultation.state = "ASSIGNED"
-            logger.info(f"Updated consultation {consultation_id} state to ASSIGNED.")
+            # Update Consultation state
+            consultation.availability_state = "ASSIGNED"
+            logger.info(f"Updated consultation {consultation_id} availability state to ASSIGNED.")
 
             # Save transaction
             card_serializer.save()
@@ -239,9 +239,9 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
 
             # Update Consultation State
-            consultation.state = "REJECTED"
+            consultation.availability_state = "REJECTED"
             consultation.save()
-            logger.info(f"Updated consultation {consultation_id} state to REJECTED.")
+            logger.info(f"Updated consultation {consultation_id} availability state to REJECTED.")
 
             return Response(status=status.HTTP_204_NO_CONTENT)
 

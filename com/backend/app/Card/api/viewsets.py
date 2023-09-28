@@ -6,12 +6,8 @@ from django.db.models import Count
 
 
 class CardViewSet(viewsets.ModelViewSet):
-    """API endpoint that allows CRUD operations on Card objects.
-
-    Inherits from viewsets.ModelViewSet and provides additional functionality
-    for custom handling of 'create' and filtering based on the 'state' query parameter.
-    """
-    queryset = Card.objects.all()  # all the data in the table
+    """API endpoint that allows CRUD operations on Card objects."""
+    queryset = Card.objects.all()
     serializer_class = CardSerializer
 
     def create(self, request, *args, **kwargs):
@@ -21,4 +17,3 @@ class CardViewSet(viewsets.ModelViewSet):
         """
         self.serializer_class = CardCreateSerializer
         return super().create(request, *args, **kwargs)
-

@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 import createPanel from '../utils/panel';
 import AddButton from "./AddButton";
 import SimpleDialog from "./SimpleDialog";
-import SuccessSnackbar from "./SuccessSnackbar";
+import AlertSnackbar from "./AlertSnackbar";
 
 
 function CreatePanelButton({boardID, addPanel}) {
@@ -41,7 +41,7 @@ function CreatePanelButton({boardID, addPanel}) {
       setOpen(false);
       setError('');
       const response = await createPanel(title, boardID);
-      if (response.state === true) {
+      if (response.status === true) {
         const panel = response.data
         addPanel(panel.id, panel.title);
         // Show a success notification
@@ -86,9 +86,8 @@ function CreatePanelButton({boardID, addPanel}) {
             helperText={error}
         />
       </SimpleDialog>
-      <SuccessSnackbar
-          isSuccess={success}
-          message={"Panel created successfully!"}
+      <AlertSnackbar
+          message={success ? "Panel created successfully!" : null}
           onClose={handleCloseSuccessSnackbar}
       />
     </div>
