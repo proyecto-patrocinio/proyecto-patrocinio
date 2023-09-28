@@ -10,6 +10,7 @@ import {formatTimestamp} from '../utils/format.jsx';
 import {getConsultation, updateConsultationField} from '../utils/caseTaker.jsx';
 import ClientTable from './ClientTable.jsx';
 import EditableFieldRow from './EditableFieldRow.jsx';
+import EditableChoiceRow from './EditableChoiceRow.jsx';
 
 
 /**
@@ -28,16 +29,19 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
         "description": false,
         "tag": false,
         "opponent": false,
+        "state": false,
     });
     const [editedFields, setEditedFields] = useState({
         "description": consultationData.description,
         "tag": consultationData.tag,
         "opponent": consultationData.opponent,
+        "state": consultationData.state,
     });
     const [fieldsError, setFieldsError] = useState({
         "description": "",
         tag: "",
         "opponent": "",
+        "state": "",
     });
 
     /**
@@ -179,10 +183,18 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
                     error={fieldsError.opponent}
                     fieldKey={"opponent"}
                 />
-                <TableRow>
-                <TableCell>State:</TableCell>
-                <TableCell>{consultationData.state}</TableCell>
-                </TableRow>
+                <EditableChoiceRow
+                    title={"State:"}
+                    isEditing={isFieldsEditing.state}
+                    value={consultationData.state}
+                    onEdit={handleEditClick}
+                    onSave={handleSaveClick}
+                    onChange={handleOnChange}
+                    onCancel={handleOnCancel}
+                    error={fieldsError.state}
+                    fieldKey={"state"}
+                    options={["ASSIGNED", "IN_PROGRESS", "DONE", "PAUSED", "BLOCKED"]}
+                />
                 <EditableFieldRow
                     tittle={"Description:"}
                     isEditing={isFieldsEditing.description}

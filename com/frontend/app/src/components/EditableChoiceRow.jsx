@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
@@ -26,14 +26,22 @@ import MenuItem from '@mui/material/MenuItem';
  * @returns {JSX.Element} - A React JSX element representing the EditableChoiceRow.
  */
 const EditableChoiceRow = ({ title, isEditing, value, onEdit, onSave, onChange, onCancel, error, fieldKey, options }) => {
+  const [selectedValue, setSelectedValue] = useState(value);
+
+  const  changeHandler = (event) => {
+    onChange(event, fieldKey)
+    const newSelection = event.target.value;
+    setSelectedValue(newSelection);
+  }
+
   return (
     <TableRow>
       <TableCell>{title}</TableCell>
       <TableCell>
         {isEditing ? (
           <Select
-            value={value}
-            onChange={(event) => onChange(event, fieldKey)}
+            value={selectedValue}
+            onChange={changeHandler}
             error={!!error}
             style={{ width: '100%' }}
           >
