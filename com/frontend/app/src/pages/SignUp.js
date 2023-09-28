@@ -18,12 +18,12 @@ import { SnackbarProvider, useSnackbar } from 'notistack';
 const theme = createTheme();
 
 function Register() {
-const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
+  const [termsAccepted, setTermsAccepted] = React.useState(false);
 
 
   //Conect to API
   const handleValidation = (event) => {  
-
     //get data from form
     const data = new FormData(event.currentTarget);
     const data_username = data.get('username');
@@ -31,10 +31,10 @@ const { enqueueSnackbar } = useSnackbar();
     const data_password2 = data.get('password2');
     const data_email = data.get('email');
 
-    //check if data is empty
-  if (data_username === "" || data_password === "" || data_email === "" || data_password2 === "") {
-    enqueueSnackbar("Complete all fields.", { variant: 'error' });
-  }else {
+      //check if data is empty
+    if (data_username === "" || data_password === "" || data_email === "" || data_password2 === "") {
+      enqueueSnackbar("Complete all fields.", { variant: 'error' });
+    }else {
 
     //send data to API
     const requestURL = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
@@ -71,14 +71,18 @@ const { enqueueSnackbar } = useSnackbar();
   return () => {}
 }
 
-
   const handleSubmit = (event) => {
-    event.preventDefault(); 
-    handleValidation(event); 
-
-
+    event.preventDefault();
+    if (!termsAccepted) {
+      enqueueSnackbar("Please accept the terms and conditions.", { variant: 'error' });
+    } else {
+      handleValidation(event);
+    }
   };
 
+  const handleCheckboxChange = (event) => {
+    setTermsAccepted(event.target.checked);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -146,10 +150,10 @@ const { enqueueSnackbar } = useSnackbar();
               </Grid>
               
               <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="termAndCond" color="primary" />}
-                  label="I have read and accept the terms and conditions."
-                />
+              <FormControlLabel
+                control={<Checkbox value="termAndCond" color="primary" onChange={handleCheckboxChange} />}
+                label="I have read and accept the terms and conditions."
+              />
               </Grid>
             </Grid>
             <Button
@@ -157,6 +161,7 @@ const { enqueueSnackbar } = useSnackbar();
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={!termsAccepted}
             >
               Sign Up
             </Button>
