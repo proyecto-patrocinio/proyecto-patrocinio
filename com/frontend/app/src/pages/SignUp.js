@@ -14,71 +14,82 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../components/Copyright';
 import { SnackbarProvider, useSnackbar } from 'notistack';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const theme = createTheme();
 
 function Register() {
-const { enqueueSnackbar } = useSnackbar();
-
+  const { enqueueSnackbar } = useSnackbar();
+  const [termsAccepted, setTermsAccepted] = React.useState(false);
+  const [loading, setLoading] = React.useState(false); 
 
   //Conect to API
-  const handleValidation = (event) => {  
-
+  const handleValidation = async  (event) => {
+    setLoading(true);
     //get data from form
-    const data = new FormData(event.currentTarget);
-    const data_username = data.get('username');
-    const data_password = data.get('password');
-    const data_password2 = data.get('password2');
-    const data_email = data.get('email');
+    try{
+        const data = new FormData(event.currentTarget);
+        const data_username = data.get('username');
+        const data_password = data.get('password');
+        const data_password2 = data.get('password2');
+        const data_email = data.get('email');
 
-    //check if data is empty
-  if (data_username === "" || data_password === "" || data_email === "" || data_password2 === "") {
-    enqueueSnackbar("Complete all fields.", { variant: 'error' });
-  }else {
+          //check if data is empty
+        if (data_username === "" || data_password === "" || data_email === "" || data_password2 === "") {
+          enqueueSnackbar("Complete all fields.", { variant: 'error' });
+        }else {
 
-    //send data to API
-    const requestURL = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                      + process.env.REACT_APP_PATH_SIGNUP;
-    const request = new XMLHttpRequest();
-    request.open('POST', requestURL);
-    request.setRequestHeader( 'Content-Type', 'application/json')
+        //send data to API
+        const requestURL = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                          + process.env.REACT_APP_PATH_SIGNUP;
+        const request = new XMLHttpRequest();
+        request.open('POST', requestURL);
+        request.setRequestHeader( 'Content-Type', 'application/json')
 
-    request.onreadystatechange = () => { // Call a function when the state changes.
-      if (request.readyState === XMLHttpRequest.DONE ) {
-        if( request.status === 201){
-          const mns = JSON.parse(request.response).detail;
-          enqueueSnackbar(mns, { variant: 'success' });
+        request.onreadystatechange = () => { // Call a function when the state changes.
+          if (request.readyState === XMLHttpRequest.DONE ) {
+            if( request.status === 201){
+              const mns = JSON.parse(request.response).detail;
+              enqueueSnackbar(mns, { variant: 'success' });
+            }
+            else { 
+              const data = JSON.parse(request.response);
+              if (data.username ) enqueueSnackbar(data.username, { variant: 'error' }) ;
+              if (data.email ) enqueueSnackbar(data.email, { variant: 'error' }) ;
+              if (data.password1 ) enqueueSnackbar(data.password1, { variant: 'error' });
+              if (data.password2 ) enqueueSnackbar(data.password2, { variant: 'error' });
+              if(data.non_field_errors) enqueueSnackbar(data.non_field_errors, { variant: 'error' });
+            }
+            
+            setLoading(false);
+          }
         }
-        else { 
-          const data = JSON.parse(request.response);
-          if (data.username ) enqueueSnackbar(data.username, { variant: 'error' }) ;
-          if (data.email ) enqueueSnackbar(data.email, { variant: 'error' }) ;
-          if (data.password1 ) enqueueSnackbar(data.password1, { variant: 'error' });
-          if (data.password2 ) enqueueSnackbar(data.password2, { variant: 'error' });
-          if(data.non_field_errors) enqueueSnackbar(data.non_field_errors, { variant: 'error' });
-        }
+        request.send(
+            JSON.stringify({
+                "username": data_username,
+                "email": data_email,
+                "password1": data_password,
+                "password2": data_password2,
+            }));
+
       }
-    }
-    request.send(
-        JSON.stringify({
-            "username": data_username,
-            "email": data_email,
-            "password1": data_password,
-            "password2": data_password2,
-        }));
-
+      return () => {}
+  } finally {
   }
-  return () => {}
 }
 
-
-  const handleSubmit = (event) => {
-    event.preventDefault(); 
-    handleValidation(event); 
-
-
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    if (!termsAccepted) {
+      enqueueSnackbar("Please accept the terms and conditions.", { variant: 'error' });
+    } else {
+      handleValidation(event);
+    }
   };
 
+  const handleCheckboxChange = (event) => {
+    setTermsAccepted(event.target.checked);
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -146,10 +157,10 @@ const { enqueueSnackbar } = useSnackbar();
               </Grid>
               
               <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="termAndCond" color="primary" />}
-                  label="I have read and accept the terms and conditions."
-                />
+              <FormControlLabel
+                control={<Checkbox value="termAndCond" color="primary" onChange={handleCheckboxChange} />}
+                label="I have read and accept the terms and conditions."
+              />
               </Grid>
             </Grid>
             <Button
@@ -157,8 +168,9 @@ const { enqueueSnackbar } = useSnackbar();
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={!termsAccepted || loading}
             >
-              Sign Up
+            {loading ? <CircularProgress size={24} /> : 'Sign Up'}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
@@ -173,7 +185,7 @@ const { enqueueSnackbar } = useSnackbar();
       </Container>
     </ThemeProvider>
   );
-}
+};
 
 
 export default function SignUp() {
@@ -182,4 +194,4 @@ export default function SignUp() {
       <Register />
     </SnackbarProvider>
   );
-}
+};
