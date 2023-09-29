@@ -1,7 +1,7 @@
 import React from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Dashboard from '../containers/Dashboard';
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 const theme = createTheme();
 export default function HomePage( ) {
@@ -9,20 +9,25 @@ export default function HomePage( ) {
     return (
         <ThemeProvider theme={theme}>
             <Dashboard>
+                <Box sx={{m:8}}>
                 <Typography variant="h4" gutterBottom>
-                    Bienvenido a la aplicación de seguimiento de casos
+                    Case Management System
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                La aplicación de gestión de casos para el proyecto de patrocinio jurídico de la UBA 
-                es una plataforma que permite a los abogados y estudiantes de derecho administrar los 
-                casos legales asignados a ellos de manera más eficiente. La aplicación incluye características 
-                como gestión de casos, asignación de casos, comunicación, calendario, documentación y estadísticas.
-                Estas características permiten a los usuarios almacenar y acceder a información relevante, 
-                programar citas y audiencias, comunicarse otros miembros del equipo, generar 
-                informes y estadísticas para evaluar el desempeño del equipo y tomar decisiones basadas en datos. 
-                En resumen, la aplicación de gestión de casos mejora la eficiencia y efectividad del proyecto de patrocinio
-                jurídico de la UBA, lo que permite brindar un mejor servicio a los clientes y obtener mejores resultados en los tribunales.
+                <Typography variant="body1" gutterBottom >
+                    <p>
+                    The case management application for the UBA legal sponsorship project is a platform that enables
+                    lawyers and law students to manage their assigned legal cases more efficiently. 
+                    </p>
+                    <p>
+                    The application includes features such as case management, case assignment, communication, scheduling, 
+                    documentation, and statistics. These features allow users to store and access relevant information, 
+                    schedule appointments and hearings, communicate with other team members, generate reports 
+                    and statistics to assess team performance, and make data-driven decisions. In summary, 
+                    the case management application enhances the efficiency and effectiveness of the UBA legal sponsorship project, 
+                    enabling the delivery of better service to clients and achieving better outcomes in the courts."
+                    </p>
                 </Typography>
+                </Box>
             </Dashboard>
         </ThemeProvider>
     );
