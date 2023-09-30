@@ -40,7 +40,6 @@ const EditableFieldRow = ({ tittle, isEditing, value, onEdit, onSave, onChange, 
         <TableCell>
             {isEditing ? (
             <TextareaAutosize
-                rowsMin={3}
                 value={value}
                 onChange={(event) => onChange(event, fieldKey)}
                 error={!!error}
