@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import List from '@mui/material/List';
 import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -58,7 +58,7 @@ const ListItemIconButton = ( {icon, text} ) => {
       };
       
       
-       fetchBoard();
+      fetchBoard();
     }, [userContext.user.pk]);
 
   return (
@@ -81,15 +81,15 @@ const ListItemCollapseButton = ( {text, sub_list} ) => {
   return (
     <>
     <ListItemButton>
-     <ListItemIcon>
-      <TableChartIcon  />
-    </ListItemIcon>
-    <ListItemText primary={text} onClick={handleClick} />
+      <ListItemIcon>
+        <TableChartIcon/>
+      </ListItemIcon>
+      <ListItemText primary={text} onClick={handleClick} />
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
     <Collapse in={open} timeout="auto" unmountOnExit>
       <List component="div" disablePadding>
-     { sub_list.map((board, index) => (
+      { sub_list.map((board, index) => (
     <Link key={index} href={"/board/" + board.id} style={{ color: 'inherit', textDecoration: 'none' }}>
           <ListItemIconButton  key={index} text={board.title}/>
     </Link>

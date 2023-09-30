@@ -7,10 +7,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import BaseTicket from '../components/BaseTicket.jsx';
 import TicketMenu from '../components/TicketMenu.jsx';
-import { MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableRow } from '@mui/material';
-import { deleteCard } from '../utils/card.jsx';
-import { getConsultation, updateConsultationField } from '../utils/caseTaker.jsx';
-import SimpleDialog from '../components/SimpleDialog.jsx';
+import { MenuItem } from '@mui/material';
 import DeleteCardDialog from '../components/DeleteCardDialog.jsx';
 
 /**
