@@ -63,7 +63,6 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
      * @param {string} fieldKey - The key of the field being edited.
      */
     const handleSaveClick = async(fieldKey) => {
-        let returnValue = ""
         if (editedFields[fieldKey] === ""
         || editedFields[fieldKey] === undefined
         || editedFields[fieldKey] === null
@@ -71,12 +70,8 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
             fieldsError[fieldKey] = "This field cannot be empty."
             setFieldsError(fieldsError);
         } else {
-            returnValue = await updateConsultationField(consultationData.id, fieldKey, editedFields[fieldKey])
-            
-            if (returnValue !== editedFields[fieldKey]) {
-                fieldsError[fieldKey] = "Error updating field. Please try again."
-                setFieldsError(fieldsError);
-            } else {
+            try {
+                await updateConsultationField(consultationData.id, fieldKey, editedFields[fieldKey])
                 fieldsError[fieldKey] = "";
                 setFieldsError(fieldsError);
                 setConsultation((prevConsultation) => ({
@@ -88,6 +83,9 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
                 if (fieldKey === "tag") {
                     updateViewTag(editedFields.tag)
                 }
+            } catch(e) {
+                fieldsError[fieldKey] = "Error updating field. Please try again."
+                setFieldsError(fieldsError);
             }
         }
         setUpdateViewCounter(updateViewCounter + 1);

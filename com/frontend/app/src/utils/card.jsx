@@ -133,7 +133,6 @@ export const deleteCard = async(cardID) => {
     });
     if (response.ok) {
       console.log(`Card ${cardID} deleted successfully`);
-      return true;
     } else {
       const mns = `Failed to delete Card with ID ${cardID}. Status: ${response.status}`
       console.error(mns);
@@ -143,6 +142,6 @@ export const deleteCard = async(cardID) => {
   } catch (error) {
     const mns = 'An unexpected error ocurred wihle trying to delete the Card'
     console.error(`${mns}: `, error);
-    return false;
+    throw error;
   }
 };

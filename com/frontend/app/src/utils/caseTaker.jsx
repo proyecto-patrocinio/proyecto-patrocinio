@@ -107,20 +107,19 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
             })
 
         if (response.ok) {
-            const requestConsultation = await response.json();
 
             if (fieldName === 'tag') {
                 // Update Card Tag if it exists. Otherwise ignore.
                 updateCardField(id, 'tag', fieldValue)
             }
-            return requestConsultation[fieldName];
 
         } else {
-            console.warn(`Failed to update the '${fieldName}' field of Consultation.`);
-            return null;
+            const mns = `Failed to update the '${fieldName}' field of Consultation.`
+            console.warn(mns);
+            throw new Error(mns);
         }
     } catch (error) {
-        console.error(`Error while making the PATCH request for the '${fieldName}' field of Consultation:`, error.message);
+        console.error(`Error while trying to update '${fieldName}' field of Consultation: `, error.message);
         console.debug(error);
         throw error;
     }
