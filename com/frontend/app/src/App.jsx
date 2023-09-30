@@ -13,6 +13,7 @@ import CaseTaker from "./pages/CaseTakerPage";
 import Cookies from "js-cookie";
 import BoardPage from "./pages/BoardPage";
 import LogoutPage from "./pages/LogoutPage";
+import TermsPage from "./pages/TermsPage";
 
 
 const App = () => {
@@ -43,12 +44,13 @@ const App = () => {
         <CssBaseline/>
         <UserProvider>
         <Router>
-            <Routes> 
+            <Routes>
                 <Route exact path="/"  element={getPage(<HomePage/>)} />
-                <Route exact path="/signup/"  element={<SignUp/>} /> 
+                <Route exact path="/signup/"  element={<SignUp/>} />
                 <Route exact path="/consultancy/"  element={getPage(<CaseTaker/>)} />
                 <Route exact path="/board/:id_board/" element={getPage(<BoardPage/>)} />
                 <Route exact path="/logout/" element={<LogoutPage  setIsLoggedIn={setIsLoggedIn}/> } />
+                <Route exact path="/terms/" element={<TermsPage/>} />
             </Routes>
         </Router>  
         </UserProvider>

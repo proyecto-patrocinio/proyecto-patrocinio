@@ -60,7 +60,7 @@ function Register() {
               if (data.password2 ) enqueueSnackbar(data.password2, { variant: 'error' });
               if(data.non_field_errors) enqueueSnackbar(data.non_field_errors, { variant: 'error' });
             }
-            
+            // Stop loading
             setLoading(false);
           }
         }
@@ -74,7 +74,9 @@ function Register() {
 
       }
       return () => {}
-  } finally {
+  } catch {
+    console.log("Unexpected error occurred during request processing.")
+    setLoading(false);
   }
 }
 
@@ -159,7 +161,12 @@ function Register() {
               <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="termAndCond" color="primary" onChange={handleCheckboxChange} />}
-                label="I have read and accept the terms and conditions."
+                label={
+                  <div>
+                  I have read and accept the <a href="terms/"
+                    target="_blank" rel="noreferrer"> terms and conditions</a>.
+                  </div>
+                }
               />
               </Grid>
             </Grid>
