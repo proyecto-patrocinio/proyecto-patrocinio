@@ -4,6 +4,7 @@ PROGRESS_STATES = (
     ('DONE', 'Done'),
     ('PAUSED', 'Paused'),
     ('BLOCKED', 'Blocked'),
+    ('INCOMPLETE','Incomplete'),
 )
 
 AVAILABILITY_STATES = (
@@ -11,4 +12,5 @@ AVAILABILITY_STATES = (
     ('PENDING', 'Pending Assignment Request'),
     ('ASSIGNED', 'Assigned'),
     ('REJECTED', 'Unassigned Rejected'),
+    ('ARCHIVED', 'Archived'),
 )
