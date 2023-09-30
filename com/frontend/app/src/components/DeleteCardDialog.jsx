@@ -28,10 +28,8 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
   useEffect(() => {
     const updateData = async() => {
       const consult = await getConsultation(idCard);
-      console.log(availableOptions)
       const isProgressValid = progressOptions.includes(consult.progress_state);
       const isAvailableValid = availableOptions.includes(consult.availability_state);
-      console.log(isAvailableValid)
       if (!isProgressValid){
         consult.progress_state = progressOptions[0]
       }
