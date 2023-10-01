@@ -1,14 +1,10 @@
-from django.test.client import  RequestFactory
-from rest_framework.test import APITestCase, APIRequestFactory  
-from rest_framework import status
-from rest_framework.test import APIClient
-from django.contrib.auth.models import User
 from Clients.api.viewsets import *
 from rest_framework.test import force_authenticate
 from django.urls import reverse 
-from locality.api.views import NationalityApiViewSet, ProvinceApiViewSet, LocalityApiViewSet
+from locality.test.utils import *
 
-#auxiliary functions
+# Auxiliary functions
+
 def load_clients(self,id,postal,address,marital_status,housing_type,studies,locality,email,id_type,id_number,first_name,last_name,birth_date,sex):
     client_data =  {  
                          "id": id, "postal": postal,"address": address,
@@ -69,6 +65,24 @@ def load_patrimony(self,id,client_user_id,employment,salary,other_income,amount_
     url= reverse('patrimony-list')
     request = self.factory.post(url,pat_data)
     force_authenticate(request, user=self.user)
-    view =  PatrimonyViewSet.as_view({'post': 'create'})
-    response =view(request)
+    view = PatrimonyViewSet.as_view({'post': 'create'})
+    response = view(request)
+
+
+def load_dummy_client(self):
+    load_nationality(self, id=1, name="Argentina")
+    load_province(self, id=1, name="Buenos Aires", nationality=1)
+    load_locality(self, id=1, name="LANUS", province=1)
+    clients_data = {
+        "id": 1, "postal": 1212, "address": "avenida santa fe",
+        "marital_status": 'SINGLE',
+        "housing_type": 'HOUSE', "studies": 'INCOMPLETE_PRIMARY', "locality": 1, "email": 'dummy@dummy.com',
+        "id_type": 'DOCUMENT', "id_number": 55, "first_name": "dummy_name", "last_name": "dummy_last_name",
+        "birth_date": '1995-10-10', "sex": 'MALE',
+    }
+
+    request = self.factory.post(self.url, clients_data)
+    force_authenticate(request, user=self.user)
+    view = ClientViewSet.as_view({'post': 'create'})
+    response = view(request)
     return response
