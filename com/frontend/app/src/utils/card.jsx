@@ -114,3 +114,34 @@ export const updateCardField = async (id, fieldName, fieldValue) => {
   }
 };
 
+/**
+ * Deletes a card by its ID.
+ *
+ * @param {string} cardID - The ID of the card to be deleted.
+ * @returns {boolean} Returns true if the card was deleted successfully, otherwise returns false.
+ */
+export const deleteCard = async(cardID) => {
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_CARDS
+      + cardID;
+    const response = await fetch(url,{
+      method: 'DELETE',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+    });
+    if (response.ok) {
+      console.log(`Card ${cardID} deleted successfully`);
+    } else {
+      const mns = `Failed to delete Card with ID ${cardID}. Status: ${response.status}`
+      console.error(mns);
+      console.error(mns, '. Details: ', response.detail);
+      return false;
+    }
+  } catch (error) {
+    const mns = 'An unexpected error ocurred wihle trying to delete the Card'
+    console.error(`${mns}: `, error);
+    throw error;
+  }
+};

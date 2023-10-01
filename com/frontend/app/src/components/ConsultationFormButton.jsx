@@ -84,7 +84,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
     const newError = {};
 
     requiredFields.forEach((field) => {
-      if (formData[field].trim() === '') {
+      if (formData[field].trim() === "") {
         newError[field] = 'This field is required';
         hasError = true;
       }
@@ -168,6 +168,8 @@ const ConsultationFormButton = ({addNewConsultation}) => {
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
+                  multiline
+                  minRows={2}
                   fullWidth
                   label="Description"
                   name="description"

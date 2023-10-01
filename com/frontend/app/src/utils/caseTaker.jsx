@@ -5,15 +5,37 @@
 import {updateCardField} from "./card";
 
 /********************** CONSULTATIONS ************************/
+
+
 /**
- * Fetches Consultations that are to be assigned based on CREATED status.
+ * Fetches Consultations that are to be assigned based on CREATED and REJECTED status.
  * @returns {Promise} A promise that resolves to the fetched data or an error.
  */
 export const getConsultationsToAssign = async () => {
+    return await getConsultationsByAvailability("CREATED,REJECTED");
+};
+
+
+/**
+ * Fetches Consultations that are to be assigned based on ARCHIVED status.
+ * @returns {Promise} A promise that resolves to the fetched data or an error.
+ */
+export const getConsultationsArchived = async () => {
+    return await getConsultationsByAvailability("ARCHIVED");
+};
+
+
+/**
+ * Fetches consultations by availability from the REST API of sponsorship.
+ * @param {string} availability - The availability to be used as a filter.
+ * @returns {Promise<Array>} - An array of consultations that match the availability filter.
+ * @throws {Error} - Throws an error if the consultation request is not successful.
+ */
+export const getConsultationsByAvailability = async (availability) => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_FILTER_CONSULTATIONS_BY_AVAILABILITY
-                + "CREATED,REJECTED";
+                + availability;
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json();
@@ -22,10 +44,10 @@ export const getConsultationsToAssign = async () => {
                 consultation: item.id
             }));
         } else {
-            throw new Error('Failed in fetch Consultations with status CREATED. Status Code:', response.status);
+            throw new Error(`Failed in fetch Consultations with status ${availability}. Status Code:`, response.status);
         }
     } catch (error) {
-        console.error('Failed in fetch Consultations with status CREATED.');
+        console.error(`Failed in fetch Consultations with status ${availability}.`);
         console.debug(error);
         throw error;
     }
@@ -107,20 +129,19 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
             })
 
         if (response.ok) {
-            const requestConsultation = await response.json();
 
             if (fieldName === 'tag') {
                 // Update Card Tag if it exists. Otherwise ignore.
                 updateCardField(id, 'tag', fieldValue)
             }
-            return requestConsultation[fieldName];
 
         } else {
-            console.warn(`Failed to update the '${fieldName}' field of Consultation.`);
-            return null;
+            const mns = `Failed to update the '${fieldName}' field of Consultation.`
+            console.warn(mns);
+            throw new Error(mns);
         }
     } catch (error) {
-        console.error(`Error while making the PATCH request for the '${fieldName}' field of Consultation:`, error.message);
+        console.error(`Error while trying to update '${fieldName}' field of Consultation: `, error.message);
         console.debug(error);
         throw error;
     }

@@ -50,7 +50,6 @@ const CardPanel = ({ panel, index }) => {
 
   const menuComponent = (
     <div
-      invisible={true}
       style={{
         position: 'absolute',
         top: '0',

@@ -3,14 +3,12 @@
  * component to make the card draggable. We are also passing              *
  * the properties "draggableId " and "index" to a "Draggable".            *
  **************************************************************************/
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
-
+import BaseTicket from '../components/BaseTicket.jsx';
+import TicketMenu from '../components/TicketMenu.jsx';
+import { MenuItem } from '@mui/material';
+import DeleteCardDialog from '../components/DeleteCardDialog.jsx';
 
 /**
  * Board Card Component
@@ -24,43 +22,40 @@ import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
  * @returns {JSX.Element} - The JSX element representing the custom card.
  */
 const CardTicket = ({ card, index }) => {
-  const [openDialog, setOpenDialog] = useState(false);
-  const [tag, setTag] = useState(card.tag);
+  const [showMenu, setShowMenu] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
+  const [isDeleted, setIsDeleted] = useState(false);
 
-  if (card == null || card.length === 0) {
-    return <div>No cards.</div>;
+  useEffect(() => {
+  }, [isDeleted]);
+
+  if (isDeleted) {
+    return null;
   }
 
-  const showConsultationHandler = () => {
-    setOpenDialog(true)
+  const cardContentProps = {
+    "onMouseEnter": ()=> setShowMenu(true),
+    "onMouseLeave": ()=> setShowMenu(false)
   }
 
-  const closeConsultationHandler = () => {
-    setOpenDialog(false)
+  const deleteCardHandler = () => {
+    setIsDeleted(true);
   }
 
   return (
-    <Draggable draggableId={String(card.consultation)} index={index}>
-      {(provided) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-        >
-          <Card style={{width: '15vw', margin: '0 auto' }} onDoubleClick={showConsultationHandler}>
-            <CardContent>
-              <Typography
-                color="textSecondary"
-                gutterBottom
-              >
-                {tag}
-              </Typography>
-            </CardContent>
-          </Card>
-          <ConsutationDisplay consultation={card} open={openDialog} onClose={closeConsultationHandler} updateViewTag={setTag}/>
-        </div>
-      )}
-    </Draggable>
+    <div>
+    <BaseTicket ticket={card} index={index} cardContentProps={cardContentProps}>
+      <TicketMenu showMenu={showMenu}>
+        <MenuItem onClick={() => {setShowConfirm(true)}}>Delete Card</MenuItem>
+      </TicketMenu>
+    </BaseTicket>
+    <DeleteCardDialog
+      idCard={card.consultation}
+      isOpen={showConfirm}
+      setOpen={setShowConfirm}
+      deleteViewCard={deleteCardHandler}
+    />
+    </div>
   );
 };
 

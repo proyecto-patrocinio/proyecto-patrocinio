@@ -40,7 +40,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
  * card movement with drag-and-drop, and initializing consultancy data.
  */
 const Consultancy = () => {
-	const [consultancy, setConsultancy] = useState( { 'title': 'Consultancy', 'panels': [{'id':0, 'title': 'Available Consultations', 'number_cards':0 , 'cards': [] }]})
+	const [consultancy, setConsultancy] = useState({ 'title': 'Consultancy', 'panels': [{'id':0, 'title': 'Available Consultations', 'number_cards':0 , 'cards': [] }]})
   const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
 
 
@@ -147,7 +147,7 @@ const Consultancy = () => {
    */
   const handleOnDragEnd = (result) => {
     onDragEnd(result,consultancy, setConsultancy, updateBackend);
-  }
+  };
 
 
   if(!consultancy){
