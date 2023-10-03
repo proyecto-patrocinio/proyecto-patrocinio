@@ -15,7 +15,7 @@ def load_clients(self, id, postal, address, marital_status, housing_type, studie
         "birth_date" : birth_date,"sex" : sex
     }
     url = reverse('client-list')
-    request = self.factory.post(url,client_data)
+    request = self.factory.post(url, client_data)
     force_authenticate(request, user=self.user)
     view =  ClientViewSet.as_view({'post': 'create'})
     response =view(request)
@@ -59,15 +59,16 @@ def load_tel(self,id,phone_number,client):
     return response
 
 
-def load_patrimony(self, id, client_user_id, employment, salary, other_income,
-                    amount_other_income,amount_retirement,amount_pension,vehicle):
+def load_patrimony(self, id, client, employment, salary, other_income,
+                   amount_other_income, amount_retirement, amount_pension, vehicle):
     pat_data = {
-        "id": id, "client_user_id": client_user_id, "employment": "employment", "salary": salary,
+        "id": id, "client": client, "employment": employment, "salary": salary,
         "other_income": other_income, "amount_other_income": amount_other_income,
-        "amount_retirement": amount_retirement, "amount_pension": amount_pension,"vehicle": vehicle,
+        "amount_retirement": amount_retirement, "amount_pension": amount_pension, 
+        "vehicle": vehicle,
     }
     url = reverse('patrimony-list')
-    request = self.factory.post(url,pat_data)
+    request = self.factory.post(path=url, data=pat_data, format='json')
     force_authenticate(request, user=self.user)
     view = PatrimonyViewSet.as_view({'post': 'create'})
     response = view(request)
