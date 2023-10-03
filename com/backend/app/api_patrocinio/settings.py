@@ -157,12 +157,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        #  'rest_framework.authentication.SessionAuthentication', #TODO:
-        #  'rest_framework.authentication.TokenAuthentication',
-       # 'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+        #   'rest_framework.authentication.SessionAuthentication', #TODO:
+        #   'rest_framework.authentication.TokenAuthentication',
+        #   'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
     ],
 
 }

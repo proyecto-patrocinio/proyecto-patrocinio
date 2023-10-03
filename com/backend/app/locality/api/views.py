@@ -14,22 +14,22 @@ from locality.api.serializers import LocalityOneSerializer,     \
 
 
 class LocalityApiViewSet(ModelViewSet): 
-    queryset = Locality.objects.all() #all the data in the table 
+    queryset = Locality.objects.all() # All the data in the table
 
-    def get_serializer(self, *args, **kwargs): #select json format
-        if self.action == 'list' or self.action == 'create': #by /api/locality/
+    def get_serializer(self, *args, **kwargs):  # Select json format
+        if self.action == 'list' or self.action == 'create':  # By /api/locality/
             return LocalityOneSerializer(*args, **kwargs)
-        return LocalityFullSerializer(*args, **kwargs) #else, /api/locality/id
-    
+        return LocalityFullSerializer(*args, **kwargs)  # Else, /api/locality/id
+
     def get_queryset(self): #select the detail data from the table
         queryset = super().get_queryset() 
-        if self.action == 'retrieve': #by /api/locality/id
-            #select_related is a method that allows you to select the data from the table
+        if self.action == 'retrieve':  # By /api/locality/id
+            # Select_related is a method that allows you to select the data from the table
             queryset=queryset.select_related('province','province__nationality')
-        #else is a "list" -> /api/locality/
-        return queryset #return SQL query   
-        
-        
+        # Else is a "list" -> /api/locality/
+        return queryset #return SQL query
+
+
 class ProvinceApiViewSet(ModelViewSet):
     queryset = Province.objects.all()
 
@@ -51,7 +51,7 @@ class NationalityApiViewSet(ModelViewSet):
     queryset = Nationality.objects.all() 
 
     def get_serializer(self, *args, **kwargs):
-        if self.action == 'list' or self.action == 'create'                 :
+        if self.action == 'list' or self.action == 'create':
             return NationalityOneSerializer(*args, **kwargs)
         return NationalityFullSerializer(*args, **kwargs)
 
@@ -62,4 +62,3 @@ class NationalityApiViewSet(ModelViewSet):
                 Prefetch('provinces') 
             )
         return queryset
-
