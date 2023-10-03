@@ -1,4 +1,6 @@
 from .utils import *
+from rest_framework import status
+
 
 class Test_locality(TestSetUp):
 
@@ -34,23 +36,23 @@ class Test_locality(TestSetUp):
         request = self.factory.get(url)
         force_authenticate(request, user=self.user)
         view =  LocalityApiViewSet.as_view({'get': 'list'})
-        response =view(request, pk=1)
+        response = view(request, pk=1)
         self.assertEqual( response.status_code, status.HTTP_200_OK)
         self.assertEqual( response.data[0]['id'], 1)
         self.assertEqual( response.data[0]['name'], "Lanus")
 
-    def test_put_positive(self):
+    def test_put_locality_positive(self):
         #PUT: UPDATE LOCALITY
-        load_nationality(self,id=1,name="Argentina")
-        load_province(self, id=1, name="Buenos Aires",nationality=1)
-        load_locality(self, id=1, name="LANUS",province=1)
+        load_nationality(self, id=1, name="Argentina")
+        load_province(self, id=1, name="Buenos Aires", nationality=1)
+        load_locality(self, id=1, name="LANUS", province=1)
         #update...
         data_new =  {
-                    "id": 1,
-                    "name": "Lanus" ,
-                    "province": 1
-                }
-        url =reverse('locality-list')
+            "id": 1,
+            "name": "Lanus" ,
+            "province": 1
+        }
+        url = reverse('locality-list')
         request_update = self.factory.put(path=url, data=data_new, format='json', content_type='application/json')
         force_authenticate(request_update, user=self.user)
         view_update =  LocalityApiViewSet.as_view({'put': 'update'})
