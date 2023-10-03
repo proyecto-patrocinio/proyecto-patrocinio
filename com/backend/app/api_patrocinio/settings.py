@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'Panel',
     'Board',
     'Consultation',
+    'terms_and_policies',
 ]
 
 MIDDLEWARE = [

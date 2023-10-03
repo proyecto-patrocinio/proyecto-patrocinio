@@ -1,4 +1,6 @@
 from .utils import *
+from rest_framework import status
+
 
 class Test_locality(TestSetUp):
 
