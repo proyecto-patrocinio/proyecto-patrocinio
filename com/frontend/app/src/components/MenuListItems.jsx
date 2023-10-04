@@ -11,6 +11,7 @@ import TableChartIcon from '@mui/icons-material/TableChart';
 import InputIcon from '@mui/icons-material/Input';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import  Link  from '@mui/material/Link'
+import TuneIcon from '@mui/icons-material/Tune';
 import { useUserContext } from '../context/UserContext';
 import {fetchBoardsByUser} from '../utils/board';
 
@@ -114,7 +115,7 @@ const ListControlPanel = () => {
     <>
     <ListItemButton>
       <ListItemIcon>
-        <TableChartIcon/>
+        <TuneIcon/>
       </ListItemIcon>
       <ListItemText primary={"Control Panel"} onClick={handleClick} />
       {open ? <ExpandLess /> : <ExpandMore />}
