@@ -32,6 +32,37 @@ export default getDataBoard;
 
 
 /**
+ * Fetch Boards by User.
+ *
+ * This function fetches a list of boards associated with a user by their ID.
+ *
+ * @param {number} idUser - The ID of the user.
+ * @returns {Promise<Array>} A promise that resolves to an array of board data.
+ */
+export const fetchBoardsByUser = async (idUser) => {
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_USERBOARD_BY_USER
+      + idUser;
+    const response = await fetch(url);
+    if (response.ok) {
+      const data = await response.json();
+      const boardPromises = data.map((item) => getDataBoard(item.board));
+      const boardList = await Promise.all(boardPromises);
+      return boardList;
+    } else {
+      console.error('Failed to fetch board-user:', response.status);
+      return [];
+    }
+  } catch (error) {
+    console.error('Unexpected error when try to fetch board by userID ', idUser);
+    console.log('Error Detail: ', error);
+    return [];
+  }
+};
+
+
+/**
  * Accepts a consultation request by sending a POST request to the API.
  *
  * @param {number} requestConsultationID - The ID of the consultation request to accept.

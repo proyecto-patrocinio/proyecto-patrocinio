@@ -156,10 +156,10 @@ const  Dashboard = ({title,  children}) => {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <main> 
+          <main>
             {children}
-        </main>
-            <Copyright sx={{ pt: 4 }} />
+          </main>
+          <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>

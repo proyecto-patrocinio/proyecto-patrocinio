@@ -15,6 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../components/Copyright';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 import CircularProgress from '@mui/material/CircularProgress';
+import { PATH_TERMS } from '../utils/constants';
 
 const theme = createTheme();
 
@@ -163,7 +164,7 @@ function Register() {
                 control={<Checkbox value="termAndCond" color="primary" onChange={handleCheckboxChange} />}
                 label={
                   <div>
-                  I have read and accept the <a href="terms/"
+                  I have read and accept the <a href={PATH_TERMS}
                     target="_blank" rel="noreferrer"> terms and conditions</a>.
                   </div>
                 }
