@@ -12,7 +12,7 @@ import InputIcon from '@mui/icons-material/Input';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import  Link  from '@mui/material/Link'
 import { useUserContext } from '../context/UserContext';
-import fetchBoardsByUser from '../utils/board';
+import {fetchBoardsByUser} from '../utils/board';
 
 
 /**
