@@ -14,6 +14,7 @@ import  Link  from '@mui/material/Link'
 import TuneIcon from '@mui/icons-material/Tune';
 import { useUserContext } from '../context/UserContext';
 import {fetchBoardsByUser} from '../utils/board';
+import { PATH_BOARD, PATH_CONSULTANCY, PATH_CP_CLIENTS, PATH_CP_CONSULT, PATH_LOGOUT } from '../utils/constants';
 
 
 /**
@@ -84,7 +85,7 @@ const ListItemCollapseButton = ({text, sub_list}) => {
     <Collapse in={open} timeout="auto" unmountOnExit>
       <List component="div" disablePadding>
       {sub_list.map((board, index) => (
-        <Link key={index} href={"/board/" + board.id} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link key={index} href={PATH_BOARD + board.id} style={{ color: 'inherit', textDecoration: 'none' }}>
           <ListItemIconButton key={index} text={board.title}/>
         </Link>
       ))}
@@ -123,10 +124,10 @@ const ListControlPanel = () => {
 
     <Collapse in={open} timeout="auto" unmountOnExit>
       <List component="div" disablePadding>
-        <Link key={"link-consult"} href={"/consultations/"} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link key={"link-consult"} href={PATH_CP_CONSULT} style={{ color: 'inherit', textDecoration: 'none' }}>
           <ListItemIconButton key={"item-consult"} text={"Consultations"}/>
         </Link>
-        <Link key={"link-client"} href={"/clients/"} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <Link key={"link-client"} href={PATH_CP_CLIENTS} style={{ color: 'inherit', textDecoration: 'none' }}>
           <ListItemIconButton key={"item-client"} text={"Clients"}/>
         </Link>
       </List>
@@ -148,11 +149,11 @@ const MenuListItems = ()=>{
       <Link href="/#" style={{ color: 'inherit', textDecoration: 'none' }}>
         <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
       </Link>
-      <Link href="/consultancy" style={{ color: 'inherit', textDecoration: 'none' }}>
+      <Link href={PATH_CONSULTANCY} style={{ color: 'inherit', textDecoration: 'none' }}>
         <ListItemIconButton icon={<InputIcon />} text="Consultancy" />
       </Link>
       <ListControlPanel />
-      <Link href="/logout" style={{ color: 'inherit', textDecoration: 'none' }}>
+      <Link href={PATH_LOGOUT} style={{ color: 'inherit', textDecoration: 'none' }}>
         <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Logout"/>
       </Link>
       <ListBoards />

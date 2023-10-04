@@ -14,6 +14,13 @@ import Cookies from "js-cookie";
 import BoardPage from "./pages/BoardPage";
 import LogoutPage from "./pages/LogoutPage";
 import TermsPage from "./pages/TermsPage";
+import {
+    PATH_BOARD, PATH_CONSULTANCY, PATH_CP_CLIENTS,
+    PATH_CP_CONSULT, PATH_LOGOUT, PATH_ROOT, PATH_SIGNUP,
+    PATH_TERMS 
+} from "./utils/constants";
+import ControlPanelConsultation from "./pages/ControlConsultionPage";
+import ControlPanelClient from "./pages/ControlClientPage";
 
 
 const App = () => {
@@ -45,12 +52,14 @@ const App = () => {
         <UserProvider>
         <Router>
             <Routes>
-                <Route exact path="/"  element={getPage(<HomePage/>)} />
-                <Route exact path="/signup/"  element={<SignUp/>} />
-                <Route exact path="/consultancy/"  element={getPage(<CaseTaker/>)} />
-                <Route exact path="/board/:id_board/" element={getPage(<BoardPage/>)} />
-                <Route exact path="/logout/" element={<LogoutPage  setIsLoggedIn={setIsLoggedIn}/> } />
-                <Route exact path="/terms/" element={<TermsPage/>} />
+                <Route exact path={PATH_ROOT}           element={getPage(<HomePage/>)} />
+                <Route exact path={PATH_SIGNUP}         element={<SignUp/>} />
+                <Route exact path={PATH_CONSULTANCY}    element={getPage(<CaseTaker/>)} />
+                <Route exact path={PATH_CP_CONSULT}     element={getPage(<ControlPanelConsultation/>)} />
+                <Route exact path={PATH_CP_CLIENTS}     element={getPage(<ControlPanelClient/>)} />
+                <Route exact path={PATH_LOGOUT}         element={<LogoutPage  setIsLoggedIn={setIsLoggedIn}/> } />
+                <Route exact path={PATH_TERMS}          element={<TermsPage/>} />
+                <Route exact path={PATH_BOARD + ":id_board/"} element={getPage(<BoardPage/>)} />
             </Routes>
         </Router>  
         </UserProvider>
