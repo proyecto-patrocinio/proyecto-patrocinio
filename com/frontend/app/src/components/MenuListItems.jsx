@@ -8,12 +8,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import SettingsIcon from '@mui/icons-material/Settings';
 import TableChartIcon from '@mui/icons-material/TableChart';
-import TuneIcon from '@mui/icons-material/Tune';
 import InputIcon from '@mui/icons-material/Input';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import  Link  from '@mui/material/Link'
 import { useUserContext } from '../context/UserContext';
-import getDataBoard from '../utils/board';
+import fetchBoardsByUser from '../utils/board';
 
 
 /**
@@ -21,7 +20,7 @@ import getDataBoard from '../utils/board';
  **  icon: icon to be displayed
  **  text: text to be displayed
  *  @returns json object
-*/
+ */
 const ListItemIconButton = ( {icon, text} ) => {
   return (
     <ListItemButton>
@@ -34,50 +33,44 @@ const ListItemIconButton = ( {icon, text} ) => {
 }
 
 
-  const ListBoards = ( ) => {
+/**
+ * Component to List Boards.
+ *
+ * This component fetches and displays a list of boards associated with the user.
+ *
+ * @returns {JSX.Element} The ListBoards component JSX.
+ */
+  const ListBoards = () => {
     const userContext = useUserContext();
     const [boards, setBoards] = useState([]);
+
     useEffect(() => {
       const fetchBoard = async () => {
-        try {
-          const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-            + process.env.REACT_APP_PATH_USERBOARD_BY_USER
-            + userContext.user.pk;
-          const response = await fetch(url);
-          if (response.ok) {
-            const data = await response.json();
-            const boardPromises = data.map((item) => getDataBoard(item.board));
-            const boards = await Promise.all(boardPromises);
-            setBoards(boards);
-          } else {
-            console.error('Failed to fetch board-user:', response.status);
-          }
-        } catch (error) {
-          console.error('Error:', error);
-        }
+        const boardList = await fetchBoardsByUser(userContext.user.pk);
+        setBoards(boardList);
       };
-      
-      
       fetchBoard();
     }, [userContext.user.pk]);
 
   return (
       <ListItemCollapseButton text="Boards" sub_list={boards}/>
   );
-}
+};
+
+
 /**
  * Item with Icon and Text and a Collapse Button
  ** text: text to be displayed
  ** sub_list: list of sub items to be displayed
- *  @returns json object 
+ *  @returns json object
  */
-const ListItemCollapseButton = ( {text, sub_list} ) => {
-
-
-  const [open, setOpen] = React.useState(true);
+const ListItemCollapseButton = ({text, sub_list}) => {
+  const [open, setOpen] = React.useState(false);
+  
   const handleClick = () => {
     setOpen(!open);
   };
+
   return (
     <>
     <ListItemButton>
@@ -89,12 +82,52 @@ const ListItemCollapseButton = ( {text, sub_list} ) => {
     </ListItemButton>
     <Collapse in={open} timeout="auto" unmountOnExit>
       <List component="div" disablePadding>
-      { sub_list.map((board, index) => (
-    <Link key={index} href={"/board/" + board.id} style={{ color: 'inherit', textDecoration: 'none' }}>
-          <ListItemIconButton  key={index} text={board.title}/>
-    </Link>
-        ))
-      }
+      {sub_list.map((board, index) => (
+        <Link key={index} href={"/board/" + board.id} style={{ color: 'inherit', textDecoration: 'none' }}>
+          <ListItemIconButton key={index} text={board.title}/>
+        </Link>
+      ))}
+      </List>
+    </Collapse>
+    </>
+  );
+};
+
+
+/**
+ * Component for Control Panel List.
+ *
+ * This component represents a control panel list with collapsible items:
+ * - Client Item
+ * - Consultations Item
+ *
+ * @returns {JSX.Element} The ListControlPanel component JSX.
+ */
+const ListControlPanel = () => {
+  const [open, setOpen] = React.useState(false);
+  
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+  return (
+    <>
+    <ListItemButton>
+      <ListItemIcon>
+        <TableChartIcon/>
+      </ListItemIcon>
+      <ListItemText primary={"Control Panel"} onClick={handleClick} />
+      {open ? <ExpandLess /> : <ExpandMore />}
+    </ListItemButton>
+
+    <Collapse in={open} timeout="auto" unmountOnExit>
+      <List component="div" disablePadding>
+        <Link key={"link-consult"} href={"/consultations/"} style={{ color: 'inherit', textDecoration: 'none' }}>
+          <ListItemIconButton key={"item-consult"} text={"Consultations"}/>
+        </Link>
+        <Link key={"link-client"} href={"/clients/"} style={{ color: 'inherit', textDecoration: 'none' }}>
+          <ListItemIconButton key={"item-client"} text={"Clients"}/>
+        </Link>
       </List>
     </Collapse>
     </>
@@ -105,29 +138,26 @@ const ListItemCollapseButton = ( {text, sub_list} ) => {
 /**
  * Component to display all the  menu items
  * @returns json object with all the menu items
- */
- const MenuListItems = ()=>{
- 
+*/
+const MenuListItems = ()=>{
+  
   return (
-
   <List component="nav">
-   <React.Fragment>
-   <Link href="/# " style={{ color: 'inherit', textDecoration: 'none' }}>
-      <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
-    </Link>
-    <Link href="/consultancy" style={{ color: 'inherit', textDecoration: 'none' }}>
-      <ListItemIconButton icon={<InputIcon />} text="Consultancy" />
-    </Link>
-    <Link href="#" style={{ color: 'inherit', textDecoration: 'none' }}>
-      <ListItemIconButton icon={<TuneIcon />} text="Control Panel" />
-    </Link>
-    <Link href="/logout" style={{ color: 'inherit', textDecoration: 'none' }}>
-      <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Logout"/>
-    </Link>
-    <ListBoards />
-  </React.Fragment>
+    <React.Fragment>
+      <Link href="/#" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
+      </Link>
+      <Link href="/consultancy" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <ListItemIconButton icon={<InputIcon />} text="Consultancy" />
+      </Link>
+      <ListControlPanel />
+      <Link href="/logout" style={{ color: 'inherit', textDecoration: 'none' }}>
+        <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Logout"/>
+      </Link>
+      <ListBoards />
+    </React.Fragment>
   </List>
   );
-  }
+};
 
   export default MenuListItems;
