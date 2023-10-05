@@ -8,6 +8,32 @@ import {updateCardField} from "./card";
 
 
 /**
+ * Asynchronous function to fetch a list of consultations from a REST API.
+ *
+ * @throws {Error} Throws an error if the API request fails.
+ *
+ * @returns {Promise<Object[]>} A promise that resolves to an array of consultation data objects.
+ */
+export const getConsultationList = async () => {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                + process.env.REACT_APP_PATH_CONSULTATIONS
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json();
+            return data;
+        } else {
+            throw new Error('Failed in fetch Consultation List. Status Code:', response.status);
+        }
+    } catch (error) {
+        console.error('Failed in fetch Consultation List.');
+        console.debug(error);
+        throw error;
+    }
+};
+
+
+/**
  * Fetches Consultations that are to be assigned based on CREATED and REJECTED status.
  * @returns {Promise} A promise that resolves to the fetched data or an error.
  */
