@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
-import TitlePanel from '../components/TitlePanel';
+import TitlePanel from '../components/panel/TitlePanel';
 import ConsultationTicket from './ConsultationTicket';
-import BasePanel from '../components/BasePanel';
+import BasePanel from '../components/panel/BasePanel';
 
 
 /**

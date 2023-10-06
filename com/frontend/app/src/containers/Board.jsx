@@ -14,7 +14,7 @@ import { Stack, Alert } from '@mui/material';
 import moveCard from '../utils/card';
 import getDataBoard from '../utils/board';
 import {acceptRequestConsult} from '../utils/board'
-import CreatePanelButton from '../components/CreatePanelButton';
+import CreatePanelButton from '../components/panel/CreatePanelButton';
 import onDragEnd from '../utils/dragAndDrop';
 import InputRequestPanel from './InputRequestPanel';
 

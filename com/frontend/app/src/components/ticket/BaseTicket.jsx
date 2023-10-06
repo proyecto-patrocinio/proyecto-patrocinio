@@ -9,7 +9,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import ConsutationDisplay from '../components/ConsutationDisplay.jsx'
+import ConsutationDisplay from '../consultation/display/ConsutationDisplay.jsx'
 
 
 /**

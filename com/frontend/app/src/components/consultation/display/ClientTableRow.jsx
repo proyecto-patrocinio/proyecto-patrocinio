@@ -2,7 +2,7 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import {getDataClient} from '../utils/client.jsx';
+import {getDataClient} from '../../../utils/client.jsx';
 import FamilyTableRow from './FamilyTableRow.jsx';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';

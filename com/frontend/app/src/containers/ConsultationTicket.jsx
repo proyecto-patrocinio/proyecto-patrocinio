@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import {useState} from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import { deleteConsultation } from '../utils/caseTaker.jsx';
-import TicketMenu from '../components/TicketMenu.jsx';
-import BaseTicket from '../components/BaseTicket.jsx';
+import TicketMenu from '../components/ticket/TicketMenu.jsx';
+import BaseTicket from '../components/ticket/BaseTicket.jsx';
 
 
 /**

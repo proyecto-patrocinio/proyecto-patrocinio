@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import CardTicket from './CardTicket';
-import TitlePanel from '../components/TitlePanel';
-import BasePanel from '../components/BasePanel';
-import TicketMenu from '../components/TicketMenu';
+import TitlePanel from '../components/panel/TitlePanel';
+import BasePanel from '../components/panel/BasePanel';
+import TicketMenu from '../components/ticket/TicketMenu';
 import { MenuItem } from '@mui/material';
 import { deletePanel } from '../utils/panel';
 import AlertSnackbar from '../components/AlertSnackbar';

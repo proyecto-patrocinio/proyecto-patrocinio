@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import Title from '../components/Title';
+import Title from '../Title';
 import { Badge, Tooltip, Box } from '@mui/material';
-import { updatPanelTitle } from '../utils/panel';
-import TitleEditable from './TitleEditable';
+import { updatPanelTitle } from '../../utils/panel';
+import TitleEditable from '../TitleEditable';
 
 /**
  * TitlePanel component displays the title of a panel and a badge with the number of cards it contains.

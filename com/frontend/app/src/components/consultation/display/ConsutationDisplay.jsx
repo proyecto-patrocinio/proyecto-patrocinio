@@ -6,11 +6,11 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import {formatTimestamp} from '../utils/format.jsx';
-import {getConsultation, updateConsultationField} from '../utils/caseTaker.jsx';
+import {getConsultation, updateConsultationField} from '../../../utils/caseTaker.jsx';
 import ClientTableRow from './ClientTableRow.jsx';
-import EditableFieldRow from './EditableFieldRow.jsx';
-import EditableChoiceRow from './EditableChoiceRow.jsx';
+import EditableFieldRow from '../../EditableFieldRow.jsx';
+import EditableChoiceRow from '../../EditableChoiceRow.jsx';
+import { formatTimestamp } from '../../../utils/tools.jsx';
 
 
 /**
