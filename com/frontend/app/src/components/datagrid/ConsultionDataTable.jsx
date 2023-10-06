@@ -11,14 +11,14 @@ import { DataGrid } from '@mui/x-data-grid';
 const ConsultationDataTable = ({data}) => {
 
     const columns = [
-        { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'availability_state', headerName: 'Availability State', width: 150 },
-        { field: 'progress_state', headerName: 'Progress State', width: 150 },
-        { field: 'time_stamp', headerName: 'Time Stamp', width: 200 },
-        { field: 'description', headerName: 'Description', width: 200 },
-        { field: 'opponent', headerName: 'Opponent', width: 150 },
-        { field: 'tag', headerName: 'Tag', width: 150 },
-        { field: 'client', headerName: 'Client', width: 100 },
+        { field: 'id', headerName: 'ID', width: 70, editable: false},
+        { field: 'availability_state', headerName: 'Availability State', width: 150, editable: true },
+        { field: 'progress_state', headerName: 'Progress State', width: 150, editable: true },
+        { field: 'time_stamp', headerName: 'Time Stamp', width: 200, editable: true },
+        { field: 'description', headerName: 'Description', width: 200, editable: true },
+        { field: 'opponent', headerName: 'Opponent', width: 150, editable: true },
+        { field: 'tag', headerName: 'Tag', width: 150, editable: true },
+        { field: 'client', headerName: 'Client', width: 100, editable: true },
       ];
 
   return (
