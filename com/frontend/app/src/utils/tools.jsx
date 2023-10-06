@@ -1,3 +1,15 @@
+
+/**
+ * Get Random Integer Number
+ * @param {Number} min 
+ * @param {Number} max 
+ * @returns Random number
+ */
+export function getRandomNumber(max) {
+    const randint = Math.floor(Math.random() * max) + 1;
+    return randint;
+};
+
 /**
  * Format a timestamp into a human-readable date and time string.
  *
@@ -14,4 +26,4 @@ export function formatTimestamp(timestamp) {
     const formattedDate = date.toLocaleDateString();
     const formattedTime = date.toLocaleTimeString();
     return `${formattedDate} ${formattedTime}`;
-}
+};
