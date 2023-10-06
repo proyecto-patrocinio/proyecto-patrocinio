@@ -1,5 +1,5 @@
 import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import BaseGrid from './BaseGrid';
 
 
 /**
@@ -29,12 +29,11 @@ function ClientDataTable({ data }) {
 
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={data}
+    <div>
+      <BaseGrid
+        initialRows={data}
         columns={columns}
-        pageSize={5} // number of rows per page
-        rowsPerPageOptions={[5, 10, 20]} // options for number of rows per page
+        emptyRecord={[]}
       />
     </div>
   );

@@ -14,16 +14,20 @@ import { EditToolbar } from './EditToolbar';
 
 
 /**
- * FullCrudGrid component for a data grid with CRUD (Create, Read, Update, Delete) operations.
+ * BaseGrid component for a data grid with CRUD (Create, Read, Update, Delete) operations.
  *
  * @param {Array} initialRows - Initial set of rows for the grid.
  * @param {Array} columns - Column configuration for the grid.
  * @param {object} emptyRecord - Empty record used for creating new rows.
  * @returns {JSX.Element} FullCrudGrid component.
  */
-export function FullCrudGrid({initialRows, columns, emptyRecord}) {
+export default function BaseGrid({initialRows, columns, emptyRecord}) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
+
+    React.useEffect(()=>{
+        setRows(initialRows)
+    }, [initialRows]);
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -136,6 +140,8 @@ export function FullCrudGrid({initialRows, columns, emptyRecord}) {
             <DataGrid
             rows={rows}
             columns={columnsWithActions}
+            pageSize={5} // number of rows per page
+            rowsPerPageOptions={[5, 10, 20]} // options for number of rows per page
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}

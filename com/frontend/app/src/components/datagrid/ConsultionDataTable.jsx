@@ -1,5 +1,5 @@
 import React from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import BaseGrid  from './BaseGrid';
 
 
 /**
@@ -14,21 +14,19 @@ const ConsultationDataTable = ({data}) => {
         { field: 'id', headerName: 'ID', width: 70, editable: false},
         { field: 'availability_state', headerName: 'Availability State', width: 150, editable: true },
         { field: 'progress_state', headerName: 'Progress State', width: 150, editable: true },
-        { field: 'time_stamp', headerName: 'Time Stamp', width: 200, editable: true },
+        { field: 'time_stamp', headerName: 'Time Stamp', width: 200, editable: false },
         { field: 'description', headerName: 'Description', width: 200, editable: true },
         { field: 'opponent', headerName: 'Opponent', width: 150, editable: true },
         { field: 'tag', headerName: 'Tag', width: 150, editable: true },
-        { field: 'client', headerName: 'Client', width: 100, editable: true },
+        { field: 'client', headerName: 'Client', width: 100, editable: false },
       ];
 
   return (
-    <div style={{ height: 400, width: '100%' }}>
-      <DataGrid
-        rows={data}
+    <div>
+      <BaseGrid
+        initialRows={data}
         columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[5, 10, 20]}
-
+        emptyRecord={[]}//TODO: aplicar emptyrecord
       />
     </div>
   );
