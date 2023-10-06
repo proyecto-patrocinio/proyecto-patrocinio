@@ -10,9 +10,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
  * Functional component for displaying family information in a table row.
  * 
  * @param {Dict} clientData - The client's data containing family information.
- * @returns {JSX.Element} - The FamilyTable component JSX. (In TableRow)
+ * @returns {JSX.Element} - The FamilyTableRow component JSX. (In TableRow)
  */
-const FamilyTable = ({clientData}) => {
+const FamilyTableRow = ({clientData}) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const family = clientData.family;
 
@@ -75,4 +75,4 @@ const FamilyTable = ({clientData}) => {
     );
 };
 
-export default FamilyTable;
+export default FamilyTableRow;
