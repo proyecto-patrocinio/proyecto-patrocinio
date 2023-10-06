@@ -16,7 +16,7 @@ import {
   getConsultationsToAssign,
   getConsultancyBoard
 } from '../utils/caseTaker'
-import ConsultationFormButton from '../components/ConsultationFormButton'
+import ConsultationFormButton from '../components/consultation/form/ConsultationFormButton'
 import onDragEnd from '../utils/dragAndDrop';
 import ConsultationPanel from './ConsultationPanel';
 import RequestPanel from './RequestPanel';

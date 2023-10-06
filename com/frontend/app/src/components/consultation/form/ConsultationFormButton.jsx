@@ -11,10 +11,10 @@ import React, { useState, useEffect } from 'react';
 import { TextField, Grid} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
-import {createConsultation} from '../utils/caseTaker'
-import { getClientList } from '../utils/client';
-import AddButton from './AddButton';
-import SimpleDialog from './SimpleDialog';
+import {createConsultation} from '../../../utils/caseTaker'
+import { getClientList } from '../../../utils/client';
+import AddButton from '../../AddButton';
+import SimpleDialog from '../../SimpleDialog';
 
 
 /**

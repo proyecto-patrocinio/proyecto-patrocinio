@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Dashboard from '../containers/Dashboard';
 import { getClientList } from '../utils/client';
-import ClientDataTable from '../components/ClientDataTable';
+import ClientDataTable from '../components/datagrid/ClientDataTable';
 
 const theme = createTheme();
 export default function ControlPanelClient( ) {

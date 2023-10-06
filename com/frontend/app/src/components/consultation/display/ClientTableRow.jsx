@@ -2,8 +2,8 @@ import React from 'react';
 import {useEffect, useState} from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import {getDataClient} from '../utils/client.jsx';
-import FamilyTable from './FamilyTable.jsx';
+import {getDataClient} from '../../../utils/client.jsx';
+import FamilyTableRow from './FamilyTableRow.jsx';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
@@ -13,9 +13,9 @@ import Button from '@mui/material/Button';
  * Functional component for displaying client information in a table row.
  * 
  * @param {string} clientID - The ID of the client to display.
- * @returns {JSX.Element} - The ClientTable component JSX.
+ * @returns {JSX.Element} - The ClientTableRow component JSX.
  */
-const ClientTable = ({clientID}) => {
+const ClientTableRow = ({clientID}) => {
     const [clientData, setClient] = useState(null)
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -87,7 +87,7 @@ const ClientTable = ({clientID}) => {
                 <TableCell>Email:</TableCell>
                 <TableCell>{clientData.email}</TableCell>
                 </TableRow>
-                <FamilyTable clientData={clientData}/>
+                <FamilyTableRow clientData={clientData}/>
 
                 <TableRow>
                 <TableCell>Telephones:</TableCell>
@@ -150,4 +150,4 @@ const ClientTable = ({clientID}) => {
     );
 };
 
-export default ClientTable;
+export default ClientTableRow;

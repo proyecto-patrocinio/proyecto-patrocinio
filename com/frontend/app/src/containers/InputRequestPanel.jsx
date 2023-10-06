@@ -1,7 +1,7 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import TitlePanel from '../components/TitlePanel';
-import BasePanel from '../components/BasePanel';
+import TitlePanel from '../components/panel/TitlePanel';
+import BasePanel from '../components/panel/BasePanel';
 import InputRequestTicket from './InputRequestTicket';
 
 

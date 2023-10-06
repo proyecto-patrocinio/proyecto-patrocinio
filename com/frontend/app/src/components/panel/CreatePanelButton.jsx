@@ -9,10 +9,10 @@
  */
 import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import createPanel from '../utils/panel';
-import AddButton from "./AddButton";
-import SimpleDialog from "./SimpleDialog";
-import AlertSnackbar from "./AlertSnackbar";
+import createPanel from '../../utils/panel';
+import AddButton from "../AddButton";
+import SimpleDialog from "../SimpleDialog";
+import AlertSnackbar from "../AlertSnackbar";
 
 
 function CreatePanelButton({boardID, addPanel}) {

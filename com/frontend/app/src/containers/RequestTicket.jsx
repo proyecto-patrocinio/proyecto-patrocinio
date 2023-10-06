@@ -1,5 +1,5 @@
 import React from 'react';
-import BaseTicket from '../components/BaseTicket.jsx';
+import BaseTicket from '../components/ticket/BaseTicket.jsx';
 
 
 /**

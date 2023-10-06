@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import {useState} from 'react';
-import TicketMenu from '../components/TicketMenu.jsx';
+import TicketMenu from '../components/ticket/TicketMenu.jsx';
 import { MenuItem } from '@mui/material';
 import { rejectRequestConsult } from '../utils/board.jsx';
-import BaseTicket from '../components/BaseTicket.jsx';
+import BaseTicket from '../components/ticket/BaseTicket.jsx';
 
 
 /**
