@@ -138,7 +138,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
             <DataGrid
             rows={rows}
             columns={columnsWithActions}
-            editMode="row"
+            editMode="none"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
