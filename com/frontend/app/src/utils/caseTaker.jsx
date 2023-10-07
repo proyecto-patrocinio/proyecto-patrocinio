@@ -152,7 +152,7 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
             body: JSON.stringify({
                 [fieldName]: fieldValue
             }),
-            })
+        })
 
         if (response.ok) {
 
@@ -194,8 +194,9 @@ export async function deleteConsultation(consultationID) {
         })
 
         if (!response.ok) {
-            console.error('Failed to DELETE Consultation', consultationID ,'. Status code:', response.status);
-            return false;
+            const mns = `Failed to DELETE Consultation with ID ${consultationID}.`
+            console.error(mns ,' Status code:', response.status);
+            throw new Error(mns);
             }
 
         console.log("Successful delete Consultation ID:", consultationID)
@@ -207,6 +208,93 @@ export async function deleteConsultation(consultationID) {
     }
 }
 
+
+/**
+ * Updates a consultation on the server using a PUT request.
+ *
+ * @param {Object} data - The data of the consultation to be updated.
+ * @throws {Error} If the update request fails or if an unexpected error occurs.
+ */
+export const updateConsultation = async (data) => {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                    + process.env.REACT_APP_PATH_CONSULTATIONS
+                    + String(data.id)
+                    + "/";
+
+        const newData = {
+            "tag": data.tag,
+            "availability_state": data.availability_state,
+            "progress_state": data.progress_state,
+            "opponent": data.opponent,
+            "description": data.description,
+        }
+
+        const response = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newData),
+        })
+        if (response.ok) {
+            // Update Card Tag if it exists. Otherwise ignore.
+            updateCardField(data.id, 'tag', data.tag)
+            const consultation = await response.json();
+            return consultation;
+        } else {
+            const mns = `Failed to update Consultation with ID '${data.id}'.`
+            console.warn(mns, "Status: " + response.status);
+            throw new Error(mns);
+        }
+    } catch (error) {
+        console.error(`Unexpected error while trying to update Consultation with ID '${data.id}': `, error.message);
+        console.debug(error);
+        throw error;
+    }
+};
+
+
+/**
+ * Creates a new consultation on the server using a POST request.
+ *
+ * @param {Object} data - Dict with the data of the consultation to be created.
+ * @returns {Promise<object>} A promise that resolves to the created consultation.
+ * @throws {Error} If the create request fails or if an unexpected error occurs.
+ */
+export const createConsultationByDict = async (data) => {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                    + process.env.REACT_APP_PATH_CONSULTATIONS;
+        const newData = {
+            "tag": data.tag,
+            "opponent": data.opponent,
+            "description": data.description,
+            "client": data.client
+        }
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newData),
+        })
+
+        if (response.ok) {
+            const consultation = await response.json();
+            return consultation;
+        } else {
+            const mns = 'Failed to create Consultation.'
+            console.warn(mns, "Status: " + response.status);
+            throw new Error(mns);
+        }
+    } catch (error) {
+        console.error('Unexpected error while trying to create Consultation: ', error.message);
+        console.debug(error);
+        throw error;
+    }
+};
 
 /********************** CONSULTATION REQUEST *************************/
 
@@ -288,7 +376,7 @@ export async function createRequest(consultationID, destinationBoardID) {
 export async function createConsultation(description, opponent, tag, clientID) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-        + process.env.REACT_APP_PATH_CONSULTATIONS
+        + process.env.REACT_APP_PATH_CONSULTATIONS;
         const newConsult = {
             "description": description,
             "opponent": opponent,
