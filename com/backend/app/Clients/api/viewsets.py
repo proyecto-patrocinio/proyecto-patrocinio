@@ -21,6 +21,11 @@ class ClientViewSet(viewsets.ModelViewSet):
             'family__children' 
         )
         return super().retrieve(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        self.serializer_class = ClientDestroySerializer
+        return super().destroy(request, *args, **kwargs)
+
 class PatrimonyViewSet(viewsets.ModelViewSet):
     queryset = Patrimony.objects.all()
     serializer_class = PatrimonySerializer

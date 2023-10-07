@@ -44,6 +44,7 @@ class SonFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Son
         fields = ("id", "age", "locality", "address")
+
 class FamilyFullSerializer(serializers.ModelSerializer):
     children = SonFullSerializer( many = True, read_only = True)
     class Meta:
@@ -57,3 +58,7 @@ class ClientFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = '__all__'
+
+class ClientDestroySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client
