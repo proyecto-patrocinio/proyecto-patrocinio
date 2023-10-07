@@ -11,10 +11,11 @@ from Board.api.serializers import BoardSerializer
 from Card.api.serializers import CardCreateSerializer
 from Consultation.api.serializers import (
     ConsultationSerializer,
-    RequestConsultationSerializer,
+    ConsultationUpdateSerializer,
     ConsultationCreateSerializer,
+    RequestConsultationSerializer,
     RequestConsultationAceptedSerializer,
-    RequestConsultationRejectedSerializer
+    RequestConsultationRejectedSerializer,
 )
 from Consultation.models import Consultation,  RequestConsultation
 from Panel.models import Panel
@@ -56,6 +57,9 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 
         return super().list(request, *args, **kwargs)
 
+    def update(self, request, *args, **kwargs):
+        self.serializer_class = ConsultationUpdateSerializer
+        return super().update(request, *args, **kwargs)
 
 class RequestConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on RequestConsultation objects."""
