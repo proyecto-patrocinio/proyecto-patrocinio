@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseGrid from './BaseGrid';
 import { createClient, deleteClient, updateClient } from '../../utils/client';
+import { formatDateToString } from '../../utils/tools';
 
 
 /**
@@ -10,6 +11,13 @@ import { createClient, deleteClient, updateClient } from '../../utils/client';
  * @returns {JSX.Element} The ClientDataTable component.
  */
 function ClientDataTable({ data }) {
+
+  const formatClientData = (clientData) => {
+    let clientDataFormatted = clientData
+    const formatDate = formatDateToString(clientData['birth_date']);
+    clientDataFormatted.birth_date = formatDate;
+    return clientDataFormatted;
+  };
 
   const columns = [
     { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
@@ -87,6 +95,7 @@ function ClientDataTable({ data }) {
         onUpdateRow={updateClient}
         onDeleteRow={deleteClient}
         onCreateRow={createClient}
+        formatDataRow={formatClientData}
       />
     </div>
   );

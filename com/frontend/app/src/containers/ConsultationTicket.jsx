@@ -22,7 +22,6 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   const [showMenu, setShowMenu] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false);
 
-
   useEffect(() => {
   }, [isDeleted]);
 
@@ -31,11 +30,9 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   }
 
   const handleDeleteClick = async() => {
-    const deleted = await deleteConsultation(card.consultation);
-    if (deleted) {
-      setIsDeleted(true);
-      reduce_number_cards();
-    }
+    await deleteConsultation(card.consultation);
+    setIsDeleted(true);
+    reduce_number_cards();
   };
 
     const cardContentProps = {
