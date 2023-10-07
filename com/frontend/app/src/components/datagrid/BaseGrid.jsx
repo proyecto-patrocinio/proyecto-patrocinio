@@ -55,7 +55,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
             ...rowModesModel,
             [id]: { mode: GridRowModes.View, ignoreModifications: true },
         });
-    
+
         const editedRow = rows.find((row) => row.id === id);
         if (editedRow.isNew) {
             setRows(rows.filter((row) => row.id !== id));
@@ -84,7 +84,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
             cellClassName: 'actions',
             getActions: ({ id }) => {
             const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-    
+
             if (isInEditMode) {
                 return [
                 <GridActionsCellItem
@@ -104,7 +104,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
                 />,
                 ];
             }
-    
+
             return [
                 <GridActionsCellItem
                 icon={<EditIcon />}
@@ -127,8 +127,6 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
     return (
         <Box
             sx={{
-            height: 500,
-            width: '100%',
             '& .actions': {
                 color: 'text.secondary',
             },
@@ -140,8 +138,6 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
             <DataGrid
             rows={rows}
             columns={columnsWithActions}
-            pageSize={5} // number of rows per page
-            rowsPerPageOptions={[5, 10, 20]} // options for number of rows per page
             editMode="row"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
