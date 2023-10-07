@@ -1,5 +1,6 @@
 import React from 'react';
 import BaseGrid from './BaseGrid';
+import { createClient, deleteClient, updateClient } from '../../utils/client';
 
 
 /**
@@ -83,9 +84,13 @@ function ClientDataTable({ data }) {
         initialRows={data}
         columns={columns}
         emptyRecord={[]}
+        onUpdateRow={updateClient}
+        onDeleteRow={deleteClient}
+        onCreateRow={createClient}
       />
     </div>
   );
 };
+// #TODO: alertar errores
 
 export default ClientDataTable;
