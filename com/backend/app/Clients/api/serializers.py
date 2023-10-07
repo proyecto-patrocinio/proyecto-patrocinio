@@ -50,6 +50,7 @@ class FamilyFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Family
         fields = ('id','partner_salary', 'children')
+
 class ClientFullSerializer(serializers.ModelSerializer):
     locality = LocalityFullSerializer( many = False, read_only = True)
     patrimony = ClientPatrimonySerializer( many = False, required=False, allow_null=True)

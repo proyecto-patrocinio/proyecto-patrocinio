@@ -12,6 +12,7 @@ import {
 } from '@mui/x-data-grid';
 import { EditToolbar } from './EditToolbar';
 import { formatDateToString } from '../../utils/tools';
+import AlertSnackbar from '../AlertSnackbar';
 
 
 /**
@@ -28,10 +29,16 @@ import { formatDateToString } from '../../utils/tools';
 export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow}) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
+    const [alertMessage, setAlertMessage] = React.useState(null);
+
 
     React.useEffect(()=>{
         setRows(initialRows)
     }, [initialRows]);
+
+    const handleProcessError = (error) => {
+        setAlertMessage(error.message);
+    };
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -51,7 +58,6 @@ export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow
         onDeleteRow(id).then(()=> {
             setRows(rows.filter((row) => row.id !== id));
         });
-        ///TODO: alertar error catch
     };
 
     const handleCancelClick = (id) => () => {
@@ -155,7 +161,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
-            // onProcessRowUpdateError TODO:
+            onProcessRowUpdateError={handleProcessError}
             slots={{
                 toolbar: EditToolbar,
             }}
@@ -163,6 +169,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow
                 toolbar: { setRows, setRowModesModel, emptyRecord},
             }}
             />
+            <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>
         </Box>
     );
 };

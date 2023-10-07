@@ -91,6 +91,5 @@ function ClientDataTable({ data }) {
     </div>
   );
 };
-// #TODO: alertar errores
 
 export default ClientDataTable;
