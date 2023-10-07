@@ -27,3 +27,17 @@ export function formatTimestamp(timestamp) {
     const formattedTime = date.toLocaleTimeString();
     return `${formattedDate} ${formattedTime}`;
 };
+
+
+/* Formats a Date object to 'YYYY-MM-DD' format.
+*
+* @param {Date} date - The Date object to format.
+* @returns {string} The formatted date in 'YYYY-MM-DD' format.
+*/
+export function formatDateToString(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zeros if necessary
+    const day = String(date.getDate()).padStart(2, '0'); // Add leading zeros if necessary
+
+    return `${year}-${month}-${day}`;
+};

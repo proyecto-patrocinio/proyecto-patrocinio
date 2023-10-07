@@ -44,11 +44,13 @@ class SonFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Son
         fields = ("id", "age", "locality", "address")
+
 class FamilyFullSerializer(serializers.ModelSerializer):
     children = SonFullSerializer( many = True, read_only = True)
     class Meta:
         model = Family
         fields = ('id','partner_salary', 'children')
+
 class ClientFullSerializer(serializers.ModelSerializer):
     locality = LocalityFullSerializer( many = False, read_only = True)
     patrimony = ClientPatrimonySerializer( many = False, required=False, allow_null=True)
@@ -57,3 +59,7 @@ class ClientFullSerializer(serializers.ModelSerializer):
     class Meta:
         model = Client
         fields = '__all__'
+
+class ClientDestroySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Client

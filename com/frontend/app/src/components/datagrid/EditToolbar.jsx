@@ -4,6 +4,7 @@ import AddIcon from '@mui/icons-material/Add';
 import {
   GridRowModes,
   GridToolbarContainer,
+  GridToolbarExport,
 } from '@mui/x-data-grid';
 import { getRandomNumber } from '../../utils/tools';
 
@@ -19,7 +20,7 @@ export function EditToolbar({setRows, setRowModesModel, emptyRecord}) {
 
   const handleClick = () => {
     const id = getRandomNumber(Number.MAX_SAFE_INTEGER);
-    setRows((oldRows) => [...oldRows, { id, ...emptyRecord, isNew: true }]);
+    setRows((oldRows) => [{ id, ...emptyRecord, isNew: true }, ...oldRows]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'id' },
@@ -31,6 +32,12 @@ export function EditToolbar({setRows, setRowModesModel, emptyRecord}) {
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
         Add record
       </Button>
+      <GridToolbarExport
+      csvOptions={{
+        fileName: 'clientsDataBase',
+        delimiter: ';',
+        utf8WithBom: true,
+      }} />
     </GridToolbarContainer>
   );
 };

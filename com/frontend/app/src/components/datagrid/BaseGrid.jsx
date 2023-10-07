@@ -11,6 +11,8 @@ import {
     GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import { EditToolbar } from './EditToolbar';
+import { formatDateToString } from '../../utils/tools';
+import AlertSnackbar from '../AlertSnackbar';
 
 
 /**
@@ -19,15 +21,24 @@ import { EditToolbar } from './EditToolbar';
  * @param {Array} initialRows - Initial set of rows for the grid.
  * @param {Array} columns - Column configuration for the grid.
  * @param {object} emptyRecord - Empty record used for creating new rows.
+ * @param {function} onUpdateRow - A function to handle row updates when the user interacts with the grid.
+ * @param {function} onDeleteRow - A function to handle row deletes when the user interacts with the grid.
+ * @param {function} onCreateRow - A function to handle row creates when the user interacts with the grid.
  * @returns {JSX.Element} FullCrudGrid component.
  */
-export default function BaseGrid({initialRows, columns, emptyRecord}) {
+export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow}) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
+    const [alertMessage, setAlertMessage] = React.useState(null);
+
 
     React.useEffect(()=>{
         setRows(initialRows)
     }, [initialRows]);
+
+    const handleProcessError = (error) => {
+        setAlertMessage(error.message);
+    };
 
     const handleRowEditStop = (params, event) => {
         if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -41,13 +52,12 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
 
     const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-        console.log("handleSaveClick")
-        //TODO: llamar a api y enviar datos si no existe que lo cree y sino que lo edite.
     };
 
     const handleDeleteClick = (id) => () => {
-        setRows(rows.filter((row) => row.id !== id));
-        //TODO: eliminar desde la API.
+        onDeleteRow(id).then(()=> {
+            setRows(rows.filter((row) => row.id !== id));
+        });
     };
 
     const handleCancelClick = (id) => () => {
@@ -55,19 +65,27 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
             ...rowModesModel,
             [id]: { mode: GridRowModes.View, ignoreModifications: true },
         });
-    
+
         const editedRow = rows.find((row) => row.id === id);
         if (editedRow.isNew) {
             setRows(rows.filter((row) => row.id !== id));
         }
     };
 
-    const processRowUpdate = (newRow) => {
-        const updatedRow = { ...newRow, isNew: false };
+    const processRowUpdate = async (newRow) => {
+        let updatedRow = { ...newRow, isNew: false };
+
+        const editedRow = rows.find((row) => row.id === updatedRow.id);
+        const formatDate = formatDateToString(updatedRow['birth_date']);
+        updatedRow.birth_date = formatDate;
+        if (editedRow.isNew) {
+            const data = await onCreateRow(updatedRow);
+            updatedRow = data;
+        } else {
+            await onUpdateRow(updatedRow);
+        }
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        console.log("processRowUpdate");
         return updatedRow;
-        //TODO: ?
     };
 
     const handleRowModesModelChange = (newRowModesModel) => {
@@ -84,7 +102,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
             cellClassName: 'actions',
             getActions: ({ id }) => {
             const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
-    
+
             if (isInEditMode) {
                 return [
                 <GridActionsCellItem
@@ -104,7 +122,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
                 />,
                 ];
             }
-    
+
             return [
                 <GridActionsCellItem
                 icon={<EditIcon />}
@@ -127,8 +145,6 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
     return (
         <Box
             sx={{
-            height: 500,
-            width: '100%',
             '& .actions': {
                 color: 'text.secondary',
             },
@@ -140,13 +156,12 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
             <DataGrid
             rows={rows}
             columns={columnsWithActions}
-            pageSize={5} // number of rows per page
-            rowsPerPageOptions={[5, 10, 20]} // options for number of rows per page
-            editMode="row"
+            editMode="none"
             rowModesModel={rowModesModel}
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
+            onProcessRowUpdateError={handleProcessError}
             slots={{
                 toolbar: EditToolbar,
             }}
@@ -154,6 +169,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord}) {
                 toolbar: { setRows, setRowModesModel, emptyRecord},
             }}
             />
+            <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>
         </Box>
     );
 };
