@@ -18,14 +18,14 @@ housing_type = (
 )
 
 studies = (
-    ('INCOMPLETE_PRIMARY', 'Primario Incompleto'),
-    ('COMPLETE_PRIMARY', 'Primario Completo'),
-    ('INCOMPLETE_SECONDARY', 'Secundario Incompleto'),
-    ('COMPLETE_SECONDARY', 'Secundario Completo'),
-    ('INCOMPLETE_TERTIARY', 'Terciario Incompleto'),
-    ('COMPLETE_TERTIARY', 'Terciario Completo'),
-    ('INCOMPLETE_UNIVERSITY', 'Universitario Incompleto'),
-    ('COMPLETE_UNIVERSITY', 'Universitario Completo'),
+    ('INCOMPLETE_PRIMARY', 'Incomplete Primary'),
+    ('COMPLETE_PRIMARY', 'Complete Primary'),
+    ('INCOMPLETE_SECONDARY', 'Incomplete Secondary'),
+    ('COMPLETE_SECONDARY', 'Complete Secondary'),
+    ('INCOMPLETE_TERTIARY', 'Incomplete Tertiary'),
+    ('COMPLETE_TERTIARY', 'Complete Tertiary'),
+    ('INCOMPLETE_UNIVERSITY', 'Incomplete University'),
+    ('COMPLETE_UNIVERSITY', 'Complete University')
 )
 
 id_type = (
