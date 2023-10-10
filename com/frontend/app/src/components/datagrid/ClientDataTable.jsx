@@ -12,6 +12,9 @@ import { formatDateToString } from '../../utils/tools';
  */
 function ClientDataTable({ data }) {
 
+  /**
+   * Handler to format the data row before sending update or create queries to the API.
+   */
   const formatClientData = (clientData) => {
     let clientDataFormatted = clientData
     const formatDate = formatDateToString(clientData['birth_date']);
@@ -85,6 +88,20 @@ function ClientDataTable({ data }) {
     { field: 'locality', headerName: 'Locality', width: 180, editable: true },
   ];
 
+  /**
+   * Investigates whether a cell is editable or not based on the custom rules established
+   */
+  const isCellEditable = (params) => {
+    if((params.row.isNew !== true) && (
+      params.field === "id_type" ||
+      params.field === "id_number"
+      )){
+      // The document fields only can be writable when the client is new.
+      return false;
+    };
+    return params.colDef.editable;
+  };
+
 
   return (
     <div>
@@ -96,6 +113,7 @@ function ClientDataTable({ data }) {
         onDeleteRow={deleteClient}
         onCreateRow={createClient}
         formatDataRow={formatClientData}
+        isCellEditable={isCellEditable}
       />
     </div>
   );

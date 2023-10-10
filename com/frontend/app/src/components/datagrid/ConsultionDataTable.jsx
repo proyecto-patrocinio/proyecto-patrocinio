@@ -6,6 +6,7 @@ import {
   updateConsultation
 } from '../../utils/caseTaker';
 
+
 /**
  * A React component that displays consultation data in a table using Material-UI DataGrid.
  *
@@ -51,8 +52,19 @@ const ConsultationDataTable = ({data}) => {
         { field: 'description', headerName: 'Description', width: 200, editable: true },
         { field: 'opponent', headerName: 'Opponent', width: 150, editable: true },
         { field: 'tag', headerName: 'Tag', width: 150, editable: true },
-        { field: 'client','type': 'number', headerName: 'Client', width: 100, editable: true }, //todo: solo editable en isNew. podes crear array con campos editables en new y cambiar el estado dentro de baseGrid
-      ];
+        { field: 'client','type': 'number', headerName: 'Client', width: 100, editable: true },
+  ];
+
+  /**
+   * Investigates whether a cell is editable or not based on the custom rules established
+   */
+  const isCellEditable = (params) => {
+    if((params.row.isNew !== true) && (params.field === "client")){
+      // The Client field only can be writable when the consult is new.
+      return false;
+    };
+    return params.colDef.editable;
+  };
 
   return (
     <div>
@@ -64,7 +76,7 @@ const ConsultationDataTable = ({data}) => {
         onDeleteRow={deleteConsultation}
         onCreateRow={createConsultationByDict}
         formatDataRow={formatConsultation}
-
+        isCellEditable={isCellEditable}
       />
     </div>
   );

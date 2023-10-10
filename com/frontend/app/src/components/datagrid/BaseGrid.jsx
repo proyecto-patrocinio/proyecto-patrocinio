@@ -24,9 +24,10 @@ import AlertSnackbar from '../AlertSnackbar';
  * @param {function} onDeleteRow - A function to handle row deletes when the user interacts with the grid.
  * @param {function} onCreateRow - A function to handle row creates when the user interacts with the grid.
  * @param {function} formatDataRow - A function to format the data row before sending update or create queries to the API.
+ * @param {function} isCellEditable - Callback fired when a cell is rendered, returns true if the cell is editable.
  * @returns {JSX.Element} FullCrudGrid component.
  */
-export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow, formatDataRow}) {
+export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow, formatDataRow, isCellEditable=null}) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [alertMessage, setAlertMessage] = React.useState(null);
@@ -161,6 +162,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessError}
+            isCellEditable={isCellEditable}
             slots={{
                 toolbar: EditToolbar,
             }}
