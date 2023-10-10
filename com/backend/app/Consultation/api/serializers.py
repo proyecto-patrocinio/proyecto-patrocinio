@@ -13,6 +13,11 @@ class ConsultationSerializer(serializers.ModelSerializer):
         model = Consultation
         fields = '__all__'
 
+class ConsultationUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Consultation
+        fields =  ['tag', 'availability_state', 'progress_state', 'opponent', 'description']
+        read_only_fields = ['id', 'time_stamp', 'client']
 
 class RequestConsultationSerializer(serializers.ModelSerializer):
     class Meta:

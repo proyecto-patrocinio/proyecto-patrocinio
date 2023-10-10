@@ -1,6 +1,7 @@
 import React from 'react';
 import BaseGrid from './BaseGrid';
 import { createClient, deleteClient, updateClient } from '../../utils/client';
+import { formatDateToString } from '../../utils/tools';
 
 
 /**
@@ -10,6 +11,16 @@ import { createClient, deleteClient, updateClient } from '../../utils/client';
  * @returns {JSX.Element} The ClientDataTable component.
  */
 function ClientDataTable({ data }) {
+
+  /**
+   * Handler to format the data row before sending update or create queries to the API.
+   */
+  const formatClientData = (clientData) => {
+    let clientDataFormatted = clientData
+    const formatDate = formatDateToString(clientData['birth_date']);
+    clientDataFormatted.birth_date = formatDate;
+    return clientDataFormatted;
+  };
 
   const columns = [
     { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
@@ -77,6 +88,20 @@ function ClientDataTable({ data }) {
     { field: 'locality', headerName: 'Locality', width: 180, editable: true },
   ];
 
+  /**
+   * Investigates whether a cell is editable or not based on the custom rules established
+   */
+  const isCellEditable = (params) => {
+    if((params.row.isNew !== true) && (
+      params.field === "id_type" ||
+      params.field === "id_number"
+      )){
+      // The document fields only can be writable when the client is new.
+      return false;
+    };
+    return params.colDef.editable;
+  };
+
 
   return (
     <div>
@@ -87,6 +112,8 @@ function ClientDataTable({ data }) {
         onUpdateRow={updateClient}
         onDeleteRow={deleteClient}
         onCreateRow={createClient}
+        formatDataRow={formatClientData}
+        isCellEditable={isCellEditable}
       />
     </div>
   );

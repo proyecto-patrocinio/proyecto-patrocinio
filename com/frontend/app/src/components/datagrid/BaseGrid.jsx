@@ -11,7 +11,6 @@ import {
     GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 import { EditToolbar } from './EditToolbar';
-import { formatDateToString } from '../../utils/tools';
 import AlertSnackbar from '../AlertSnackbar';
 
 
@@ -24,9 +23,11 @@ import AlertSnackbar from '../AlertSnackbar';
  * @param {function} onUpdateRow - A function to handle row updates when the user interacts with the grid.
  * @param {function} onDeleteRow - A function to handle row deletes when the user interacts with the grid.
  * @param {function} onCreateRow - A function to handle row creates when the user interacts with the grid.
+ * @param {function} formatDataRow - A function to format the data row before sending update or create queries to the API.
+ * @param {function} isCellEditable - Callback fired when a cell is rendered, returns true if the cell is editable.
  * @returns {JSX.Element} FullCrudGrid component.
  */
-export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow}) {
+export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow, formatDataRow, isCellEditable=null}) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [alertMessage, setAlertMessage] = React.useState(null);
@@ -76,8 +77,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow
         let updatedRow = { ...newRow, isNew: false };
 
         const editedRow = rows.find((row) => row.id === updatedRow.id);
-        const formatDate = formatDateToString(updatedRow['birth_date']);
-        updatedRow.birth_date = formatDate;
+        updatedRow = formatDataRow(updatedRow);
         if (editedRow.isNew) {
             const data = await onCreateRow(updatedRow);
             updatedRow = data;
@@ -162,6 +162,7 @@ export default function BaseGrid({initialRows, columns, emptyRecord, onUpdateRow
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
             onProcessRowUpdateError={handleProcessError}
+            isCellEditable={isCellEditable}
             slots={{
                 toolbar: EditToolbar,
             }}
