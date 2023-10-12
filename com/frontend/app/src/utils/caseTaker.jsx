@@ -281,11 +281,15 @@ export const createConsultationByDict = async (data) => {
             body: JSON.stringify(newData),
         })
 
+        const responseJson = await response.json();
         if (response.ok) {
-            const consultation = await response.json();
+            const consultation = responseJson;
             return consultation;
         } else {
-            const mns = 'Failed to create Consultation.'
+            if (responseJson.client != null || responseJson.client !== undefined) {
+                responseJson.client = "[Must be a valid Client DNI number]"
+            };
+            const mns = (JSON.stringify(responseJson)).replace(/["{}]/g, '');
             console.warn(mns, "Status: " + response.status);
             throw new Error(mns);
         }
