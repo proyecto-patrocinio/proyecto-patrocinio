@@ -5,6 +5,7 @@ import {
   deleteConsultation,
   updateConsultation
 } from '../../utils/caseTaker';
+import { getClientDNI2ID, getClientID2DNI } from '../../utils/tools';
 
 
 /**
@@ -14,10 +15,30 @@ import {
  * @returns {JSX.Element} The ConsultationDataTable component.
  */
 const ConsultationDataTable = ({data}) => {
+  const [clientDNI2ID, setClientDNI2ID] = React.useState([]);
+  const [clientID2DNI, setClientID2DNI] = React.useState([]);
 
+
+    React.useEffect(() => {
+      const fetchConsultancy = async () => {
+          const clientDNItoIdMapping = await getClientDNI2ID();
+          setClientDNI2ID(clientDNItoIdMapping);
+          const clientIDtoDNIMapping = await getClientID2DNI();
+          setClientID2DNI(clientIDtoDNIMapping);
+      };
+  
+      fetchConsultancy();
+  
+    }, []);
+
+    /**
+     * Handler to format the data row before sending update or create queries to the API.
+     */
     const formatConsultation = (ConsultationData) => {
-
-      return ConsultationData;
+      let consultationFormatted = ConsultationData
+      const formatID = clientDNI2ID[ConsultationData['client']];
+      consultationFormatted.client = formatID;
+      return consultationFormatted;
     };
 
     const columns = [
@@ -52,7 +73,9 @@ const ConsultationDataTable = ({data}) => {
         { field: 'description', headerName: 'Description', width: 200, editable: true },
         { field: 'opponent', headerName: 'Opponent', width: 150, editable: true },
         { field: 'tag', headerName: 'Tag', width: 150, editable: true },
-        { field: 'client','type': 'number', headerName: 'Client', width: 100, editable: true },
+        { field: 'client','type': 'number', headerName: 'Client', width: 100, editable: true,
+          valueGetter: ({ value }) => clientID2DNI[value],
+        },
   ];
 
   /**

@@ -12,9 +12,9 @@ import { TextField, Grid} from '@mui/material';
 import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import {createConsultation} from '../../../utils/caseTaker'
-import { getClientList } from '../../../utils/client';
 import AddButton from '../../AddButton';
 import SimpleDialog from '../../SimpleDialog';
+import { getClientDNI2ID } from '../../../utils/tools';
 
 
 /**
@@ -51,20 +51,13 @@ const ConsultationFormButton = ({addNewConsultation}) => {
   });
 
 
-  /**
-   * Fetch client list.
-   */
   useEffect(() => {
     const fetchConsultancy = async () => {
-            const clients = await getClientList()
-            const clientDNItoIdMapping = {};
-            clients.forEach((client) => {
-              clientDNItoIdMapping[client.id_number] = client.id;
-            });
-            setClientDNI2ID(clientDNItoIdMapping);
-        };
+        const clientDNItoIdMapping = await getClientDNI2ID();
+        setClientDNI2ID(clientDNItoIdMapping);
+    };
 
-        fetchConsultancy();
+    fetchConsultancy();
 
   }, []);
 
