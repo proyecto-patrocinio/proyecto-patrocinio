@@ -1,3 +1,33 @@
+import { getClientList } from "./client";
+
+
+/**
+ * Get a mapping of client's DNI (ID number) to client ID.
+ * @returns {Promise<object>} An object that maps DNI numbers to client IDs.
+ */
+export async function getClientDNI2ID () {
+    const clients = await getClientList()
+    const clientDNItoIdMapping = {};
+    clients.forEach((client) => {
+    clientDNItoIdMapping[client.id_number] = client.id;
+    });
+    return clientDNItoIdMapping;
+};
+
+
+/**
+ * Get a mapping of client ID to DNI (ID number).
+ * @returns {Promise<object>} An object that maps client IDs to DNI numbers.
+ */
+export async function getClientID2DNI () {
+    const clients = await getClientList()
+    const clientDNItoIdMapping = {};
+    clients.forEach((client) => {
+    clientDNItoIdMapping[client.id] = client.id_number;
+    });
+    return clientDNItoIdMapping;
+};
+
 
 /**
  * Get Random Integer Number
