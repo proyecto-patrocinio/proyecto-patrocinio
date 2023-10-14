@@ -15,21 +15,21 @@ function ClientDataTable({ data }) {
   const [nationalityOptions, setNationalityOptions] = useState(null)
   const [provinceOptions, setProvinceOptions] = useState(null)
   const [localityOptions, setLocalityOptions] = useState(null)
-  const [nationalitySelect, setNationalitySelect] = useState(null)
-  const [provinceSelect, setProvinceSelect] = useState(null)
+  const [nationalitySelectID, setnationalitySelectID] = useState(null)
+  const [provinceSelectID, setprovinceSelectID] = useState(null)
 
 
   useEffect( () => {
     const updateGeographic = async () => {
       const nationalityList = await getNationalityList();
-      const provinceList = nationalitySelect ? await getProvinceList(nationalitySelect) : null;
-      const localityList = provinceSelect ? await getLocalityList(provinceSelect) : null;
+      const provinceList = nationalitySelectID ? await getProvinceList(nationalitySelectID) : null;
+      const localityList = provinceSelectID ? await getLocalityList(provinceSelectID) : null;
       setNationalityOptions(nationalityList);
       setProvinceOptions(provinceList);
       setLocalityOptions(localityList);
     };
     updateGeographic();
-  },[nationalitySelect, provinceSelect])
+  },[nationalitySelectID, provinceSelectID])
 
 /**
  * Handle changes in cell values for the DataGrid.
@@ -42,10 +42,10 @@ function ClientDataTable({ data }) {
     if (params.editRows[idField] !== undefined){
       const value = params.editRows[idField][field]?.value;
       if (field === 'nationality') {
-        setNationalitySelect(value);
-        setProvinceSelect(null);
+        setnationalitySelectID(value);
+        setprovinceSelectID(null);
       } else if (field === 'province') {
-        setProvinceSelect(value);
+        setprovinceSelectID(value);
       };
     };
   };
@@ -140,28 +140,28 @@ function ClientDataTable({ data }) {
     },
     { field: 'nationality', headerName: 'Nationality',
       type: 'singleSelect',  width: 150, editable: true,
-      getOptionValue: (value) => value,
+      getOptionValue: (value) => value.id,
       getOptionLabel: (value) => value.name,
       valueOptions: nationalityOptions,
       valueFormatter: (value) => value.value.name,
     },
     { field: 'province', headerName: 'Province',
       type: 'singleSelect', width: 180, editable: true,
-      getOptionValue: (value) => value,
+      getOptionValue: (value) => value.id,
       getOptionLabel: (value) => value.name,
-      valueOptions: (params) =>{ 
-        return params.row.nationality.id===nationalitySelect? provinceOptions : undefined
+      valueOptions: (params) =>{
+        return params.row.nationality===nationalitySelectID? provinceOptions : undefined
       },
-      valueFormatter: (value) => value.value.name,
+      valueFormatter: (value) => value.value.name || value.value,
     },
     { field: 'locality', headerName: 'Locality',
       type: 'singleSelect', width: 180, editable: true,
-      getOptionValue: (value) => value,
+      getOptionValue: (value) => value.id,
       getOptionLabel: (value) => value.name,
       valueOptions: (params) =>{
-        return params.row.province.id===provinceSelect? localityOptions : undefined 
+        return params.row.province===provinceSelectID? localityOptions : undefined
       },
-      valueFormatter: (value) => value.value.name,
+      valueFormatter: (value) => value.value.name || value.value,
     },
 ];
 
