@@ -11,13 +11,13 @@
 export async function getNacionalityList() {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-            + process.env.REACT_APP_PATH_Province;
+            + process.env.REACT_APP_PATH_NATIONALITY;
         const response = await fetch(url);
         if (response.ok) {
-            const ProvinceList = await response.json();
-            return ProvinceList;
+            const nationalityList = await response.json();
+            return nationalityList;
         } else {
-            const mns = 'Failed to fetch Province List.'
+            const mns = 'Failed to fetch Nationality List.'
             console.error(mns, " Status Code: ", response.status);
             throw new Error(mns);
         }
@@ -41,7 +41,7 @@ export async function getProvinceList( NacionalityID ) {
         const response = await fetch(url);
         if (response.ok) {
             const provinceList = await response.json();
-            return provinceList;
+            return provinceList.provinces;
         } else {
             const mns = 'Failed to fetch Province List.'
             console.error(mns, " Status Code: ", response.status);
@@ -67,7 +67,7 @@ export async function getLocalityList( ProvinceID ) {
         const response = await fetch(url);
         if (response.ok) {
             const localityList = await response.json();
-            return localityList;
+            return localityList.localities;
         } else {
             const mns = 'Failed to fetch Locality List.'
             console.error(mns, " Status Code: ", response.status);
