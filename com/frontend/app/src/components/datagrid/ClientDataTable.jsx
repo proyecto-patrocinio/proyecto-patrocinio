@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import BaseGrid from './BaseGrid';
 import { createClient, deleteClient, updateClient } from '../../utils/client';
 import { formatDateToString } from '../../utils/tools';
-import { getLocalityList, getNacionalityList, getProvinceList } from '../../utils/locality';
+import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
 
 
 /**
@@ -15,21 +15,21 @@ function ClientDataTable({ data }) {
   const [nationalityOptions, setNationalityOptions] = useState(null)
   const [provinceOptions, setProvinceOptions] = useState(null)
   const [localityOptions, setLocalityOptions] = useState(null)
-  const [nacionalitySelect, setNacionalitySelect] = useState(null)
+  const [nationalitySelect, setNationalitySelect] = useState(null)
   const [provinceSelect, setProvinceSelect] = useState(null)
 
 
   useEffect( () => {
     const updateGeographic = async () => {
-      const nationalityList = await getNacionalityList();
-      const provinceList = nacionalitySelect ? await getProvinceList(nacionalitySelect) : null;
+      const nationalityList = await getNationalityList();
+      const provinceList = nationalitySelect ? await getProvinceList(nationalitySelect) : null;
       const localityList = provinceSelect ? await getLocalityList(provinceSelect) : null;
       setNationalityOptions(nationalityList);
       setProvinceOptions(provinceList);
       setLocalityOptions(localityList);
     };
     updateGeographic();
-  },[nacionalitySelect, provinceSelect])
+  },[nationalitySelect, provinceSelect])
 
 /**
  * Handle changes in cell values for the DataGrid.
@@ -41,8 +41,8 @@ function ClientDataTable({ data }) {
     const idField = params.tabIndex.cell?.id;
     if (params.editRows[idField] !== undefined){
       const value = params.editRows[idField][field]?.value;
-      if (field === 'nacionality') {
-        setNacionalitySelect(value);
+      if (field === 'nationality') {
+        setNationalitySelect(value);
         setProvinceSelect(null);
       } else if (field === 'province') {
         setProvinceSelect(value);
@@ -57,6 +57,7 @@ function ClientDataTable({ data }) {
     let clientDataFormatted = clientData
     const formatDate = formatDateToString(clientData['birth_date']);
     clientDataFormatted.birth_date = formatDate;
+    clientDataFormatted.locality = clientData.locality.id;
     return clientDataFormatted;
   };
 
@@ -137,24 +138,31 @@ function ClientDataTable({ data }) {
         {value: 'FEMALE', label: 'Female'},
       ]
     },
-    { field: 'nacionality', headerName: 'Nacionality',
-    type: 'singleSelect',  width: 150, editable: true,
-      getOptionValue: (value) => value.id,
+    { field: 'nationality', headerName: 'Nationality',
+      type: 'singleSelect',  width: 150, editable: true,
+      getOptionValue: (value) => value,
       getOptionLabel: (value) => value.name,
       valueOptions: nationalityOptions,
+      valueFormatter: (value) => value.value.name,
     },
     { field: 'province', headerName: 'Province',
-    type: 'singleSelect', width: 180, editable: true,
-    getOptionValue: (value) => value.id,
-    getOptionLabel: (value) => value.name,
-    valueOptions: provinceOptions,
-  },
-  { field: 'locality', headerName: 'Locality',
-    type: 'singleSelect', width: 180, editable: true,
-    getOptionValue: (value) => value.id,
-    getOptionLabel: (value) => value.name,
-    valueOptions: localityOptions,
-  },
+      type: 'singleSelect', width: 180, editable: true,
+      getOptionValue: (value) => value,
+      getOptionLabel: (value) => value.name,
+      valueOptions: (params) =>{ 
+        return params.row.nationality.id===nationalitySelect? provinceOptions : undefined
+      },
+      valueFormatter: (value) => value.value.name,
+    },
+    { field: 'locality', headerName: 'Locality',
+      type: 'singleSelect', width: 180, editable: true,
+      getOptionValue: (value) => value,
+      getOptionLabel: (value) => value.name,
+      valueOptions: (params) =>{
+        return params.row.province.id===provinceSelect? localityOptions : undefined 
+      },
+      valueFormatter: (value) => value.value.name,
+    },
 ];
 
   return (

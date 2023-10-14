@@ -8,7 +8,7 @@
  * Fetches a list of nationalities from the server.
  * @returns {Promise<Array>} An array containing the list of nationalities.
  */
-export async function getNacionalityList() {
+export async function getNationalityList() {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_NATIONALITY;
@@ -33,11 +33,11 @@ export async function getNacionalityList() {
  * @param {string} nationalityID - The ID of the nationality for which to fetch provinces.
  * @returns {Promise<Array>} An array containing the list of provinces.
  */
-export async function getProvinceList( NacionalityID ) {
+export async function getProvinceList( NationalityID ) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_NATIONALITY
-            + NacionalityID;
+            + NationalityID;
         const response = await fetch(url);
         if (response.ok) {
             const provinceList = await response.json();
