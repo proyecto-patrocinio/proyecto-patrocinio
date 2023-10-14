@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import BaseGrid from './BaseGrid';
 import { createClient, deleteClient, updateClient } from '../../utils/client';
 import { formatDateToString } from '../../utils/tools';
+import { getLocalityList, getNacionalityList, getProvinceList } from '../../utils/locality';
 
 
 /**
@@ -9,8 +10,45 @@ import { formatDateToString } from '../../utils/tools';
  *
  * @param {Object[]} data - An array of client data objects to be displayed in the table.
  * @returns {JSX.Element} The ClientDataTable component.
- */
+*/
 function ClientDataTable({ data }) {
+  const [nationalityOptions, setNationalityOptions] = useState(null)
+  const [provinceOptions, setProvinceOptions] = useState(null)
+  const [localityOptions, setLocalityOptions] = useState(null)
+  const [nacionalitySelect, setNacionalitySelect] = useState(null)
+  const [provinceSelect, setProvinceSelect] = useState(null)
+
+
+  useEffect( () => {
+    const updateGeographic = async () => {
+      const nationalityList = await getNacionalityList();
+      const provinceList = nacionalitySelect ? await getProvinceList(nacionalitySelect) : null;
+      const localityList = provinceSelect ? await getLocalityList(provinceSelect) : null;
+      setNationalityOptions(nationalityList);
+      setProvinceOptions(provinceList);
+      setLocalityOptions(localityList);
+    };
+    updateGeographic();
+  },[nacionalitySelect, provinceSelect])
+
+/**
+ * Handle changes in cell values for the DataGrid.
+ *
+ * @param {Object} params - The parameters object containing information about the edited cell.
+ */
+  const handleCellValueChange = (params) => {
+    const field = params.tabIndex.cell?.field;
+    const idField = params.tabIndex.cell?.id;
+    if (params.editRows[idField] !== undefined){
+      const value = params.editRows[idField][field]?.value;
+      if (field === 'nacionality') {
+        setNacionalitySelect(value);
+        setProvinceSelect(null);
+      } else if (field === 'province') {
+        setProvinceSelect(value);
+      };
+    };
+  };
 
   /**
    * Handler to format the data row before sending update or create queries to the API.
@@ -20,6 +58,20 @@ function ClientDataTable({ data }) {
     const formatDate = formatDateToString(clientData['birth_date']);
     clientDataFormatted.birth_date = formatDate;
     return clientDataFormatted;
+  };
+
+  /**
+   * Investigates whether a cell is editable or not based on the custom rules established
+   */
+  const isCellEditable = (params) => {
+    if((params.row.isNew !== true) && (
+      params.field === "id_type" ||
+      params.field === "id_number"
+      )){
+      // The document fields only can be writable when the client is new.
+      return false;
+    };
+    return params.colDef.editable;
   };
 
   const columns = [
@@ -85,23 +137,25 @@ function ClientDataTable({ data }) {
         {value: 'FEMALE', label: 'Female'},
       ]
     },
-    { field: 'locality', headerName: 'Locality', width: 180, editable: true },
-  ];
-
-  /**
-   * Investigates whether a cell is editable or not based on the custom rules established
-   */
-  const isCellEditable = (params) => {
-    if((params.row.isNew !== true) && (
-      params.field === "id_type" ||
-      params.field === "id_number"
-      )){
-      // The document fields only can be writable when the client is new.
-      return false;
-    };
-    return params.colDef.editable;
-  };
-
+    { field: 'nacionality', headerName: 'Nacionality',
+    type: 'singleSelect',  width: 150, editable: true,
+      getOptionValue: (value) => value.id,
+      getOptionLabel: (value) => value.name,
+      valueOptions: nationalityOptions,
+    },
+    { field: 'province', headerName: 'Province',
+    type: 'singleSelect', width: 180, editable: true,
+    getOptionValue: (value) => value.id,
+    getOptionLabel: (value) => value.name,
+    valueOptions: provinceOptions,
+  },
+  { field: 'locality', headerName: 'Locality',
+    type: 'singleSelect', width: 180, editable: true,
+    getOptionValue: (value) => value.id,
+    getOptionLabel: (value) => value.name,
+    valueOptions: localityOptions,
+  },
+];
 
   return (
     <div>
@@ -114,6 +168,8 @@ function ClientDataTable({ data }) {
         onCreateRow={createClient}
         formatDataRow={formatClientData}
         isCellEditable={isCellEditable}
+        handleStateChange={handleCellValueChange}
+
       />
     </div>
   );
