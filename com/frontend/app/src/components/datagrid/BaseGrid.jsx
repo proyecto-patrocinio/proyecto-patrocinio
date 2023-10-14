@@ -26,11 +26,12 @@ import AlertSnackbar from '../AlertSnackbar';
  * @param {function} formatDataRow - A function to format the data row before sending update or create queries to the API.
  * @param {function} isCellEditable - Callback fired when a cell is rendered, returns true if the cell is editable.
  * @param {function} handleStateChange - Callback fired when the values change in form.
+ * @param {function} handleCellRendering - Handler to render the data after a row in the table is created or updated
  * @returns {JSX.Element} FullCrudGrid component.
  */
 export default function BaseGrid({
     initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow,
-    formatDataRow, isCellEditable=null, handleStateChange=null
+    formatDataRow, isCellEditable=null, handleStateChange=null, handleCellRendering=(data)=>data
 }) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
@@ -89,7 +90,8 @@ export default function BaseGrid({
             await onUpdateRow(updatedRow);
         }
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-        return updatedRow;
+        const resultData = handleCellRendering(updatedRow)
+        return resultData;
     };
 
     const handleRowModesModelChange = (newRowModesModel) => {

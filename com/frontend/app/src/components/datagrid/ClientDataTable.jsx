@@ -5,9 +5,7 @@ import { formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
 
 
-/**
- * A React component that displays client data in a table using Material-UI DataGrid.
- *
+/**A React component that displays client data in a table using Material-UI DataGrid.
  * @param {Object[]} data - An array of client data objects to be displayed in the table.
  * @returns {JSX.Element} The ClientDataTable component.
 */
@@ -31,11 +29,9 @@ function ClientDataTable({ data }) {
     updateGeographic();
   },[nationalitySelectID, provinceSelectID])
 
-/**
- * Handle changes in cell values for the DataGrid.
- *
- * @param {Object} params - The parameters object containing information about the edited cell.
- */
+  /**Handle changes in cell values for the DataGrid.
+   * @param {Object} params - The parameters object containing information about the edited cell.
+   */
   const handleCellValueChange = (params) => {
     const field = params.tabIndex.cell?.field;
     const idField = params.tabIndex.cell?.id;
@@ -50,9 +46,7 @@ function ClientDataTable({ data }) {
     };
   };
 
-  /**
-   * Handler to format the data row before sending update or create queries to the API.
-   */
+  /**Handler to format the data row before sending update or create queries to the API.*/
   const formatClientData = (clientData) => {
     let clientDataFormatted = clientData
     const formatDate = formatDateToString(clientData['birth_date']);
@@ -60,9 +54,22 @@ function ClientDataTable({ data }) {
     return clientDataFormatted;
   };
 
-  /**
-   * Investigates whether a cell is editable or not based on the custom rules established
+  /**Handler to render the data after a row in the table is created or updated
+   * @param {*} clientData
+   * @returns rendered data
    */
+  const handleCellRendering = async (clientData) => {
+    const localityData = await getLocalityByID(clientData.locality);
+    const clientRendered = clientData;
+    clientRendered.locality = {'id': localityData.id, 'name': localityData.name};
+    clientRendered.province = {'id': localityData.province.id, 'name': localityData.province.name};
+    clientRendered.nationality = {
+      'id': localityData.province.nationality.id, 'name': localityData.province.nationality.name
+    };
+    return clientRendered;
+  };
+
+  /**Investigates whether a cell is editable or not based on the custom rules established*/
   const isCellEditable = (params) => {
     if((params.row.isNew !== true) && (
       params.field === "id_type" ||
@@ -176,7 +183,7 @@ function ClientDataTable({ data }) {
         formatDataRow={formatClientData}
         isCellEditable={isCellEditable}
         handleStateChange={handleCellValueChange}
-
+        handleCellRendering={handleCellRendering}
       />
     </div>
   );
