@@ -57,7 +57,6 @@ function ClientDataTable({ data }) {
     let clientDataFormatted = clientData
     const formatDate = formatDateToString(clientData['birth_date']);
     clientDataFormatted.birth_date = formatDate;
-    clientDataFormatted.locality = clientData.locality.id;
     return clientDataFormatted;
   };
 

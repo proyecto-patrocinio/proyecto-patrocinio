@@ -9,13 +9,6 @@
   {
     "model": "locality.nationality",
     "fields": {
-      "id": "2",
-      "name": "Aland Islands"
-    }
-  },
-  {
-    "model": "locality.nationality",
-    "fields": {
       "id": "3",
       "name": "Albania"
     }
