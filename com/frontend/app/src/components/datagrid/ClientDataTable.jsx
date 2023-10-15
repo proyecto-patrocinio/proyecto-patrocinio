@@ -14,38 +14,39 @@ function ClientDataTable({ data }) {
   const [nationalityOptions, setNationalityOptions] = useState(null)
   const [provinceOptions, setProvinceOptions] = useState(null)
   const [localityOptions, setLocalityOptions] = useState(null)
-  const [nationalitySelectID, setnationalitySelectID] = useState(null)
-  const [provinceSelectID, setprovinceSelectID] = useState(null)
-  const [geographyModel, setGeographyModel] = useState({})
+  // const [nationalitySelectID, setnationalitySelectID] = useState(null)
+  // const [provinceSelectID, setprovinceSelectID] = useState(null)
+  const [geographyModel, setGeographyModel] = useState({k:'j'})
+
 
   useEffect( () => {
     const updateGeographic = async () => {
       const nationalityList = await getNationalityList();
-      const provinceList = nationalitySelectID ? await getProvinceList(nationalitySelectID) : null;
-      const localityList = provinceSelectID ? await getLocalityList(provinceSelectID) : null;
+      const provinceList = geographyModel.nationality ? await getProvinceList(geographyModel.nationality.id) : null;
+      const localityList = geographyModel.province ? await getLocalityList(geographyModel.province.id) : null;
       setNationalityOptions(nationalityList);
       setProvinceOptions(provinceList);
       setLocalityOptions(localityList);
     };
     updateGeographic();
-  },[nationalitySelectID, provinceSelectID])
+  },[geographyModel])
 
   /**Handle changes in cell values for the DataGrid.
    * @param {Object} params - The parameters object containing information about the edited cell.
    */
   const handleCellValueChange = (params) => {
-    console.log("handlecellvaluechange: ",params.tabIndex.cell?.field)
-    // const field = params.tabIndex.cell?.field;
-    // const idField = params.tabIndex.cell?.id;
-    // if (params.editRows[idField] !== undefined){
-    //   const value = params.editRows[idField][field]?.value;
-    //   if (field === 'nationality') {
-    //     setnationalitySelectID(value);
-    //     setprovinceSelectID(null);
-    //   } else if (field === 'province') {
-    //     setprovinceSelectID(value);
-    //   };
-    // };
+    const field = params.tabIndex.cell?.field;
+    const idField = params.tabIndex.cell?.id;
+    if (params.editRows[idField] !== undefined){
+      // if (field === 'nationality') {
+      //   params.editRows[idField][field].value = geographyModel.nationality;
+      // } else if (field === 'locality') {
+      //   params.editRows[idField][field].value = geographyModel.locality;
+      // } else if (field === 'province') {
+      //   params.editRows[idField][field].value = geographyModel.province;
+      // };
+      // setGeographyModel({});//TODO:
+    };
   };//TODO: borrar
 
   /**Handler to format the data row before sending update or create queries to the API.*/
@@ -53,6 +54,7 @@ function ClientDataTable({ data }) {
     let clientDataFormatted = clientData
     const formatDate = formatDateToString(clientData['birth_date']);
     clientDataFormatted.birth_date = formatDate;
+    clientDataFormatted.locality = geographyModel.locality.id;
     return clientDataFormatted;
   };
 
@@ -103,6 +105,13 @@ function ClientDataTable({ data }) {
             )}
           />
       )
+    }
+
+    const preProcessEdit = (row) => {
+      const locality = row.locality
+      const province = row.province
+      const nationality = row.nationality
+      setGeographyModel({locality: locality, province: province, nationality: nationality})
     }
 
   const columns = [
@@ -174,13 +183,11 @@ function ClientDataTable({ data }) {
         <AutocompleteCell {...params} optionsNameID={nationalityOptions} model={geographyModel.nationality}
           handleChange={
             (id, name) => {
-              setnationalitySelectID(id);
-              geographyModel.nationality.id = id;
-              geographyModel.nationality.name = name;
-              geographyModel.locality = null;
-              geographyModel.province = null;
-              setGeographyModel(geographyModel);
-              setprovinceSelectID(null);
+              const newModel = {};
+              newModel['nationality'] = {id: id, name: name};
+              newModel['locality'] = null;
+              newModel['province'] = null;
+              setGeographyModel(newModel);
           }}
         />
       ),
@@ -189,25 +196,27 @@ function ClientDataTable({ data }) {
     { field: 'province', headerName: 'Province', editable: true,  width: 200,
       valueFormatter: (value) => value.value.name,
       renderEditCell: (params) => (
-        <AutocompleteCell {...params} optionsNameID={provinceOptions}
+        <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel.province}
           handleChange={(id, name) => {
-            setprovinceSelectID(id);
-            geographyModel.province.id = id;
-            geographyModel.province.name = name;
-            geographyModel.locality = null;
-            setGeographyModel(geographyModel);
+            const newModel = {};
+            newModel['nationality'] = geographyModel.nationality;
+            newModel['province'] = {id: id, name: name};
+            newModel['locality'] = null;
+            setGeographyModel(newModel);
           }}
         />
       )
     },
     { field: 'locality', headerName: 'Locality',
-      width: 200, editable: true, onsubmit: ()=>{console.log("SUMBIT")}, 
+      width: 200, editable: true,
       renderEditCell: (params) => (
-        <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel.province}
+        <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel.locality}
           handleChange={(id, name) =>{
-            geographyModel.locality.id = id;
-            geographyModel.locality.name = name;
-            setGeographyModel(geographyModel);
+            const newModel = {}
+            newModel['nationality'] = geographyModel.nationality;
+            newModel['province'] = geographyModel.province;
+            newModel['locality'] = {id: id, name: name};
+            setGeographyModel(newModel);
           }}
         />
       ),
@@ -228,6 +237,7 @@ function ClientDataTable({ data }) {
         isCellEditable={isCellEditable}
         handleStateChange={handleCellValueChange}
         handleCellRendering={handleCellRendering}
+        preProcessEdit={preProcessEdit}
       />
     </div>
   );

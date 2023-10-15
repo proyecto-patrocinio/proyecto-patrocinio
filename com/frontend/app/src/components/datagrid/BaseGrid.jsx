@@ -31,7 +31,7 @@ import AlertSnackbar from '../AlertSnackbar';
  */
 export default function BaseGrid({
     initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow,
-    formatDataRow, isCellEditable=null, handleStateChange=null, handleCellRendering=(data)=>data
+    formatDataRow, isCellEditable=null, handleStateChange=null, handleCellRendering=(data)=>data, preProcessEdit=()=>{}
 }) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
@@ -54,6 +54,7 @@ export default function BaseGrid({
 
     const handleEditClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+        preProcessEdit(rows[id]);
     };
 
     const handleSaveClick = (id) => () => {
