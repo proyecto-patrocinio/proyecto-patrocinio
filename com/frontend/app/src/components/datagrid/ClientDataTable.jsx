@@ -11,19 +11,17 @@ import { Autocomplete, TextField } from '@mui/material';
  * @returns {JSX.Element} The ClientDataTable component.
 */
 function ClientDataTable({ data }) {
-  const [nationalityOptions, setNationalityOptions] = useState(null)
-  const [provinceOptions, setProvinceOptions] = useState(null)
-  const [localityOptions, setLocalityOptions] = useState(null)
-  // const [nationalitySelectID, setnationalitySelectID] = useState(null)
-  // const [provinceSelectID, setprovinceSelectID] = useState(null)
-  const [geographyModel, setGeographyModel] = useState({k:'j'})
+  const [nationalityOptions, setNationalityOptions] = useState(null);
+  const [provinceOptions, setProvinceOptions] = useState(null);
+  const [localityOptions, setLocalityOptions] = useState(null);
+  const [geographyModel, setGeographyModel] = useState(null);
 
 
   useEffect( () => {
     const updateGeographic = async () => {
       const nationalityList = await getNationalityList();
-      const provinceList = geographyModel.nationality ? await getProvinceList(geographyModel.nationality.id) : null;
-      const localityList = geographyModel.province ? await getLocalityList(geographyModel.province.id) : null;
+      const provinceList = geographyModel?.nationality?.id ? await getProvinceList(geographyModel.nationality.id) : null;
+      const localityList = geographyModel?.province?.id ? await getLocalityList(geographyModel.province.id) : null;
       setNationalityOptions(nationalityList);
       setProvinceOptions(provinceList);
       setLocalityOptions(localityList);
@@ -31,30 +29,13 @@ function ClientDataTable({ data }) {
     updateGeographic();
   },[geographyModel])
 
-  /**Handle changes in cell values for the DataGrid.
-   * @param {Object} params - The parameters object containing information about the edited cell.
-   */
-  const handleCellValueChange = (params) => {
-    const field = params.tabIndex.cell?.field;
-    const idField = params.tabIndex.cell?.id;
-    if (params.editRows[idField] !== undefined){
-      // if (field === 'nationality') {
-      //   params.editRows[idField][field].value = geographyModel.nationality;
-      // } else if (field === 'locality') {
-      //   params.editRows[idField][field].value = geographyModel.locality;
-      // } else if (field === 'province') {
-      //   params.editRows[idField][field].value = geographyModel.province;
-      // };
-      // setGeographyModel({});//TODO:
-    };
-  };//TODO: borrar
 
   /**Handler to format the data row before sending update or create queries to the API.*/
   const formatClientData = (clientData) => {
     let clientDataFormatted = clientData
     const formatDate = formatDateToString(clientData['birth_date']);
     clientDataFormatted.birth_date = formatDate;
-    clientDataFormatted.locality = geographyModel.locality.id;
+    clientDataFormatted.locality = geographyModel?.locality?.id;
     return clientDataFormatted;
   };
 
@@ -73,13 +54,18 @@ function ClientDataTable({ data }) {
     return clientRendered;
   };
 
-  /**Investigates whether a cell is editable or not based on the custom rules established*/
+  /**Investigates whether a cell is editable or not based on the custom rules established
+   * only one row is editable at a time.
+   * And the document fields only can be writable when the client is new.
+  */
   const isCellEditable = (params) => {
+    if(params.id !== geographyModel?.rowID){
+      return false;
+    }
     if((params.row.isNew !== true) && (
       params.field === "id_type" ||
       params.field === "id_number"
       )){
-      // The document fields only can be writable when the client is new.
       return false;
     };
     return params.colDef.editable;
@@ -107,12 +93,17 @@ function ClientDataTable({ data }) {
       )
     }
 
+  /**
+   * Preprocesses the data before editing a row.
+   * @param {object} row - The row data.
+   */
     const preProcessEdit = (row) => {
       const locality = row.locality
       const province = row.province
       const nationality = row.nationality
-      setGeographyModel({locality: locality, province: province, nationality: nationality})
+      setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row.id})
     }
+
 
   const columns = [
     { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
@@ -180,7 +171,7 @@ function ClientDataTable({ data }) {
     { field: 'nationality', headerName: 'Nationality',
       width: 150, editable: true,
       renderEditCell: (params) => (
-        <AutocompleteCell {...params} optionsNameID={nationalityOptions} model={geographyModel.nationality}
+        <AutocompleteCell {...params} optionsNameID={nationalityOptions} model={geographyModel?.nationality}
           handleChange={
             (id, name) => {
               const newModel = {};
@@ -196,7 +187,7 @@ function ClientDataTable({ data }) {
     { field: 'province', headerName: 'Province', editable: true,  width: 200,
       valueFormatter: (value) => value.value.name,
       renderEditCell: (params) => (
-        <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel.province}
+        <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel?.province}
           handleChange={(id, name) => {
             const newModel = {};
             newModel['nationality'] = geographyModel.nationality;
@@ -210,7 +201,7 @@ function ClientDataTable({ data }) {
     { field: 'locality', headerName: 'Locality',
       width: 200, editable: true,
       renderEditCell: (params) => (
-        <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel.locality}
+        <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel?.locality}
           handleChange={(id, name) =>{
             const newModel = {}
             newModel['nationality'] = geographyModel.nationality;
@@ -235,7 +226,6 @@ function ClientDataTable({ data }) {
         onCreateRow={createClient}
         formatDataRow={formatClientData}
         isCellEditable={isCellEditable}
-        handleStateChange={handleCellValueChange}
         handleCellRendering={handleCellRendering}
         preProcessEdit={preProcessEdit}
       />
