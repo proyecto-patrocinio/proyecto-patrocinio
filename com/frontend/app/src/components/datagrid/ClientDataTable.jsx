@@ -3,6 +3,7 @@ import BaseGrid from './BaseGrid';
 import { createClient, deleteClient, updateClient } from '../../utils/client';
 import { formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
+import { Autocomplete, TextField } from '@mui/material';
 
 
 /**A React component that displays client data in a table using Material-UI DataGrid.
@@ -15,7 +16,7 @@ function ClientDataTable({ data }) {
   const [localityOptions, setLocalityOptions] = useState(null)
   const [nationalitySelectID, setnationalitySelectID] = useState(null)
   const [provinceSelectID, setprovinceSelectID] = useState(null)
-
+  const [geographyModel, setGeographyModel] = useState({})
 
   useEffect( () => {
     const updateGeographic = async () => {
@@ -33,18 +34,19 @@ function ClientDataTable({ data }) {
    * @param {Object} params - The parameters object containing information about the edited cell.
    */
   const handleCellValueChange = (params) => {
-    const field = params.tabIndex.cell?.field;
-    const idField = params.tabIndex.cell?.id;
-    if (params.editRows[idField] !== undefined){
-      const value = params.editRows[idField][field]?.value;
-      if (field === 'nationality') {
-        setnationalitySelectID(value);
-        setprovinceSelectID(null);
-      } else if (field === 'province') {
-        setprovinceSelectID(value);
-      };
-    };
-  };
+    console.log("handlecellvaluechange: ",params.tabIndex.cell?.field)
+    // const field = params.tabIndex.cell?.field;
+    // const idField = params.tabIndex.cell?.id;
+    // if (params.editRows[idField] !== undefined){
+    //   const value = params.editRows[idField][field]?.value;
+    //   if (field === 'nationality') {
+    //     setnationalitySelectID(value);
+    //     setprovinceSelectID(null);
+    //   } else if (field === 'province') {
+    //     setprovinceSelectID(value);
+    //   };
+    // };
+  };//TODO: borrar
 
   /**Handler to format the data row before sending update or create queries to the API.*/
   const formatClientData = (clientData) => {
@@ -80,6 +82,28 @@ function ClientDataTable({ data }) {
     };
     return params.colDef.editable;
   };
+
+    function AutocompleteCell(props) {
+      const nameToIdMap = {};
+      props.optionsNameID?.forEach((item) => {
+        nameToIdMap[item.name] = item.id;
+      });
+      return (
+          <Autocomplete
+            fullWidth
+            options={Object.keys(nameToIdMap) || []}
+            value={props.model?.name}
+            onChange={(event, newValue) => {
+              const newID =  nameToIdMap[newValue];
+              const newName = newValue;
+              props.handleChange(newID, newName);
+            }}
+            renderInput={(params) => (
+              <TextField {...params}/>
+            )}
+          />
+      )
+    }
 
   const columns = [
     { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
@@ -145,28 +169,48 @@ function ClientDataTable({ data }) {
       ]
     },
     { field: 'nationality', headerName: 'Nationality',
-      type: 'singleSelect',  width: 150, editable: true,
-      getOptionValue: (value) => value.id,
-      getOptionLabel: (value) => value.name,
-      valueOptions: nationalityOptions,
+      width: 150, editable: true,
+      renderEditCell: (params) => (
+        <AutocompleteCell {...params} optionsNameID={nationalityOptions} model={geographyModel.nationality}
+          handleChange={
+            (id, name) => {
+              setnationalitySelectID(id);
+              geographyModel.nationality.id = id;
+              geographyModel.nationality.name = name;
+              geographyModel.locality = null;
+              geographyModel.province = null;
+              setGeographyModel(geographyModel);
+              setprovinceSelectID(null);
+          }}
+        />
+      ),
       valueFormatter: (value) => value.value.name,
     },
-    { field: 'province', headerName: 'Province',
-      type: 'singleSelect', width: 180, editable: true,
-      getOptionValue: (value) => value.id,
-      getOptionLabel: (value) => value.name,
-      valueOptions: (params) =>{
-        return params.row.nationality===nationalitySelectID? provinceOptions : undefined
-      },
+    { field: 'province', headerName: 'Province', editable: true,  width: 200,
       valueFormatter: (value) => value.value.name,
+      renderEditCell: (params) => (
+        <AutocompleteCell {...params} optionsNameID={provinceOptions}
+          handleChange={(id, name) => {
+            setprovinceSelectID(id);
+            geographyModel.province.id = id;
+            geographyModel.province.name = name;
+            geographyModel.locality = null;
+            setGeographyModel(geographyModel);
+          }}
+        />
+      )
     },
     { field: 'locality', headerName: 'Locality',
-      type: 'singleSelect', width: 180, editable: true,
-      getOptionValue: (value) => value.id,
-      getOptionLabel: (value) => value.name,
-      valueOptions: (params) =>{
-        return params.row.province===provinceSelectID? localityOptions : undefined
-      },
+      width: 200, editable: true, onsubmit: ()=>{console.log("SUMBIT")}, 
+      renderEditCell: (params) => (
+        <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel.province}
+          handleChange={(id, name) =>{
+            geographyModel.locality.id = id;
+            geographyModel.locality.name = name;
+            setGeographyModel(geographyModel);
+          }}
+        />
+      ),
       valueFormatter: (value) => value.value.name,
     },
 ];
