@@ -158,7 +158,7 @@ function ClientDataTable({ data }) {
       valueOptions: (params) =>{
         return params.row.nationality===nationalitySelectID? provinceOptions : undefined
       },
-      valueFormatter: (value) => value.value.name || value.value,
+      valueFormatter: (value) => value.value.name,
     },
     { field: 'locality', headerName: 'Locality',
       type: 'singleSelect', width: 180, editable: true,
@@ -167,7 +167,7 @@ function ClientDataTable({ data }) {
       valueOptions: (params) =>{
         return params.row.province===provinceSelectID? localityOptions : undefined
       },
-      valueFormatter: (value) => value.value.name || value.value,
+      valueFormatter: (value) => value.value.name,
     },
 ];
 
