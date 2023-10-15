@@ -14,20 +14,20 @@ then
   echo "PostgreSQL started"
 fi
 #migrations
-# python manage.py makemigrations 
-# python manage.py flush --no-input
-# python manage.py migrate
-# python manage.py collectstatic --no-input --clear
+python manage.py makemigrations 
+python manage.py flush --no-input
+python manage.py migrate
+python manage.py collectstatic --no-input --clear
 
-# #load initial data (the order is important)
-# python manage.py loaddata locality/load_data/nationality.json 
-# python manage.py loaddata locality/load_data/province.json 
-# python manage.py loaddata locality/load_data/locality.json 
+#load initial data (the order is important)
+python manage.py loaddata locality/load_data/nationality.json 
+python manage.py loaddata locality/load_data/province.json 
+python manage.py loaddata locality/load_data/locality.json 
 
-# #run test
-# python manage.py test
+#run test
+python manage.py test
 
-# #create superuser
-# python manage.py createsuperuser --no-input
+#create superuser
+python manage.py createsuperuser --no-input
 
 exec "$@"  # execute the command that was passed to docker run
