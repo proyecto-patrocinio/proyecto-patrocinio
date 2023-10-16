@@ -159,6 +159,8 @@ export default function BaseGrid({
         },
     ];
 
+    const canCreateRow = (!isMultipleEdition && !isAnyRowEditing) || isMultipleEdition
+
     return (
         <Box
             sx={{
@@ -184,7 +186,7 @@ export default function BaseGrid({
                 toolbar: EditToolbar,
             }}
             slotProps={{
-                toolbar: { setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing },
+                toolbar: { setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing, canCreateRow },
             }}
             />
             <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>
