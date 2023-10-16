@@ -61,7 +61,8 @@ export default function BaseGrid({
         }
         setIsAnyRowEditing(true);
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
-        preProcessEdit(rows[id]);
+        const editRow =  rows.find((row) => row.id === id);
+        preProcessEdit(editRow);
     };
 
     const handleSaveClick = (id) => () => {
