@@ -59,9 +59,7 @@ function ClientDataTable({ data }) {
    * And the document fields only can be writable when the client is new.
   */
   const isCellEditable = (params) => {
-    if(params.id !== geographyModel?.rowID){
-      return false;
-    }
+
     if((params.row.isNew !== true) && (
       params.field === "id_type" ||
       params.field === "id_number"
@@ -109,10 +107,10 @@ function ClientDataTable({ data }) {
    * @param {object} row - The row data.
    */
     const preProcessEdit = (row) => {
-      const locality = row.locality
-      const province = row.province
-      const nationality = row.nationality
-      setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row.id})
+      const locality = row?.locality
+      const province = row?.province
+      const nationality = row?.nationality
+      setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id})
     }
 
 
@@ -193,10 +191,10 @@ function ClientDataTable({ data }) {
           }}
         />
       ),
-      valueFormatter: (value) => value.value.name,
+      valueFormatter: (value) => value.value?.name,
     },
     { field: 'province', headerName: 'Province', editable: true,  width: 200,
-      valueFormatter: (value) => value.value.name,
+      valueFormatter: (value) => value.value?.name,
       renderEditCell: (params) => (
         <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel?.province}
           handleChange={(id, name) => {
@@ -222,7 +220,7 @@ function ClientDataTable({ data }) {
           }}
         />
       ),
-      valueFormatter: (value) => value.value.name,
+      valueFormatter: (value) => value.value?.name,
     },
 ];
 
@@ -239,6 +237,7 @@ function ClientDataTable({ data }) {
         isCellEditable={isCellEditable}
         handleCellRendering={handleCellRendering}
         preProcessEdit={preProcessEdit}
+        isMultipleEdition={false}
       />
     </div>
   );

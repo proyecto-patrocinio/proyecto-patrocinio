@@ -14,9 +14,10 @@ import { getRandomNumber } from '../../utils/tools';
  * @param {function} setRows - Function to set the rows.
  * @param {function} setRowModesModel - Function to set the row modes model.
  * @param {object} emptyRecord - Empty record used for creating new rows.
+ * @param {function} setIsAnyRowEditing - Function to set the is any row editing.
  * @returns {JSX.Element} Edit toolbar component.
  */
-export function EditToolbar({setRows, setRowModesModel, emptyRecord}) {
+export function EditToolbar({setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing}) {
 
   const handleClick = () => {
     const id = getRandomNumber(Number.MAX_SAFE_INTEGER);
@@ -25,6 +26,7 @@ export function EditToolbar({setRows, setRowModesModel, emptyRecord}) {
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'id' },
     }));
+    setIsAnyRowEditing(true);
   };
 
   return (

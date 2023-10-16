@@ -27,15 +27,17 @@ import AlertSnackbar from '../AlertSnackbar';
  * @param {function} isCellEditable - Callback fired when a cell is rendered, returns true if the cell is editable.
  * @param {function} handleCellRendering - Handler to render the data after a row in the table is created or updated
  * @param {function} preprocessEdit - Fuction to processes the data before editing a row.
+ * @param {boolean} isMultipleEdition - True if multiple records can be edited at the same time. Otherwise false.
  * @returns {JSX.Element} FullCrudGrid component.
  */
 export default function BaseGrid({
     initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow,
-    formatDataRow, isCellEditable=null, handleCellRendering=(data)=>data, preProcessEdit=()=>{}
+    formatDataRow, isCellEditable=null, handleCellRendering=(data)=>data, preProcessEdit=()=>{}, isMultipleEdition=true
 }) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [alertMessage, setAlertMessage] = React.useState(null);
+    const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
 
 
     React.useEffect(()=>{
@@ -53,12 +55,18 @@ export default function BaseGrid({
     };
 
     const handleEditClick = (id) => () => {
+        if ((!isMultipleEdition) && isAnyRowEditing) {
+                setAlertMessage("There is already a record in editing.");
+                return;
+        }
+        setIsAnyRowEditing(true);
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
         preProcessEdit(rows[id]);
     };
 
     const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+        setIsAnyRowEditing(false);
     };
 
     const handleDeleteClick = (id) => () => {
@@ -77,6 +85,7 @@ export default function BaseGrid({
         if (editedRow.isNew) {
             setRows(rows.filter((row) => row.id !== id));
         }
+        setIsAnyRowEditing(false);
     };
 
     const processRowUpdate = async (newRow) => {
@@ -174,7 +183,7 @@ export default function BaseGrid({
                 toolbar: EditToolbar,
             }}
             slotProps={{
-                toolbar: { setRows, setRowModesModel, emptyRecord},
+                toolbar: { setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing },
             }}
             />
             <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>
