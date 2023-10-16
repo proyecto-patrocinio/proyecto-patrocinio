@@ -60,6 +60,12 @@ class ClientFullSerializer(serializers.ModelSerializer):
         model = Client
         fields = '__all__'
 
+class ClientSimpleSerializer(serializers.ModelSerializer):
+        locality = LocalityFullSerializer( many = False, read_only = True)
+        class Meta:
+            model = Client
+            fields = '__all__'
+
 class ClientDestroySerializer(serializers.ModelSerializer):
     class Meta:
         model = Client

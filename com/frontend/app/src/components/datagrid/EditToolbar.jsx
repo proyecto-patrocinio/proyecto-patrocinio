@@ -7,6 +7,7 @@ import {
   GridToolbarExport,
 } from '@mui/x-data-grid';
 import { getRandomNumber } from '../../utils/tools';
+import AlertSnackbar from '../AlertSnackbar';
 
 /**
  * EditToolbar component for an editing toolbar.
@@ -14,17 +15,25 @@ import { getRandomNumber } from '../../utils/tools';
  * @param {function} setRows - Function to set the rows.
  * @param {function} setRowModesModel - Function to set the row modes model.
  * @param {object} emptyRecord - Empty record used for creating new rows.
+ * @param {function} setIsAnyRowEditing - Function to set the is any row editing.
+ * @param {boolean} canCreateRow - True if can create any row.
  * @returns {JSX.Element} Edit toolbar component.
  */
-export function EditToolbar({setRows, setRowModesModel, emptyRecord}) {
+export function EditToolbar({setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing, canCreateRow}) {
+  const [alertMessage, setAlertMessage] = React.useState(null);
 
   const handleClick = () => {
-    const id = getRandomNumber(Number.MAX_SAFE_INTEGER);
-    setRows((oldRows) => [{ id, ...emptyRecord, isNew: true }, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'id' },
-    }));
+    if(canCreateRow){
+      const id = getRandomNumber(Number.MAX_SAFE_INTEGER);
+      setRows((oldRows) => [{ id, ...emptyRecord, isNew: true }, ...oldRows]);
+      setRowModesModel((oldModel) => ({
+        ...oldModel,
+        [id]: { mode: GridRowModes.Edit, fieldToFocus: 'id' },
+      }));
+      setIsAnyRowEditing(true);
+    } else {
+      setAlertMessage("There is already a record in editing.");
+    }
   };
 
   return (
@@ -38,6 +47,7 @@ export function EditToolbar({setRows, setRowModesModel, emptyRecord}) {
         delimiter: ';',
         utf8WithBom: true,
       }} />
+    <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>
     </GridToolbarContainer>
   );
 };

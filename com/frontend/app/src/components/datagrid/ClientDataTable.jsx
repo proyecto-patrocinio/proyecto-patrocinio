@@ -1,26 +1,118 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import BaseGrid from './BaseGrid';
 import { createClient, deleteClient, updateClient } from '../../utils/client';
 import { formatDateToString } from '../../utils/tools';
+import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
+import { Autocomplete, TextField } from '@mui/material';
 
 
-/**
- * A React component that displays client data in a table using Material-UI DataGrid.
- *
+/**A React component that displays client data in a table using Material-UI DataGrid.
  * @param {Object[]} data - An array of client data objects to be displayed in the table.
  * @returns {JSX.Element} The ClientDataTable component.
- */
+*/
 function ClientDataTable({ data }) {
+  const [nationalityOptions, setNationalityOptions] = useState(null);
+  const [provinceOptions, setProvinceOptions] = useState(null);
+  const [localityOptions, setLocalityOptions] = useState(null);
+  const [geographyModel, setGeographyModel] = useState(null);
 
-  /**
-   * Handler to format the data row before sending update or create queries to the API.
-   */
+
+  useEffect( () => {
+    const updateGeographic = async () => {
+      const nationalityList = await getNationalityList();
+      const provinceList = geographyModel?.nationality?.id ? await getProvinceList(geographyModel.nationality.id) : null;
+      const localityList = geographyModel?.province?.id ? await getLocalityList(geographyModel.province.id) : null;
+      setNationalityOptions(nationalityList);
+      setProvinceOptions(provinceList);
+      setLocalityOptions(localityList);
+    };
+    updateGeographic();
+  },[geographyModel])
+
+
+  /**Handler to format the data row before sending update or create queries to the API.*/
   const formatClientData = (clientData) => {
     let clientDataFormatted = clientData
     const formatDate = formatDateToString(clientData['birth_date']);
     clientDataFormatted.birth_date = formatDate;
+    clientDataFormatted.locality = geographyModel?.locality?.id;
     return clientDataFormatted;
   };
+
+  /**Handler to render the data after a row in the table is created or updated
+   * @param {*} clientData
+   * @returns rendered data
+   */
+  const handleCellRendering = async (clientData) => {
+    const localityData = await getLocalityByID(clientData.locality);
+    const clientRendered = clientData;
+    clientRendered.locality = {'id': localityData.id, 'name': localityData.name};
+    clientRendered.province = {'id': localityData.province.id, 'name': localityData.province.name};
+    clientRendered.nationality = {
+      'id': localityData.province.nationality.id, 'name': localityData.province.nationality.name
+    };
+    return clientRendered;
+  };
+
+  /**Investigates whether a cell is editable or not based on the custom rules established
+   * only one row is editable at a time.
+   * And the document fields only can be writable when the client is new.
+  */
+  const isCellEditable = (params) => {
+
+    if((params.row.isNew !== true) && (
+      params.field === "id_type" ||
+      params.field === "id_number"
+      )){
+      return false;
+    };
+    return params.colDef.editable;
+  };
+
+  /**
+   * A cell component for the Material-UI (MUI) DataGrid table used in renderEditCell.
+   * This component is designed to work with fields related to locality, province, and nation.
+   *
+   * @param {Object} props - The component's properties.
+   * @param {Array} props.optionsNameID - The list of options with objects containing 'name' and 'id' properties.
+   * @param {Object} props.model - The data model for the cell.
+   * @param {function} props.handleChange - The function called when the selected value in the Autocomplete changes.
+   *
+   * @returns {JSX.Element} - The rendered AutocompleteCell component.
+   */
+    function AutocompleteCell(props) {
+      const nameToIdMap = {};
+      props.optionsNameID?.forEach((item) => {
+        nameToIdMap[item.name] = item.id;
+      });
+      return (
+          <Autocomplete
+            fullWidth
+            options={Object.keys(nameToIdMap) || []}
+            value={props.model?.name}
+            onChange={(event, newValue) => {
+              const newID =  nameToIdMap[newValue];
+              const newName = newValue;
+              props.handleChange(newID, newName);
+            }}
+            renderInput={(params) => (
+              <TextField {...params}/>
+            )}
+          />
+      )
+    }
+
+  /**
+   * Preprocesses the data before editing a row.
+   * @param {object} row - The row data.
+   */
+    const preProcessEdit = (row) => {
+      const locality = row?.locality
+      const province = row?.province
+      const nationality = row?.nationality
+      setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id})
+    }
+
 
   const columns = [
     { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
@@ -85,23 +177,52 @@ function ClientDataTable({ data }) {
         {value: 'FEMALE', label: 'Female'},
       ]
     },
-    { field: 'locality', headerName: 'Locality', width: 180, editable: true },
-  ];
-
-  /**
-   * Investigates whether a cell is editable or not based on the custom rules established
-   */
-  const isCellEditable = (params) => {
-    if((params.row.isNew !== true) && (
-      params.field === "id_type" ||
-      params.field === "id_number"
-      )){
-      // The document fields only can be writable when the client is new.
-      return false;
-    };
-    return params.colDef.editable;
-  };
-
+    { field: 'nationality', headerName: 'Nationality',
+      width: 150, editable: true,
+      renderEditCell: (params) => (
+        <AutocompleteCell {...params} optionsNameID={nationalityOptions} model={geographyModel?.nationality}
+          handleChange={
+            (id, name) => {
+              const newModel = {};
+              newModel['nationality'] = {id: id, name: name};
+              newModel['locality'] = null;
+              newModel['province'] = null;
+              setGeographyModel(newModel);
+          }}
+        />
+      ),
+      valueFormatter: (value) => value.value?.name,
+    },
+    { field: 'province', headerName: 'Province', editable: true,  width: 200,
+      valueFormatter: (value) => value.value?.name,
+      renderEditCell: (params) => (
+        <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel?.province}
+          handleChange={(id, name) => {
+            const newModel = {};
+            newModel['nationality'] = geographyModel.nationality;
+            newModel['province'] = {id: id, name: name};
+            newModel['locality'] = null;
+            setGeographyModel(newModel);
+          }}
+        />
+      )
+    },
+    { field: 'locality', headerName: 'Locality',
+      width: 200, editable: true,
+      renderEditCell: (params) => (
+        <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel?.locality}
+          handleChange={(id, name) =>{
+            const newModel = {}
+            newModel['nationality'] = geographyModel.nationality;
+            newModel['province'] = geographyModel.province;
+            newModel['locality'] = {id: id, name: name};
+            setGeographyModel(newModel);
+          }}
+        />
+      ),
+      valueFormatter: (value) => value.value?.name,
+    },
+];
 
   return (
     <div>
@@ -114,6 +235,9 @@ function ClientDataTable({ data }) {
         onCreateRow={createClient}
         formatDataRow={formatClientData}
         isCellEditable={isCellEditable}
+        handleCellRendering={handleCellRendering}
+        preProcessEdit={preProcessEdit}
+        isMultipleEdition={false}
       />
     </div>
   );
