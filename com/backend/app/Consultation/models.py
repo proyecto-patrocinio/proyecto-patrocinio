@@ -22,7 +22,7 @@ class Consultation(models.Model):
         Client,
         on_delete=models.DO_NOTHING,  # on_delete attribute specifies the behavior to adopt when the referenced object is deleted.
         related_name="consultations",  # related_name attribute specifies the name of the reverse relation.
-        verbose_name="Cliente",  # from the User model back to this model.
+        verbose_name="Client",  # from the User model back to this model.
         null=False
     )
     opponent = models.CharField(max_length=500)

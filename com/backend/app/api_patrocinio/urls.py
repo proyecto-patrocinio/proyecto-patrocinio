@@ -21,11 +21,11 @@ from Card.api.router import router_card
 from BoardUSer.api.router import router_boardUser
 from Panel.api.router import router_panel
 from Board.api.router import router_board
+from Comment.api.router import router_comment
 from Consultation.api.router import router_consultation
 from dj_rest_auth.registration.views import RegisterView, ConfirmEmailView, VerifyEmailView, ResendEmailVerificationView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 from terms_and_policies.router import paths_terms_and_policies
-
 
 urlpatterns = [
     path('api/auth/account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),
@@ -45,5 +45,6 @@ urlpatterns = [
     path('api/boardUser/', include(router_boardUser.urls)),
     path('api/boards/', include(router_board.urls)),
     path('api/consultations/', include(router_consultation.urls)),
+    path('api/comments/', include(router_comment.urls)),
     *paths_terms_and_policies,
 ]
