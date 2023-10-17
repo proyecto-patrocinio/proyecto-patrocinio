@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'Board',
     'Consultation',
     'terms_and_policies',
+    'Comment',
 ]
 
 MIDDLEWARE = [
