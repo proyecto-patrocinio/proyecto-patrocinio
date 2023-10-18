@@ -1,12 +1,12 @@
 import os
-from requests import Response
 from rest_framework import viewsets
 from Board.api.serializers import BoardSerializer, BoardFullSerializer, BoardListSerializer, ConsultancyListSerializer
 from Board.models import Board
 from django.db.models import Prefetch, Count
 from rest_framework.decorators import action
-
+from constants import CONSULTANCY_BOARD_NAME
 from Consultation.models import Consultation
+
 
 class BoardViewSet(viewsets.ModelViewSet):
     queryset = Board.objects.all()
@@ -53,7 +53,7 @@ class BoardViewSet(viewsets.ModelViewSet):
         consultancy_panels = consultancy.data
         consultancy_data = {
             "id": 0,
-            "title": os.environ.get('CONSULTANCY_BOARD_NAME', 'Consultancy'),
+            "title": CONSULTANCY_BOARD_NAME,
             "panels": consultancy_panels
         }
         consultancy.data = consultancy_data

@@ -3,7 +3,8 @@
 '''
 
 from rest_framework.serializers import ModelSerializer
-from Comment.models import Comment
+from Comment.models import Comment, File
+from rest_framework import serializers
 
 
 class CommentSerializer(ModelSerializer):
@@ -26,3 +27,24 @@ class CommentCreateSerializer(ModelSerializer):
 class CommentDestroySerializer(ModelSerializer):
     class Meta:
         model = Comment
+
+
+
+class FileUploadSerializer(ModelSerializer):
+    uploadedFile = serializers.FileField()
+    class Meta:
+        model = File
+        fields = '__all__'
+        read_only = ['id', 'time_stamp']
+
+class FileCreatedSerializer(ModelSerializer):
+    class Meta:
+        model = File
+        fields = '__all__'
+        read_only = ['id', 'time_stamp']
+
+class FileGetSerializer(ModelSerializer):
+    class Meta:
+        model = File
+        fields = '__all__'
+        read_only = ['id', 'time_stamp', 'comment']

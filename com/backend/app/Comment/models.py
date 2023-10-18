@@ -23,4 +23,20 @@ class Comment(models.Model):
     )
 
     def __str__(self):
-        return f'comment_{self.id}_C{self.consultation}_U{self.user}'
+        return f'{self.consultation}_{self.id}'
+
+
+class File(models.Model):
+    id = models.AutoField(primary_key=True)
+    time_stamp = models.DateTimeField(auto_now_add=True)
+    comment = models.ForeignKey(
+        Comment,
+        on_delete=models.CASCADE,
+        related_name="files",
+        verbose_name="comment",
+        null=False
+    )
+    filename = models.CharField(max_length=255, blank=False)
+
+    def __str__(self):
+        return f'{self.comment}_{self.time_stamp}'
