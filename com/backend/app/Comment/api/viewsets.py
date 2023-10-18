@@ -106,3 +106,23 @@ class FileViewSet(ModelViewSet):
             logger.debug(f"Error details: {str(e)}")
             return Response(mns, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+    def destroy(self, request, *args, **kwargs):
+            try:
+                instance = self.get_object()
+                filename = instance.filename
+                filepath = f"{ATTACHMENT_FILES_DIRECTORY}/{instance.id}"
+
+                # First remove the file from disk
+                if os.path.exists(filepath):
+                    os.remove(filepath)
+                    logger.info(f"File {filename} was successfully deleted from disk.")
+
+                # Then, delete from database
+                self.perform_destroy(instance)
+
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+            except Exception as e:
+                mns = f"Error while trying to delete file"
+                logger.error(mns, f". Error details: {str(e)}")
+                return Response(mns, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
