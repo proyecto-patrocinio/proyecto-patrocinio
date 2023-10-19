@@ -1,6 +1,6 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import { Dialog, DialogTitle, DialogContent, Button} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Button, BottomNavigation, BottomNavigationAction} from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -11,6 +11,9 @@ import ClientTableRow from './ClientTableRow.jsx';
 import EditableFieldRow from '../../EditableFieldRow.jsx';
 import EditableChoiceRow from '../../EditableChoiceRow.jsx';
 import { formatTimestamp } from '../../../utils/tools.jsx';
+import InfoIcon from '@mui/icons-material/Info';
+import CommentIcon from '@mui/icons-material/Comment';
+
 
 
 /**
@@ -25,6 +28,7 @@ import { formatTimestamp } from '../../../utils/tools.jsx';
 const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
     const [consultationData, setConsultation] = useState(consultation)
     const [updateViewCounter, setUpdateViewCounter] = useState(0); // Force update View
+    const [windowNumber, setWindowNumber] = useState(0)
     const [isFieldsEditing, setIsFieldsEditing] = useState({
         "description": false,
         "tag": false,
@@ -147,14 +151,32 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
 
 
     return (
-        <Dialog open={open} onClose={handleClose} >
-        <DialogTitle variant="h5">Consultation Details</DialogTitle>
+        <Dialog fullWidth={true} maxWidth={'md'} open={open} onClose={handleClose} >
+        <DialogTitle variant="h5" sx={{ textAlign: 'center' }}>
+            Consultation Details
+        </DialogTitle>
+        <BottomNavigation
+            sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                backgroundColor: '#f0f0f0',
+                borderRadius: '10px',
+                padding: '10px',
+            }}
+            showLabels
+            value={windowNumber}
+            onChange={(event, newValue) => {
+                setWindowNumber(newValue);
+            }}
+        >
+            <BottomNavigationAction label="Info" icon={<InfoIcon />} />
+            <BottomNavigationAction label="Comments" icon={<CommentIcon />} />
+        </BottomNavigation>
+
+
         <DialogContent>
-
-
-
+        {(windowNumber===0)&&
         <div elevation={3} style={{ padding: '20px' }}>
-
         <TableContainer style={{width: '800px'}}>
             <Table>
             <TableBody>
@@ -216,7 +238,11 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
             </Table>
         </TableContainer>
         </div>
-
+        }
+        {(windowNumber===1)&&
+        
+        "TODO: comments"
+        }
 
         </DialogContent>
         <Button onClick={handleClose} color="primary">
