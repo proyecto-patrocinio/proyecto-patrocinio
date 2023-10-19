@@ -29,6 +29,7 @@ import { useUserContext } from '../../../context/UserContext.jsx';
  */
 const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
     const userContext =  useUserContext();
+    const [userData, setUserData] = useState(0);
     const [consultationData, setConsultation] = useState(consultation)
     const [updateViewCounter, setUpdateViewCounter] = useState(0); // Force update View
     const [windowNumber, setWindowNumber] = useState(0)
@@ -55,17 +56,22 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
 
     useEffect(() => {
         const initComment = async() => {
-            const coments = await getCommentListByConsult(consultation.id);
+            const coments = await getCommentListByConsult(consultation.consultation);
             setComments(coments);
         };
         initComment();
-    }, [consultation]);
+    }, [consultation.consultation]);
+
+    useEffect(() => {
+        setUserData(userContext.user);
+        console.log(`User ${userContext.user.pk}`);
+    }, [userContext])
 
     const handleAddComment = async () => {
         if (newComment.trim() !== '') {
-            const userID = userContext.user.pk;
-            const commentData = {user: userID, consultation: consultation.id, text: newComment};
+            const commentData = {user: userData.pk, consultation: consultation.consultation, text: newComment};
             const commentDict = await createComment(commentData);
+            commentDict.user = userData
             setComments([commentDict, ...comments]);
             setNewComment('');
         }
@@ -291,7 +297,7 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
                 <Grid container spacing={2}>
                     <Grid item>
                         <Avatar sx={{ bgcolor: 'primary.main' }}>
-                            {comment.user.username.charAt(0)}
+                            {comment.user.username?.charAt(0)}
                         </Avatar>
                         </Grid>
                         <Grid item>

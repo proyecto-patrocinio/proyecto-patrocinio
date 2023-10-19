@@ -20,7 +20,7 @@ export async function getCommentListByConsult(consultID) {
             throw new Error(mns);
         }
         } catch (error) {
-        console.error('Error while try to get list of comments:', error);
+        console.error('Error while try to get list of comments:', String(error));
         throw error;
     }
 };
@@ -52,7 +52,7 @@ export async function createComment(commentData) {
             throw new Error(mns);
         };
         } catch (error) {
-        console.error('Error while try to create a Comment:', error);
+        console.error('Error while try to create a Comment:', String(error));
         throw error;
     };
 };
