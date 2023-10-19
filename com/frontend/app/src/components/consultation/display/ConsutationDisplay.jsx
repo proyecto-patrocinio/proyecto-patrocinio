@@ -1,6 +1,6 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import { Dialog, DialogTitle, DialogContent, Button, BottomNavigation, BottomNavigationAction, List, ListItem, ListItemText, TextField, Card, CardContent, Typography, Avatar, Box, Grid} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Button, BottomNavigation, BottomNavigationAction, List, ListItem, ListItemText, TextField, Card, CardContent, Typography, Avatar, Box, Grid, IconButton} from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -13,7 +13,7 @@ import EditableChoiceRow from '../../EditableChoiceRow.jsx';
 import { formatTimestamp } from '../../../utils/tools.jsx';
 import InfoIcon from '@mui/icons-material/Info';
 import CommentIcon from '@mui/icons-material/Comment';
-
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 
 /**
@@ -53,7 +53,7 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
     const handleAddComment = () => {
         if (newComment.trim() !== '') {
             const commentDict = {user:{username:'Auser'},text:newComment} //TODO: implementar llamado a api.
-            setComments([...comments, commentDict]);
+            setComments([commentDict, ...comments]);
             setNewComment('');
         }
     };
@@ -251,6 +251,26 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
         }
         {(windowNumber===1)&&
             <div>
+            <Box width="100%" style={{ marginBottom: '10px', display: 'flex', justifyContent: 'flex-end' }}>
+                <TextField
+                    id="outlined-textarea"
+                    placeholder="Placeholder"
+                    label="Add a comment"
+                    multiline
+                    variant="outlined"
+                    fullWidth
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                />
+                <IconButton
+                    color="primary"
+                    onClick={handleAddComment}
+                    style={{ marginLeft: '10px' }}
+                    
+                >
+                    <AddCircleIcon />
+                </IconButton>
+            </Box>
             {comments.map((comment, index) => (
                 <Box key={comment.id} width="100%" style={{ marginBottom: '10px' }}>
                 <Card key={comment.id} variant="outlined" style={{ marginBottom: '10px' }}>
@@ -277,20 +297,6 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
                 </Box>
             ))}
 
-        <TextField
-            id="outlined-textarea"
-            placeholder="Placeholder"
-            label="Add a comment"
-            multiline
-            variant="outlined"
-            fullWidth
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-        />
-
-        <Button variant="contained" onClick={handleAddComment}>
-            Add Comment
-        </Button>
             </div>
         }
 
