@@ -1,6 +1,6 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import { Dialog, DialogTitle, DialogContent, Button, BottomNavigation, BottomNavigationAction} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Button, BottomNavigation, BottomNavigationAction, List, ListItem, ListItemText, TextField, Card, CardContent, Typography, Avatar, Box, Grid} from '@mui/material';
 import TableContainer from '@mui/material/TableContainer';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -47,6 +47,16 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
         "opponent": "",
         "progress_state": "",
     });
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
+
+    const handleAddComment = () => {
+        if (newComment.trim() !== '') {
+            const commentDict = {user:{username:'Auser'},text:newComment} //TODO: implementar llamado a api.
+            setComments([...comments, commentDict]);
+            setNewComment('');
+        }
+    };
 
     /**
      * Handles the click event to enable editing of a specific field.
@@ -240,8 +250,48 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
         </div>
         }
         {(windowNumber===1)&&
-        
-        "TODO: comments"
+            <div>
+            {comments.map((comment, index) => (
+                <Box key={comment.id} width="100%" style={{ marginBottom: '10px' }}>
+                <Card key={comment.id} variant="outlined" style={{ marginBottom: '10px' }}>
+                <CardContent sx={{ whiteSpace: 'pre-line' }}>
+                <Grid container spacing={2}>
+                    <Grid item>
+                        <Avatar sx={{ bgcolor: 'primary.main' }}>
+                            {comment.user.username.charAt(0)}
+                        </Avatar>
+                        </Grid>
+                        <Grid item>
+                        <Typography variant="h6" component="div">
+                            {comment.user.username}
+                        </Typography>
+                    </Grid>
+                    <Grid item>
+                        <Typography>
+                            {comment.text}
+                        </Typography>
+                    </Grid>
+                </Grid>
+            </CardContent>
+                </Card>
+                </Box>
+            ))}
+
+        <TextField
+            id="outlined-textarea"
+            placeholder="Placeholder"
+            label="Add a comment"
+            multiline
+            variant="outlined"
+            fullWidth
+            value={newComment}
+            onChange={(e) => setNewComment(e.target.value)}
+        />
+
+        <Button variant="contained" onClick={handleAddComment}>
+            Add Comment
+        </Button>
+            </div>
         }
 
         </DialogContent>
