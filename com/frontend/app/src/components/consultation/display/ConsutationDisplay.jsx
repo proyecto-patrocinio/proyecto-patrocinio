@@ -14,6 +14,8 @@ import { formatTimestamp } from '../../../utils/tools.jsx';
 import InfoIcon from '@mui/icons-material/Info';
 import CommentIcon from '@mui/icons-material/Comment';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { createComment, getCommentListByConsult } from '../../../utils/comments.jsx';
+import { useUserContext } from '../../../context/UserContext.jsx';
 
 
 /**
@@ -26,6 +28,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
  * @returns {JSX.Element} - The ConsultationDisplay component JSX.
  */
 const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
+    const userContext =  useUserContext();
     const [consultationData, setConsultation] = useState(consultation)
     const [updateViewCounter, setUpdateViewCounter] = useState(0); // Force update View
     const [windowNumber, setWindowNumber] = useState(0)
@@ -50,9 +53,19 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
 
-    const handleAddComment = () => {
+    useEffect(() => {
+        const initComment = async() => {
+            const coments = await getCommentListByConsult(consultation.id);
+            setComments(coments);
+        };
+        initComment();
+    }, [consultation]);
+
+    const handleAddComment = async () => {
         if (newComment.trim() !== '') {
-            const commentDict = {user:{username:'Auser'},text:newComment} //TODO: implementar llamado a api.
+            const userID = userContext.user.pk;
+            const commentData = {user: userID, consultation: consultation.id, text: newComment};
+            const commentDict = await createComment(commentData);
             setComments([commentDict, ...comments]);
             setNewComment('');
         }
