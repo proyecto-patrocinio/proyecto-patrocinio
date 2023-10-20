@@ -91,3 +91,38 @@ export async function deleteComment(CommentID) {
     }
 };
 
+/**
+ * Updates an existing Comment by sending a PUT request to the API.
+ *
+ * @param {object} commentData - The updated data for the Comment.
+ * @returns {Promise<object>} A promise that resolves to the updated Comment.
+ * @throws {Error} If the update fails, an error is thrown.
+ */
+export async function updateComment(commentData) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+            + process.env.REACT_APP_PATH_COMMENTS
+            + commentData.id
+            + "/";
+        const response = await fetch(
+            url,
+            {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(commentData)
+            });
+        if (response.ok) {
+            const comment = await response.json();
+            return comment;
+        } else {
+            const mns = 'Failed to update a Comment.';
+            console.error(mns, " Status: ", response.status);
+            throw new Error(mns);
+        };
+        } catch (error) {
+        console.error('Error while try to update a Comment: ', String(error));
+        throw error;
+    };
+};
