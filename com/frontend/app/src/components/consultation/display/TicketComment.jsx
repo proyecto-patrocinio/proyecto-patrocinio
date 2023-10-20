@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState} from 'react';
-import {Card, CardContent, Typography, Avatar, Box, Grid, MenuItem} from '@mui/material';
+import {Card, CardContent, Typography, Avatar, Box, Grid, MenuItem, TextField, IconButton} from '@mui/material';
 import TicketMenu from '../../ticket/TicketMenu.jsx';
 import { deleteComment } from '../../../utils/comments.jsx';
+import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 
 
@@ -12,19 +14,38 @@ import { deleteComment } from '../../../utils/comments.jsx';
  */
 const TicketComment = ({comment}) => {
     const [showMenu, setShowMenu] = useState(false);
-    const [idDeleted, setDeleted] = useState(false);
+    const [isDeleted, setIsDeleted] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedTitle, setEditedTitle] = useState(comment.text);
 
-    if(idDeleted){
+    if(isDeleted){
         return null;
+    };
+
+    const handleTitleChange = (event) => {
+        setEditedTitle(event.target.value);
+    };
+
+    const handleSaveComment = async (event) => {
+        const newTitle = event.target.value;
+        //saveTitle(newTitle);
+        setIsEditing(false);
+    };
+
+    const handleCancelComment = async (event) => {
+        const newTitle = event.target.value;
+        //saveTitle(newTitle);
+        setIsEditing(false);
     };
 
     const handleDeleteComment = async () => {
         await deleteComment(comment.id);
-        setDeleted(true);
+        setIsDeleted(true);
     };
 
     const handleEditComment = () => {
-        console.log("Deleting"); //TODO
+        // setEditedTitle(comment.text);//TODO: esto se setea como un estado y en effect se pone el comment.text.
+        setIsEditing(true);
     };
 
     const menuComponent = (
@@ -49,7 +70,7 @@ const TicketComment = ({comment}) => {
                     onMouseLeave={()=> setShowMenu(false)}
                 >
                     <Card key={comment.id} variant="outlined" style={{ marginBottom: '10px' , position: 'relative'}}>
-                        <CardContent sx={{ whiteSpace: 'pre-line' }}>
+                        <CardContent sx={{ whiteSpace: 'pre-line' }} >
                             <Grid container spacing={2}>
                                 <Grid item>
                                     <Avatar sx={{ bgcolor: 'primary.main' }}>
@@ -57,14 +78,39 @@ const TicketComment = ({comment}) => {
                                     </Avatar>
                                     </Grid>
                                     <Grid item>
-                                    <Typography variant="h6" component="div">
-                                        {comment.user.username}
-                                    </Typography>
+                                        <Typography variant="h6" component="div">
+                                            {comment.user.username}
+                                        </Typography>
                                 </Grid>
-                                <Grid item>
+                                <Grid item  width="100%">
+                                    {isEditing === true ? (
+                                        <div>
+
+                                        <TextField
+                                            placeholder="Placeholder"
+                                            multiline
+                                            variant="outlined"
+                                            fullWidth
+                                            value={editedTitle}
+                                            onChange={handleTitleChange}
+                                            // onBlur={handleTitleBlur}
+                                            autoFocus
+                                        />
+                                        <div  style={{ display: 'flex', justifyContent: 'flex-end' }}>
+
+                                    <IconButton color="primary" aria-label="menu-ticket" onClick={handleCancelComment}>
+                                        <CancelIcon/>
+                                    </IconButton>
+                                    <IconButton color="primary" aria-label="menu-ticket" onClick={handleSaveComment}>
+                                        <CheckCircleIcon/>
+                                    </IconButton>
+                                        </div>
+                                        </div>
+                                        ) : (
                                     <Typography>
                                         {comment.text}
                                     </Typography>
+                                        )}
                                 </Grid>
                             </Grid>
                         </CardContent>
