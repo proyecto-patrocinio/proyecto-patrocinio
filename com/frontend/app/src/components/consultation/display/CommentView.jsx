@@ -1,10 +1,10 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import {TextField,Box, IconButton} from '@mui/material';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import {TextField,Box} from '@mui/material';
 import {createComment, getCommentListByConsult} from '../../../utils/comments.jsx';
 import {useUserContext} from '../../../context/UserContext.jsx';
 import TicketComment from './TicketComment.jsx';
+import AddButton from '../../AddButton.jsx';
 
 
 
@@ -54,14 +54,7 @@ const Comment = ({consultationID}) => {
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
                 />
-                <IconButton
-                    color="primary"
-                    onClick={handleAddComment}
-                    style={{ marginLeft: '10px' }}
-                    
-                >
-                    <AddCircleIcon />
-                </IconButton>
+                <AddButton onClick={handleAddComment}/>
             </Box>
             {/*List of Comments */}
             {comments.map((comment, index) => (<TicketComment comment={comment}/>))}
