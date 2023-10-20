@@ -2,6 +2,7 @@ import React from 'react';
 import { useState} from 'react';
 import {Card, CardContent, Typography, Avatar, Box, Grid, MenuItem} from '@mui/material';
 import TicketMenu from '../../ticket/TicketMenu.jsx';
+import { deleteComment } from '../../../utils/comments.jsx';
 
 
 
@@ -11,9 +12,15 @@ import TicketMenu from '../../ticket/TicketMenu.jsx';
  */
 const TicketComment = ({comment}) => {
     const [showMenu, setShowMenu] = useState(false);
+    const [idDeleted, setDeleted] = useState(false);
 
-    const handleDeleteComment = () => {
-        console.log("Deleting"); //TODO
+    if(idDeleted){
+        return null;
+    };
+
+    const handleDeleteComment = async () => {
+        await deleteComment(comment.id);
+        setDeleted(true);
     };
 
     const handleEditComment = () => {

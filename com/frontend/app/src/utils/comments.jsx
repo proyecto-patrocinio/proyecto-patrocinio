@@ -56,3 +56,38 @@ export async function createComment(commentData) {
         throw error;
     };
 };
+
+
+/**
+ * Deletes a Comment by sending a DELETE request to the API.
+ *
+ * @param {string} CommentID - The ID of the comment to be deleted.
+ * @returns {Promise<object>} A promise that response.
+ * @throws {Error} If the deletion fails, an error is thrown.
+ */
+export async function deleteComment(CommentID) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+            + process.env.REACT_APP_PATH_COMMENTS
+            + CommentID + '/';
+        const response = await fetch(
+            url,
+            {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        if (response.ok) {
+            return response;
+        } else {
+            const mns = 'Failed to delete Comment.'
+            console.error(mns, " Status: ", response.status);
+            throw new Error(mns);
+        }
+    } catch (error) {
+        console.error('Error while try to delete a Comment: ', error);
+        throw error;
+    }
+};
+
