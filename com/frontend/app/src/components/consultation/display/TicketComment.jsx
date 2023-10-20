@@ -5,6 +5,7 @@ import TicketMenu from '../../ticket/TicketMenu.jsx';
 import { deleteComment, updateComment } from '../../../utils/comments.jsx';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AlertSnackbar from '../../AlertSnackbar.jsx';
 
 
 /**
@@ -17,6 +18,7 @@ const TicketComment = ({comment}) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editedCommentContent, setEditedCommentContent] = useState(comment?.text);
     const [commentDict, setCommentDict] = useState(comment);
+    const [alertMessage, setAlertMessage] = useState("");
 
     useEffect(()=>{
         setCommentDict(comment)
@@ -33,8 +35,13 @@ const TicketComment = ({comment}) => {
     const handleConfirmEdition = async () => {
         const newComment = commentDict;
         newComment.text = editedCommentContent;
-        await updateComment(newComment.id, {text: editedCommentContent});
-        setCommentDict(newComment);
+        try {
+            await updateComment(newComment.id, {text: editedCommentContent});
+        } catch (e) {
+            setAlertMessage(e.message);
+            return;
+        }
+            setCommentDict(newComment);
         setIsEditing(false);
     };
 
@@ -43,7 +50,12 @@ const TicketComment = ({comment}) => {
     };
 
     const handleDeleteClick = async () => {
-        await deleteComment(commentDict?.id);
+        try {
+            await deleteComment(commentDict?.id);
+        } catch (e) {
+            setAlertMessage(e.message);
+            return;
+        }
         setIsDeleted(true);
     };
 
@@ -117,6 +129,7 @@ const TicketComment = ({comment}) => {
                         </CardContent>
                         {menuComponent}
                     </Card>
+                    <AlertSnackbar onClose={() => {setAlertMessage("")}} message={alertMessage} severity={'error'}/>
                 </Box>
     );
 };
