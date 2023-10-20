@@ -47,9 +47,9 @@ class CommentApiViewSet(ModelViewSet):
         user_id = self.request.query_params.get('user_id', None)
         consultation_id = self.request.query_params.get('consultation_id', None)
         if user_id is not None:
-            self.queryset = self.queryset.filter(user=user_id)
+            self.queryset = self.queryset.filter(user=user_id).order_by('-time_stamp')
         if consultation_id is not None:
-            self.queryset = self.queryset.filter(consultation=consultation_id)
+            self.queryset = self.queryset.filter(consultation=consultation_id).order_by('-time_stamp')
         return super().list(request, *args, **kwargs)
 
 
