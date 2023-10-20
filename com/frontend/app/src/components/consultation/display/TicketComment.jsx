@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import { useState} from 'react';
 import {Card, CardContent, Typography, Avatar, Box, Grid, MenuItem, TextField, IconButton} from '@mui/material';
 import TicketMenu from '../../ticket/TicketMenu.jsx';
-import { deleteComment } from '../../../utils/comments.jsx';
+import { deleteComment, updateComment } from '../../../utils/comments.jsx';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
 
 
 /**
@@ -16,35 +15,40 @@ const TicketComment = ({comment}) => {
     const [showMenu, setShowMenu] = useState(false);
     const [isDeleted, setIsDeleted] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
-    const [editedTitle, setEditedTitle] = useState(comment.text);
+    const [editedCommentContent, setEditedCommentContent] = useState(comment?.text);
+    const [commentDict, setCommentDict] = useState(comment);
+
+    useEffect(()=>{
+        setCommentDict(comment)
+    },[comment])
 
     if(isDeleted){
         return null;
     };
 
-    const handleTitleChange = (event) => {
-        setEditedTitle(event.target.value);
+    const handleCommentDataChange = (event) => {
+        setEditedCommentContent(event.target.value);
     };
 
-    const handleSaveComment = async (event) => {
-        const newTitle = event.target.value;
-        //saveTitle(newTitle);
+    const handleConfirmEdition = async () => {
+        const newComment = commentDict;
+        newComment.text = editedCommentContent;
+        await updateComment(newComment.id, {text: editedCommentContent});
+        setCommentDict(newComment);
         setIsEditing(false);
     };
 
-    const handleCancelComment = async (event) => {
-        const newTitle = event.target.value;
-        //saveTitle(newTitle);
+    const handleCancelateEdition = async (event) => {
         setIsEditing(false);
     };
 
-    const handleDeleteComment = async () => {
-        await deleteComment(comment.id);
+    const handleDeleteClick = async () => {
+        await deleteComment(commentDict?.id);
         setIsDeleted(true);
     };
 
-    const handleEditComment = () => {
-        // setEditedTitle(comment.text);//TODO: esto se setea como un estado y en effect se pone el comment.text.
+    const handleEditClick = () => {
+        setEditedCommentContent(commentDict?.text);
         setIsEditing(true);
     };
 
@@ -57,58 +61,55 @@ const TicketComment = ({comment}) => {
             }}
             >
             <TicketMenu showMenu={showMenu} key={"menu"}>
-                <MenuItem onClick={handleDeleteComment}>Delete</MenuItem>
-                <MenuItem onClick={handleEditComment}>Edit</MenuItem>
+                <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+                <MenuItem onClick={handleEditClick}>Edit</MenuItem>
             </TicketMenu>
         </div>
     );
 
     return (
                 <Box
-                    key={comment.id} width="100%" style={{ marginBottom: '10px' }}
+                    key={commentDict?.id} width="100%" style={{ marginBottom: '10px' }}
                     onMouseEnter={()=> setShowMenu(true)}
                     onMouseLeave={()=> setShowMenu(false)}
                 >
-                    <Card key={comment.id} variant="outlined" style={{ marginBottom: '10px' , position: 'relative'}}>
+                    <Card key={commentDict?.id} variant="outlined" style={{ marginBottom: '10px' , position: 'relative'}}>
                         <CardContent sx={{ whiteSpace: 'pre-line' }} >
                             <Grid container spacing={2}>
                                 <Grid item>
                                     <Avatar sx={{ bgcolor: 'primary.main' }}>
-                                        {comment.user.username?.charAt(0)}
+                                        {commentDict?.user?.username?.charAt(0)}
                                     </Avatar>
                                     </Grid>
                                     <Grid item>
                                         <Typography variant="h6" component="div">
-                                            {comment.user.username}
+                                            {commentDict?.user?.username}
                                         </Typography>
                                 </Grid>
                                 <Grid item  width="100%">
                                     {isEditing === true ? (
                                         <div>
-
-                                        <TextField
-                                            placeholder="Placeholder"
-                                            multiline
-                                            variant="outlined"
-                                            fullWidth
-                                            value={editedTitle}
-                                            onChange={handleTitleChange}
-                                            // onBlur={handleTitleBlur}
-                                            autoFocus
-                                        />
-                                        <div  style={{ display: 'flex', justifyContent: 'flex-end' }}>
-
-                                    <IconButton color="primary" aria-label="menu-ticket" onClick={handleCancelComment}>
-                                        <CancelIcon/>
-                                    </IconButton>
-                                    <IconButton color="primary" aria-label="menu-ticket" onClick={handleSaveComment}>
-                                        <CheckCircleIcon/>
-                                    </IconButton>
-                                        </div>
+                                            <TextField
+                                                placeholder="Placeholder"
+                                                multiline
+                                                variant="outlined"
+                                                fullWidth
+                                                value={editedCommentContent}
+                                                onChange={handleCommentDataChange}
+                                                autoFocus
+                                            />
+                                            <div  style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                                <IconButton color="primary" aria-label="menu-ticket" onClick={handleCancelateEdition}>
+                                                    <CancelIcon/>
+                                                </IconButton>
+                                                <IconButton color="primary" aria-label="menu-ticket" onClick={handleConfirmEdition}>
+                                                    <CheckCircleIcon/>
+                                                </IconButton>
+                                            </div>
                                         </div>
                                         ) : (
                                     <Typography>
-                                        {comment.text}
+                                        {commentDict?.text}
                                     </Typography>
                                         )}
                                 </Grid>

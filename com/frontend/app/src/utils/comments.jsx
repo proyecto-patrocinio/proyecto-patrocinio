@@ -94,15 +94,16 @@ export async function deleteComment(CommentID) {
 /**
  * Updates an existing Comment by sending a PUT request to the API.
  *
+ * @param {Number} id The id of the Comment.
  * @param {object} commentData - The updated data for the Comment.
  * @returns {Promise<object>} A promise that resolves to the updated Comment.
  * @throws {Error} If the update fails, an error is thrown.
  */
-export async function updateComment(commentData) {
+export async function updateComment(commentID, commentData) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_COMMENTS
-            + commentData.id
+            + commentID
             + "/";
         const response = await fetch(
             url,
