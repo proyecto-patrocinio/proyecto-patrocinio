@@ -5,12 +5,13 @@
 from rest_framework.serializers import ModelSerializer
 from Comment.models import Comment, File
 from rest_framework import serializers
-
+from User.serializers import UserSimpleSerializer
 
 class CommentSerializer(ModelSerializer):
+    user = UserSimpleSerializer()
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ['id', 'time_stamp', 'text', 'consultation', 'user']
 
 class CommentEditSerializer(ModelSerializer):
     class Meta:

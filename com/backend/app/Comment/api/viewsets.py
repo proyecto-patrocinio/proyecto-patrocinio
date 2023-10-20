@@ -19,6 +19,7 @@ from Comment.api.serializers import (
 )
 from django.http import FileResponse
 from rest_framework.decorators import action
+from django.contrib.auth.models import User
 
 
 logger = logging.getLogger(__name__)
@@ -42,13 +43,13 @@ class CommentApiViewSet(ModelViewSet):
         return super().destroy(*args, **kwargs)
 
     def list(self, request, *args, **kwargs):
-        # FILTER BY USER AND/OR CONSULTATION ID.
+        # FILTER COMMENTS BY USER AND/OR CONSULTATION ID.
         user_id = self.request.query_params.get('user_id', None)
         consultation_id = self.request.query_params.get('consultation_id', None)
         if user_id is not None:
-            self.queryset = self.queryset.filter(user=user_id)
+            self.queryset = self.queryset.filter(user=user_id).order_by('-time_stamp')
         if consultation_id is not None:
-            self.queryset = self.queryset.filter(consultation=consultation_id)
+            self.queryset = self.queryset.filter(consultation=consultation_id).order_by('-time_stamp')
         return super().list(request, *args, **kwargs)
 
 
