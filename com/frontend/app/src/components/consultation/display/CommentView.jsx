@@ -1,10 +1,11 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
-import {TextField,Box} from '@mui/material';
+import {TextField,Box, Paper} from '@mui/material';
 import {createComment, getCommentListByConsult} from '../../../utils/comments.jsx';
 import {useUserContext} from '../../../context/UserContext.jsx';
 import TicketComment from './TicketComment.jsx';
 import AddButton from '../../AddButton.jsx';
+import InputFileUpload from '../../uploadFileButton.jsx';
 
 
 
@@ -41,24 +42,34 @@ const Comment = ({consultationID}) => {
     };
 
     return (
-        <div>
-            {/* Input Text for new Comment */}
-            <Box width="100%" style={{ marginBottom: '10px', display: 'flex', justifyContent: 'flex-end' }}>
-                <TextField
-                    id="outlined-textarea"
-                    placeholder="Placeholder"
-                    label="Add a comment"
-                    multiline
-                    variant="outlined"
-                    fullWidth
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                />
-                <AddButton onClick={handleAddComment}/>
+        <Paper elevation={3} style={{ padding: '16px' }}>
+            {/* Menu */}
+            <Box display="flex" justifyContent="flex-end" marginBottom="16px">
+                <InputFileUpload />
             </Box>
-            {/*List of Comments */}
-            {comments.map((comment, index) => (<TicketComment comment={comment}/>))}
-        </div>
+            {/* Input Text for New Comment */}
+            <Box display="flex" alignItems="center" marginBottom="16px">
+
+            <TextField
+                id="outlined-textarea"
+                placeholder="Add a comment"
+                label="Add a comment"
+                multiline
+                variant="outlined"
+                fullWidth
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+            />
+            <AddButton onClick={handleAddComment}>
+                <AddButton />
+            </AddButton>
+            </Box>
+
+            {/* List of Comments */}
+            {comments.map((comment, index) => (
+                <TicketComment key={index} comment={comment} />
+            ))}
+        </Paper>
     );
 };
 
