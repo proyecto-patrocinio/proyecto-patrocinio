@@ -1,30 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from '@mui/material';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import { uploadFile } from '../utils/comments';
 
-const InputFileUpload = ({ commentID }) => {
-  const [file, setFile] = useState();
+const InputFileUpload = ({file, setFile }) => {
 
   const handleFileChange = (e) => {
     if (e.target.files) {
-      console.log(e.target.files)
       setFile(e.target.files[0]);
     }
   };
 
-
-  const handleUploadClick = async () => {
-    if (!file) {
-      return;
-    }
-    const formData = new FormData();
-    formData.append('uploadedFile', file);
-    formData.append('filename', file.name);
-    formData.append('comment', 30);
   
-    uploadFile(formData)
-
+  const handleCancel = () => {
+    setFile(null);
   };
 
   return (
@@ -40,10 +28,19 @@ const InputFileUpload = ({ commentID }) => {
           component="span"
           startIcon={<CloudUploadIcon />}
         >
-          Upload file
+          {file ? (
+            <>
+            {file.name}{' '}
+            <Button onClick={handleCancel} color="error">
+              X
+            </Button>
+            </>
+          ) : (
+            'Upload file'
+          )}
         </Button>
       </label>
-      <Button onClick={handleUploadClick}>OK</Button>
+      
     </div>
   );
 };

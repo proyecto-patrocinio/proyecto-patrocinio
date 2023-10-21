@@ -1,7 +1,7 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
 import {TextField,Box, Paper} from '@mui/material';
-import {createComment, getCommentListByConsult} from '../../../utils/comments.jsx';
+import {createComment, getCommentListByConsult, uploadFile} from '../../../utils/comments.jsx';
 import {useUserContext} from '../../../context/UserContext.jsx';
 import TicketComment from './TicketComment.jsx';
 import AddButton from '../../AddButton.jsx';
@@ -18,6 +18,7 @@ const Comment = ({consultationID}) => {
     const [userData, setUserData] = useState(0);
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [file, setFile] = useState();
 
     useEffect(() => {
         const initComment = async() => {
@@ -31,13 +32,28 @@ const Comment = ({consultationID}) => {
         setUserData(userContext.user);
     }, [userContext])
 
+
+    const handleUploadFile = async (commentID) => {
+        if (!file) {
+        return;
+        }
+        const formData = new FormData();
+        formData.append('uploadedFile', file);
+        formData.append('filename', file.name);
+        formData.append('comment', commentID);
+        
+        uploadFile(formData)
+    };
+
     const handleAddComment = async () => {
         if (newComment.trim() !== '') {
             const commentData = {user: userData.pk, consultation: consultationID, text: newComment};
             const commentDict = await createComment(commentData);
+            await handleUploadFile(commentDict.id);
             commentDict.user = userData
             setComments([commentDict, ...comments]);
             setNewComment('');
+            setFile(null);
         }
     };
 
@@ -45,7 +61,7 @@ const Comment = ({consultationID}) => {
         <Paper elevation={3} style={{ padding: '16px' }}>
             {/* Menu */}
             <Box display="flex" justifyContent="flex-end" marginBottom="16px">
-                <InputFileUpload />
+                <InputFileUpload file={file} setFile={setFile}/>
             </Box>
             {/* Input Text for New Comment */}
             <Box display="flex" alignItems="center" marginBottom="16px">
