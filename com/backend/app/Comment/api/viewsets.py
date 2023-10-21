@@ -44,6 +44,7 @@ class CommentApiViewSet(ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         # FILTER COMMENTS BY USER AND/OR CONSULTATION ID.
+        self.queryset = self.queryset.prefetch_related('files')
         user_id = self.request.query_params.get('user_id', None)
         consultation_id = self.request.query_params.get('consultation_id', None)
         if user_id is not None:

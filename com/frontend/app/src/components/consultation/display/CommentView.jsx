@@ -35,14 +35,14 @@ const Comment = ({consultationID}) => {
 
     const handleUploadFile = async (commentID) => {
         if (!file) {
-            return;
+            return null;
         }
         const formData = new FormData();
         formData.append('uploadedFile', file);
         formData.append('filename', file.name);
         formData.append('comment', commentID);
         const responseFile = await uploadFile(formData);
-        return responseFile;
+        return [responseFile];
     };
 
     const handleAddComment = async () => {
@@ -50,7 +50,7 @@ const Comment = ({consultationID}) => {
             const commentData = {user: userData.pk, consultation: consultationID, text: newComment};
             const commentDict = await createComment(commentData);
             const attachedFile = await handleUploadFile(commentDict.id);
-            commentDict.file = attachedFile;
+            commentDict.files = attachedFile;
             commentDict.user = userData
             setComments([commentDict, ...comments]);
             setNewComment('');

@@ -7,11 +7,6 @@ from Comment.models import Comment, File
 from rest_framework import serializers
 from User.serializers import UserSimpleSerializer
 
-class CommentSerializer(ModelSerializer):
-    user = UserSimpleSerializer()
-    class Meta:
-        model = Comment
-        fields = ['id', 'time_stamp', 'text', 'consultation', 'user']
 
 class CommentEditSerializer(ModelSerializer):
     class Meta:
@@ -49,3 +44,10 @@ class FileGetSerializer(ModelSerializer):
         model = File
         fields = '__all__'
         read_only = ['id', 'time_stamp', 'comment']
+
+class CommentSerializer(ModelSerializer):
+    user = UserSimpleSerializer()
+    files = FileGetSerializer(many = True, required=False, allow_null=True )
+    class Meta:
+        model = Comment
+        fields = ['id', 'time_stamp', 'text', 'consultation', 'user', 'files']

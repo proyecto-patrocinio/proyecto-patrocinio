@@ -125,7 +125,12 @@ const TicketComment = ({comment}) => {
                                         {commentDict?.text}
                                     </Typography>
                                         )}
-                                        {commentDict?.file && (<> <AttachFileIcon/> {commentDict?.file.filename} </>)}
+                                        {   commentDict?.files  && commentDict.files.map((file, index) => (
+                                            <div key={index}>
+                                                <AttachFileIcon/>
+                                                {file?.filename}
+                                            </div>
+                                        ))}
                                 </Grid>
                             </Grid>
                         </CardContent>
