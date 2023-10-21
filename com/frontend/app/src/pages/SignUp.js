@@ -76,7 +76,7 @@ function Register() {
       }
       return () => {}
   } catch {
-    console.log("Unexpected error occurred during request processing.")
+    console.error("Unexpected error occurred during request processing.")
     setLoading(false);
   }
 }

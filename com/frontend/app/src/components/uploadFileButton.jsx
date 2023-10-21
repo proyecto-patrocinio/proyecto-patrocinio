@@ -10,7 +10,6 @@ const InputFileUpload = ({file, setFile }) => {
     }
   };
 
-  
   const handleCancel = () => {
     setFile(null);
   };

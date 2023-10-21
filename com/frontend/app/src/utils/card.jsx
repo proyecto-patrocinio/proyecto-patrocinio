@@ -132,7 +132,7 @@ export const deleteCard = async(cardID) => {
           },
     });
     if (response.ok) {
-      console.log(`Card ${cardID} deleted successfully`);
+      console.info(`Card ${cardID} deleted successfully`);
     } else {
       const mns = `Failed to delete Card with ID ${cardID}. Status: ${response.status}`
       console.error(mns);
