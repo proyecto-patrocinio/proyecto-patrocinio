@@ -127,3 +127,34 @@ export async function updateComment(commentID, commentData) {
         throw error;
     };
 };
+
+
+/**
+ * Uploads a file to the specified API endpoint.
+ *
+ * @param {object} fileData - The data representing the file to be uploaded.
+ * @returns {Promise} A Promise that resolves to the uploaded file data.
+ * @throws {Error} Throws an error if the file upload fails.
+ */
+export async function uploadFile(fileData) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+            + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE;
+        const response = await fetch(url, {
+                method: 'POST',
+                body: fileData
+            });
+        if (response.ok) {
+            const file = await response.json();
+            return file;
+        } else {
+            const mns = 'Failed to upload a new File.';
+            console.error(mns, " Status: ", response.status);
+            console.error(mns, " Status: ", response);
+            throw new Error(mns);
+        };
+        } catch (error) {
+        console.error('Error while try to upload a File:', String(error));
+        throw error;
+    };
+};
