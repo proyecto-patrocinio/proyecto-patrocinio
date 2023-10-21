@@ -6,6 +6,7 @@ import { deleteComment, updateComment } from '../../../utils/comments.jsx';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AlertSnackbar from '../../AlertSnackbar.jsx';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 
 /**
@@ -124,6 +125,7 @@ const TicketComment = ({comment}) => {
                                         {commentDict?.text}
                                     </Typography>
                                         )}
+                                        {commentDict?.file && (<> <AttachFileIcon/> {commentDict?.file.filename} </>)}
                                 </Grid>
                             </Grid>
                         </CardContent>

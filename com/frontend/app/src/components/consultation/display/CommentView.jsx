@@ -35,21 +35,22 @@ const Comment = ({consultationID}) => {
 
     const handleUploadFile = async (commentID) => {
         if (!file) {
-        return;
+            return;
         }
         const formData = new FormData();
         formData.append('uploadedFile', file);
         formData.append('filename', file.name);
         formData.append('comment', commentID);
-        
-        uploadFile(formData)
+        const responseFile = await uploadFile(formData);
+        return responseFile;
     };
 
     const handleAddComment = async () => {
         if (newComment.trim() !== '') {
             const commentData = {user: userData.pk, consultation: consultationID, text: newComment};
             const commentDict = await createComment(commentData);
-            await handleUploadFile(commentDict.id);
+            const attachedFile = await handleUploadFile(commentDict.id);
+            commentDict.file = attachedFile;
             commentDict.user = userData
             setComments([commentDict, ...comments]);
             setNewComment('');
