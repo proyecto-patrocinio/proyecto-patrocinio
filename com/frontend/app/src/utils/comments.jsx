@@ -193,7 +193,7 @@ export async function getContentFile(fileID) {
  * @param {number} fileID - The ID of the file for which to obtain the download URL.
  * @returns {string} - The URL for downloading the file.
  */
-export async function getURLtoDownloadFile(fileID) {
+export function getURLtoDownloadFile(fileID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE
             + fileID + '/download/';
