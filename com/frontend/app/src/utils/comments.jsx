@@ -158,3 +158,30 @@ export async function uploadFile(fileData) {
         throw error;
     };
 };
+
+
+/**
+ * Downloads a file associated with a comment using its ID.
+ *
+ * @param {number} CommentID - The ID of the comment from which to download the file.
+ * @returns {Promise<boolean>} - Returns true if the download was successful.
+ * @throws {Error} - Throws an error if the download fails.
+ */
+export async function downloadFile(CommentID) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+            + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE
+            + CommentID + '/download/';
+        const response = await fetch(url, {method: 'GET',});
+        if (response.ok) {
+            return true;
+        } else {
+            const mns = 'Failed to download file.'
+            console.error(mns, " Status: ", response.status);
+            throw new Error(mns);
+        }
+    } catch (error) {
+        console.error('Error while try to download a file: ', String(error));
+        throw error;
+    }
+};
