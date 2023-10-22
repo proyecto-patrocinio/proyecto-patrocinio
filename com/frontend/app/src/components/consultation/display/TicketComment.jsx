@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useState} from 'react';
-import {Card, CardContent, Typography, Avatar, Box, Grid, MenuItem, TextField, IconButton} from '@mui/material';
+import {Card, CardContent, Typography, Avatar, Box, Grid, MenuItem, TextField, IconButton, Link} from '@mui/material';
 import TicketMenu from '../../ticket/TicketMenu.jsx';
-import { deleteComment, updateComment } from '../../../utils/comments.jsx';
+import { deleteComment, getURLtoDownloadFile, updateComment } from '../../../utils/comments.jsx';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AlertSnackbar from '../../AlertSnackbar.jsx';
@@ -128,7 +128,12 @@ const TicketComment = ({comment}) => {
                                         {   commentDict?.files  && commentDict.files.map((file, index) => (
                                             <div key={index}>
                                                 <AttachFileIcon/>
+                                            <Link
+                                                href={() => getURLtoDownloadFile(file.id)}
+                                                style={{ cursor: 'pointer' }}
+                                            >
                                                 {file?.filename}
+                                            </Link>
                                             </div>
                                         ))}
                                 </Grid>

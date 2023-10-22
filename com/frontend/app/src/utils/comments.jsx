@@ -61,15 +61,15 @@ export async function createComment(commentData) {
 /**
  * Deletes a Comment by sending a DELETE request to the API.
  *
- * @param {string} CommentID - The ID of the comment to be deleted.
+ * @param {string} commentID - The ID of the comment to be deleted.
  * @returns {Promise<object>} A promise that response.
  * @throws {Error} If the deletion fails, an error is thrown.
  */
-export async function deleteComment(CommentID) {
+export async function deleteComment(commentID) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_COMMENTS
-            + CommentID + '/';
+            + commentID + '/';
         const response = await fetch(
             url,
             {
@@ -161,27 +161,41 @@ export async function uploadFile(fileData) {
 
 
 /**
- * Downloads a file associated with a comment using its ID.
+ * Fetches the content of a document associated with a file.
  *
- * @param {number} CommentID - The ID of the comment from which to download the file.
- * @returns {Promise<boolean>} - Returns true if the download was successful.
- * @throws {Error} - Throws an error if the download fails.
+ * @param {number} fileID - The ID of the file to fetch the content from.
+ * @returns {Promise<string>} - A Promise that resolves to the content of the file.
+ * @throws {Error} - Throws an error if fetching the content fails.
  */
-export async function downloadFile(CommentID) {
+export async function getContentFile(fileID) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE
-            + CommentID + '/download/';
+            + fileID + '/download/';
         const response = await fetch(url, {method: 'GET',});
         if (response.ok) {
-            return true;
+            return response.text();
         } else {
-            const mns = 'Failed to download file.'
+            const mns = 'Failed to get content file.'
             console.error(mns, " Status: ", response.status);
             throw new Error(mns);
         }
     } catch (error) {
-        console.error('Error while try to download a file: ', String(error));
+        console.error('Error while try to get content file: ', String(error));
         throw error;
     }
+};
+
+
+/**
+ * Get the URL to download a file associated with a file ID.
+ *
+ * @param {number} fileID - The ID of the file for which to obtain the download URL.
+ * @returns {string} - The URL for downloading the file.
+ */
+export async function getURLtoDownloadFile(fileID) {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+            + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE
+            + fileID + '/download/';
+        return url;
 };
