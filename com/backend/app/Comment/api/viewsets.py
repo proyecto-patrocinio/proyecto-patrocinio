@@ -40,6 +40,17 @@ class CommentApiViewSet(ModelViewSet):
 
     def destroy(self, *args, **kwargs):
         self.serializer_class = CommentDestroySerializer
+        comment_id = self.get_object().pk
+        try:
+            comment = Comment.objects.prefetch_related('files').get(pk=comment_id)
+        except Comment.DoesNotExist:
+            raise Http404
+
+        # Delete attachment files from disk.
+        for file in comment.files.all():
+            file_path = f"{ATTACHMENT_FILES_DIRECTORY}{file.id}"
+            if os.path.exists(file_path):
+                os.remove(file_path)
         return super().destroy(*args, **kwargs)
 
     def list(self, request, *args, **kwargs):
@@ -72,7 +83,7 @@ class FileViewSet(ModelViewSet):
                         os.makedirs(ATTACHMENT_FILES_DIRECTORY)
 
                     # Save the file to disk
-                    filepath = f"{ATTACHMENT_FILES_DIRECTORY}/{filename_disk}"
+                    filepath = f"{ATTACHMENT_FILES_DIRECTORY}{filename_disk}"
                     with open(filepath, 'wb') as destination:
                         for chunk in uploadedFile.chunks():
                             destination.write(chunk)
@@ -92,7 +103,7 @@ class FileViewSet(ModelViewSet):
         try:
             file_id = self.get_object().pk
             download_filename = File.objects.get(id=file_id).filename
-            filepath_disk =  f"{ATTACHMENT_FILES_DIRECTORY}/{file_id}"
+            filepath_disk =  f"{ATTACHMENT_FILES_DIRECTORY}{file_id}"
             logger.info(f"Downloading {filepath_disk} file with filename: {download_filename}...")
 
             file = open(filepath_disk, 'rb')
@@ -112,7 +123,7 @@ class FileViewSet(ModelViewSet):
             try:
                 instance = self.get_object()
                 filename = instance.filename
-                filepath = f"{ATTACHMENT_FILES_DIRECTORY}/{instance.id}"
+                filepath = f"{ATTACHMENT_FILES_DIRECTORY}{instance.id}"
 
                 # First remove the file from disk
                 if os.path.exists(filepath):

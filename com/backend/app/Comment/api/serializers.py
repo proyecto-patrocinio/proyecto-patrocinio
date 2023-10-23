@@ -22,7 +22,10 @@ class CommentCreateSerializer(ModelSerializer):
 
 class CommentDestroySerializer(ModelSerializer):
     class Meta:
+        files = serializers.ListField()
         model = Comment
+        fields = '__all__'
+        read_only = ['id', 'time_stamp', 'text', 'consultation', 'user', 'files']
 
 
 
