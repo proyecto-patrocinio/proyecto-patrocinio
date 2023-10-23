@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useState} from 'react';
-import {Card, CardContent, Typography, Avatar, Box, Grid, MenuItem, TextField, IconButton} from '@mui/material';
+import {Card, CardContent, Typography, Avatar, Box, Grid, MenuItem, TextField, IconButton, Link} from '@mui/material';
 import TicketMenu from '../../ticket/TicketMenu.jsx';
-import { deleteComment, updateComment } from '../../../utils/comments.jsx';
+import { deleteComment, getURLtoDownloadFile, updateComment } from '../../../utils/comments.jsx';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import AlertSnackbar from '../../AlertSnackbar.jsx';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 
 
 /**
@@ -79,6 +80,21 @@ const TicketComment = ({comment}) => {
         </div>
     );
 
+    const LinkFileComponente = ({file}) => {
+        const downloadURL = getURLtoDownloadFile(file?.id);
+        return (
+            <div>
+                <AttachFileIcon/>
+                <Link
+                href={downloadURL}
+                style={{ cursor: 'pointer' }}
+                >
+                {file?.filename}
+                </Link>
+            </div>
+    )
+    };
+
     return (
                 <Box
                     key={commentDict?.id} width="100%" style={{ marginBottom: '10px' }}
@@ -124,6 +140,9 @@ const TicketComment = ({comment}) => {
                                         {commentDict?.text}
                                     </Typography>
                                         )}
+                                        {   commentDict?.files  && commentDict.files.map((file, index) => (
+                                            <LinkFileComponente key={index} file={file}/>
+                                        ))}
                                 </Grid>
                             </Grid>
                         </CardContent>

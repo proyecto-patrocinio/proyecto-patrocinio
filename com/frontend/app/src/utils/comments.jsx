@@ -61,15 +61,15 @@ export async function createComment(commentData) {
 /**
  * Deletes a Comment by sending a DELETE request to the API.
  *
- * @param {string} CommentID - The ID of the comment to be deleted.
+ * @param {string} commentID - The ID of the comment to be deleted.
  * @returns {Promise<object>} A promise that response.
  * @throws {Error} If the deletion fails, an error is thrown.
  */
-export async function deleteComment(CommentID) {
+export async function deleteComment(commentID) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_COMMENTS
-            + CommentID + '/';
+            + commentID + '/';
         const response = await fetch(
             url,
             {
@@ -126,4 +126,76 @@ export async function updateComment(commentID, commentData) {
         console.error('Error while try to update a Comment: ', String(error));
         throw error;
     };
+};
+
+
+/**
+ * Uploads a file to the specified API endpoint.
+ *
+ * @param {object} fileData - The data representing the file to be uploaded.
+ * @returns {Promise} A Promise that resolves to the uploaded file data.
+ * @throws {Error} Throws an error if the file upload fails.
+ */
+export async function uploadFile(fileData) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+            + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE;
+        const response = await fetch(url, {
+                method: 'POST',
+                body: fileData
+            });
+        if (response.ok) {
+            const file = await response.json();
+            return file;
+        } else {
+            const mns = 'Failed to upload a new File.';
+            console.error(mns, " Status: ", response.status);
+            console.error(mns, " Status: ", response);
+            throw new Error(mns);
+        };
+        } catch (error) {
+        console.error('Error while try to upload a File:', String(error));
+        throw error;
+    };
+};
+
+
+/**
+ * Fetches the content of a document associated with a file.
+ *
+ * @param {number} fileID - The ID of the file to fetch the content from.
+ * @returns {Promise<string>} - A Promise that resolves to the content of the file.
+ * @throws {Error} - Throws an error if fetching the content fails.
+ */
+export async function getContentFile(fileID) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+            + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE
+            + fileID + '/download/';
+        const response = await fetch(url, {method: 'GET',});
+        if (response.ok) {
+            return response.text();
+        } else {
+            const mns = 'Failed to get content file.'
+            console.error(mns, " Status: ", response.status);
+            throw new Error(mns);
+        }
+    } catch (error) {
+        console.error('Error while try to get content file: ', String(error));
+        throw error;
+    }
+};
+
+
+/**
+ * Get the URL to download a file associated with a file ID.
+ *
+ * @param {number} fileID - The ID of the file for which to obtain the download URL.
+ * @returns {string} - The URL for downloading the file.
+ */
+export function getURLtoDownloadFile(fileID) {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+            + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE
+            + fileID + '/download/';
+        return url;
 };

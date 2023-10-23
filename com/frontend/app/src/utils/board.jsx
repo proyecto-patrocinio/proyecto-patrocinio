@@ -56,7 +56,7 @@ export const fetchBoardsByUser = async (idUser) => {
     }
   } catch (error) {
     console.error('Unexpected error when try to fetch board by userID ', idUser);
-    console.log('Error Detail: ', error);
+    console.debug('Error Detail: ', error);
     return [];
   }
 };
@@ -88,7 +88,7 @@ export const acceptRequestConsult = async(requestConsultationID, panelID) => {
 
     if (response.ok) {
       const successMessage = `Request Consultation ${requestConsultationID} accepted successfully`;
-      console.log(successMessage);
+      console.info(successMessage);
       return true;
     } else {
       console.error("Failed to accept the consultation request: ", response.status);
@@ -123,7 +123,7 @@ export const rejectRequestConsult = async(id) => {
 
     if (response.ok) {
       const successMessage = `Request Consultation ${id} rejected successfully`;
-      console.log(successMessage);
+      console.info(successMessage);
       return true;
     } else {
       console.error("Failed to reject the consultation request: ", response.status);

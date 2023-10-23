@@ -199,7 +199,7 @@ export async function deleteConsultation(consultationID) {
             throw new Error(mns);
             }
 
-        console.log("Successful delete Consultation ID:", consultationID)
+        console.info("Successful delete Consultation ID:", consultationID)
         return true;
     } catch (error) {
         console.error('Error in delete consultation.');
@@ -325,7 +325,7 @@ export async function deleteRequest(requestID) {
             throw new Error('Failed to DELETE request consultation.');
             }
 
-        console.log("Successful delete Request for Consultation ID:", requestID)
+        console.info("Successful delete Request for Consultation ID:", requestID)
     } catch (error) {
         console.error('Error in delete request consultation.');
         console.debug(error)
@@ -359,7 +359,7 @@ export async function createRequest(consultationID, destinationBoardID) {
             console.error('Failed to POST request Consultation:', response.status);
             throw new Error('Failed to POST request consultation.');
         }
-        console.log("Successfull Create Reques for Consultatio ID:", consultationID)
+        console.info("Successfull Create Reques for Consultatio ID:", consultationID)
     } catch (error) {
         console.error('Error in create request consultation.');
         console.debug(error)

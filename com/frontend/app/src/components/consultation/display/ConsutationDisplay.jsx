@@ -17,7 +17,7 @@ import ConsutationInfoView from './ConsultationInfoView.jsx';
  * @returns {JSX.Element} - The ConsultationDisplay component JSX.
  */
 const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
-    const [windowNumber, setWindowNumber] = useState(0)
+    const [windowNumber, setWindowNumber] = useState(0);
 
     /**
      * Close the dialog.
