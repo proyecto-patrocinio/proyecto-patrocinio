@@ -17,20 +17,23 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 const InputRequestPanel = ({ panel, index }) => {
   const [isFirstPanelPinned, setIsFirstPanelPinned] = React.useState(true);
   const [style, setStyle] = React.useState({ position: "sticky", left: 0, zIndex: 1});
+  const [pinColor, setPinColor] = React.useState("primary");
 
   const toggleFirstPanelPinning = () => {
     const isPinned = !isFirstPanelPinned;
     setIsFirstPanelPinned(isPinned);
     if(isPinned){
       setStyle({ position: "sticky", left: 0, zIndex: 1});
+      setPinColor("primary");
     } else {
       setStyle({ backgroundColor: "lightgray"});
+      setPinColor("default");
     }
   };
 
   const title = (
       <>
-      <IconButton onClick={toggleFirstPanelPinning}  size="small" color="primary">
+      <IconButton onClick={toggleFirstPanelPinning}  size="small" color={pinColor}>
       <PushPinIcon/>
       </IconButton>
       {TitlePanel({panel:panel})}
