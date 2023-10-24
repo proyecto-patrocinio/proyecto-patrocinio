@@ -12,7 +12,6 @@ import {
 } from '@mui/x-data-grid';
 import { EditToolbar } from './EditToolbar';
 import AlertSnackbar from '../AlertSnackbar';
-import ConsutationDisplay from '../consultation/display/ConsutationDisplay';
 
 
 /**
@@ -29,34 +28,22 @@ import ConsutationDisplay from '../consultation/display/ConsutationDisplay';
  * @param {function} handleCellRendering - Handler to render the data after a row in the table is created or updated
  * @param {function} preprocessEdit - Fuction to processes the data before editing a row.
  * @param {boolean} isMultipleEdition - True if multiple records can be edited at the same time. Otherwise false.
+ * @param {function} doubleClickHandler - Handler to double-click the row when the user interacts.
  * @returns {JSX.Element} FullCrudGrid component.
  */
 export default function BaseGrid({
     initialRows, columns, emptyRecord, onUpdateRow, onDeleteRow, onCreateRow,
-    formatDataRow, isCellEditable=null, handleCellRendering=(data)=>data, preProcessEdit=()=>{}, isMultipleEdition=true
+    formatDataRow, isCellEditable=null, handleCellRendering=(data)=>data, preProcessEdit=()=>{},
+    isMultipleEdition=true, doubleClickHandler= ()=>{},
 }) {
     const [rows, setRows] = React.useState(initialRows);
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [alertMessage, setAlertMessage] = React.useState(null);
     const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
-    const [openDialog, setOpenDialog] = React.useState(false);
-    const [consultationSelected, setConsultationSelected] = React.useState(null);
 
     React.useEffect(()=>{
         setRows(initialRows)
     }, [initialRows]);
-
-    const doubleClickConsultationHandler = (selected) => {
-        const consultation = selected.row;
-        consultation.consultation = consultation.id; // formatted
-        setConsultationSelected(consultation);
-        setOpenDialog(true);
-    };
-
-    const closeConsultationHandler = () => {
-        setConsultationSelected(null);
-        setOpenDialog(false)
-    };
 
     const handleProcessError = (error) => {
         setAlertMessage(error.message);
@@ -194,7 +181,7 @@ export default function BaseGrid({
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
-            onRowDoubleClick={doubleClickConsultationHandler}
+            onRowDoubleClick={doubleClickHandler}
             onProcessRowUpdateError={handleProcessError}
             isCellEditable={isCellEditable}
             slots={{
@@ -205,7 +192,6 @@ export default function BaseGrid({
             }}
             />
             <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>
-            <ConsutationDisplay consultation={consultationSelected} open={openDialog} onClose={closeConsultationHandler}/>
         </Box>
     );
 };
