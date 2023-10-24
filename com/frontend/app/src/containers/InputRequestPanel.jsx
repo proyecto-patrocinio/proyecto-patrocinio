@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid';
 import TitlePanel from '../components/panel/TitlePanel';
 import BasePanel from '../components/panel/BasePanel';
 import InputRequestTicket from './InputRequestTicket';
+import { IconButton } from '@mui/material';
+import PushPinIcon from '@mui/icons-material/PushPin';
 
 
 /**
@@ -13,8 +15,31 @@ import InputRequestTicket from './InputRequestTicket';
  * @returns {JSX.Element} - A JSX element representing the panel with input request tickets.
  */
 const InputRequestPanel = ({ panel, index }) => {
-  const title = TitlePanel({panel:panel})
+  const [isFirstPanelPinned, setIsFirstPanelPinned] = React.useState(true);
+  const [style, setStyle] = React.useState({ position: "sticky", left: 0, zIndex: 1});
+
+  const toggleFirstPanelPinning = () => {
+    const isPinned = !isFirstPanelPinned;
+    setIsFirstPanelPinned(isPinned);
+    if(isPinned){
+      setStyle({ position: "sticky", left: 0, zIndex: 1});
+    } else {
+      setStyle({ backgroundColor: "lightgray"});
+    }
+  };
+
+  const title = (
+      <>
+      <IconButton onClick={toggleFirstPanelPinning}  size="small" color="primary">
+      <PushPinIcon/>
+      </IconButton>
+      {TitlePanel({panel:panel})}
+      </>
+    )
+
+
   return (
+    <div style={style}>
     <BasePanel panel={panel} index={index} title={title}>
       {panel.cards.map((card, index) => (
           <Grid item xs={12} sm={6} md={11} key={card.consultation} >
@@ -22,6 +47,7 @@ const InputRequestPanel = ({ panel, index }) => {
           </Grid>
       ))}
     </BasePanel>
+    </div>
   );
 };
 

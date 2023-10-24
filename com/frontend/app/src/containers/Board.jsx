@@ -139,15 +139,13 @@ const Board = ({id}) => {
               spacing={2}
             >
               {/*panel-0: Input Request Cards.*/}
-              <div style={{ position: "sticky", left: 0, zIndex: 1}}>
                 <InputRequestPanel
                   key={"0"}
                   index={0}
                   panel={board.panels[0]}
                 />
-              </div>
               <CreatePanelButton key={"panel-template"} boardID={id} addPanel={addNewPanel}/>
-                {/*rest of panels: Panels with cards. */}
+              {/*rest of panels: Panels with cards. */}
                 {board.panels.map((panel, index) => (
                   index === 0 ? null: (
                     <CardPanel
