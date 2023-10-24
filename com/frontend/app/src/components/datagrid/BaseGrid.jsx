@@ -12,6 +12,7 @@ import {
 } from '@mui/x-data-grid';
 import { EditToolbar } from './EditToolbar';
 import AlertSnackbar from '../AlertSnackbar';
+import ConsutationDisplay from '../consultation/display/ConsutationDisplay';
 
 
 /**
@@ -38,11 +39,24 @@ export default function BaseGrid({
     const [rowModesModel, setRowModesModel] = React.useState({});
     const [alertMessage, setAlertMessage] = React.useState(null);
     const [isAnyRowEditing, setIsAnyRowEditing] = React.useState(false);
-
+    const [openDialog, setOpenDialog] = React.useState(false);
+    const [consultationSelected, setConsultationSelected] = React.useState(null);
 
     React.useEffect(()=>{
         setRows(initialRows)
     }, [initialRows]);
+
+    const doubleClickConsultationHandler = (selected) => {
+        const consultation = selected.row;
+        consultation.consultation = consultation.id; // formatted
+        setConsultationSelected(consultation);
+        setOpenDialog(true);
+    };
+
+    const closeConsultationHandler = () => {
+        setConsultationSelected(null);
+        setOpenDialog(false)
+    };
 
     const handleProcessError = (error) => {
         setAlertMessage(error.message);
@@ -180,6 +194,7 @@ export default function BaseGrid({
             onRowModesModelChange={handleRowModesModelChange}
             onRowEditStop={handleRowEditStop}
             processRowUpdate={processRowUpdate}
+            onRowDoubleClick={doubleClickConsultationHandler}
             onProcessRowUpdateError={handleProcessError}
             isCellEditable={isCellEditable}
             slots={{
@@ -190,6 +205,7 @@ export default function BaseGrid({
             }}
             />
             <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>
+            <ConsutationDisplay consultation={consultationSelected} open={openDialog} onClose={closeConsultationHandler}/>
         </Box>
     );
 };
