@@ -6,6 +6,7 @@ import {
   updateConsultation
 } from '../../utils/caseTaker';
 import { getClientDNI2ID, getClientID2DNI } from '../../utils/tools';
+import ConsutationDisplay from '../consultation/display/ConsutationDisplay';
 
 
 /**
@@ -17,7 +18,8 @@ import { getClientDNI2ID, getClientID2DNI } from '../../utils/tools';
 const ConsultationDataTable = ({data}) => {
   const [clientDNI2ID, setClientDNI2ID] = React.useState([]);
   const [clientID2DNI, setClientID2DNI] = React.useState([]);
-
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [consultationSelected, setConsultationSelected] = React.useState(null);
 
     React.useEffect(() => {
       const fetchConsultancy = async () => {
@@ -30,6 +32,18 @@ const ConsultationDataTable = ({data}) => {
       fetchConsultancy();
   
     }, []);
+
+
+  const doubleClickConsultationHandler = (selected) => {
+    const consultation = selected.row;
+    consultation.consultation = consultation.id; // formatted
+    setConsultationSelected(consultation);
+    setOpenDialog(true);
+  };
+
+  const closeConsultationHandler = () => {
+    setOpenDialog(false);
+  };
 
     /**
      * Handler to format the data row before sending update or create queries to the API.
@@ -100,7 +114,10 @@ const ConsultationDataTable = ({data}) => {
         onCreateRow={createConsultationByDict}
         formatDataRow={formatConsultation}
         isCellEditable={isCellEditable}
+        doubleClickHandler={doubleClickConsultationHandler}
       />
+      <ConsutationDisplay consultation={consultationSelected} open={openDialog}
+        onClose={closeConsultationHandler}/>
     </div>
   );
 };
