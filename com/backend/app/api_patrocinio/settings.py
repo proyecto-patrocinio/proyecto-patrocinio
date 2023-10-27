@@ -77,7 +77,7 @@ ROOT_URLCONF = 'api_patrocinio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -159,7 +159,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated', #TODO: AllowAny
+        'rest_framework.permissions.AllowAny', #TODO: AllowAny
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         #   'rest_framework.authentication.SessionAuthentication', #TODO:
@@ -175,12 +175,13 @@ JWT_AUTH_COOKIE = 'my-app-auth'
 JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
 
 # User Register
-SITE_ID = 1
+SITE_ID=1
+DEFAULT_HTTP_PROTOCOL="https"
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = "http://" + os.environ.get("HOSTNAME", '')
+LOGIN_URL = DEFAULT_HTTP_PROTOCOL + "://"+os.environ.get("HOSTNAME", '')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -190,4 +191,6 @@ EMAIL_PORT = 587
 
 # CORS- Cross-Origin
 # https://pypi.org/project/django-cors-headers/
+# CORS_ALLOW_ALL_ORIGINS = True TODO: remove
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://0.0.0.0').split(' ')
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://0.0.0.0').split(' ')
