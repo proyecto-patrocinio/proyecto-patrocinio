@@ -46,7 +46,7 @@ const BaseTicket = ({ticket, index, cardContentProps={}, children}) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
             >
-            <Card style={{width: '15vw', margin: '0 auto', position: 'relative' }} onDoubleClick={showConsultationHandler}>
+            <Card style={{width: '15vw', margin: '0 auto', position: 'relative', minWidth: '150px'}} onDoubleClick={showConsultationHandler}>
                 <CardContent {...cardContentProps}>
                     {children}
                     <Typography color="textSecondary" gutterBottom>

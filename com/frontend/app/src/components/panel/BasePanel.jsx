@@ -26,7 +26,16 @@ const BasePanel = ({ panel, index, title, children }) => {
     textAlign: 'center',
     height: '75vh',
     width: '20vw',
+    minWidth: '200px', // Límite mínimo de ancho
   };
+
+  const placeholderStyle = {
+    width: '20vw',
+    backgroundColor: '#d7f0fa' ,
+    flexDirection: 'column',
+    margin: '0 auto',
+    minWidth: '200px',
+  }
 
   if (!panel) {
     return <div>No panels.</div>;
@@ -37,7 +46,7 @@ const BasePanel = ({ panel, index, title, children }) => {
       {(provided) => (
         <Paper ref={provided.innerRef} {...provided.droppableProps}  style={panelStyle}>
             {title}
-            <Grid container  columns={12} spacing={2}  style={{width: '20vw', backgroundColor: '#d7f0fa' , flexDirection: 'column', margin: '0 auto'}} >
+            <Grid container  columns={12} spacing={2} style={placeholderStyle} >
                 {children}
                 {provided.placeholder}
             </Grid>
