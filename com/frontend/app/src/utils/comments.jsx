@@ -10,7 +10,11 @@ export async function getCommentListByConsult(consultID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_COMMENTS_BY_CONSULT
             + consultID;
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {'Authorization': `Token ${token}`}
+        });
         if (response.ok) {
             const comments = await response.json();
             return comments;
@@ -38,9 +42,13 @@ export async function createComment(commentData) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_COMMENTS;
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json',},
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Token ${token}`
+                },
                 body: JSON.stringify(commentData)
             });
         if (response.ok) {
@@ -70,12 +78,12 @@ export async function deleteComment(commentID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_COMMENTS
             + commentID + '/';
-        const response = await fetch(
-            url,
-            {
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
         });
         if (response.ok) {
@@ -105,12 +113,13 @@ export async function updateComment(commentID, commentData) {
             + process.env.REACT_APP_PATH_COMMENTS
             + commentID
             + "/";
-        const response = await fetch(
-            url,
-            {
+
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(commentData)
             });
@@ -140,8 +149,11 @@ export async function uploadFile(fileData) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE;
-        const response = await fetch(url, {
+
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+            const response = await fetch(url, {
                 method: 'POST',
+                headers: {'Authorization': `Token ${token}`},
                 body: fileData
             });
         if (response.ok) {
@@ -172,7 +184,11 @@ export async function getContentFile(fileID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE
             + fileID + '/download/';
-        const response = await fetch(url, {method: 'GET',});
+            const token = window.localStorage.getItem('loggedCaseManagerUser');
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {'Authorization': `Token ${token}`}
+            });
         if (response.ok) {
             return response.text();
         } else {

@@ -18,7 +18,11 @@ export const getConsultationList = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_CONSULTATIONS
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url, {
+                method: 'GET',
+                headers: {'Authorization': `Token ${token}`}
+        });
         if (response.ok) {
             const data = await response.json();
             return data;
@@ -62,7 +66,11 @@ export const getConsultationsByAvailability = async (availability) => {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_FILTER_CONSULTATIONS_BY_AVAILABILITY
                 + availability;
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url, {
+                method: 'GET',
+                headers: {'Authorization': `Token ${token}`}
+        });
         if (response.ok) {
             const data = await response.json();
             return data.map(item => ({
@@ -88,7 +96,11 @@ export const getConsultancyBoard = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                     + process.env.REACT_APP_PATH_REQUEST_CONSULTANCY_BOARD;
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url,{
+            method: 'GET',
+            headers: {'Authorization': `Token ${token}`}
+        });
         if (response.ok) {
             const requestConsultationsList = await response.json();
             return requestConsultationsList
@@ -114,7 +126,11 @@ export const getConsultation = async (id) => {
                 + process.env.REACT_APP_PATH_CONSULTATIONS
                 + String(id)
                 + "/";
-        const response = await fetch(url);
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url, {
+                method: 'GET',
+                headers: {'Authorization': `Token ${token}`}
+        });
         if (response.ok) {
             const data = await response.json();
             return data;
@@ -143,11 +159,12 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
                     + process.env.REACT_APP_PATH_CONSULTATIONS
                     + String(id)
                     + "/";
-
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
                 [fieldName]: fieldValue
@@ -186,10 +203,12 @@ export async function deleteConsultation(consultationID) {
         + String(consultationID)
         + "/"
 
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
         })
 
@@ -230,10 +249,12 @@ export const updateConsultation = async (data) => {
             "description": data.description,
         }
 
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newData),
         })
@@ -272,11 +293,13 @@ export const createConsultationByDict = async (data) => {
             "description": data.description,
             "client": data.client
         }
-        
+
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newData),
         })
@@ -313,10 +336,12 @@ export async function deleteRequest(requestID) {
         + String(requestID)
         + "/"
 
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
         })
 
@@ -344,10 +369,12 @@ export async function createRequest(consultationID, destinationBoardID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
         + process.env.REACT_APP_PATH_REQUEST_CARDS
 
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
         },
         body: JSON.stringify({
             "consultation": consultationID,
@@ -388,10 +415,12 @@ export async function createConsultation(description, opponent, tag, clientID) {
             "client": clientID
         }
 
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newConsult),
         })

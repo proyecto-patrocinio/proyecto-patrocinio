@@ -15,7 +15,13 @@ export async function getDataClient(clientID) {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
         + process.env.REACT_APP_PATH_CLIENTS
         + clientID;
-      const response = await fetch(url);
+
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: {'Authorization': `Token ${token}`}
+      });
+
       if (response.ok) {
         const client = await response.json();
         return client;
@@ -40,7 +46,13 @@ export async function getClientList() {
   try {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_CLIENTS;
-    const response = await fetch(url);
+
+      const token = window.localStorage.getItem('loggedCaseManagerUser');
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {'Authorization': `Token ${token}`}
+    });
+
     if (response.ok) {
       const client = await response.json();
       return client;
@@ -66,12 +78,13 @@ export async function createClient(clientData) {
   try {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_CLIENTS;
-    const response = await fetch(
-      url,
-      {
+
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
         },
         body: JSON.stringify(clientData)
       });
@@ -102,12 +115,13 @@ export async function deleteClient(clientID) {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_CLIENTS
       + clientID + '/';
-    const response = await fetch(
-      url,
-      {
+
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
         },
     });
     if (response.ok) {
@@ -137,15 +151,17 @@ export async function updateClient(clientData) {
       + process.env.REACT_APP_PATH_CLIENTS
       + clientData.id
       + "/";
-    const response = await fetch(
-      url,
-      {
+
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
         },
         body: JSON.stringify(clientData)
       });
+
     if (response.ok) {
       const client = await response.json();
       return client;
@@ -154,6 +170,7 @@ export async function updateClient(clientData) {
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
+
   } catch (error) {
     console.error('Error while try to update a client: ', error);
     throw error;

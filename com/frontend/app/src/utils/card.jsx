@@ -15,6 +15,8 @@ async function moveCard(cardID, destinyPanelID) {
     const request = new XMLHttpRequest();
     request.open('PATCH', url);
     request.setRequestHeader( 'Content-Type', 'application/json');
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    request.setRequestHeader( 'Authorization', `Token ${token}`);
 
     const promise = new Promise((resolve, reject) => {
       request.onreadystatechange = () => {// Call a function when the state changes.
@@ -59,7 +61,13 @@ export const getCard = async(cardID) => {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_CARDS
       + cardID;
-    const response = await fetch(url);
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url,
+      {
+        method: 'GET',
+        headers: {'Authorization': `Token ${token}`}
+      }
+      );
     if (response.ok) {
       const card = await response.json();
       return card;
@@ -88,11 +96,12 @@ export const updateCardField = async (id, fieldName, fieldValue) => {
                   + process.env.REACT_APP_PATH_CARDS
                   + String(id)
                   + "/";
-
+      const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url, {
           method: 'PATCH',
           headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Token ${token}`
           },
           body: JSON.stringify({
               [fieldName]: fieldValue
@@ -125,10 +134,12 @@ export const deleteCard = async(cardID) => {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_CARDS
       + cardID;
+      const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url,{
       method: 'DELETE',
           headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Token ${token}`
           },
     });
     if (response.ok) {
