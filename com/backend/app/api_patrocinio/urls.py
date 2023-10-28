@@ -18,6 +18,7 @@ from django.urls import path, include, re_path
 from locality.api.router import router_locality
 from Clients.api.router import router_clients
 from Card.api.router import router_card
+from User.views import get_user_info_from_token
 from BoardUSer.api.router import router_boardUser
 from Panel.api.router import router_panel
 from Board.api.router import router_board
@@ -26,6 +27,7 @@ from Consultation.api.router import router_consultation
 from dj_rest_auth.registration.views import RegisterView, ConfirmEmailView, VerifyEmailView, ResendEmailVerificationView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 from terms_and_policies.router import paths_terms_and_policies
+
 
 urlpatterns = [
     path('api/auth/account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),
@@ -46,5 +48,6 @@ urlpatterns = [
     path('api/boards/', include(router_board.urls)),
     path('api/consultations/', include(router_consultation.urls)),
     path('api/comments/', include(router_comment.urls)),
+    path('api/auth/user-by-token/', get_user_info_from_token, name='get_user_info'),
     *paths_terms_and_policies,
 ]

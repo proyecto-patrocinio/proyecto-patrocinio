@@ -15,6 +15,7 @@ import  Alert  from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
 import { useUserContext } from '../context/UserContext';
 import Cookies from "js-cookie";
+import { getDataUserByID } from '../utils/user';
 
 const theme = createTheme();
 
@@ -42,12 +43,20 @@ export default function SignIn( props) {
       const request = new XMLHttpRequest();
       request.open('POST', requestURL);
       request.setRequestHeader( 'Content-Type', 'application/json');
-      request.onreadystatechange = () => { // Call a function when the state changes.
+      request.onreadystatechange = async (event_data) => { // Call a function when the state changes.
         if (request.readyState === XMLHttpRequest.DONE ) {
           if( request.status === 200){
-            setOpen(false); 
-            //update user context 
-            userContext.setUser(JSON.parse( request.response).user);
+            // Storage token session
+            const resonse = event_data.currentTarget.response;
+            const token = JSON.parse( resonse).key;
+            window.localStorage.setItem("loggedCaseManagerUser", token);
+            setOpen(false);
+
+            // Update user context
+            console.log("User context", request);
+            const user = await getDataUserByID(token);
+            user.token = token;
+            userContext.setUser(user);
             Cookies.set("isLoggedIn", true);
             props.setIsLoggedIn(true);
           }
@@ -61,14 +70,12 @@ export default function SignIn( props) {
           }
         }
       }
-      const data_token = request.send(
+      request.send(
         JSON.stringify({
           "username": data_username,
           "email": "",
           "password": data_password,
         }));
-      window.localStorage.setItem("loggedCaseManagerUser", JSON.stringify(data_token));
-    //TODO: mover a otra parte mas centralizado
     }
     return () => {}
   }
