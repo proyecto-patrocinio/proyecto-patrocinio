@@ -61,13 +61,14 @@ export default function SignIn( props) {
           }
         }
       }
-      request.send(
-          JSON.stringify({
-              "username": data_username,
-              "email": "",
-              "password": data_password,
-          }));
-    
+      const data_token = request.send(
+        JSON.stringify({
+          "username": data_username,
+          "email": "",
+          "password": data_password,
+        }));
+      window.localStorage.setItem("loggedCaseManagerUser", JSON.stringify(data_token));
+    //TODO: mover a otra parte mas centralizado
     }
     return () => {}
   }

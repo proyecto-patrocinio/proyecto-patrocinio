@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'dj_rest_auth.registration',
     'Clients',
     'locality',
@@ -185,3 +186,5 @@ EMAIL_PORT = 587
 # https://pypi.org/project/django-cors-headers/
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://0.0.0.0').split(' ')
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://0.0.0.0').split(' ')
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_USE_SESSION = True

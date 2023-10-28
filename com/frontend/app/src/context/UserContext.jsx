@@ -12,19 +12,25 @@ export const UserProvider = ({ children }) => {
         username: "",
         email: "",
         firstname: "",
-        lastname: ""
+        lastname: "",
+        token: ""
     };
     const [userState, setUserState] = useState( initialState );
+
     useEffect(() => {
       // Comprobar si el estado del usuario ha cambiado y actualizar la cookie
         if( userState === initialState && Cookies.get("isLoggedIn") === "true"){
-          const a = Cookies.get("user");
-          setUserState( JSON.parse(a));
+          const newDataUser = Cookies.get("user");
+          const token = window.localStorage.getItem("loggedCaseManagerUser").token;//TODO: revisar
+          newDataUser.token = token;
+          setUserState(JSON.parse(newDataUser));
         }
-    }, []);
+      }, []);
 
       const setUser = (user) => {
         Cookies.set("user", JSON.stringify(user));
+        const token = window.localStorage.getItem("loggedCaseManagerUser").token;//TODO: revisar
+        user.token = token;
         setUserState(user);
       };
 

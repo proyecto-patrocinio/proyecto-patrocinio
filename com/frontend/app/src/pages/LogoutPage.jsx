@@ -13,6 +13,7 @@ const LogoutPage = () => {
   };
 
   removeCookies();
+  window.localStorage.removeItem("loggedCaseManagerUser");
   const navigate = useNavigate();
 
   useEffect(() => {
