@@ -21,7 +21,7 @@ export const UserProvider = ({ children }) => {
         const loggedUserToken = window.localStorage.getItem('loggedCaseManagerUser');
         if( userState === initialState && loggedUserToken){
           const newDataUser = await getDataUserByToken(loggedUserToken);
-          setUserState(JSON.parse(newDataUser));
+          setUserState(newDataUser);
       }};
       saveUser();
       }, []);

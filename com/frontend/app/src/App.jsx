@@ -32,6 +32,8 @@ const App = () => {
      */
     useEffect(() => {
         const tokenUser = window.localStorage.getItem('loggedCaseManagerUser');
+        setIsLoggedIn(!!tokenUser); // fast show page.
+        // reconfirm the token user with API (Check if this is valid)
         if (!tokenUser) {
             setIsLoggedIn(false);
         } else {
