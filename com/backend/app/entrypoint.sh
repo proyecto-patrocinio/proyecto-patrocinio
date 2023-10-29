@@ -13,6 +13,12 @@ then
     
   echo "PostgreSQL started"
 fi
+
+migrations=$(python manage.py showmigrations --list | grep "\[ \]")
+
+# Check if migrations are pending
+if [ -n "$migrations" ]; then
+echo "Pending migrations found, applying..."
 #migrations
 python manage.py makemigrations 
 python manage.py flush --no-input
@@ -29,5 +35,10 @@ python manage.py test
 
 #create superuser
 python manage.py createsuperuser --no-input
+
+
+else
+  echo "No pending migrations, database tables already exist."
+fi
 
 exec "$@"  # execute the command that was passed to docker run

@@ -20,6 +20,8 @@ function TermsAndPoliciesMarkdown() {
         } else {
             setContent("Sorry, the content could not be loaded.");
         }
+    }).catch((err) => {
+        setContent("Sorry, the content could not be loaded.");
     });
     }, []);
 
