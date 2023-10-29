@@ -116,7 +116,7 @@ function ClientDataTable({ data }) {
 
   const columns = [
     { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
-    { field: 'postal', 'type': 'number', headerName: 'Postal', width: 70, editable: true },
+    { field: 'postal', 'type': 'number', headerName: 'Postal', width: 80, editable: true },
     { field: 'address', headerName: 'Address', width: 150, editable: true },
     {
       field: 'marital_status', headerName: 'Marital Status', width: 120, editable: true,
@@ -161,7 +161,7 @@ function ClientDataTable({ data }) {
         {value: 'PASSPORT', label: 'Passport'},
       ]
     },
-    { field: 'id_number', 'type': 'number', headerName: 'ID Number', width: 110, editable: true },
+    { field: 'id_number', 'type': 'number', headerName: 'ID Number', width: 120, editable: true },
     { field: 'first_name', headerName: 'First Name', width: 150, editable: true },
     { field: 'last_name', headerName: 'Last Name', width: 150, editable: true },
     {
@@ -170,7 +170,7 @@ function ClientDataTable({ data }) {
       valueGetter: ({ value }) => value && new Date(value),
     },
     {
-      field: 'sex', headerName: 'Sex', width: 100, editable: true,
+      field: 'sex', headerName: 'Sex', width: 110, editable: true,
       type: 'singleSelect',
       valueOptions: [
         {value: 'MALE', label: 'Male'},

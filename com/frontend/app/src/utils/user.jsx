@@ -4,7 +4,7 @@
  * @param {string} token - The authentication token for the user.
  * @returns {Promise<object>} A promise that resolves to the user data or rejects with an error.
  */
-export async function getDataUserByID(token) {
+export async function getDataUserByToken(token) {
     try {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
         + process.env.REACT_APP_PATH_USER_BY_TOKEN
@@ -49,7 +49,7 @@ export function loginUser(dataUser, onLoginSuccess, onLoginError){
         
         // Update user context
         console.log("User context", request);
-        const user = await getDataUserByID(token);
+        const user = await getDataUserByToken(token);
         onLoginSuccess(user);
       }
       else if( request.status !== 400 ){

@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useUserContext } from "../context/UserContext";
@@ -7,13 +6,7 @@ import { logoutUser } from "../utils/user";
 const LogoutPage = () => {
   const userContext =  useUserContext();
 
-  const removeCookies = () => {
-    Cookies.remove("isLoggedIn");
-    Cookies.remove("user");
-  };
-
   logoutUser();
-  removeCookies();
   userContext.setUser({
     pk: "0",
     username: "",
@@ -32,7 +25,6 @@ const LogoutPage = () => {
   }, []);
 
   return <div>Loading...</div>;
-}
-
+};
 
   export default LogoutPage;

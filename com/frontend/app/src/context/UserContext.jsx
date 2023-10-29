@@ -1,5 +1,5 @@
 import { createContext, useState , useContext, useEffect} from "react";
-import Cookies from "js-cookie";
+import { getDataUserByToken } from "../utils/user";
 
 const UserContext = createContext();
 
@@ -17,15 +17,16 @@ export const UserProvider = ({ children }) => {
     const [userState, setUserState] = useState( initialState );
 
     useEffect(() => {
-      // Comprobar si el estado del usuario ha cambiado y actualizar la cookie
-        if( userState === initialState && Cookies.get("isLoggedIn") === "true"){
-          const newDataUser = Cookies.get("user");
+      const saveUser = async() => {
+        const loggedUserToken = window.localStorage.getItem('loggedCaseManagerUser');
+        if( userState === initialState && loggedUserToken){
+          const newDataUser = await getDataUserByToken(loggedUserToken);
           setUserState(JSON.parse(newDataUser));
-        }
+      }};
+      saveUser();
       }, []);
 
       const setUser = (user) => {
-        Cookies.set("user", JSON.stringify(user));
         setUserState(user);
       };
 

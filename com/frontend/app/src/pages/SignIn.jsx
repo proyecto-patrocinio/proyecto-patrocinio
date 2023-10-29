@@ -14,7 +14,6 @@ import Copyright from '../components/Copyright';
 import  Alert  from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
 import { useUserContext } from '../context/UserContext';
-import Cookies from "js-cookie";
 import {loginUser} from '../utils/user';
 const theme = createTheme();
 
@@ -25,7 +24,6 @@ export default function SignIn( props) {
 
   const onLoginSuccess = (user) => {
     userContext.setUser(user);
-    Cookies.set("isLoggedIn", true); //TODO: Eliminar cookie
     props.setIsLoggedIn(true);
   };
 
