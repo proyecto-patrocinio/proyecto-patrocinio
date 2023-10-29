@@ -5,7 +5,7 @@ WORKDIR /app
 COPY ./package.json ./
 COPY ./package-lock.json ./
 # RUN npm ci --silent
-RUN npm install 
+RUN npm install
 # Copy app files
 COPY . .
 # Build the app
