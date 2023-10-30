@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 /**
  * Fetch user data by token from the API.
  *
@@ -9,7 +11,6 @@ export async function getDataUserByToken(token) {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
         + process.env.REACT_APP_PATH_USER_BY_TOKEN
         + token;
-        console.log(url)
       const response = await fetch(url,
         {
             method: 'GET',
@@ -31,6 +32,14 @@ export async function getDataUserByToken(token) {
     }
 };
 
+
+/**
+ * Sends a login request to the API to authenticate a user with the provided data.
+ *
+ * @param {object} dataUser - An object containing user login data, including username and password.
+ * @param {function} onLoginSuccess - A callback function to be called upon successful login. It receives the user data.
+ * @param {function} onLoginError - A callback function to be called when there is an error during login. It receives an error message.
+ */
 export function loginUser(dataUser, onLoginSuccess, onLoginError){
   const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
   + process.env.REACT_APP_PATH_LOGIN ;
@@ -48,7 +57,6 @@ export function loginUser(dataUser, onLoginSuccess, onLoginError){
         window.localStorage.setItem("loggedCaseManagerUser", token);
         
         // Update user context
-        console.log("User context", request);
         const user = await getDataUserByToken(token);
         onLoginSuccess(user);
       }
@@ -73,26 +81,35 @@ export function loginUser(dataUser, onLoginSuccess, onLoginError){
 };
 
 
-export function logoutUser(){
-  const token = window.localStorage.getItem('loggedCaseManagerUser');
-  const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-  + process.env.REACT_APP_PATH_LOGOUT ;
+/**
+ * Logs out the user by sending a logout request to the API.
+ *
+ * @returns {Promise<boolean>} A promise that resolves to true if the logout is successful, and false otherwise.
+ */
+export async function logoutUser(){
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const csrfToken = Cookies.get("csrftoken");
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+    + process.env.REACT_APP_PATH_LOGOUT ;
 
-  const request = new XMLHttpRequest();
-  request.open('POST', url);
-  request.setRequestHeader( 'Content-Type', 'application/json');
-  request.setRequestHeader( 'Authorization', `Token ${token}`);
-  
-  request.onreadystatechange = async (event_data) => {
-    // Call a function when the state changes.
-    if (request.readyState === XMLHttpRequest.DONE ) {
-      if( request.status !== 200){
-        console.info('Logout Success');
-      } else{
-        console.error('Logout Failure');
-      }
+    try {
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`,
+      },
+    })
+    if(response.ok) {
+      console.info('Successful logout');
+      return true;
+    } else {
+      console.info('Logout Failure');
+      return false;
     }
-  };
-
-  request.send();
+  } catch (error) {
+    console.info('Logout Failure');
+    return false;
+  }
 };
