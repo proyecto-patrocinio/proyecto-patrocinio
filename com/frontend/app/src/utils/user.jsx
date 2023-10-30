@@ -113,3 +113,33 @@ export async function logoutUser(){
     return false;
   }
 };
+
+
+/**
+ * Sends a confirmation email to the specified email address.
+ *
+ * @param {string} email - The email address to which the confirmation email will be sent.
+ * @returns {Promise<Object>} A Promise that resolves with an object containing the result of the email sending.
+ * @property {boolean} ok - Indicates whether the email was sent successfully (true) or not (false).
+ * @property {string} detail - A message providing details about the result of the email sending.
+ */
+export async function sendConfirmationEmail(email){
+  const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+  + process.env.REACT_APP_PATH_RESEND_EMAIL;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: JSON.stringify({'email': email})
+    })
+    if(response.ok) {
+      return{ok: true, detail: 'Successful send email.'};
+    } else {
+      return{ok: false, detail: 'Failed to send email. Server response not okay.'};
+    };
+    
+  } catch (error) {
+    const mns = `Error while sending the email: ${error}`
+    return{ok: false, detail: mns};
+  }
+};

@@ -14,13 +14,14 @@ import BoardPage from "./pages/BoardPage";
 import LogoutPage from "./pages/LogoutPage";
 import TermsPage from "./pages/TermsPage";
 import {
-    PATH_BOARD, PATH_CONSULTANCY, PATH_CP_CLIENTS,
+    PATH_BOARD, PATH_CONFIRM_EMAIL, PATH_CONSULTANCY, PATH_CP_CLIENTS,
     PATH_CP_CONSULT, PATH_LOGOUT, PATH_ROOT, PATH_SIGNUP,
     PATH_TERMS 
 } from "./utils/constants";
 import ControlPanelConsultation from "./pages/ControlConsultionPage";
 import ControlPanelClient from "./pages/ControlClientPage";
 import { getDataUserByToken } from "./utils/user";
+import EmailConfirmationPage from "./pages/EmailConfirmationPage";
 
 
 const App = () => {
@@ -65,6 +66,7 @@ const App = () => {
             <Routes>
                 <Route exact path={PATH_ROOT}           element={getPage(<HomePage/>)} />
                 <Route exact path={PATH_SIGNUP}         element={<SignUp/>} />
+                <Route exact path={PATH_CONFIRM_EMAIL}  element={<EmailConfirmationPage/>} />
                 <Route exact path={PATH_CONSULTANCY}    element={getPage(<CaseTaker/>)} />
                 <Route exact path={PATH_CP_CONSULT}     element={getPage(<ControlPanelConsultation/>)} />
                 <Route exact path={PATH_CP_CLIENTS}     element={getPage(<ControlPanelClient/>)} />
