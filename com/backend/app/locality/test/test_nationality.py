@@ -27,7 +27,7 @@ class TestNationality(TestSetUp):
         view_fail = NationalityApiViewSet.as_view({'post': 'create'})
         response_fail = view_fail(request_fail)
         self.assertEqual(response_fail.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_fail.data['detail'], 'You do not have permission to perform this action.')
+        self.assertEqual(response_fail.data['detail'], "Authentication credentials were not provided.")
 
     def test_get_negative_not_authenticated(self):
         # GET: FAIL GET LIST NATIONALITIES - NOT AUTHENTICATED
@@ -36,7 +36,7 @@ class TestNationality(TestSetUp):
         view_fail = NationalityApiViewSet.as_view({'get': 'list'})
         response_fail = view_fail(request_fail)
         self.assertEqual(response_fail.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(response_fail.data['detail'], 'You do not have permission to perform this action.')
+        self.assertEqual(response_fail.data['detail'], "Authentication credentials were not provided.")
 
     def test_get_positive(self):
         # GET: GET LIST NATIONALITIES

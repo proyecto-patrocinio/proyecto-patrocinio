@@ -15,7 +15,13 @@ async function getDataBoard(boardID) {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_BOARD
       + boardID;
-    const response = await fetch(url);
+      const token = window.localStorage.getItem('loggedCaseManagerUser');
+      const response = await fetch(url,
+        {
+          method: 'GET',
+          headers: {'Authorization': `Token ${token}`}
+        }
+      );
     if (response.ok) {
       const board = await response.json();
       return board;
@@ -44,7 +50,13 @@ export const fetchBoardsByUser = async (idUser) => {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_USERBOARD_BY_USER
       + idUser;
-    const response = await fetch(url);
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url,
+      {
+        method: 'GET',
+        headers: {'Authorization': `Token ${token}`}
+      }
+    );
     if (response.ok) {
       const data = await response.json();
       const boardPromises = data.map((item) => getDataBoard(item.board));
@@ -75,11 +87,12 @@ export const acceptRequestConsult = async(requestConsultationID, panelID) => {
     + process.env.REACT_APP_PATH_REQUEST_CARDS
     + String(requestConsultationID)
     + process.env.REACT_APP_EXTRA_PATH_ACCEPT_REQUEST_CARDS;
-
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
       },
       body: JSON.stringify({
         "destiny_panel": panelID
@@ -113,11 +126,12 @@ export const rejectRequestConsult = async(id) => {
     + process.env.REACT_APP_PATH_REQUEST_CARDS
     + String(id)
     + process.env.REACT_APP_EXTRA_PATH_REJECTED_REQUEST_CARDS;
-
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`
       },
     });
 
@@ -145,7 +159,13 @@ export const getListBoard = async () => {
   try {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                   + process.env.REACT_APP_PATH_BOARD;
-      const response = await fetch(url);
+      const token = window.localStorage.getItem('loggedCaseManagerUser');
+      const response = await fetch(url,
+        {
+          method: 'GET',
+          headers: {'Authorization': `Token ${token}`}
+        }
+        );
       if (response.ok) {
           const boardList = await response.json();
           return boardList;
@@ -173,11 +193,12 @@ export const updatBoardTitle = async (id, newTitle) => {
                   + process.env.REACT_APP_PATH_BOARD
                   + String(id)
                   + "/";
-
+      const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url, {
           method: 'PATCH',
           headers: {
               'Content-Type': 'application/json',
+              'Authorization': `Token ${token}`
           },
           body: JSON.stringify({
               "title": newTitle

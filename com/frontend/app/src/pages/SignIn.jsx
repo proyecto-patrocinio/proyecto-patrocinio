@@ -14,8 +14,7 @@ import Copyright from '../components/Copyright';
 import  Alert  from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
 import { useUserContext } from '../context/UserContext';
-import Cookies from "js-cookie";
-
+import {loginUser} from '../utils/user';
 const theme = createTheme();
 
 export default function SignIn( props) {
@@ -23,8 +22,18 @@ export default function SignIn( props) {
   const [open, setOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
 
+  const onLoginSuccess = (user) => {
+    userContext.setUser(user);
+    props.setIsLoggedIn(true);
+  };
+
+  const onLoginError = (errorMensage) => {
+  setLoginError(errorMensage);
+  setOpen(true);
+  };
+
   //Conect to API
-  const handleValidation = (event) => {  
+  const handleValidation = (event) => {
     
       //get data from form
       const data = new FormData(event.currentTarget);
@@ -35,45 +44,15 @@ export default function SignIn( props) {
     if (data_username === "" || data_password === "") {
       setLoginError("Complete all fields.");
       setOpen(true);
-    }else {      
-      //send data to API
-      const requestURL = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-                        + process.env.REACT_APP_PATH_LOGIN ;
-      const request = new XMLHttpRequest();
-      request.open('POST', requestURL);
-      request.setRequestHeader( 'Content-Type', 'application/json');
-      request.onreadystatechange = () => { // Call a function when the state changes.
-        if (request.readyState === XMLHttpRequest.DONE ) {
-          if( request.status === 200){
-            setOpen(false); 
-            //update user context 
-            userContext.setUser(JSON.parse( request.response).user);
-            Cookies.set("isLoggedIn", true);
-            props.setIsLoggedIn(true);
-          }
-          else if( request.status !== 400 ){
-            setLoginError("Unable to login. Please try again later.");
-            setOpen(true);
-          }
-          else {
-            setLoginError("The username or password is incorrect.");
-            setOpen(true);
-          }
-        }
-      }
-      request.send(
-          JSON.stringify({
-              "username": data_username,
-              "email": "",
-              "password": data_password,
-          }));
-    
+    }else {
+      setOpen(false);
+      const dataUser = {username: data_username, password: data_password};
+      loginUser(dataUser, onLoginSuccess, onLoginError);
     }
     return () => {}
-  }
-  
+  };
 
-  //Handle submit when click on button ("Sign in") 
+  //Handle submit when click on button ("Sign in")
   const handleSubmit = (event) => {
     event.preventDefault();
     handleValidation(event);
@@ -88,7 +67,6 @@ export default function SignIn( props) {
   };
 
 
-  
   return (
     <ThemeProvider theme={theme}>
     
@@ -163,4 +141,4 @@ export default function SignIn( props) {
       </Container>
     </ThemeProvider>
   );
-}
+};

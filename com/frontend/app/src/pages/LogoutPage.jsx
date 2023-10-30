@@ -1,28 +1,33 @@
-import Cookies from "js-cookie";
 import { useEffect } from "react";
-import { Navigate, redirect } from "react-router-dom";
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useUserContext } from "../context/UserContext";
+import { logoutUser } from "../utils/user";
+import { deleteCookie } from "../utils/tools";
 
-const LogoutPage = () => {
-
-    //TODO: Eliminar token(?) en backend
-    //TODO: Eliminar usercontext(?)
-  const removeCookies = () => {
-    Cookies.remove("isLoggedIn");
-    Cookies.remove("user");
-  };
-
-  removeCookies();
+const LogoutPage =  ({setIsLoggedIn}) => {
+  const userContext =  useUserContext();
   const navigate = useNavigate();
 
+  const exit = async () => {
+    window.localStorage.removeItem("loggedCaseManagerUser");
+    logoutUser();
+    deleteCookie("csrftoken");
+    userContext.setUser({
+      pk: "0",
+      username: "",
+      email: "",
+      firstname: "",
+      lastname: "",
+    });
+    setIsLoggedIn(false);
+    navigate('/', { replace: true });
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      navigate('/', { replace: true });
-    }, 500);
+    exit();
   }, []);
 
   return <div>Loading...</div>;
-}
-
+};
 
   export default LogoutPage;

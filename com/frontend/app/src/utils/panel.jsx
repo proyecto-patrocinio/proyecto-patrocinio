@@ -8,11 +8,14 @@ async function createPanel(titlePanel, boardID) {
     const boardIntID = Number(boardID);
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
     + process.env.REACT_APP_PATH_PANELS;
+
     try {
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
             title: titlePanel,
@@ -56,10 +59,12 @@ export const updatPanelTitle = async (id, newTitle) => {
                     + String(id)
                     + "/";
 
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
                 "title": newTitle
@@ -99,10 +104,12 @@ export const deletePanel = async(id) => {
     + "/";
 
     try {
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
             headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
             },
         });
 

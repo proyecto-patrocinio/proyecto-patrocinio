@@ -155,28 +155,21 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Autenticacion and Login
 # https://coffeebytes.dev/login-con-django-rest-framework-drf/
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth
-# https://django-rest-framework-simplejwt.readthedocs.io/en/latest/
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny', #TODO: AllowAny
+        'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        #   'rest_framework.authentication.SessionAuthentication', #TODO:
-        #   'rest_framework.authentication.TokenAuthentication',
-        #   'dj_rest_auth.jwt_auth.JWTCookieAuthentication',
+          'rest_framework.authentication.SessionAuthentication',
+          'rest_framework.authentication.TokenAuthentication',
     ],
 
 }
 
-# JWT authentication
-REST_USE_JWT = True
-JWT_AUTH_COOKIE = 'my-app-auth'
-JWT_AUTH_REFRESH_COOKIE = 'my-refresh-token'
-
 # User Register
 SITE_ID=1
-DEFAULT_HTTP_PROTOCOL="https"
+DEFAULT_HTTP_PROTOCOL = os.environ.get('DEFAULT_HTTP_PROTOCOL', 'http')
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
@@ -191,6 +184,7 @@ EMAIL_PORT = 587
 
 # CORS- Cross-Origin
 # https://pypi.org/project/django-cors-headers/
-# CORS_ALLOW_ALL_ORIGINS = True TODO: remove
 CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://0.0.0.0').split(' ')
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://0.0.0.0').split(' ')
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_USE_SESSION = True

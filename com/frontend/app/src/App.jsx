@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {useEffect, useState } from "react";
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -10,7 +10,6 @@ import SignUp from "./pages/SignUp";
 import { UserProvider } from "./context/UserContext";
 import HomePage from "./pages/HomePage";
 import CaseTaker from "./pages/CaseTakerPage";
-import Cookies from "js-cookie";
 import BoardPage from "./pages/BoardPage";
 import LogoutPage from "./pages/LogoutPage";
 import TermsPage from "./pages/TermsPage";
@@ -21,20 +20,32 @@ import {
 } from "./utils/constants";
 import ControlPanelConsultation from "./pages/ControlConsultionPage";
 import ControlPanelClient from "./pages/ControlClientPage";
+import { getDataUserByToken } from "./utils/user";
 
 
 const App = () => {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    /**
+     * Check for a user token in local storage.
+     * If a token exists, attempt to retrieve user data using the token.
+     */
     useEffect(() => {
-        //TODO: conectar al backend (crear/obtener token?) y consultar si removemos la cookie 
-        // Comprobar si la cookie existe y establecer el estado de inicio de sesión en consecuencia
-        const isLoggedInCookie = Cookies.get("isLoggedIn");
-        if(isLoggedInCookie === "true"){
-            setIsLoggedIn(true);
-        }
-        else{
+        const tokenUser = window.localStorage.getItem('loggedCaseManagerUser');
+        setIsLoggedIn(!!tokenUser); // fast show page.
+        // reconfirm the token user with API (Check if this is valid)
+        if (!tokenUser) {
             setIsLoggedIn(false);
-        }
+        } else {
+            getDataUserByToken(tokenUser).then( (user) => {
+                if(user){
+                    setIsLoggedIn(true);
+                }
+                else{
+                    setIsLoggedIn(false);
+                }
+            });
+    };
     }, []);
 
     const getPage  = (children) => {
