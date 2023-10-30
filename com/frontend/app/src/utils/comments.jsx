@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 
 /**
  * Fetches all comments for consultation ID from the API.
@@ -42,12 +43,16 @@ export async function createComment(commentData) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_COMMENTS;
+
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Token ${token}`
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+                'Authorization': `Token ${token}`
                 },
                 body: JSON.stringify(commentData)
             });
@@ -78,11 +83,15 @@ export async function deleteComment(commentID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_COMMENTS
             + commentID + '/';
+
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
         });
@@ -114,11 +123,14 @@ export async function updateComment(commentID, commentData) {
             + commentID
             + "/";
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PUT',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
             body: JSON.stringify(commentData)
@@ -150,11 +162,16 @@ export async function uploadFile(fileData) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_ATTACH_COMMENT_FILE;
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: {'Authorization': `Token ${token}`},
-                body: fileData
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': csrfToken,
+                'Authorization': `Token ${token}`
+            },
+            body: fileData
             });
         if (response.ok) {
             const file = await response.json();

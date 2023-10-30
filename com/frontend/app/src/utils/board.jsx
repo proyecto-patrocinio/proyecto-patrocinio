@@ -1,6 +1,7 @@
 /**************************************************************************
 * This module houses essential functions for interacting with board data. *
 ***************************************************************************/
+import Cookies from "js-cookie";
 
 
 /**
@@ -87,12 +88,16 @@ export const acceptRequestConsult = async(requestConsultationID, panelID) => {
     + process.env.REACT_APP_PATH_REQUEST_CARDS
     + String(requestConsultationID)
     + process.env.REACT_APP_EXTRA_PATH_ACCEPT_REQUEST_CARDS;
+
+    const csrfToken = Cookies.get("csrftoken");
     const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
       },
       body: JSON.stringify({
         "destiny_panel": panelID
@@ -126,11 +131,15 @@ export const rejectRequestConsult = async(id) => {
     + process.env.REACT_APP_PATH_REQUEST_CARDS
     + String(id)
     + process.env.REACT_APP_EXTRA_PATH_REJECTED_REQUEST_CARDS;
+
+    const csrfToken = Cookies.get("csrftoken");
     const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
+      credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
         'Authorization': `Token ${token}`
       },
     });
@@ -142,12 +151,13 @@ export const rejectRequestConsult = async(id) => {
     } else {
       console.error("Failed to reject the consultation request: ", response.status);
       return false;
-    }
+    };
+
   } catch (error) {
     console.error('Unexpected error when try to reject  the consultation request:', error);
     return false;
-  }
-}
+  };
+};
 
 
 /**
@@ -159,9 +169,9 @@ export const getListBoard = async () => {
   try {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                   + process.env.REACT_APP_PATH_BOARD;
+
       const token = window.localStorage.getItem('loggedCaseManagerUser');
-      const response = await fetch(url,
-        {
+      const response = await fetch(url, {
           method: 'GET',
           headers: {'Authorization': `Token ${token}`}
         }
@@ -171,13 +181,14 @@ export const getListBoard = async () => {
           return boardList;
       } else {
           throw new Error('Failed to fetch board. Status Code: ' , response.status);
-      }
+      };
+
   } catch (error) {
       console.error('Failed to fetch board.');
       console.debug(error);
       throw error;
-  }
-}
+  };
+};
 
 
 /**
@@ -187,23 +198,27 @@ export const getListBoard = async () => {
  * @param {string} newTitle - The new title to set for the Board.
  * @returns {Promise<string|null>} - A promise that resolves to the updated title if successful, or null if there was an error.
  */
-export const updatBoardTitle = async (id, newTitle) => {
+export const updateBoardTitle = async (id, newTitle) => {
   try {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                   + process.env.REACT_APP_PATH_BOARD
                   + String(id)
                   + "/";
+
+      const csrfToken = Cookies.get("csrftoken");
       const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url, {
-          method: 'PATCH',
-          headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Token ${token}`
-          },
-          body: JSON.stringify({
-              "title": newTitle
-          }),
-      })
+        method: 'PATCH',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+          'Authorization': `Token ${token}`
+        },
+        body: JSON.stringify({
+          "title": newTitle
+        }),
+      });
 
       if (response.ok) {
           const requestPanel = await response.json();
@@ -213,10 +228,11 @@ export const updatBoardTitle = async (id, newTitle) => {
       } else {
           console.warn(`Failed to update the Title field of Board.`);
           return null;
-      }
+      };
+
   } catch (error) {
       console.error(`Error while making the PATCH request for the Title field of Board:`, error.message);
       console.debug(error);
       throw error;
-  }
+  };
 };

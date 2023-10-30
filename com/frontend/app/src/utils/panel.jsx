@@ -1,3 +1,6 @@
+import Cookies from "js-cookie";
+
+
 /**
  * Creates a new panel by sending a POST request to the specified URL.
  * @param {string} titlePanel - The title of the panel to be created.
@@ -10,12 +13,15 @@ async function createPanel(titlePanel, boardID) {
     + process.env.REACT_APP_PATH_PANELS;
 
     try {
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
             title: titlePanel,
@@ -59,11 +65,14 @@ export const updatPanelTitle = async (id, newTitle) => {
                     + String(id)
                     + "/";
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PATCH',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
@@ -104,12 +113,16 @@ export const deletePanel = async(id) => {
     + "/";
 
     try {
+
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
+            credentials: 'same-origin',
             headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
             },
         });
 

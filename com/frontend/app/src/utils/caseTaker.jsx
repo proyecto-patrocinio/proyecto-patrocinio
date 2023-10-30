@@ -1,8 +1,9 @@
 /***********************************************************
  * This Module contains functions for the Consultancy Page.*
  ***********************************************************/
-
+import Cookies from "js-cookie";
 import {updateCardField} from "./card";
+
 
 /********************** CONSULTATIONS ************************/
 
@@ -159,11 +160,15 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
                     + process.env.REACT_APP_PATH_CONSULTATIONS
                     + String(id)
                     + "/";
+
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PATCH',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
@@ -203,11 +208,14 @@ export async function deleteConsultation(consultationID) {
         + String(consultationID)
         + "/"
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
         })
@@ -249,11 +257,14 @@ export const updateConsultation = async (data) => {
             "description": data.description,
         }
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PUT',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newData),
@@ -294,11 +305,14 @@ export const createConsultationByDict = async (data) => {
             "client": data.client
         }
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newData),
@@ -336,27 +350,30 @@ export async function deleteRequest(requestID) {
         + String(requestID)
         + "/"
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
-        })
+        });
 
         if (!response.ok) {
             console.error('Failed to DELETE request Consultation', requestID ,'. Status code:', response.status);
             throw new Error('Failed to DELETE request consultation.');
-            }
+        };
 
         console.info("Successful delete Request for Consultation ID:", requestID)
     } catch (error) {
         console.error('Error in delete request consultation.');
         console.debug(error)
         throw error;
-    }
-}
+    };
+};
 
 
 /**
@@ -369,17 +386,20 @@ export async function createRequest(consultationID, destinationBoardID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
         + process.env.REACT_APP_PATH_REQUEST_CARDS
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
-        },
-        body: JSON.stringify({
-            "consultation": consultationID,
-            "destiny_board": destinationBoardID
-        }),
+            },
+            body: JSON.stringify({
+                "consultation": consultationID,
+                "destiny_board": destinationBoardID
+            }),
         })
 
         if(!response.ok) {
@@ -413,13 +433,16 @@ export async function createConsultation(description, opponent, tag, clientID) {
             "opponent": opponent,
             "tag": tag,
             "client": clientID
-        }
+        };
 
+        const csrfToken = Cookies.get("csrftoken");
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
+            credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newConsult),
@@ -437,5 +460,5 @@ export async function createConsultation(description, opponent, tag, clientID) {
         console.error('Unexpected error in create consultation.');
         console.debug(error)
         return { success: false, content: {'all': 'Unexpected error occurred.'} };
-    }
-}
+    };
+};
