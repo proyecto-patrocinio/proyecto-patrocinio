@@ -1,6 +1,7 @@
 /**************************************************************************
 * This module houses essential functions for interacting with client data. *
 ***************************************************************************/
+import Cookies from "js-cookie";
 
 
 /**
@@ -79,14 +80,17 @@ export async function createClient(clientData) {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_CLIENTS;
 
+    const csrfToken = Cookies.get("csrftoken");
     const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`
-        },
-        body: JSON.stringify(clientData)
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify(clientData)
       });
     if (response.ok) {
       const client = await response.json();
@@ -116,12 +120,15 @@ export async function deleteClient(clientID) {
       + process.env.REACT_APP_PATH_CLIENTS
       + clientID + '/';
 
+    const csrfToken = Cookies.get("csrftoken");
     const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
         },
     });
     if (response.ok) {
@@ -152,15 +159,18 @@ export async function updateClient(clientData) {
       + clientData.id
       + "/";
 
+    const csrfToken = Cookies.get("csrftoken");
     const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`
-        },
-        body: JSON.stringify(clientData)
-      });
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify(clientData)
+    });
 
     if (response.ok) {
       const client = await response.json();

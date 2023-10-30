@@ -3,7 +3,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Dashboard from '../containers/Dashboard';
 import Board from '../containers/Board';
 import { useParams } from 'react-router-dom';
-import getDataBoard, { updatBoardTitle } from '../utils/board';
+import getDataBoard, { updateBoardTitle } from '../utils/board';
 import TitleEditable from '../components/TitleEditable';
 
 
@@ -34,7 +34,7 @@ export default function BoardPage( ) {
     }, [id_board]);
     
     const saveTitle = async (newTitle) => {
-        const responseTitle = await updatBoardTitle(id_board, newTitle);
+        const responseTitle = await updateBoardTitle(id_board, newTitle);
         if (responseTitle !== null && responseTitle !== undefined) {
             setTitle(responseTitle);
         }

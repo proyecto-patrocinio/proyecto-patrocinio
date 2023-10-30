@@ -71,7 +71,7 @@ function Register() {
                 "email": data_email,
                 "password1": data_password,
                 "password2": data_password2,
-            }));
+        }));
 
       }
       return () => {}
