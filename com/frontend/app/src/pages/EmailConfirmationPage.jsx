@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Avatar, Grid, Link } from '@mui/material';
 import { sendConfirmationEmail } from '../utils/user';
 import AlertSnackbar from '../components/AlertSnackbar';
+import Copyright from '../components/Copyright';
 
 const theme = createTheme();
 
@@ -111,6 +112,7 @@ function EmailConfirmationPage() {
             onClose={handleCloseSuccessSnackbar}
             severity = { success ? 'success' : 'error'}
         />
+        <Copyright sx={{ mt: 5 }} />
         </Container>
         </ThemeProvider>
     );

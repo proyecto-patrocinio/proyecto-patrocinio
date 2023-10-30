@@ -43,11 +43,11 @@ export async function getDataUserByToken(token) {
 export function loginUser(dataUser, onLoginSuccess, onLoginError){
   const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
   + process.env.REACT_APP_PATH_LOGIN ;
-  
+
   const request = new XMLHttpRequest();
   request.open('POST', url);
-  request.setRequestHeader( 'Content-Type', 'application/json');
-  
+  request.setRequestHeader('Content-Type', 'application/json');
+
   request.onreadystatechange = async (event_data) => { // Call a function when the state changes.
     if (request.readyState === XMLHttpRequest.DONE ) {
       if( request.status === 200){
@@ -55,7 +55,7 @@ export function loginUser(dataUser, onLoginSuccess, onLoginError){
         const resonse = event_data.currentTarget.response;
         const token = JSON.parse( resonse).key;
         window.localStorage.setItem("loggedCaseManagerUser", token);
-        
+
         // Update user context
         const user = await getDataUserByToken(token);
         onLoginSuccess(user);
@@ -130,7 +130,8 @@ export async function sendConfirmationEmail(email){
   try {
     const response = await fetch(url, {
       method: 'POST',
-      body: JSON.stringify({'email': email})
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: email})
     })
     if(response.ok) {
       return{ok: true, detail: 'Successful send email.'};
