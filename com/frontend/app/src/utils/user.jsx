@@ -43,11 +43,11 @@ export async function getDataUserByToken(token) {
 export function loginUser(dataUser, onLoginSuccess, onLoginError){
   const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
   + process.env.REACT_APP_PATH_LOGIN ;
-  
+
   const request = new XMLHttpRequest();
   request.open('POST', url);
-  request.setRequestHeader( 'Content-Type', 'application/json');
-  
+  request.setRequestHeader('Content-Type', 'application/json');
+
   request.onreadystatechange = async (event_data) => { // Call a function when the state changes.
     if (request.readyState === XMLHttpRequest.DONE ) {
       if( request.status === 200){
@@ -55,7 +55,7 @@ export function loginUser(dataUser, onLoginSuccess, onLoginError){
         const resonse = event_data.currentTarget.response;
         const token = JSON.parse( resonse).key;
         window.localStorage.setItem("loggedCaseManagerUser", token);
-        
+
         // Update user context
         const user = await getDataUserByToken(token);
         onLoginSuccess(user);
@@ -111,5 +111,36 @@ export async function logoutUser(){
   } catch (error) {
     console.info('Logout Failure');
     return false;
+  }
+};
+
+
+/**
+ * Sends a confirmation email to the specified email address.
+ *
+ * @param {string} email - The email address to which the confirmation email will be sent.
+ * @returns {Promise<Object>} A Promise that resolves with an object containing the result of the email sending.
+ * @property {boolean} ok - Indicates whether the email was sent successfully (true) or not (false).
+ * @property {string} detail - A message providing details about the result of the email sending.
+ */
+export async function sendConfirmationEmail(email){
+  const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+  + process.env.REACT_APP_PATH_RESEND_EMAIL;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: email})
+    })
+    if(response.ok) {
+      return{ok: true, detail: 'Successful send email.'};
+    } else {
+      return{ok: false, detail: 'Failed to send email. Server response not okay.'};
+    };
+    
+  } catch (error) {
+    const mns = `Error while sending the email: ${error}`
+    return{ok: false, detail: mns};
   }
 };

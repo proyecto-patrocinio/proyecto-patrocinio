@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../components/Copyright';
 import { SnackbarProvider, useSnackbar } from 'notistack';
 import CircularProgress from '@mui/material/CircularProgress';
-import { PATH_TERMS } from '../utils/constants';
+import { PATH_CONFIRM_EMAIL, PATH_ROOT, PATH_TERMS } from '../utils/constants';
 
 const theme = createTheme();
 
@@ -182,8 +182,13 @@ function Register() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/" variant="body2">
+                <Link href={PATH_ROOT} variant="body2">
                   Already have an account? Sign in
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href={PATH_CONFIRM_EMAIL} variant="body2">
+                  Did you not receive the email?
                 </Link>
               </Grid>
             </Grid>
