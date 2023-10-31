@@ -56,7 +56,7 @@ function ForgetPasswordPage() {
         const response = await sendResetPasswordEmail(email);
         setSuccess(response.ok);
         setAlertMessage(response.detail);
-        if (success) {
+        if (response.ok) {
             setButtonDisabled(true);
         }
     };
