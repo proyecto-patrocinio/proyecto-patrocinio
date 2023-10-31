@@ -15,6 +15,7 @@ import  Alert  from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
 import { useUserContext } from '../context/UserContext';
 import {loginUser} from '../utils/user';
+import { PATH_FORGET_PASSWORD } from '../utils/constants';
 const theme = createTheme();
 
 export default function SignIn( props) {
@@ -125,7 +126,7 @@ export default function SignIn( props) {
       
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href={PATH_FORGET_PASSWORD} variant="body2">
                   Forgot password?
                 </Link>
               </Grid>

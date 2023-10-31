@@ -144,3 +144,34 @@ export async function sendConfirmationEmail(email){
     return{ok: false, detail: mns};
   }
 };
+
+
+
+/**
+ * Sends a reset password email to the specified email address.
+ * @param {string} email - The email address to send the reset password email to.
+ * @returns {Object} An object containing the result of the email sending operation.
+ * - ok (boolean): Indicates whether the email was sent successfully.
+ * - detail (string): A message describing the result of the operation.
+ */
+export async function sendResetPasswordEmail(email){
+  const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+  + process.env.REACT_APP_PATH_RESET_PASSWORD;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: email})
+    })
+    if(response.ok) {
+      return{ok: true, detail: 'Successful send email.'};
+    } else {
+      return{ok: false, detail: 'Failed to send email. Server response not okay.'};
+    };
+    
+  } catch (error) {
+    const mns = `Error while sending the email: ${error}`
+    return{ok: false, detail: mns};
+  }
+};
