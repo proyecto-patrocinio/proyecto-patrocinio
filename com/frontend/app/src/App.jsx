@@ -23,6 +23,7 @@ import ControlPanelClient from "./pages/ControlClientPage";
 import { getDataUserByToken } from "./utils/user";
 import EmailConfirmationPage from "./pages/EmailConfirmationPage";
 import ForgetPasswordPage from "./pages/ForgetPasswordPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 
 const App = () => {
@@ -69,6 +70,7 @@ const App = () => {
                 <Route exact path={PATH_SIGNUP}         element={<SignUp/>} />
                 <Route exact path={PATH_CONFIRM_EMAIL}  element={<EmailConfirmationPage/>} />
                 <Route exact path={PATH_FORGET_PASSWORD}  element={<ForgetPasswordPage/>} />
+                <Route exact path={PATH_FORGET_PASSWORD + ":uid/:token/"}  element={<ChangePasswordPage/>} />
                 <Route exact path={PATH_CONSULTANCY}    element={getPage(<CaseTaker/>)} />
                 <Route exact path={PATH_CP_CONSULT}     element={getPage(<ControlPanelConsultation/>)} />
                 <Route exact path={PATH_CP_CLIENTS}     element={getPage(<ControlPanelClient/>)} />
