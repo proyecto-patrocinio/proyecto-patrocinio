@@ -74,15 +74,13 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         or have pending requests.
         """
         # Get content from Body
-        body_content = request.body.decode('utf-8')
-        data_dict = json.loads(body_content)
-        if not ("consultation" in data_dict):
+        consultation_id = request.data.get("consultation")
+        if not (consultation_id):
             mns = 'The key "consultation" is not present in the JSON.'
             logger.error('Error creating request: ', mns)
             return Response(data={'error': mns}, status=400)
 
         # Check if Consultation exists
-        consultation_id = data_dict["consultation"]
         try:
             consultation = Consultation.objects.get(id=consultation_id)
         except Consultation.DoesNotExist:
