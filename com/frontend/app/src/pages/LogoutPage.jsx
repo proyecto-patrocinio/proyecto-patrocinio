@@ -9,17 +9,19 @@ const LogoutPage =  ({setIsLoggedIn}) => {
   const navigate = useNavigate();
 
   const exit = async () => {
-    window.localStorage.removeItem("loggedCaseManagerUser");
-    logoutUser();
-    deleteCookie("csrftoken");
-    userContext.setUser({
-      pk: "0",
-      username: "",
-      email: "",
-      firstname: "",
-      lastname: "",
-    });
-    setIsLoggedIn(false);
+    const isLogout = await logoutUser();
+    if (isLogout){
+      window.localStorage.removeItem("loggedCaseManagerUser");
+      deleteCookie("csrftoken");
+      userContext.setUser({
+        pk: "0",
+        username: "",
+        email: "",
+        firstname: "",
+        lastname: "",
+      });
+      setIsLoggedIn(false);
+    }
     navigate('/', { replace: true });
   };
 

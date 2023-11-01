@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'Consultation',
     'terms_and_policies',
     'Comment',
+    'templatetags',
 ]
 
 MIDDLEWARE = [
@@ -86,6 +87,9 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries':{
+                'custom_filters': 'templatetags.custom_filters',
+            }
         },
     },
 ]

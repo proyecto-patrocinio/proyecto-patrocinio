@@ -10,6 +10,7 @@ import { Avatar, Grid, Link } from '@mui/material';
 import { sendConfirmationEmail } from '../utils/user';
 import AlertSnackbar from '../components/AlertSnackbar';
 import Copyright from '../components/Copyright';
+import { PATH_ROOT } from '../utils/constants';
 
 const theme = createTheme();
 
@@ -34,6 +35,7 @@ function EmailConfirmationPage() {
             };
         } else {
             setButtonDisabled(false);
+            setCountdown(COUNT_DOWN_SEC);
         }
     }, [countdown, isButtonDisabled]);
 
@@ -100,8 +102,8 @@ function EmailConfirmationPage() {
                 </Button>
                 <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
                 <Grid item>
-                    <Link href="/" variant="body2">
-                    Already have an account? Sign in
+                    <Link href={PATH_ROOT} variant="body2">
+                    Back to Home
                     </Link>
                 </Grid>
                 </Grid>
