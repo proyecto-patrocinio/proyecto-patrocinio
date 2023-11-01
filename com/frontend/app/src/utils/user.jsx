@@ -188,7 +188,7 @@ export async function sendResetPasswordEmail(email){
  */
 export async function sendChangePassword(password, uid, token) {
   const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-  + process.env.REACT_APP_PATH_RESET_PASSWORD
+  + process.env.REACT_APP_PATH_RESET_PASSWORD_CONFIRM
   + `${uid}/${token}/`;
 
   try {
@@ -203,7 +203,7 @@ export async function sendChangePassword(password, uid, token) {
     })
     })
     if(response.ok) {
-      return{ok: true, detail: 'Successful send email.'};
+      return{ok: true, detail: 'Password change successful'};
     } else {
       const responseJson = await response.json();
       const message = responseJson?.detail
