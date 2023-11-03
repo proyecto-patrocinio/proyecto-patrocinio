@@ -9,7 +9,7 @@ export async function getClientDNI2ID () {
     const clients = await getClientList()
     const clientDNItoIdMapping = {};
     clients.forEach((client) => {
-    clientDNItoIdMapping[client.id_number] = client.id;
+    clientDNItoIdMapping[client.id_value] = client.id;
     });
     return clientDNItoIdMapping;
 };
@@ -23,7 +23,7 @@ export async function getClientID2DNI () {
     const clients = await getClientList()
     const clientDNItoIdMapping = {};
     clients.forEach((client) => {
-    clientDNItoIdMapping[client.id] = client.id_number;
+    clientDNItoIdMapping[client.id] = client.id_value;
     });
     return clientDNItoIdMapping;
 };

@@ -6,12 +6,12 @@ from locality.test.utils import *
 # Auxiliary functions
 
 def load_clients(self, id, postal, address, marital_status, housing_type, studies, locality,
-                email, id_type, id_number, first_name, last_name, birth_date, sex):
+                email, id_type, id_value, first_name, last_name, birth_date, sex):
     client_data = {
         "id": id, "postal": postal,"address": address,
         "marital_status":marital_status,
         "housing_type":housing_type,"studies" :studies, "locality":locality,"email" :email,
-        "id_type": id_type,"id_number" : id_number, "first_name" : first_name,"last_name" : last_name,
+        "id_type": id_type,"id_value" : id_value, "first_name" : first_name,"last_name" : last_name,
         "birth_date" : birth_date,"sex" : sex
     }
     url = reverse('client-list')
@@ -83,7 +83,7 @@ def load_dummy_client(self):
         "id": 1, "postal": 1212, "address": "avenida santa fe",
         "marital_status": 'SINGLE',
         "housing_type": 'HOUSE', "studies": 'INCOMPLETE_PRIMARY', "locality": 1, "email": 'dummy@dummy.com',
-        "id_type": 'DOCUMENT', "id_number": 55, "first_name": "dummy_name", "last_name": "dummy_last_name",
+        "id_type": 'DOCUMENT', "id_value": '55', "first_name": "dummy_name", "last_name": "dummy_last_name",
         "birth_date": '1995-10-10', "sex": 'MALE',
     }
     request = self.factory.post(self.url, clients_data)
