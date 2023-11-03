@@ -83,7 +83,7 @@ def load_dummy_client(self):
         "id": 1, "postal": 1212, "address": "avenida santa fe",
         "marital_status": 'SINGLE',
         "housing_type": 'HOUSE', "studies": 'INCOMPLETE_PRIMARY', "locality": 1, "email": 'dummy@dummy.com',
-        "id_type": 'DOCUMENT', "id_value": '55', "first_name": "dummy_name", "last_name": "dummy_last_name",
+        "id_type": 'DOCUMENT', "id_value": "55", "first_name": "dummy_name", "last_name": "dummy_last_name",
         "birth_date": '1995-10-10', "sex": 'MALE',
     }
     request = self.factory.post(self.url, clients_data)

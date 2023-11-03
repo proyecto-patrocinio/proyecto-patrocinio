@@ -14,7 +14,7 @@ from Clients.test.utils import *
 class Test_tel(APITestCase):
 
     def setUp(self):
-        self.factory =APIRequestFactory()
+        self.factory = APIRequestFactory()
         self.view = TelViewSet.as_view({'get':'retrieve'})
         self.url = reverse('tel-list')
         self.client = APIClient()

@@ -2,7 +2,7 @@ import { getClientList } from "./client";
 
 
 /**
- * Get a mapping of client's DNI (ID number) to client ID.
+ * Get a mapping of client's DNI (ID Value) to client ID.
  * @returns {Promise<object>} An object that maps DNI numbers to client IDs.
  */
 export async function getClientDNI2ID () {
@@ -16,7 +16,7 @@ export async function getClientDNI2ID () {
 
 
 /**
- * Get a mapping of client ID to DNI (ID number).
+ * Get a mapping of client ID to DNI (ID value).
  * @returns {Promise<object>} An object that maps client IDs to DNI numbers.
  */
 export async function getClientID2DNI () {

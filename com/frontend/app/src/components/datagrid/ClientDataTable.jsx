@@ -161,7 +161,7 @@ function ClientDataTable({ data }) {
         {value: 'PASSPORT', label: 'Passport'},
       ]
     },
-    { field: 'id_value', 'type': 'number', headerName: 'ID Number', width: 120, editable: true },
+    { field: 'id_value', headerName: 'ID Value', width: 120, editable: true },
     { field: 'first_name', headerName: 'First Name', width: 150, editable: true },
     { field: 'last_name', headerName: 'Last Name', width: 150, editable: true },
     {
