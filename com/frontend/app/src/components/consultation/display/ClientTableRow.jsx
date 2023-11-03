@@ -68,19 +68,19 @@ const ClientTableRow = ({clientID}) => {
                 <TableCell>{clientData.last_name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>ID type:</TableCell>
+                <TableCell>ID Type:</TableCell>
                 <TableCell>{clientData.id_type}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>ID Number:</TableCell>
-                <TableCell>{clientData.id_number}</TableCell>
+                <TableCell>ID Value:</TableCell>
+                <TableCell>{clientData.id_value}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Sex:</TableCell>
                 <TableCell>{clientData.sex}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Birth date:</TableCell>
+                <TableCell>Birthdate:</TableCell>
                 <TableCell>{clientData.birth_date}</TableCell>
                 </TableRow>
                 <TableRow>
