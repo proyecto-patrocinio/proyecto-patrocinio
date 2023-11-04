@@ -324,7 +324,7 @@ export const createConsultationByDict = async (data) => {
             return consultation;
         } else {
             if (responseJson.client != null || responseJson.client !== undefined) {
-                responseJson.client = "[Must be a valid Client DNI number]"
+                responseJson.client = "[Must be a valid Client DNI or Passport]"
             };
             const mns = (JSON.stringify(responseJson)).replace(/["{}]/g, '');
             console.warn(mns, "Status: " + response.status);
