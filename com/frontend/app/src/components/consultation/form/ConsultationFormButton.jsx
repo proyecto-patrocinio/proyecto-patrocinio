@@ -83,10 +83,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
       }
     });
 
-    if (isNaN(formData.client)) {
-      newError.client = 'Must be a valid DNI number';
-      hasError = true;
-    } else if (!clientDNI2ID[formData.client]) {
+    if (!clientDNI2ID[formData.client]) {
       newError.client = 'Client ID does not exist';
     } else {
       formData.client = clientDNI2ID[formData.client] // Set ID of the client
