@@ -31,12 +31,12 @@ export async function getClientID2DNI () {
 
 /**
  * Get Random Integer Number
- * @param {Number} min 
- * @param {Number} max 
+ * @param {Number} max.
+ * @param {Number} min. Default value is 1.
  * @returns Random number
  */
-export function getRandomNumber(max) {
-    const randint = Math.floor(Math.random() * max) + 1;
+export function getRandomNumber(max, min=1) {
+    const randint = Math.floor(Math.random() * (max-min)) + min;
     return randint;
 };
 

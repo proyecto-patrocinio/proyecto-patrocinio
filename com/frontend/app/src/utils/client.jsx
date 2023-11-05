@@ -176,13 +176,80 @@ export async function updateClient(clientData) {
       const client = await response.json();
       return client;
     } else {
-      const mns = 'Failed to update a new client.';
+      const mns = 'Failed to update a new Client.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
 
   } catch (error) {
-    console.error('Error while try to update a client: ', error);
+    console.error('Error while try to update a Client: ', error);
+    throw error;
+  };
+};
+
+
+export async function addPhoneNumer(phone){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_TEL;
+
+    const csrfToken = Cookies.get("csrftoken");
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify(phone)
+    });
+
+    if (response.ok) {
+      const phone = await response.json();
+      console.info(`Phone with ID ${phone.id} is added successfuly.`)
+      return phone;
+    } else {
+      const mns = 'Failed to update a new Phone Number.';
+      console.error(mns, " Status: ", response.status);
+      throw new Error(mns);
+    };
+
+  } catch (error) {
+    console.error('Error while try to update a Phone Number: ', error);
+    throw error;
+  };
+};
+
+
+export async function deletePhoneNumer(phone){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_TEL
+      + phone.id + '/';
+
+    const csrfToken = Cookies.get("csrftoken");
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      }
+    });
+
+    if (response.ok) {
+      console.info(`Phone with ID ${phone.id} is deleted successfuly.`)
+    } else {
+      const mns = 'Failed to delete Phone Number.';
+      console.error(mns, " Status: ", response.status);
+      throw new Error(mns);
+    };
+
+  } catch (error) {
+    console.error('Error while try to delete Phone Number: ', error);
     throw error;
   };
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogContent, DialogActions, Button, TextField, List, ListItem, IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -6,35 +6,53 @@ import { getRandomNumber } from '../utils/tools';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 
 
+/**
+ * PhoneNumbersDialog component displays a dialog for managing phone numbers.
+ *
+ * @param {Object} props - The component's props.
+ * @param {boolean} props.open - Controls the visibility of the dialog.
+ * @param {Function} props.onClose - Callback function to close the dialog.
+ * @param {Array} props.phoneNumbers - The list of phone numbers to display.
+ * @param {Function} props.onAdd - Callback function to add a new phone number.
+ * @param {Function} props.onDelete - Callback function to delete a phone number.
+ */
 function PhoneNumbersDialog({ open, onClose, phoneNumbers, onAdd, onDelete }) {
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
+  const [numbersList, setNumbersList] = useState(phoneNumbers);
 
-  const handleAdd = (event) => {
+  useEffect(()=> {
+    setNumbersList(phoneNumbers);
+  },[phoneNumbers]);
+
+  const addHandler = (event) => {
     if (newPhoneNumber.trim() !== '') {
-      const newPhoneDict = {id: getRandomNumber(999), phone_number:newPhoneNumber}
+      const newPhoneDict = {id: getRandomNumber(Number.MAX_SAFE_INTEGER), phone_number:newPhoneNumber}
       onAdd(newPhoneDict);
+      setNumbersList([...numbersList, newPhoneDict]);
     }
-    setNewPhoneNumber(event.target.value);
+    setNewPhoneNumber('');
   };
 
   const handleDelete = (index) => {
-    const updatedPhoneNumbers = [...phoneNumbers];
-    const deletedPhone = updatedPhoneNumbers.splice(index, 1);
-    if(!!deletedPhone) {
-      onDelete(deletedPhone[0]);
+    const updatedPhoneNumbers = [...numbersList];
+    const deletedPhoneList = updatedPhoneNumbers.splice(index, 1);
+    if(!!deletedPhoneList) {
+      const deletedPhone = deletedPhoneList[0];
+      setNumbersList(updatedPhoneNumbers);
+      onDelete(deletedPhone);
     }
   };
 
-  const handleClose = () => {
+  const closeHandler = () => {
     setNewPhoneNumber('');
     onClose();
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={open} onClose={closeHandler}>
       <DialogContent>
         <List>
-          {phoneNumbers.map((phoneDict, index) => (
+          {numbersList?.map((phoneDict, index) => (
             <ListItem key={index}>
               {phoneDict?.phone_number}
               <IconButton onClick={() => handleDelete(index)} color="secondary">
@@ -50,11 +68,11 @@ function PhoneNumbersDialog({ open, onClose, phoneNumbers, onAdd, onDelete }) {
             value={newPhoneNumber}
             onChange={(e) => setNewPhoneNumber(e.target.value)}
           />
-          <Button onClick={handleAdd} color="primary" startIcon={<AddIcCallIcon />} />
+          <Button onClick={addHandler} color="primary" startIcon={<AddIcCallIcon />} />
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose} startIcon={<CloseIcon />} />
+        <Button onClick={closeHandler} startIcon={<CloseIcon />} />
       </DialogActions>
     </Dialog>
   );

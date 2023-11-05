@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Autocomplete, Button, TextField } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
-import { createClient, deleteClient, updateClient } from '../../utils/client';
+import { addPhoneNumer, createClient, deleteClient, deletePhoneNumer, updateClient } from '../../utils/client';
 import { formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
 import PhoneNumbersDialog from '../PhoneNumbersDialog';
@@ -18,6 +18,8 @@ function ClientDataTable({ data }) {
   const [localityOptions, setLocalityOptions] = useState(null);
   const [geographyModel, setGeographyModel] = useState(null);
   const [phoneNumbers, setPhoneNumbers] = useState([]);
+  const [addPhoneNumbers, setAddPhoneNumbers] = useState([]);
+  const [deletedPhoneNumbers, setDeletedPhoneNumbers] = useState([]);
   const [isPhoneNumbersDialogOpen, setIsPhoneNumbersDialogOpen] = useState(false);
 
 
@@ -31,8 +33,32 @@ function ClientDataTable({ data }) {
       setLocalityOptions(localityList);
     };
     updateGeographic();
-  },[geographyModel])
+  },[geographyModel]);
 
+  /**
+   * Update Row Handler. Updates a client's information when save changes editions.
+   * @param {Object} client - The client to be updated.
+   * @returns {Promise<Object>} The updated client data.
+   */
+  const updateRowHandler = async (client) => {
+    const updatedClient = updateClient(client);
+    let updatedPhoneNumbers = phoneNumbers;
+    for (let index = 0; index < addPhoneNumbers.length; index++) {
+      let phone = addPhoneNumbers[index];
+      phone.client = client.id;
+      phone = await addPhoneNumer(phone);
+      updatedPhoneNumbers.push(phone);
+    }
+    for (let index = 0; index < deletedPhoneNumbers.length; index++) {
+      let phone = deletedPhoneNumbers[index];
+      phone.client = client.id;
+      await deletePhoneNumer(phone);
+      updatedPhoneNumbers = updatedPhoneNumbers.filter(item => item.id !== phone.id);
+    }
+    updatedClient.tels = updatedPhoneNumbers;
+    setPhoneNumbers(updatedPhoneNumbers);
+    return updatedClient;
+  };
 
   /**Handler to format the data row before sending update or create queries to the API.*/
   const formatClientData = (clientData) => {
@@ -108,15 +134,20 @@ function ClientDataTable({ data }) {
     }
 
   /**
-   * Preprocesses the data before editing a row.
+   * On click edit cell handler. Preprocesses the data before editing a row.
    * @param {object} row - The row data.
    */
     const preProcessEdit = (row) => {
-      const locality = row?.locality
-      const province = row?.province
-      const nationality = row?.nationality
-      setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id})
-    }
+      // Init State of Geography
+      const locality = row?.locality;
+      const province = row?.province;
+      const nationality = row?.nationality;
+      setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id});
+      // Init States of Phone Number
+      setDeletedPhoneNumbers([]);
+      setAddPhoneNumbers([]);
+      setPhoneNumbers(row.tels);
+    };
 
   /**
    * Opens the phone numbers dialog and populates it with the current value.
@@ -139,8 +170,7 @@ function ClientDataTable({ data }) {
    * @param {Object} deletedPhone - The phone number to be deleted.
    */
   const deletePhoneNumber = (deletedPhone) => {
-    const updatedPhoneNumbers = phoneNumbers.filter(item => item.id !== deletedPhone.id);
-    setPhoneNumbers(updatedPhoneNumbers);
+    setDeletedPhoneNumbers(([...deletedPhoneNumbers, deletedPhone]));
   };
 
   /**
@@ -148,7 +178,7 @@ function ClientDataTable({ data }) {
    * @param {Object} newPhoneNumber - The new phone number to be added.
    */
   const addPhoneNumber = (newPhoneNumber) => {
-    setPhoneNumbers([...phoneNumbers, newPhoneNumber]);
+    setAddPhoneNumbers([...addPhoneNumbers, newPhoneNumber]);
   };
 
 
@@ -237,7 +267,7 @@ function ClientDataTable({ data }) {
         <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel?.province}
           handleChange={(id, name) => {
             const newModel = {};
-            newModel['nationality'] = geographyModel.nationality;
+            newModel['nationality'] = geographyModel?.nationality;
             newModel['province'] = {id: id, name: name};
             newModel['locality'] = null;
             setGeographyModel(newModel);
@@ -251,14 +281,14 @@ function ClientDataTable({ data }) {
         <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel?.locality}
           handleChange={(id, name) =>{
             const newModel = {}
-            newModel['nationality'] = geographyModel.nationality;
-            newModel['province'] = geographyModel.province;
+            newModel['nationality'] = geographyModel?.nationality;
+            newModel['province'] = geographyModel?.province;
             newModel['locality'] = {id: id, name: name};
             setGeographyModel(newModel);
           }}
         />
       ),
-      valueFormatter: (value) => value.value?.name,
+      valueFormatter: (value) => value?.value?.name,
     },
     {
       field: 'tels',
@@ -266,15 +296,14 @@ function ClientDataTable({ data }) {
       valueFormatter: (value) => value?.value?.map((tel)=> tel?.phone_number),
       width: 180, editable: true,
       renderEditCell: (params) => {
-        console.log(params)
         return(
-        <div>
+          <div>
           <Button
             variant="text"
             color="primary"
             startIcon={<LocalPhoneIcon />}
-            onClick={() => openPhoneNumbersDialog(params.value)}
-            disabled={params.row.isNew}
+            onClick={() => openPhoneNumbersDialog(params?.value)}
+            disabled={params?.row?.isNew}
           >
           Manage Tels
           </Button>
@@ -296,7 +325,7 @@ function ClientDataTable({ data }) {
         initialRows={data}
         columns={columns}
         emptyRecord={[]}
-        onUpdateRow={updateClient}
+        onUpdateRow={updateRowHandler}
         onDeleteRow={deleteClient}
         onCreateRow={createClient}
         formatDataRow={formatClientData}
