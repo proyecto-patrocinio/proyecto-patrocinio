@@ -10,9 +10,18 @@ class ClientViewSet(viewsets.ModelViewSet):
     serializer_class = ClientSerializer
 
     def list(self, request, *args, **kwargs):
-        self.serializer_class = ClientSimpleSerializer
+        self.serializer_class = ClientFullSerializer
         self.queryset = self.queryset.prefetch_related(
             Prefetch('locality')
+        )
+        self.queryset = self.queryset.prefetch_related(
+            Prefetch('patrimony')
+        )
+        self.queryset = self.queryset.prefetch_related(
+            Prefetch('tels')
+        )
+        self.queryset = self.queryset.prefetch_related(
+            'family__children'
         )
         client_list = super().list(request, *args, **kwargs)
         for client in client_list.data:

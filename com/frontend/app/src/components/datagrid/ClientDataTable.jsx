@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Autocomplete, Button, TextField } from '@mui/material';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
 import { createClient, deleteClient, updateClient } from '../../utils/client';
 import { formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
-import { Autocomplete, TextField } from '@mui/material';
+import PhoneNumbersDialog from '../PhoneNumbersDialog';
 
 
 /**A React component that displays client data in a table using Material-UI DataGrid.
@@ -15,6 +17,8 @@ function ClientDataTable({ data }) {
   const [provinceOptions, setProvinceOptions] = useState(null);
   const [localityOptions, setLocalityOptions] = useState(null);
   const [geographyModel, setGeographyModel] = useState(null);
+  const [phoneNumbers, setPhoneNumbers] = useState([]);
+  const [isPhoneNumbersDialogOpen, setIsPhoneNumbersDialogOpen] = useState(false);
 
 
   useEffect( () => {
@@ -51,6 +55,7 @@ function ClientDataTable({ data }) {
     clientRendered.nationality = {
       'id': localityData.province.nationality.id, 'name': localityData.province.nationality.name
     };
+    clientRendered.tels = phoneNumbers;
     return clientRendered;
   };
 
@@ -112,6 +117,39 @@ function ClientDataTable({ data }) {
       const nationality = row?.nationality
       setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id})
     }
+
+  /**
+   * Opens the phone numbers dialog and populates it with the current value.
+   * @param {Object} currentValue - The current value to populate the dialog with.
+   */
+  const openPhoneNumbersDialog = (currentValue) => {
+    setPhoneNumbers(currentValue);
+    setIsPhoneNumbersDialogOpen(true);
+  };
+
+  /**
+   * Closes the phone numbers dialog.
+   */
+  const closePhoneNumbersDialog = () => {
+    setIsPhoneNumbersDialogOpen(false);
+  };
+
+  /**
+   * Deletes a phone number from the list of phone numbers.
+   * @param {Object} deletedPhone - The phone number to be deleted.
+   */
+  const deletePhoneNumber = (deletedPhone) => {
+    const updatedPhoneNumbers = phoneNumbers.filter(item => item.id !== deletedPhone.id);
+    setPhoneNumbers(updatedPhoneNumbers);
+  };
+
+  /**
+   * Adds a new phone number to the list of phone numbers.
+   * @param {Object} newPhoneNumber - The new phone number to be added.
+   */
+  const addPhoneNumber = (newPhoneNumber) => {
+    setPhoneNumbers([...phoneNumbers, newPhoneNumber]);
+  };
 
 
   const columns = [
@@ -221,6 +259,34 @@ function ClientDataTable({ data }) {
         />
       ),
       valueFormatter: (value) => value.value?.name,
+    },
+    {
+      field: 'tels',
+      headerName: 'Phone Numbers',
+      valueFormatter: (value) => value?.value?.map((tel)=> tel?.phone_number),
+      width: 180, editable: true,
+      renderEditCell: (params) => {
+        console.log(params)
+        return(
+        <div>
+          <Button
+            variant="text"
+            color="primary"
+            startIcon={<LocalPhoneIcon />}
+            onClick={() => openPhoneNumbersDialog(params.value)}
+            disabled={params.row.isNew}
+          >
+          Manage Tels
+          </Button>
+          <PhoneNumbersDialog
+            open={isPhoneNumbersDialogOpen}
+            onClose={closePhoneNumbersDialog}
+            phoneNumbers={phoneNumbers}
+            onAdd={addPhoneNumber}
+            onDelete={deletePhoneNumber}
+          />
+        </div>
+      )},
     },
 ];
 
