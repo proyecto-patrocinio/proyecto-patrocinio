@@ -75,3 +75,11 @@ export function formatDateToString(date) {
 export function deleteCookie(name) {
     document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 };
+
+/**
+ * Filter elements from listA that are not in listB
+ */
+export function findUniqueElementsInA(listA, listB) {
+    const result = listA.filter(item => !listB.includes(item));
+    return result;
+}

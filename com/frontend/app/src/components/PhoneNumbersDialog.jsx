@@ -13,10 +13,9 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
  * @param {boolean} props.open - Controls the visibility of the dialog.
  * @param {Function} props.onClose - Callback function to close the dialog.
  * @param {Array} props.phoneNumbers - The list of phone numbers to display.
- * @param {Function} props.onAdd - Callback function to add a new phone number.
- * @param {Function} props.onDelete - Callback function to delete a phone number.
+ * @param {Function} props.onUpdatePhoneNumbers - Callback function to add or delete phone number.
  */
-function PhoneNumbersDialog({ open, onClose, phoneNumbers, onAdd, onDelete }) {
+function PhoneNumbersDialog({ open, onClose, phoneNumbers, onUpdatePhoneNumbers }) {
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
   const [numbersList, setNumbersList] = useState(phoneNumbers);
 
@@ -27,8 +26,7 @@ function PhoneNumbersDialog({ open, onClose, phoneNumbers, onAdd, onDelete }) {
   const addHandler = (event) => {
     if (newPhoneNumber.trim() !== '') {
       const newPhoneDict = {id: getRandomNumber(Number.MAX_SAFE_INTEGER), phone_number:newPhoneNumber}
-      onAdd(newPhoneDict);
-      setNumbersList([...numbersList, newPhoneDict]);
+      onUpdatePhoneNumbers([...numbersList, newPhoneDict]);
     }
     setNewPhoneNumber('');
   };
@@ -37,9 +35,7 @@ function PhoneNumbersDialog({ open, onClose, phoneNumbers, onAdd, onDelete }) {
     const updatedPhoneNumbers = [...numbersList];
     const deletedPhoneList = updatedPhoneNumbers.splice(index, 1);
     if(!!deletedPhoneList) {
-      const deletedPhone = deletedPhoneList[0];
-      setNumbersList(updatedPhoneNumbers);
-      onDelete(deletedPhone);
+      onUpdatePhoneNumbers(updatedPhoneNumbers);
     }
   };
 

@@ -3,7 +3,7 @@ import { Autocomplete, Button, TextField } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
 import { addPhoneNumer, createClient, deleteClient, deletePhoneNumer, updateClient } from '../../utils/client';
-import { formatDateToString } from '../../utils/tools';
+import { findUniqueElementsInA, formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
 import PhoneNumbersDialog from '../PhoneNumbersDialog';
 
@@ -18,8 +18,6 @@ function ClientDataTable({ data }) {
   const [localityOptions, setLocalityOptions] = useState(null);
   const [geographyModel, setGeographyModel] = useState(null);
   const [phoneNumbers, setPhoneNumbers] = useState([]);
-  const [addPhoneNumbers, setAddPhoneNumbers] = useState([]);
-  const [deletedPhoneNumbers, setDeletedPhoneNumbers] = useState([]);
   const [isPhoneNumbersDialogOpen, setIsPhoneNumbersDialogOpen] = useState(false);
 
 
@@ -41,8 +39,11 @@ function ClientDataTable({ data }) {
    * @returns {Promise<Object>} The updated client data.
    */
   const updateRowHandler = async (client) => {
-    const updatedClient = updateClient(client);
-    let updatedPhoneNumbers = phoneNumbers;
+    const updatedClient = await updateClient(client);
+    const originalTels = client.tels;
+    let updatedPhoneNumbers = originalTels;
+    const deletedPhoneNumbers = findUniqueElementsInA(originalTels, phoneNumbers);
+    const addPhoneNumbers = findUniqueElementsInA(phoneNumbers, originalTels);
     for (let index = 0; index < addPhoneNumbers.length; index++) {
       let phone = addPhoneNumbers[index];
       phone.client = client.id;
@@ -144,43 +145,8 @@ function ClientDataTable({ data }) {
       const nationality = row?.nationality;
       setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id});
       // Init States of Phone Number
-      setDeletedPhoneNumbers([]);
-      setAddPhoneNumbers([]);
       setPhoneNumbers(row.tels);
     };
-
-  /**
-   * Opens the phone numbers dialog and populates it with the current value.
-   * @param {Object} currentValue - The current value to populate the dialog with.
-   */
-  const openPhoneNumbersDialog = (currentValue) => {
-    setPhoneNumbers(currentValue);
-    setIsPhoneNumbersDialogOpen(true);
-  };
-
-  /**
-   * Closes the phone numbers dialog.
-   */
-  const closePhoneNumbersDialog = () => {
-    setIsPhoneNumbersDialogOpen(false);
-  };
-
-  /**
-   * Deletes a phone number from the list of phone numbers.
-   * @param {Object} deletedPhone - The phone number to be deleted.
-   */
-  const deletePhoneNumber = (deletedPhone) => {
-    setDeletedPhoneNumbers(([...deletedPhoneNumbers, deletedPhone]));
-  };
-
-  /**
-   * Adds a new phone number to the list of phone numbers.
-   * @param {Object} newPhoneNumber - The new phone number to be added.
-   */
-  const addPhoneNumber = (newPhoneNumber) => {
-    setAddPhoneNumbers([...addPhoneNumbers, newPhoneNumber]);
-  };
-
 
   const columns = [
     { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
@@ -302,17 +268,16 @@ function ClientDataTable({ data }) {
             variant="text"
             color="primary"
             startIcon={<LocalPhoneIcon />}
-            onClick={() => openPhoneNumbersDialog(params?.value)}
+            onClick={() => setIsPhoneNumbersDialogOpen(true)}
             disabled={params?.row?.isNew}
           >
           Manage Tels
           </Button>
           <PhoneNumbersDialog
             open={isPhoneNumbersDialogOpen}
-            onClose={closePhoneNumbersDialog}
+            onClose={() => setIsPhoneNumbersDialogOpen(false)}
             phoneNumbers={phoneNumbers}
-            onAdd={addPhoneNumber}
-            onDelete={deletePhoneNumber}
+            onUpdatePhoneNumbers={setPhoneNumbers}
           />
         </div>
       )},
