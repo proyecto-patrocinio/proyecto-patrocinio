@@ -17,26 +17,19 @@ import AddIcCallIcon from '@mui/icons-material/AddIcCall';
  */
 function PhoneNumbersDialog({ open, onClose, phoneNumbers, onUpdatePhoneNumbers }) {
   const [newPhoneNumber, setNewPhoneNumber] = useState('');
-  const [numbersList, setNumbersList] = useState(phoneNumbers);
-
-  useEffect(()=> {
-    setNumbersList(phoneNumbers);
-  },[phoneNumbers]);
 
   const addHandler = (event) => {
     if (newPhoneNumber.trim() !== '') {
-      const newPhoneDict = {id: getRandomNumber(Number.MAX_SAFE_INTEGER), phone_number:newPhoneNumber}
-      onUpdatePhoneNumbers([...numbersList, newPhoneDict]);
+      const newPhoneDict = {id: getRandomNumber(Number.MAX_SAFE_INTEGER), phone_number:newPhoneNumber};
+      onUpdatePhoneNumbers([...phoneNumbers, newPhoneDict]);
     }
     setNewPhoneNumber('');
   };
 
   const handleDelete = (index) => {
-    const updatedPhoneNumbers = [...numbersList];
-    const deletedPhoneList = updatedPhoneNumbers.splice(index, 1);
-    if(!!deletedPhoneList) {
-      onUpdatePhoneNumbers(updatedPhoneNumbers);
-    }
+    const updatedPhoneNumbers = [...phoneNumbers];
+    updatedPhoneNumbers.splice(index, 1);
+    onUpdatePhoneNumbers(updatedPhoneNumbers);
   };
 
   const closeHandler = () => {
@@ -48,7 +41,7 @@ function PhoneNumbersDialog({ open, onClose, phoneNumbers, onUpdatePhoneNumbers 
     <Dialog open={open} onClose={closeHandler}>
       <DialogContent>
         <List>
-          {numbersList?.map((phoneDict, index) => (
+          {phoneNumbers?.map((phoneDict, index) => (
             <ListItem key={index}>
               {phoneDict?.phone_number}
               <IconButton onClick={() => handleDelete(index)} color="secondary">

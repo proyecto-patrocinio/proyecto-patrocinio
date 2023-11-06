@@ -55,6 +55,7 @@ function ClientDataTable({ data }) {
       updatedPhoneNumbers = updatedPhoneNumbers.filter(item => item.id !== phone.id);
     }
     setPhoneNumbers(updatedPhoneNumbers);
+    return updatedPhoneNumbers;
   };
 
   /**
@@ -63,7 +64,7 @@ function ClientDataTable({ data }) {
    * @returns {Promise<Object>} - The updated client object with processed phone numbers.
    */
   const createRowHandler = async (client) => {
-    const updatedClient = await createClient(client);
+    let updatedClient = await createClient(client);
     updatedClient.tels = [];
     updatedClient.tels =  await processPhoneNumbers(updatedClient);
     return updatedClient;
@@ -75,7 +76,7 @@ function ClientDataTable({ data }) {
    * @returns {Promise<Object>} The updated client data.
    */
   const updateRowHandler = async (client) => {
-    const updatedClient = await updateClient(client);
+    let updatedClient = await updateClient(client);
     updatedClient.tels =  await processPhoneNumbers(client);
     return updatedClient;
   };
@@ -101,7 +102,6 @@ function ClientDataTable({ data }) {
     clientRendered.nationality = {
       'id': localityData.province.nationality.id, 'name': localityData.province.nationality.name
     };
-    clientRendered.tels = phoneNumbers;
     return clientRendered;
   };
 
