@@ -34,12 +34,10 @@ function ClientDataTable({ data }) {
   },[geographyModel]);
 
   /**
-   * Update Row Handler. Updates a client's information when save changes editions.
-   * @param {Object} client - The client to be updated.
-   * @returns {Promise<Object>} The updated client data.
+   * Process phone numbers for a client.
+   * @param {Object} client - The client object with phone numbers to process.
    */
-  const updateRowHandler = async (client) => {
-    const updatedClient = await updateClient(client);
+  const processPhoneNumbers = async (client) => {
     const originalTels = client.tels;
     let updatedPhoneNumbers = originalTels;
     const deletedPhoneNumbers = findUniqueElementsInA(originalTels, phoneNumbers);
@@ -56,8 +54,29 @@ function ClientDataTable({ data }) {
       await deletePhoneNumer(phone);
       updatedPhoneNumbers = updatedPhoneNumbers.filter(item => item.id !== phone.id);
     }
-    updatedClient.tels = updatedPhoneNumbers;
     setPhoneNumbers(updatedPhoneNumbers);
+  };
+
+  /**
+   * Create a new client with processed phone numbers.
+   * @param {Object} client - The client object to create.
+   * @returns {Promise<Object>} - The updated client object with processed phone numbers.
+   */
+  const createRowHandler = async (client) => {
+    const updatedClient = await createClient(client);
+    updatedClient.tels = [];
+    updatedClient.tels =  await processPhoneNumbers(updatedClient);
+    return updatedClient;
+  };
+
+  /**
+   * Update Row Handler. Updates a client's information when save changes editions.
+   * @param {Object} client - The client to be updated.
+   * @returns {Promise<Object>} The updated client data.
+   */
+  const updateRowHandler = async (client) => {
+    const updatedClient = await updateClient(client);
+    updatedClient.tels =  await processPhoneNumbers(client);
     return updatedClient;
   };
 
@@ -145,7 +164,7 @@ function ClientDataTable({ data }) {
       const nationality = row?.nationality;
       setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id});
       // Init States of Phone Number
-      setPhoneNumbers(row.tels);
+      setPhoneNumbers(row?.tels || []);
     };
 
   const columns = [
@@ -269,7 +288,6 @@ function ClientDataTable({ data }) {
             color="primary"
             startIcon={<LocalPhoneIcon />}
             onClick={() => setIsPhoneNumbersDialogOpen(true)}
-            disabled={params?.row?.isNew}
           >
           Manage Tels
           </Button>
@@ -292,7 +310,7 @@ function ClientDataTable({ data }) {
         emptyRecord={[]}
         onUpdateRow={updateRowHandler}
         onDeleteRow={deleteClient}
-        onCreateRow={createClient}
+        onCreateRow={createRowHandler}
         formatDataRow={formatClientData}
         isCellEditable={isCellEditable}
         handleCellRendering={handleCellRendering}

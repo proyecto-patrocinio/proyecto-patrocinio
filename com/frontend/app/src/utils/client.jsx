@@ -211,13 +211,13 @@ export async function addPhoneNumer(phone){
       console.info(`Phone with ID ${phone.id} is added successfuly.`)
       return phone;
     } else {
-      const mns = 'Failed to update a new Phone Number.';
+      const mns = 'Failed to create a new Phone Number.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
 
   } catch (error) {
-    console.error('Error while try to update a Phone Number: ', error);
+    console.error('Error while try to create a Phone Number: ', error);
     throw error;
   };
 };
