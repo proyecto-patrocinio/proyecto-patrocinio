@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Autocomplete, Button, TextField } from '@mui/material';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
-import { createClient, deleteClient, updateClient } from '../../utils/client';
-import { formatDateToString } from '../../utils/tools';
+import { addPhoneNumer, createClient, deleteClient, deletePhoneNumer, updateClient } from '../../utils/client';
+import { findUniqueElementsInA, formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
-import { Autocomplete, TextField } from '@mui/material';
+import PhoneNumbersDialog from '../PhoneNumbersDialog';
 
 
 /**A React component that displays client data in a table using Material-UI DataGrid.
@@ -15,6 +17,8 @@ function ClientDataTable({ data }) {
   const [provinceOptions, setProvinceOptions] = useState(null);
   const [localityOptions, setLocalityOptions] = useState(null);
   const [geographyModel, setGeographyModel] = useState(null);
+  const [phoneNumbers, setPhoneNumbers] = useState([]);
+  const [isPhoneNumbersDialogOpen, setIsPhoneNumbersDialogOpen] = useState(false);
 
 
   useEffect( () => {
@@ -27,8 +31,55 @@ function ClientDataTable({ data }) {
       setLocalityOptions(localityList);
     };
     updateGeographic();
-  },[geographyModel])
+  },[geographyModel]);
 
+  /**
+   * Process phone numbers for a client.
+   * @param {Object} client - The client object with phone numbers to process.
+   */
+  const processPhoneNumbers = async (client) => {
+    const originalTels = client.tels;
+    let updatedPhoneNumbers = originalTels;
+    const deletedPhoneNumbers = findUniqueElementsInA(originalTels, phoneNumbers);
+    const addPhoneNumbers = findUniqueElementsInA(phoneNumbers, originalTels);
+    for (let index = 0; index < addPhoneNumbers.length; index++) {
+      let phone = addPhoneNumbers[index];
+      phone.client = client.id;
+      phone = await addPhoneNumer(phone);
+      updatedPhoneNumbers.push(phone);
+    }
+    for (let index = 0; index < deletedPhoneNumbers.length; index++) {
+      let phone = deletedPhoneNumbers[index];
+      phone.client = client.id;
+      await deletePhoneNumer(phone);
+      updatedPhoneNumbers = updatedPhoneNumbers.filter(item => item.id !== phone.id);
+    }
+    setPhoneNumbers(updatedPhoneNumbers);
+    return updatedPhoneNumbers;
+  };
+
+  /**
+   * Create a new client with processed phone numbers.
+   * @param {Object} client - The client object to create.
+   * @returns {Promise<Object>} - The updated client object with processed phone numbers.
+   */
+  const createRowHandler = async (client) => {
+    let updatedClient = await createClient(client);
+    updatedClient.tels = [];
+    updatedClient.tels =  await processPhoneNumbers(updatedClient);
+    return updatedClient;
+  };
+
+  /**
+   * Update Row Handler. Updates a client's information when save changes editions.
+   * @param {Object} client - The client to be updated.
+   * @returns {Promise<Object>} The updated client data.
+   */
+  const updateRowHandler = async (client) => {
+    let updatedClient = await updateClient(client);
+    updatedClient.tels =  await processPhoneNumbers(client);
+    return updatedClient;
+  };
 
   /**Handler to format the data row before sending update or create queries to the API.*/
   const formatClientData = (clientData) => {
@@ -103,16 +154,18 @@ function ClientDataTable({ data }) {
     }
 
   /**
-   * Preprocesses the data before editing a row.
+   * On click edit cell handler. Preprocesses the data before editing a row.
    * @param {object} row - The row data.
    */
     const preProcessEdit = (row) => {
-      const locality = row?.locality
-      const province = row?.province
-      const nationality = row?.nationality
-      setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id})
-    }
-
+      // Init State of Geography
+      const locality = row?.locality;
+      const province = row?.province;
+      const nationality = row?.nationality;
+      setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id});
+      // Init States of Phone Number
+      setPhoneNumbers(row?.tels || []);
+    };
 
   const columns = [
     { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
@@ -199,7 +252,7 @@ function ClientDataTable({ data }) {
         <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel?.province}
           handleChange={(id, name) => {
             const newModel = {};
-            newModel['nationality'] = geographyModel.nationality;
+            newModel['nationality'] = geographyModel?.nationality;
             newModel['province'] = {id: id, name: name};
             newModel['locality'] = null;
             setGeographyModel(newModel);
@@ -213,14 +266,39 @@ function ClientDataTable({ data }) {
         <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel?.locality}
           handleChange={(id, name) =>{
             const newModel = {}
-            newModel['nationality'] = geographyModel.nationality;
-            newModel['province'] = geographyModel.province;
+            newModel['nationality'] = geographyModel?.nationality;
+            newModel['province'] = geographyModel?.province;
             newModel['locality'] = {id: id, name: name};
             setGeographyModel(newModel);
           }}
         />
       ),
-      valueFormatter: (value) => value.value?.name,
+      valueFormatter: (value) => value?.value?.name,
+    },
+    {
+      field: 'tels',
+      headerName: 'Phone Numbers',
+      valueFormatter: (value) => value?.value?.map((tel)=> tel?.phone_number),
+      width: 180, editable: true,
+      renderEditCell: (params) => {
+        return(
+          <div>
+          <Button
+            variant="text"
+            color="primary"
+            startIcon={<LocalPhoneIcon />}
+            onClick={() => setIsPhoneNumbersDialogOpen(true)}
+          >
+          Manage Tels
+          </Button>
+          <PhoneNumbersDialog
+            open={isPhoneNumbersDialogOpen}
+            onClose={() => setIsPhoneNumbersDialogOpen(false)}
+            phoneNumbers={phoneNumbers}
+            onUpdatePhoneNumbers={setPhoneNumbers}
+          />
+        </div>
+      )},
     },
 ];
 
@@ -230,9 +308,9 @@ function ClientDataTable({ data }) {
         initialRows={data}
         columns={columns}
         emptyRecord={[]}
-        onUpdateRow={updateClient}
+        onUpdateRow={updateRowHandler}
         onDeleteRow={deleteClient}
-        onCreateRow={createClient}
+        onCreateRow={createRowHandler}
         formatDataRow={formatClientData}
         isCellEditable={isCellEditable}
         handleCellRendering={handleCellRendering}

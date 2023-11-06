@@ -96,10 +96,9 @@ export default function BaseGrid({
         const editedRow = rows.find((row) => row.id === updatedRow.id);
         updatedRow = formatDataRow(updatedRow);
         if (editedRow.isNew) {
-            const data = await onCreateRow(updatedRow);
-            updatedRow = data;
+            updatedRow = await onCreateRow(updatedRow);
         } else {
-            await onUpdateRow(updatedRow);
+            updatedRow = await onUpdateRow(updatedRow);
         }
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
         const resultData = handleCellRendering(updatedRow)

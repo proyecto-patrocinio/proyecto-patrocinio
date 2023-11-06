@@ -16,7 +16,7 @@ class ConsultationSerializer(serializers.ModelSerializer):
 class ConsultationUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Consultation
-        fields =  ['tag', 'availability_state', 'progress_state', 'opponent', 'description']
+        fields =  '__all__'
         read_only_fields = ['id', 'time_stamp', 'client']
 
 class RequestConsultationSerializer(serializers.ModelSerializer):

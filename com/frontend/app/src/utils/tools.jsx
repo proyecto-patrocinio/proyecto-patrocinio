@@ -31,12 +31,12 @@ export async function getClientID2DNI () {
 
 /**
  * Get Random Integer Number
- * @param {Number} min 
- * @param {Number} max 
+ * @param {Number} max.
+ * @param {Number} min. Default value is 1.
  * @returns Random number
  */
-export function getRandomNumber(max) {
-    const randint = Math.floor(Math.random() * max) + 1;
+export function getRandomNumber(max, min=1) {
+    const randint = Math.floor(Math.random() * (max-min)) + min;
     return randint;
 };
 
@@ -75,3 +75,11 @@ export function formatDateToString(date) {
 export function deleteCookie(name) {
     document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 };
+
+/**
+ * Filter elements from listA that are not in listB
+ */
+export function findUniqueElementsInA(listA, listB) {
+    const result = listA.filter(item => !listB.includes(item));
+    return result;
+}
