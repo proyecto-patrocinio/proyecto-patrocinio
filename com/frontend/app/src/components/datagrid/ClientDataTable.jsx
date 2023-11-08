@@ -85,7 +85,7 @@ function ClientDataTable({ data }) {
     updatedClient.tels = [];
     updatedClient.tels =  await processPhoneNumbers(updatedClient);
     const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
-    updatedClient = Object.assign(updatedClient, patrimony);
+    updatedClient = Object.assign(updatedClient, {patrimony: patrimony});
     return updatedClient;
   };
 
@@ -98,7 +98,7 @@ function ClientDataTable({ data }) {
     let updatedClient = await updateClient(client);
     updatedClient.tels =  await processPhoneNumbers(client);
     const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
-    updatedClient = Object.assign(updatedClient, patrimony);
+    updatedClient = Object.assign(updatedClient, {patrimony: patrimony});
     return updatedClient;
   };
 
@@ -117,12 +117,18 @@ function ClientDataTable({ data }) {
    */
   const handleCellRendering = async (clientData) => {
     const localityData = await getLocalityByID(clientData.locality);
-    const clientRendered = clientData;
+    let clientRendered = clientData;
     clientRendered.locality = {'id': localityData.id, 'name': localityData.name};
     clientRendered.province = {'id': localityData.province.id, 'name': localityData.province.name};
     clientRendered.nationality = {
       'id': localityData.province.nationality.id, 'name': localityData.province.nationality.name
     };
+    console.log(clientRendered)
+    if(clientRendered.patrimony){
+      Object.keys(clientRendered.patrimony).forEach(subField => {
+        clientRendered[`patrimony.${subField}`] = clientRendered.patrimony[subField];
+      });
+    }
     return clientRendered;
   };
 
@@ -326,13 +332,13 @@ function ClientDataTable({ data }) {
       valueGetter: getSubField, valueSetter: setSubField('employment'),},
     { field: 'patrimony.salary', headerName: 'Salary', width: 100, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubField('salary'),},
-    { field: 'patrimony.other_income', headerName: 'Other Incomet', width: 100, editable: true,
+    { field: 'patrimony.other_income', headerName: 'Other Incomet', width: 110, editable: true,
       valueGetter: getSubField, valueSetter: setSubField('other_income'),},
-    { field: 'patrimony.amount_other_income', headerName: 'Amount Other Incomet', width: 100, editable: true, 'type': 'number',
+    { field: 'patrimony.amount_other_income', headerName: 'Amount Other Incomet', width: 120, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubField('amount_other_income'),},
     { field: 'patrimony.amount_retirement', headerName: 'Amount Retirement', width: 100, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubField('amount_retirement'),},
-    { field: 'patrimony.amount_pension', headerName: 'Amount Pension', width: 100, editable: true, 'type': 'number',
+    { field: 'patrimony.amount_pension', headerName: 'Amount Pension', width: 110, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubField('amount_pension'),},
     { field: 'patrimony.vehicle', headerName: 'Vehicle', width: 120, editable: true,
       valueGetter: getSubField, valueSetter: setSubField('vehicle'),},
