@@ -97,7 +97,6 @@ function ClientDataTable({ data }) {
   const updateRowHandler = async (client) => {
     let updatedClient = await updateClient(client);
     updatedClient.tels =  await processPhoneNumbers(client);
-    console.log(client);
     const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
     updatedClient = Object.assign(updatedClient, patrimony);
     return updatedClient;
@@ -323,14 +322,35 @@ function ClientDataTable({ data }) {
       )},
     },
     // PATRIMONY
-    { field: 'patrimony.employment', headerName: 'Employment', width: 180, editable: true},
-    { field: 'patrimony.salary', headerName: 'Salary', width: 100, editable: true, 'type': 'number'},
-    { field: 'patrimony.other_income', headerName: 'Other Incomet', width: 100, editable: true},
-    { field: 'patrimony.amount_other_income', headerName: 'Amount Other Incomet', width: 100, editable: true, 'type': 'number'},
-    { field: 'patrimony.amount_retirement', headerName: 'Amount Retirement', width: 100, editable: true, 'type': 'number'},
-    { field: 'patrimony.amount_pension', headerName: 'Amount Pension', width: 100, editable: true, 'type': 'number'},
-    { field: 'patrimony.vehicle', headerName: 'Vehicle', width: 120, editable: true },
+    { field: 'patrimony.employment', headerName: 'Employment', width: 180, editable: true,
+      valueGetter: getSubField, valueSetter: setSubField('employment'),},
+    { field: 'patrimony.salary', headerName: 'Salary', width: 100, editable: true, 'type': 'number',
+      valueGetter: getSubField, valueSetter: setSubField('salary'),},
+    { field: 'patrimony.other_income', headerName: 'Other Incomet', width: 100, editable: true,
+      valueGetter: getSubField, valueSetter: setSubField('other_income'),},
+    { field: 'patrimony.amount_other_income', headerName: 'Amount Other Incomet', width: 100, editable: true, 'type': 'number',
+      valueGetter: getSubField, valueSetter: setSubField('amount_other_income'),},
+    { field: 'patrimony.amount_retirement', headerName: 'Amount Retirement', width: 100, editable: true, 'type': 'number',
+      valueGetter: getSubField, valueSetter: setSubField('amount_retirement'),},
+    { field: 'patrimony.amount_pension', headerName: 'Amount Pension', width: 100, editable: true, 'type': 'number',
+      valueGetter: getSubField, valueSetter: setSubField('amount_pension'),},
+    { field: 'patrimony.vehicle', headerName: 'Vehicle', width: 120, editable: true,
+      valueGetter: getSubField, valueSetter: setSubField('vehicle'),},
 ];
+
+function getSubField(params) {
+  const [fieldName, subFieldName] = params?.field?.toString().split('.')
+  const field =  params?.row[fieldName]
+  return field? field[subFieldName] : null;
+}
+
+function setSubField(subFieldName) {
+  return (params) => {
+    const field = { ...params.row.patrimony };
+    field[subFieldName] = params.value;
+    return { ...params.row, patrimony: field };
+  };
+}
 
   return (
     <div>

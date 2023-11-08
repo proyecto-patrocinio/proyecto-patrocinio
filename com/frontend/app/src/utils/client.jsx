@@ -329,6 +329,7 @@ export async function updatePatrimony(idClient, patrimonyData){
       "amount_retirement": patrimonyData.amount_retirement,
       "amount_pension": patrimonyData.amount_pension,
       "vehicle": patrimonyData.vehicle,
+      "id": idClient
     };
 
     const csrfToken = Cookies.get("csrftoken");
