@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Autocomplete, Button, TextField } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
-import { addPhoneNumer, createClient, deleteClient, deletePhoneNumer, updateClient } from '../../utils/client';
+import { addPatrimony, addPhoneNumer, createClient, deleteClient, deletePhoneNumer, getPatrymony, updateClient, updatePatrimony } from '../../utils/client';
 import { findUniqueElementsInA, formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
 import PhoneNumbersDialog from '../PhoneNumbersDialog';
@@ -59,6 +59,23 @@ function ClientDataTable({ data }) {
   };
 
   /**
+   * Process Patrimony - Retrieves, updates, or adds patrimony data for a client based on the client's ID.
+   * @param {number} idClient - The ID of the client.
+   * @param {Object} patrimonyData - The patrimony data to be updated or added.
+   * @returns {Promise<Object>} The processed patrimony data.
+   */
+  const processPatrimony = async (idClient, patrimonyData) => {
+    let patrimony = await getPatrymony(idClient);
+    const patrymonyExists = patrimony != null;
+    if (patrymonyExists) {
+      patrimony = await updatePatrimony(idClient, patrimonyData);
+    } else {
+      patrimony = await addPatrimony(idClient, patrimonyData);
+    }
+    return patrimony;
+  };
+
+  /**
    * Create a new client with processed phone numbers.
    * @param {Object} client - The client object to create.
    * @returns {Promise<Object>} - The updated client object with processed phone numbers.
@@ -67,6 +84,8 @@ function ClientDataTable({ data }) {
     let updatedClient = await createClient(client);
     updatedClient.tels = [];
     updatedClient.tels =  await processPhoneNumbers(updatedClient);
+    const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
+    updatedClient = Object.assign(updatedClient, patrimony);
     return updatedClient;
   };
 
@@ -78,6 +97,9 @@ function ClientDataTable({ data }) {
   const updateRowHandler = async (client) => {
     let updatedClient = await updateClient(client);
     updatedClient.tels =  await processPhoneNumbers(client);
+    console.log(client);
+    const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
+    updatedClient = Object.assign(updatedClient, patrimony);
     return updatedClient;
   };
 
@@ -300,6 +322,14 @@ function ClientDataTable({ data }) {
         </div>
       )},
     },
+    // PATRIMONY
+    { field: 'patrimony.employment', headerName: 'Employment', width: 180, editable: true},
+    { field: 'patrimony.salary', headerName: 'Salary', width: 100, editable: true, 'type': 'number'},
+    { field: 'patrimony.other_income', headerName: 'Other Incomet', width: 100, editable: true},
+    { field: 'patrimony.amount_other_income', headerName: 'Amount Other Incomet', width: 100, editable: true, 'type': 'number'},
+    { field: 'patrimony.amount_retirement', headerName: 'Amount Retirement', width: 100, editable: true, 'type': 'number'},
+    { field: 'patrimony.amount_pension', headerName: 'Amount Pension', width: 100, editable: true, 'type': 'number'},
+    { field: 'patrimony.vehicle', headerName: 'Vehicle', width: 120, editable: true },
 ];
 
   return (
