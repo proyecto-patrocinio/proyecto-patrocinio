@@ -55,7 +55,7 @@ class ClientFullSerializer(serializers.ModelSerializer):
     locality = LocalityFullSerializer( many = False, read_only = True)
     patrimony = ClientPatrimonySerializer( many = False, required=False, allow_null=True)
     tels = ClientTelSerializer(many = True, required=False, allow_null=True )
-    family = FamilyFullSerializer(many = False, required=False, allow_null=True )
+    family = FamilyFullSerializer(many = True, required=False, allow_null=True )
     class Meta:
         model = Client
         fields = '__all__'
