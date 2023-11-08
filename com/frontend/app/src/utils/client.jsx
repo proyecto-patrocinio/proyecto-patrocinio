@@ -253,3 +253,145 @@ export async function deletePhoneNumer(phone){
     throw error;
   };
 };
+
+
+/**
+ * Adds patrimony data for a client.
+ *
+ * @param {number} idClient - The ID of the client.
+ * @param {Object} patrimonyData - The patrimony data to be added.
+ * @returns {Promise<Object>} The added patrimony data.
+ */
+export async function addPatrimony(idClient, patrimonyData){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_PATRIMONY;
+
+    const patrimony = {
+      "employment": patrimonyData.employment,
+      "salary": patrimonyData.salary,
+      "other_income": patrimonyData.other_income,
+      "amount_other_income": patrimonyData.amount_other_income,
+      "amount_retirement": patrimonyData.amount_retirement,
+      "amount_pension": patrimonyData.amount_pension,
+      "vehicle": patrimonyData.vehicle,
+      "client": idClient,
+      "id": idClient
+    };
+
+    const csrfToken = Cookies.get("csrftoken");
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify(patrimony)
+    });
+
+    if (response.ok) {
+      const patrimony = await response.json();
+      console.info(`Patrimony data for user ID ${idClient} is added successfuly.`)
+      return patrimony;
+    } else {
+      const mns = 'The patrimony data could not be added.';
+      console.error(mns, " Status: ", response.status);
+      throw new Error(mns);
+    };
+
+  } catch (error) {
+    console.error('Error while try to add patrimony data: ', error);
+    throw error;
+  };
+};
+
+
+/**
+ * Updates patrimony data for a client.
+ *
+ * @param {number} idClient - The ID of the client.
+ * @param {Object} patrimonyData - The updated patrimony data.
+ * @returns {Promise<Object>} The updated patrimony data.
+ */
+export async function updatePatrimony(idClient, patrimonyData){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_PATRIMONY
+      + idClient + "/";
+
+    const patrimony = {
+      "employment": patrimonyData.employment,
+      "salary": patrimonyData.salary,
+      "other_income": patrimonyData.other_income,
+      "amount_other_income": patrimonyData.amount_other_income,
+      "amount_retirement": patrimonyData.amount_retirement,
+      "amount_pension": patrimonyData.amount_pension,
+      "vehicle": patrimonyData.vehicle,
+      "id": idClient
+    };
+
+    const csrfToken = Cookies.get("csrftoken");
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify(patrimony)
+    });
+
+    if (response.ok) {
+      const patrimony = await response.json();
+      console.info(`Patrimony data for user ID ${idClient} is updated successfuly.`)
+      return patrimony;
+    } else {
+      const mns = 'The Patrimony data could not be updated.';
+      console.error(mns, " Status: ", response.status);
+      throw new Error(mns);
+    };
+
+  } catch (error) {
+    console.error('Error while try to update patrimony data: ', error);
+    throw error;
+  };
+};
+
+
+/**
+ * Get patrimony data for a client.
+ *
+ * @param {number} idClient - The ID of the client.
+ * @returns {Promise<Object|null>} The patrimony data or null if not found.
+ */
+export async function getPatrymony(idClient){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_PATRIMONY
+      + idClient + "/";
+
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Token ${token}`
+      },
+    });
+
+    if (response.ok) {
+      const patrimony = await response.json();
+      return patrimony;
+    } else {
+      return null;
+    };
+
+  } catch (error) {
+    console.error('Error while try to get patrimony data: ', error);
+    throw error;
+  };
+};

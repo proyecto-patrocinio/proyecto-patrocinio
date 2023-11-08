@@ -137,6 +137,41 @@ const ClientTableRow = ({clientID}) => {
                 <TableCell>Studies:</TableCell>
                 <TableCell>{clientData.studies}</TableCell>
                 </TableRow>
+                <TableRow>
+                <TableCell>Patrimony:</TableCell>
+                <TableCell>
+                <ul>
+                    <li key={1}>
+                    <strong>Employment: </strong>
+                    {clientData?.patrimony?.employment}
+                    </li>
+                    <li key={2}>
+                    <strong>Salary: </strong>
+                    {clientData?.patrimony?.salary}
+                    </li>
+                    <li key={3}>
+                    <strong>Other Income: </strong>
+                    {clientData?.patrimony?.other_income}
+                    </li>
+                    <li key={4}>
+                    <strong>Amount Other Income: </strong>
+                    {clientData?.patrimony?.amount_other_income}
+                    </li>
+                    <li key={5}>
+                    <strong>Amount Retirement: </strong>
+                    {clientData?.patrimony?.amount_retirement}
+                    </li>
+                    <li key={6}>
+                    <strong>Amount Pension: </strong>
+                    {clientData?.patrimony?.amount_pension}
+                    </li>
+                    <li key={7}>
+                    <strong>Vehicle: </strong>
+                    {clientData?.patrimony?.vehicle}
+                    </li>
+                </ul>
+                </TableCell>
+                </TableRow>
             </div>
                 ) : (
                     <p>{clientData.first_name} {clientData.last_name}</p>

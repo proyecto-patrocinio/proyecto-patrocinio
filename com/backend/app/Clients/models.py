@@ -22,22 +22,21 @@ class Client(models.Model):
         return f'{self.last_name} {self.first_name}'
 
 class Patrimony(models.Model):
-    id = models.AutoField( primary_key=True)  
-    client = models.OneToOneField(Client, on_delete=models.CASCADE, related_name="patrimony")
-    employment = models.CharField(max_length=45,verbose_name='Employment')
-    salary = models.IntegerField(verbose_name='Salary',default=0)
+    id = models.OneToOneField(Client, on_delete=models.CASCADE, related_name="patrimony", primary_key=True)
+    employment = models.CharField(max_length=45, verbose_name='Employment')
+    salary = models.IntegerField(verbose_name='Salary', default=0)
     other_income = models.CharField(max_length=45, verbose_name='Otros Ingresos')
-    amount_other_income = models.IntegerField(  verbose_name='Amount Other Income',default=0)
-    amount_retirement = models.IntegerField( verbose_name='Retirement Amount', default=0)
-    amount_pension = models.IntegerField( verbose_name='Pension Amount', default=0)
-    vehicle = models.CharField(max_length=125,  verbose_name='Vehicle')
+    amount_other_income = models.IntegerField(verbose_name='Amount Other Income', default=0)
+    amount_retirement = models.IntegerField(verbose_name='Retirement Amount', default=0)
+    amount_pension = models.IntegerField(verbose_name='Pension Amount', default=0)
+    vehicle = models.CharField(max_length=125, verbose_name='Vehicle')
 
     def __str__(self) -> str:
-        return f'{self.id}_{self.client}_{self.employment}'.replace(" ","-")
+        return f'{self.client}_{self.employment}'.replace(" ","-")
 
 class Family(models.Model):
     id = models.AutoField( primary_key=True)
-    client = models.OneToOneField( Client, on_delete=models.CASCADE, related_name="family")
+    client = models.ForeignKey( Client, on_delete=models.CASCADE, related_name="family")
     partner_salary = models.IntegerField()
 
     def __str__(self) -> str:
