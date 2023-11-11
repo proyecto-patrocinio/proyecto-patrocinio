@@ -8,7 +8,7 @@ import { Autocomplete, TextField } from "@mui/material";
  * @param {Array} props.optionsNameID - The list of options with objects containing 'name' and 'id' properties.
  * @param {Object} props.model - The data model for the cell.
  * @param {function} props.handleChange - The function called when the selected value in the Autocomplete changes.
- *
+ * @param {label} props.label - Optional. Label display.
  * @returns {JSX.Element} - The rendered AutocompleteCell component.
  */
 export function AutocompleteCell(props) {
@@ -27,7 +27,7 @@ export function AutocompleteCell(props) {
             props.handleChange(newID, newName);
         }}
         renderInput={(params) => (
-            <TextField {...params}/>
+            <TextField {...params} label={props?.label}/>
         )}
         />
     )
