@@ -61,7 +61,7 @@ const App = () => {
         );
     };
 
-    return ( 
+    return (
         <LocalizationProvider dateAdapter={AdapterDayjs}>
         <CssBaseline/>
         <UserProvider>
