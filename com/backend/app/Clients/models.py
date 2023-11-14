@@ -8,7 +8,7 @@ class Person(models.Model):
     first_name = models.CharField(max_length=150, verbose_name='First Name')
     last_name = models.CharField(max_length=150, verbose_name='Last Name')
     id_type= models.CharField(choices=id_type, max_length=10, verbose_name='Type of identification document')
-    id_value = models.CharField(default='', unique=True, max_length=20, verbose_name='Document value')
+    id_value = models.CharField(unique=True, max_length=20, blank=False, null=False, verbose_name='Document value')
     locality = models.ForeignKey(Locality, on_delete=models.DO_NOTHING)
     sex = models.CharField(choices=sex, max_length=6, default='FEMALE', verbose_name='Sex')
     birth_date = models.DateField(verbose_name='Birthdate')
@@ -48,7 +48,8 @@ class Family(models.Model):
         return f'{self.partner_salary}'
 
 class Son(Person):
-    family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE, related_name="children")
+    id_value = models.CharField( blank=False, null=False, max_length=20, verbose_name='Document value')
+    family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE, verbose_name="family", related_name="children")
 
     def __str__(self) -> str:
         return f'{ self.family_client_user + "/"  + self.name + "_" + self.last_name}'
@@ -57,6 +58,6 @@ class Tel(models.Model):
     id = models.AutoField( primary_key=True)
     phone_number = models.CharField(max_length=20, verbose_name='Phone number')
     client = models.ForeignKey(Client, on_delete=models.CASCADE, related_name="tels" )
-    
+
     def __str__(self) -> str:
         return f'{self.phone_number}'
