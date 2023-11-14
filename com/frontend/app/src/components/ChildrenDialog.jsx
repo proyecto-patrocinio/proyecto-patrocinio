@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Dialog, DialogContent, DialogActions, Button, TextField, List, ListItem, IconButton, Select, MenuItem, InputLabel, FormControl, Divider, Typography } from '@mui/material';
+import { Dialog, DialogContent, DialogActions, Button, TextField, List, ListItem, IconButton, Select, MenuItem, InputLabel, FormControl, Divider, Typography, Paper, Grid, Box, Avatar } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import { getRandomNumber } from '../utils/tools';
@@ -10,7 +10,7 @@ import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 import { DatePicker } from '@mui/x-date-pickers';
 
 
-const EMPTY_CHILDREN = {
+const EMPTY_CHILD = {
   id:0,
   first_name: "",
   last_name: "",
@@ -32,7 +32,7 @@ const EMPTY_CHILDREN = {
  * @param {function} onUpdateChildren - Function to update the list of children.
  */
 function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID }) {
-  const [newChild, setNewChild] = useState(EMPTY_CHILDREN);
+  const [newChild, setNewChild] = useState(EMPTY_CHILD);
   const [nationalityOptions, setNationalityOptions] = useState(null);
   const [provinceOptions, setProvinceOptions] = useState(null);
   const [localityOptions, setLocalityOptions] = useState(null);
@@ -65,14 +65,15 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
     ) {
       const child = {
         ...newChild,
-        id: getRandomNumber(Number.MAX_SAFE_INTEGER),
+        id: ("NEW" + getRandomNumber(Number.MAX_SAFE_INTEGER)),
         locality: geographyModel?.locality,
         family_client_user: familyID
       };
+      child.birth_date = child?.birth_date?.$d?.toISOString();
       onUpdateChildren([...children, child]);
-      setNewChild(EMPTY_CHILDREN);
+      setNewChild(EMPTY_CHILD);
     } else {
-      setNewChild(EMPTY_CHILDREN);
+      setNewChild(EMPTY_CHILD);
       console.error("Error submitting new child.")
       setAlertMessage("Please complete all required fields before submitting.");
     }
@@ -89,7 +90,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
   };
 
   const closeHandler = () => {
-    setNewChild(EMPTY_CHILDREN);
+    setNewChild(EMPTY_CHILD);
     onClose();
   };
 
@@ -97,21 +98,36 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
     <Dialog maxWidth={'md'}  open={open} onClose={closeHandler} key={"dialog-family-" + familyID}>
       <DialogContent>
         <List>
-          {children && children?.map((children, index) => (
-            <ListItem key={index}>
-              <strong>ID:</strong> {children?.id} <br/>
-              <strong>First Name:</strong> {children?.first_name}<br/>
-              <strong>Last Name:</strong> {children?.last_name}<br/>
-              <strong>ID Type:</strong> {children?.id_type}<br/>
-              <strong>ID Value:</strong> {children?.id_value}<br/>
-              <strong>Locality:</strong> {children?.locality?.name}<br/>
-              <strong>Sex:</strong> {children?.sex}<br/>
-              <strong>birth_date:</strong> {children?.birth_date}<br/>
-              <strong>Adress:</strong> {children?.address}<br/>
-              <IconButton onClick={() => handleDelete(index)} color="secondary">
-                <Delete />
-              </IconButton>
-            </ListItem>
+          {children && children?.map((child, index) => (
+            <Paper elevation={3} key={index} style={{ marginBottom: '15px' }}>
+                <ListItem>
+                  <Grid container spacing={3}>
+                    <Grid item xs={2}>
+                      <Box display="flex" alignItems="center">
+                        <Avatar>{child?.first_name[0]}</Avatar>
+                      </Box>
+                    </Grid>
+                    <Grid item xs={10}>
+                      <Typography variant="h6">
+                        {child?.first_name} {child?.last_name}
+                      </Typography>
+                      <Typography variant="body2">
+                        <strong>ID:</strong> {child?.id} |{' '}
+                        <strong>ID Type:</strong> {child?.id_type} |{' '}
+                        <strong>ID Value:</strong> {child?.id_value} |{' '}
+                        <strong>Locality:</strong> {child?.locality?.name} |{' '}
+                        <strong>Sex:</strong> {child?.sex} |{' '}
+                        <strong>Birth Date:</strong>{' '}
+                        {child?.birth_date?.$d?.toLocaleDateString()} |{' '}
+                        <strong>Address:</strong> {child?.address}
+                      </Typography>
+                      <IconButton onClick={() => handleDelete(index)} color="secondary">
+                      <Delete />
+                      </IconButton>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+              </Paper>
           ))}
         </List>
 
