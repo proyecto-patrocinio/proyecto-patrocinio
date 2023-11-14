@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
-import { addPatrimony, addPhoneNumer, createClient, deleteClient, deletePhoneNumer, getPatrymony, updateClient, updatePatrimony } from '../../utils/client';
+import { addChild, addPatrimony, addPhoneNumer, createClient, createFamily, deleteChild, deleteClient, deletePhoneNumer, getPatrymony, updateClient, updateFamily, updatePatrimony } from '../../utils/client';
 import { findUniqueElementsInA, formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
 import PhoneNumbersDialog from '../PhoneNumbersDialog';
@@ -37,6 +37,54 @@ function ClientDataTable({ data }) {
     };
     updateGeographic();
   },[geographyModel]);
+
+  /**
+   * Processes a family, updating or creating it along with its children.
+   *
+   * @param {Object} family - The family data to be processed.
+   * @returns {Promise<Object>} - A promise that resolves to the processed family data.
+   */
+  const processFamily = async (family) => {
+    const FamilyIsNew = family.id.toString().includes('NEW');
+    if (!FamilyIsNew){
+        const originalChildren = family.children;
+        const newChildren = await processChildren(originalChildren);
+        const response = await updateFamily(family);
+        const isUpdated = response.success;
+        if(isUpdated){
+          const newFamily = response.content;
+          newFamily.children = newChildren;
+          return newFamily;
+        } // false 404 -> not found, should be created
+    }
+      const newFamily = await createFamily({...family, children: children});
+      return newFamily;
+  }
+
+  /**
+   * Processes children, updating, adding, or deleting them as needed.
+   *
+   * @param {Array} originalChildren - The original children data.
+   * @returns {Promise<Array>} - A promise that resolves to the updated children data.
+   */
+  const processChildren = async (originalChildren) => {
+    let updatedChildren = originalChildren;
+    const deleteChildren = findUniqueElementsInA(originalChildren, children);
+    const addChildren = findUniqueElementsInA(children, originalChildren);
+    for (let index = 0; index < deleteChildren.length; index++) {
+      const child = deleteChildren[index];
+      await deleteChild(child);
+      updatedChildren = updatedChildren.filter(item => item.id !== child.id);
+    }
+    for (let index = 0; index < addChildren.length; index++) {
+      let child = addChildren[index];
+      child = await addChild(child);
+      updatedChildren.push(child);
+      
+    }
+    setChildren(updatedChildren);
+    return updatedChildren;
+  };
 
   /**
    * Process phone numbers for a client.
@@ -83,15 +131,18 @@ function ClientDataTable({ data }) {
   /**
    * Create a new client with processed phone numbers.
    * @param {Object} client - The client object to create.
-   * @returns {Promise<Object>} - The updated client object with processed phone numbers.
+   * @returns {Promise<Object>} - The created client object with processed phone numbers and family data.
    */
   const createRowHandler = async (client) => {
-    let updatedClient = await createClient(client);
-    updatedClient.tels = [];
-    updatedClient.tels =  await processPhoneNumbers(updatedClient);
-    const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
-    updatedClient = Object.assign(updatedClient, {patrimony: patrimony});
-    return updatedClient;
+    let createdClient = await createClient(client);
+    createdClient.tels = [];
+    createdClient.tels =  await processPhoneNumbers(createdClient);
+    const patrimony = await processPatrimony(createdClient.id, client.patrimony);
+    createdClient = Object.assign(createdClient, {patrimony: patrimony});
+    if (client.family){
+      createdClient.family = await createFamily({partner_salary:client.family.partner_salary, id: createdClient.id, children: children});
+    }
+    return createdClient;
   };
 
   /**
@@ -104,6 +155,9 @@ function ClientDataTable({ data }) {
     updatedClient.tels =  await processPhoneNumbers(client);
     const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
     updatedClient = Object.assign(updatedClient, {patrimony: patrimony});
+    if (client.family) {
+      updatedClient.family = await processFamily({...client.family, id:client.id});
+      }
     return updatedClient;
   };
 
@@ -163,10 +217,11 @@ function ClientDataTable({ data }) {
       setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id});
       // Init States of Phone Number
       setPhoneNumbers(row?.tels || []);
+      setChildren(row?.family?.children || []);
     };
 
   const columns = [
-    { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
+    { field: 'id', headerName: 'ID', width: 70, editable: false},
     { field: 'postal', 'type': 'number', headerName: 'Postal', width: 80, editable: true },
     { field: 'address', headerName: 'Address', width: 150, editable: true },
     {
@@ -318,7 +373,8 @@ function ClientDataTable({ data }) {
       { field: 'family.partner_salary', headerName: 'Partner Salary', width: 100, editable: true,
         valueGetter: getSubField, valueSetter: setSubFamilyField('partner_salary'),},
       { field: 'family.children', headerName: 'Children', editable: true, width: 180,
-        valueFormatter: (value) => value?.value?.length,
+      valueGetter: getSubField,
+        valueFormatter: (value) => (value?.value?.length || 0 ) + " children",
         renderEditCell: (params) => {
           return(
             <div>
