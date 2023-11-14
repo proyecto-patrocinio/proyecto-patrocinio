@@ -49,7 +49,7 @@ class SonFullSerializer(serializers.ModelSerializer):
     locality = LocalityFullSerializer( many = False, read_only = True)
     class Meta:
         model = Son
-        fields = ("id", "age", "locality", "address")
+        fields = ("id", "birth_date", "locality", "address")
 
 class FamilyFullSerializer(serializers.ModelSerializer):
     children = SonFullSerializer( many = True, read_only = True)

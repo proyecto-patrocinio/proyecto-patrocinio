@@ -28,7 +28,7 @@ class Test_son(APITestCase):
         load_dummy_client(self)
         load_family(self, id=1, client=1, partner_salary=120_000)
         son_data =  {
-            "id": 1, "age": 25, "locality": 1, "address": "avenida santa fe",
+            "id": 1, "birth_date": "2023-12-10", "locality": 1, "address": "avenida santa fe",
             "family_client_user": 1
         }
         request = self.factory.post(self.url, son_data)
@@ -51,9 +51,9 @@ class Test_son(APITestCase):
         load_locality(self, id=1, name="LANUS", province=1)
         load_dummy_client(self)
         load_family(self, id=1, client=1, partner_salary=120_000)
-        load_son(self,id=1,age=25, locality=1, address="sante fe", family_client_user=1)
+        load_son(self,id=1,birth_date="2023-12-10", locality=1, address="sante fe", family_client_user=1)
         data_new =  {
-            "id": 1, "age": 25, "locality" : 1,"address": "avenida santa fe",
+            "id": 1, "birth_date": "2023-12-10", "locality" : 1,"address": "avenida santa fe",
             "family_client_user": 1
         }
         url = reverse('son-list')
@@ -62,5 +62,5 @@ class Test_son(APITestCase):
         view_update = SonViewSet.as_view({'put': 'update'})
         response_update = view_update(request_update, pk=1)
         self.assertEqual( response_update.status_code, status.HTTP_200_OK)
-        self.assertEqual( response_update.data['age'], data_new['age'])
+        self.assertEqual( response_update.data['birth_date'], data_new['birth_date'])
         self.assertEqual( response_update.data['id'], data_new['id'])
