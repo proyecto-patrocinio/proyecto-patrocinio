@@ -24,7 +24,7 @@ export function EditToolbar({setRows, setRowModesModel, emptyRecord, setIsAnyRow
 
   const handleClick = () => {
     if(canCreateRow){
-      const id = getRandomNumber(Number.MAX_SAFE_INTEGER);
+      const id = "NEW" + getRandomNumber(Number.MAX_SAFE_INTEGER);
       setRows((oldRows) => [{ id, ...emptyRecord, isNew: true }, ...oldRows]);
       setRowModesModel((oldModel) => ({
         ...oldModel,
