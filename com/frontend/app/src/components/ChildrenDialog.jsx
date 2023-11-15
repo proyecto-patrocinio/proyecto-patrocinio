@@ -66,7 +66,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
       const child = {
         ...newChild,
         id: ("NEW" + getRandomNumber(Number.MAX_SAFE_INTEGER)),
-        locality: geographyModel?.locality,
+        locality: {...geographyModel?.locality, province: {...geographyModel?.province, nationality: geographyModel?.nationality}},
         family_client_user: familyID
       };
       child.birth_date = child?.birth_date?.$d?.toISOString().split('T')[0];
