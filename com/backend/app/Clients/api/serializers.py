@@ -49,7 +49,8 @@ class SonFullSerializer(serializers.ModelSerializer):
     locality = LocalityFullSerializer( many = False, read_only = True)
     class Meta:
         model = Son
-        fields = ("id", "birth_date", "locality", "address")
+        fields = '__all__'
+        read_only_fields = ['id',]
 
 class FamilyFullSerializer(serializers.ModelSerializer):
     children = SonFullSerializer( many = True, read_only = True)

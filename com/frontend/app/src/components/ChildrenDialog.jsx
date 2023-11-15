@@ -104,7 +104,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
                   <Grid container spacing={3}>
                     <Grid item xs={2}>
                       <Box display="flex" alignItems="center">
-                        <Avatar>{child?.first_name[0]}</Avatar>
+                        <Avatar>{child?.first_name ? child?.first_name[0] : 'A'}</Avatar>
                       </Box>
                     </Grid>
                     <Grid item xs={10}>
@@ -115,11 +115,14 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
                         <strong>ID:</strong> {child?.id} |{' '}
                         <strong>ID Type:</strong> {child?.id_type} |{' '}
                         <strong>ID Value:</strong> {child?.id_value} |{' '}
-                        <strong>Locality:</strong> {child?.locality?.name} |{' '}
+                        <strong>Locality:</strong>{' '}
+                          {child?.locality?.province?.nationality?.name},{' '}
+                          {child?.locality?.province?.name},{' '}
+                          {child?.locality?.name} |{' '}
+                        <strong>Address:</strong> {child?.address} |{' '}
                         <strong>Sex:</strong> {child?.sex} |{' '}
                         <strong>Birth Date:</strong>{' '}
-                        {child?.birth_date?.$d?.toLocaleDateString()} |{' '}
-                        <strong>Address:</strong> {child?.address}
+                        {child?.birth_date}
                       </Typography>
                       <IconButton onClick={() => handleDelete(index)} color="secondary">
                       <Delete />
