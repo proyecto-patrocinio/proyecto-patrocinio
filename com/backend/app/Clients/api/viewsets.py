@@ -56,9 +56,34 @@ class FamilyViewSet(viewsets.ModelViewSet):
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
 
+    def retrieve(self, request, *args, **kwargs):
+        self.serializer_class = FamilyFullSerializer
+        self.queryset = self.queryset = self.queryset.prefetch_related(
+            Prefetch('children__locality')
+        )
+        return super().retrieve(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+        family = super().create(request, *args, **kwargs)
+        children = request.data.get('children', None)
+        family.data["children"] = []
+        if children:
+            for child in children:
+                child["family_client_user"] = Family.objects.get(pk=family.data["id"])
+                child["locality"] = Locality.objects.get(pk=child["locality"]["id"])
+                del child["id"]
+                new_child = Son.objects.create(**child).id
+                family.data["children"].append(new_child)
+        return family
+
+
 class SonViewSet(viewsets.ModelViewSet):
     queryset = Son.objects.all()
     serializer_class = SonSerializer
+
+    def create(self, request, *args, **kwargs):
+        self.serializer_class = SonCreateSerializer
+        return super().create(request, *args, **kwargs)
 
 class TelViewSet(viewsets.ModelViewSet):
     queryset = Tel.objects.all()

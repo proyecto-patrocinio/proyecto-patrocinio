@@ -3,6 +3,8 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import SignIn from "./pages/SignIn";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -59,9 +61,8 @@ const App = () => {
         );
     };
 
-    return ( 
-        <>
-
+    return (
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
         <CssBaseline/>
         <UserProvider>
         <Router>
@@ -80,7 +81,7 @@ const App = () => {
             </Routes>
         </Router>  
         </UserProvider>
-        </>
+        </LocalizationProvider>
     );
 };
 

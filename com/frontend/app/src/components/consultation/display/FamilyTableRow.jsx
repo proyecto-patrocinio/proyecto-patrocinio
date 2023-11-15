@@ -47,7 +47,7 @@ const FamilyTableRow = ({clientData}) => {
                             <li key={childIndex}>
                             <h4>Child {childIndex + 1}:</h4>
                             <ul>
-                                <li><strong>Age: </strong>{child.age}</li>
+                                <li><strong>Birthdate: </strong>{child.birth_date}</li>
                                 <li><strong>Nationality: </strong>{child.locality.province.nationality.name}</li>
                                 <li><strong>Province: </strong>{child.locality.province.name}</li>
                                 <li><strong>Locality: </strong>{child.locality.name}</li>

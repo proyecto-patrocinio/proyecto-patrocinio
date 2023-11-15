@@ -20,7 +20,7 @@ function PhoneNumbersDialog({ open, onClose, phoneNumbers, onUpdatePhoneNumbers 
 
   const addHandler = (event) => {
     if (newPhoneNumber.trim() !== '') {
-      const newPhoneDict = {id: getRandomNumber(Number.MAX_SAFE_INTEGER), phone_number:newPhoneNumber};
+      const newPhoneDict = {id: "NEW" + getRandomNumber(Number.MAX_SAFE_INTEGER), phone_number:newPhoneNumber};
       onUpdatePhoneNumbers([...phoneNumbers, newPhoneDict]);
     }
     setNewPhoneNumber('');

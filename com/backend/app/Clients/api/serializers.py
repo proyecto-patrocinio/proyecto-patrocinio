@@ -23,7 +23,13 @@ class FamilySerializer(serializers.ModelSerializer):
     class Meta:
         model = Family
         fields = '__all__'
-        
+
+class SonCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Son
+        fields = '__all__'
+        read_only_fields = ['id',]
+
 class SonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Son
@@ -43,7 +49,8 @@ class SonFullSerializer(serializers.ModelSerializer):
     locality = LocalityFullSerializer( many = False, read_only = True)
     class Meta:
         model = Son
-        fields = ("id", "age", "locality", "address")
+        fields = '__all__'
+        read_only_fields = ['id',]
 
 class FamilyFullSerializer(serializers.ModelSerializer):
     children = SonFullSerializer( many = True, read_only = True)
@@ -55,7 +62,7 @@ class ClientFullSerializer(serializers.ModelSerializer):
     locality = LocalityFullSerializer( many = False, read_only = True)
     patrimony = ClientPatrimonySerializer( many = False, required=False, allow_null=True)
     tels = ClientTelSerializer(many = True, required=False, allow_null=True )
-    family = FamilyFullSerializer(many = True, required=False, allow_null=True )
+    family = FamilyFullSerializer(many = False, required=False, allow_null=True )
     class Meta:
         model = Client
         fields = '__all__'

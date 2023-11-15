@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Autocomplete, Button, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
-import { addPatrimony, addPhoneNumer, createClient, deleteClient, deletePhoneNumer, getPatrymony, updateClient, updatePatrimony } from '../../utils/client';
+import { addChild, addPatrimony, addPhoneNumer, createClient, createFamily, deleteChild, deleteClient, deletePhoneNumer, getPatrymony, updateClient, updateFamily, updatePatrimony } from '../../utils/client';
 import { findUniqueElementsInA, formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
 import PhoneNumbersDialog from '../PhoneNumbersDialog';
+import { AutocompleteCell } from '../AutocompleteCell';
+import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
+import ChildrenDialog from '../ChildrenDialog';
 
 
 /**A React component that displays client data in a table using Material-UI DataGrid.
@@ -19,6 +22,8 @@ function ClientDataTable({ data }) {
   const [geographyModel, setGeographyModel] = useState(null);
   const [phoneNumbers, setPhoneNumbers] = useState([]);
   const [isPhoneNumbersDialogOpen, setIsPhoneNumbersDialogOpen] = useState(false);
+  const [isFamilyDialogOpen, setIsFamilyDialogOpen] = useState(false);
+  const [children, setChildren] = useState([]);
 
 
   useEffect( () => {
@@ -32,6 +37,54 @@ function ClientDataTable({ data }) {
     };
     updateGeographic();
   },[geographyModel]);
+
+  /**
+   * Processes a family, updating or creating it along with its children.
+   *
+   * @param {Object} family - The family data to be processed.
+   * @returns {Promise<Object>} - A promise that resolves to the processed family data.
+   */
+  const processFamily = async (family) => {
+    const FamilyIsNew = family.id.toString().includes('NEW');
+    if (!FamilyIsNew){
+        const originalChildren = family.children;
+        const newChildren = await processChildren(originalChildren);
+        const response = await updateFamily(family);
+        const isUpdated = response.success;
+        if(isUpdated){
+          const newFamily = response.content;
+          newFamily.children = newChildren;
+          return newFamily;
+        } // false 404 -> not found, should be created
+    }
+      const newFamily = await createFamily({...family, children: children});
+      return newFamily;
+  }
+
+  /**
+   * Processes children, updating, adding, or deleting them as needed.
+   *
+   * @param {Array} originalChildren - The original children data.
+   * @returns {Promise<Array>} - A promise that resolves to the updated children data.
+   */
+  const processChildren = async (originalChildren) => {
+    let updatedChildren = originalChildren;
+    const deleteChildren = findUniqueElementsInA(originalChildren, children);
+    const addChildren = findUniqueElementsInA(children, originalChildren);
+    for (let index = 0; index < deleteChildren.length; index++) {
+      const child = deleteChildren[index];
+      await deleteChild(child);
+      updatedChildren = updatedChildren.filter(item => item.id !== child.id);
+    }
+    for (let index = 0; index < addChildren.length; index++) {
+      let child = addChildren[index];
+      child = await addChild(child);
+      updatedChildren.push(child);
+      
+    }
+    setChildren(updatedChildren);
+    return updatedChildren;
+  };
 
   /**
    * Process phone numbers for a client.
@@ -78,15 +131,18 @@ function ClientDataTable({ data }) {
   /**
    * Create a new client with processed phone numbers.
    * @param {Object} client - The client object to create.
-   * @returns {Promise<Object>} - The updated client object with processed phone numbers.
+   * @returns {Promise<Object>} - The created client object with processed phone numbers and family data.
    */
   const createRowHandler = async (client) => {
-    let updatedClient = await createClient(client);
-    updatedClient.tels = [];
-    updatedClient.tels =  await processPhoneNumbers(updatedClient);
-    const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
-    updatedClient = Object.assign(updatedClient, {patrimony: patrimony});
-    return updatedClient;
+    let createdClient = await createClient(client);
+    createdClient.tels = [];
+    createdClient.tels =  await processPhoneNumbers(createdClient);
+    const patrimony = await processPatrimony(createdClient.id, client.patrimony);
+    createdClient = Object.assign(createdClient, {patrimony: patrimony});
+    if (client.family){
+      createdClient.family = await createFamily({partner_salary:client.family.partner_salary, id: createdClient.id, children: children});
+    }
+    return createdClient;
   };
 
   /**
@@ -99,6 +155,9 @@ function ClientDataTable({ data }) {
     updatedClient.tels =  await processPhoneNumbers(client);
     const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
     updatedClient = Object.assign(updatedClient, {patrimony: patrimony});
+    if (client.family) {
+      updatedClient.family = await processFamily({...client.family, id:client.id});
+      }
     return updatedClient;
   };
 
@@ -123,7 +182,6 @@ function ClientDataTable({ data }) {
     clientRendered.nationality = {
       'id': localityData.province.nationality.id, 'name': localityData.province.nationality.name
     };
-    console.log(clientRendered)
     if(clientRendered.patrimony){
       Object.keys(clientRendered.patrimony).forEach(subField => {
         clientRendered[`patrimony.${subField}`] = clientRendered.patrimony[subField];
@@ -148,39 +206,6 @@ function ClientDataTable({ data }) {
   };
 
   /**
-   * A cell component for the Material-UI (MUI) DataGrid table used in renderEditCell.
-   * This component is designed to work with fields related to locality, province, and nation.
-   *
-   * @param {Object} props - The component's properties.
-   * @param {Array} props.optionsNameID - The list of options with objects containing 'name' and 'id' properties.
-   * @param {Object} props.model - The data model for the cell.
-   * @param {function} props.handleChange - The function called when the selected value in the Autocomplete changes.
-   *
-   * @returns {JSX.Element} - The rendered AutocompleteCell component.
-   */
-    function AutocompleteCell(props) {
-      const nameToIdMap = {};
-      props.optionsNameID?.forEach((item) => {
-        nameToIdMap[item.name] = item.id;
-      });
-      return (
-          <Autocomplete
-            fullWidth
-            options={Object.keys(nameToIdMap) || []}
-            value={props.model?.name}
-            onChange={(event, newValue) => {
-              const newID =  nameToIdMap[newValue];
-              const newName = newValue;
-              props.handleChange(newID, newName);
-            }}
-            renderInput={(params) => (
-              <TextField {...params}/>
-            )}
-          />
-      )
-    }
-
-  /**
    * On click edit cell handler. Preprocesses the data before editing a row.
    * @param {object} row - The row data.
    */
@@ -192,10 +217,11 @@ function ClientDataTable({ data }) {
       setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id});
       // Init States of Phone Number
       setPhoneNumbers(row?.tels || []);
+      setChildren(row?.family?.children || []);
     };
 
   const columns = [
-    { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
+    { field: 'id', headerName: 'ID', width: 70, editable: false},
     { field: 'postal', 'type': 'number', headerName: 'Postal', width: 80, editable: true },
     { field: 'address', headerName: 'Address', width: 150, editable: true },
     {
@@ -329,34 +355,71 @@ function ClientDataTable({ data }) {
     },
     // PATRIMONY
     { field: 'patrimony.employment', headerName: 'Employment', width: 180, editable: true,
-      valueGetter: getSubField, valueSetter: setSubField('employment'),},
+      valueGetter: getSubField, valueSetter: setSubPatrimonyField('employment'),},
     { field: 'patrimony.salary', headerName: 'Salary', width: 100, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubField('salary'),},
+      valueGetter: getSubField, valueSetter: setSubPatrimonyField('salary'),},
     { field: 'patrimony.other_income', headerName: 'Other Incomet', width: 110, editable: true,
-      valueGetter: getSubField, valueSetter: setSubField('other_income'),},
+      valueGetter: getSubField, valueSetter: setSubPatrimonyField('other_income'),},
     { field: 'patrimony.amount_other_income', headerName: 'Amount Other Incomet', width: 120, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubField('amount_other_income'),},
+      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_other_income'),},
     { field: 'patrimony.amount_retirement', headerName: 'Amount Retirement', width: 100, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubField('amount_retirement'),},
+      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_retirement'),},
     { field: 'patrimony.amount_pension', headerName: 'Amount Pension', width: 110, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubField('amount_pension'),},
+      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_pension'),},
     { field: 'patrimony.vehicle', headerName: 'Vehicle', width: 120, editable: true,
-      valueGetter: getSubField, valueSetter: setSubField('vehicle'),},
+      valueGetter: getSubField, valueSetter: setSubPatrimonyField('vehicle'),},
+
+      //FAMILY
+      { field: 'family.partner_salary', headerName: 'Partner Salary', width: 100, editable: true,
+        type: 'number', valueGetter: getSubField, valueSetter: setSubFamilyField('partner_salary'),},
+      { field: 'family.children', headerName: 'Children', editable: true, width: 180,
+      valueGetter: getSubField,
+        valueFormatter: (value) => (value?.value?.length || 0 ) + " children",
+        renderEditCell: (params) => {
+          return(
+            <div>
+            <Button
+              variant="text"
+              color="primary"
+              startIcon={<FamilyRestroomIcon />}
+              onClick={() => setIsFamilyDialogOpen(true)}
+            >
+            Manage Family
+            </Button>
+            <ChildrenDialog
+              open={isFamilyDialogOpen}
+              onClose={() => setIsFamilyDialogOpen(false)}
+              children={children}
+              onUpdateChildren={setChildren}
+              familyID={params?.row?.id}
+            />
+          </div>
+        )},
+      },
 ];
 
 function getSubField(params) {
   const [fieldName, subFieldName] = params?.field?.toString().split('.')
   const field =  params?.row[fieldName]
   return field? field[subFieldName] : null;
-}
+};
 
-function setSubField(subFieldName) {
+function setSubPatrimonyField(subFieldName) {
   return (params) => {
     const field = { ...params.row.patrimony };
     field[subFieldName] = params.value;
     return { ...params.row, patrimony: field };
   };
-}
+};
+
+function setSubFamilyField(subFieldName) {
+  return (params) => {
+    const field = { ...params.row.family };
+    field[subFieldName] = params.value;
+    return { ...params.row, family: field };
+  };
+};
+
 
   return (
     <div>

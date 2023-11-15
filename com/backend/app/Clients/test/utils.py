@@ -36,9 +36,9 @@ def load_family(self, id, client, partner_salary):
     return response
 
 
-def load_son(self, id, age, locality, address, family_client_user):
+def load_son(self, id, birth_date, locality, address, family_client_user):
     son_data = {
-        "id": id, "age": age,"locality" : locality,"address": address,
+        "id": id, "birth_date": birth_date,"locality" : locality,"address": address,
         "family_client_user": family_client_user
     }
     url= reverse('son-list')

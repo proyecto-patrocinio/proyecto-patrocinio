@@ -395,3 +395,183 @@ export async function getPatrymony(idClient){
     throw error;
   };
 };
+
+
+/**
+ * Creates a new family by sending a POST request to the API.
+ *
+ * @param {Object} family - The family data to be added.
+ * @returns {Promise<Object>} - A promise that resolves to the added family data.
+ * @throws {Error} - If there is an error during the request or if the response is not okay.
+ */
+export async function createFamily(family){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_FAMILY;
+
+    const csrfToken = Cookies.get("csrftoken");
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify(family)
+    });
+
+    if (response.ok) {
+      const family = await response.json();
+      console.info(`Family data with ID ${family.id} is added successfuly.`)
+      return family;
+    } else {
+      const mns = 'The family data could not be added.';
+      console.error(mns, " Status: ", response.status);
+      throw new Error(mns);
+    };
+
+  } catch (error) {
+    console.error('Error while try to add family data: ', error);
+    throw error;
+  };
+};
+
+
+/**
+ * Updates an existing family by sending a PUT request to the API.
+ *
+ * @param {Object} family - The updated family data.
+ * @returns {Promise<{ success: boolean, content: Object }>} - A promise that resolves to an object indicating the success of the update and the updated family data.
+ * @throws {Error} - If there is an error during the request or if the response is not okay.
+ */
+export async function updateFamily(family){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_FAMILY
+      + family.id + "/";
+
+    const csrfToken = Cookies.get("csrftoken");
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'PUT',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify(family)
+    });
+
+    if (response.ok) {
+      const family = await response.json();
+      console.info(`Family data with ID ${family.id} is updatted successfuly.`)
+      return {success:true, content:family};;
+    } else {
+      if (response.status === 404) {
+        return {success:false, content:null};
+    }
+      const mns = 'The family data could not be updatted.';
+      console.error(mns, " Status: ", response.status);
+      throw new Error(mns);
+    };
+
+  } catch (error) {
+    console.error('Error while try to update family data: ', error);
+    throw error;
+  };
+};
+
+
+/**
+ * Deletes a child by sending a DELETE request to the API.
+ *
+ * @param {Object} child - The child data to be deleted.
+ * @throws {Error} - If there is an error during the request or if the response is not okay.
+ */
+export async function deleteChild(child){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_CHILDREN
+      + child.id + '/';
+
+    const csrfToken = Cookies.get("csrftoken");
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'DELETE',
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      }
+    });
+
+    if (response.ok) {
+      console.info(`Child with ID ${child.id} is deleted successfuly.`)
+    } else {
+      const mns = 'Failed to delete Child.';
+      console.error(mns, " Status: ", response.status);
+      throw new Error(mns);
+    };
+
+  } catch (error) {
+    console.error('Error while try to delete Child: ', error);
+    throw error;
+  };
+};
+
+
+/**
+ * Adds a new child by sending a POST request to the API.
+ *
+ * @param {Object} child - The child data to be added.
+ * @returns {Promise<Object>} - A promise that resolves to the added child data.
+ * @throws {Error} - If there is an error during the request or if the response is not okay.
+ */
+export async function addChild(child){
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+      + process.env.REACT_APP_PATH_CHILDREN;
+
+    const childFormatted = {
+      "first_name": child.first_name,
+      "last_name":child.last_name,
+      "id_type": child.id_type,
+      "sex": child.Authorizationsex,
+      "birth_date": child.birth_date,
+      "address": child.address,
+      "id_value": child.id_value,
+      "locality": child.locality.id,
+      "family_client_user": child.family_client_user
+  }
+
+    const csrfToken = Cookies.get("csrftoken");
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`
+      },
+      body: JSON.stringify(childFormatted)
+    });
+
+    if (response.ok) {
+      const child = await response.json();
+      console.info(`Child data with ID ${child.id} is added successfuly.`)
+      return child;
+    } else {
+      const mns = 'The child data could not be added.';
+      console.error(mns, " Status: ", response.status);
+      throw new Error(mns);
+    };
+
+  } catch (error) {
+    console.error('Error while try to add child data: ', error);
+    throw error;
+  };
+};

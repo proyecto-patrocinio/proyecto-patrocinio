@@ -56,7 +56,7 @@ const ConsultationDataTable = ({data}) => {
     };
 
     const columns = [
-        { field: 'id', 'type': 'number', headerName: 'ID', width: 70, editable: false},
+        { field: 'id', headerName: 'ID', width: 70, editable: false},
         {
           field: 'availability_state', headerName: 'Availability State', width: 150, editable: true,
           type: 'singleSelect',

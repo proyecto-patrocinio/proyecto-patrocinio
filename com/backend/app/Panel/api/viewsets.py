@@ -74,7 +74,7 @@ class PanelViewSet(ModelViewSet):
             Prefetch('cards')
         ).annotate(
             number_cards=Count('cards', distinct=True)
-        )
+        ).filter(id=self.get_object().pk)
         serializer = PanelWithNumberCardsSerializer
         response = serializer(queryset, many=True)
 
