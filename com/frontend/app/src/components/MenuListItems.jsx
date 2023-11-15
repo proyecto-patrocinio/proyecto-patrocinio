@@ -75,11 +75,11 @@ const ListItemCollapseButton = ({text, sub_list}) => {
 
   return (
     <>
-    <ListItemButton>
+    <ListItemButton onClick={handleClick}>
       <ListItemIcon>
         <TableChartIcon/>
       </ListItemIcon>
-      <ListItemText primary={text} onClick={handleClick} />
+      <ListItemText primary={text} />
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
     <Collapse in={open} timeout="auto" unmountOnExit>
@@ -114,11 +114,11 @@ const ListControlPanel = () => {
 
   return (
     <>
-    <ListItemButton>
+    <ListItemButton onClick={handleClick}>
       <ListItemIcon>
         <TuneIcon/>
       </ListItemIcon>
-      <ListItemText primary={"Control Panel"} onClick={handleClick} />
+      <ListItemText primary={"Control Panel"} />
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
 
