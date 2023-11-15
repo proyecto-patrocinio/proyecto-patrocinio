@@ -540,7 +540,7 @@ export async function addChild(child){
       "last_name":child.last_name,
       "id_type": child.id_type,
       "sex": child.Authorizationsex,
-      "birth_date": child.birth_date.split('T')[0],  // YYYY-MM-DD
+      "birth_date": child.birth_date,
       "address": child.address,
       "id_value": child.id_value,
       "locality": child.locality.id,

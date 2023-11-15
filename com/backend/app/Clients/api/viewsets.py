@@ -66,11 +66,14 @@ class FamilyViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         family = super().create(request, *args, **kwargs)
         children = request.data.get('children', None)
-        family["children"] = []
+        family.data["children"] = []
         if children:
             for child in children:
-                new_child = Son.objects.create(child)
-                family["children"].append(new_child)
+                child["family_client_user"] = Family.objects.get(pk=family.data["id"])
+                child["locality"] = Locality.objects.get(pk=child["locality"]["id"])
+                del child["id"]
+                new_child = Son.objects.create(**child).id
+                family.data["children"].append(new_child)
         return family
 
 

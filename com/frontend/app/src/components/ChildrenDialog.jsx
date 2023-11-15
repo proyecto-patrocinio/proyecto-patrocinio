@@ -61,7 +61,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
       && newChild?.birth_date !== null
       && newChild?.address !== ''
       && geographyModel?.locality != null
-      && familyID > 0
+      && familyID
     ) {
       const child = {
         ...newChild,
@@ -69,7 +69,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
         locality: geographyModel?.locality,
         family_client_user: familyID
       };
-      child.birth_date = child?.birth_date?.$d?.toISOString();
+      child.birth_date = child?.birth_date?.$d?.toISOString().split('T')[0];
       onUpdateChildren([...children, child]);
       setNewChild(EMPTY_CHILD);
     } else {
