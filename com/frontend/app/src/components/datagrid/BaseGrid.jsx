@@ -187,7 +187,7 @@ export default function BaseGrid({
                 toolbar: EditToolbar,
             }}
             slotProps={{
-                toolbar: { setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing, canCreateRow },
+                toolbar: { setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing, canCreateRow, preProcessEdit },
             }}
             />
             <AlertSnackbar onClose={() => setAlertMessage(null)} message={alertMessage} severity={"error"}/>

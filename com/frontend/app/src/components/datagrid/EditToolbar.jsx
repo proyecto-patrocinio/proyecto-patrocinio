@@ -17,13 +17,15 @@ import AlertSnackbar from '../AlertSnackbar';
  * @param {object} emptyRecord - Empty record used for creating new rows.
  * @param {function} setIsAnyRowEditing - Function to set the is any row editing.
  * @param {boolean} canCreateRow - True if can create any row.
+ * @param {fuction} preProcessEdit - Function to prepare, clear, set, reset the states to use.
  * @returns {JSX.Element} Edit toolbar component.
  */
-export function EditToolbar({setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing, canCreateRow}) {
+export function EditToolbar({setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing, canCreateRow, preProcessEdit=()=>{}}) {
   const [alertMessage, setAlertMessage] = React.useState(null);
 
   const handleClick = () => {
     if(canCreateRow){
+      preProcessEdit();
       const id = "NEW" + getRandomNumber(Number.MAX_SAFE_INTEGER);
       setRows((oldRows) => [{ id, ...emptyRecord, isNew: true }, ...oldRows]);
       setRowModesModel((oldModel) => ({
