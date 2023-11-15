@@ -371,7 +371,7 @@ function ClientDataTable({ data }) {
 
       //FAMILY
       { field: 'family.partner_salary', headerName: 'Partner Salary', width: 100, editable: true,
-        valueGetter: getSubField, valueSetter: setSubFamilyField('partner_salary'),},
+        type: 'number', valueGetter: getSubField, valueSetter: setSubFamilyField('partner_salary'),},
       { field: 'family.children', headerName: 'Children', editable: true, width: 180,
       valueGetter: getSubField,
         valueFormatter: (value) => (value?.value?.length || 0 ) + " children",
