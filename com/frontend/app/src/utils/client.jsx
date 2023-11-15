@@ -494,7 +494,7 @@ export async function updateFamily(family){
 export async function deleteChild(child){
   try {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-      + process.env.REACT_APP_PATH_TEL
+      + process.env.REACT_APP_PATH_CHILDREN
       + child.id + '/';
 
     const csrfToken = Cookies.get("csrftoken");
