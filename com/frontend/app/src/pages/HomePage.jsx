@@ -113,6 +113,7 @@ const HomePage = () => {
                     </p>
                     <p>
                         CaseManager is a comprehensive tool designed to simplify and optimize case management in academic and professional environments.
+                        <br/>
                         <strong>Main Features:</strong>
                         <ol>
                             <li>
@@ -160,7 +161,7 @@ const HomePage = () => {
                     </p>
 
                     </Typography>
-                    <Button variant="contained" color="secondary" size="small" onClick={handleTutorialOpen}>
+                    <Button variant="contained" color="secondary" sx={{ width: 'fit-content' }} onClick={handleTutorialOpen}>
                         Start
                     </Button>
                     <TutorialModal open={tutorialOpen} handleClose={handleTutorialClose} />
