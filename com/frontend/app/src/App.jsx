@@ -18,7 +18,7 @@ import TermsPage from "./pages/TermsPage";
 import {
     PATH_BOARD, PATH_CONFIRM_EMAIL, PATH_CONSULTANCY, PATH_CP_CLIENTS,
     PATH_CP_CONSULT, PATH_FORGET_PASSWORD, PATH_LOGOUT, PATH_ROOT, PATH_SIGNUP,
-    PATH_TERMS 
+    PATH_TERMS, PATH_SETTINGS
 } from "./utils/constants";
 import ControlPanelConsultation from "./pages/ControlConsultionPage";
 import ControlPanelClient from "./pages/ControlClientPage";
@@ -26,6 +26,7 @@ import { getDataUserByToken } from "./utils/user";
 import EmailConfirmationPage from "./pages/EmailConfirmationPage";
 import ForgetPasswordPage from "./pages/ForgetPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import SettingsPage from "./pages/SettingsPage";
 
 
 const App = () => {
@@ -78,8 +79,9 @@ const App = () => {
                 <Route exact path={PATH_LOGOUT}         element={<LogoutPage  setIsLoggedIn={setIsLoggedIn}/> } />
                 <Route exact path={PATH_TERMS}          element={<TermsPage/>} />
                 <Route exact path={PATH_BOARD + ":id_board/"} element={getPage(<BoardPage/>)} />
+                <Route exact path={PATH_SETTINGS}       element={getPage(<SettingsPage/>)} />
             </Routes>
-        </Router>  
+        </Router>
         </UserProvider>
         </LocalizationProvider>
     );
