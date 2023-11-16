@@ -14,7 +14,8 @@ import  Link  from '@mui/material/Link'
 import TuneIcon from '@mui/icons-material/Tune';
 import { useUserContext } from '../context/UserContext';
 import {fetchBoardsByUser} from '../utils/board';
-import { PATH_BOARD, PATH_CONSULTANCY, PATH_CP_CLIENTS, PATH_CP_CONSULT, PATH_LOGOUT } from '../utils/constants';
+import { PATH_BOARD, PATH_CONSULTANCY, PATH_CP_CLIENTS,
+  PATH_CP_CONSULT, PATH_LOGOUT, PATH_SETTINGS } from '../utils/constants';
 
 
 /**
@@ -75,11 +76,11 @@ const ListItemCollapseButton = ({text, sub_list}) => {
 
   return (
     <>
-    <ListItemButton>
+    <ListItemButton onClick={handleClick}>
       <ListItemIcon>
         <TableChartIcon/>
       </ListItemIcon>
-      <ListItemText primary={text} onClick={handleClick} />
+      <ListItemText primary={text} />
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
     <Collapse in={open} timeout="auto" unmountOnExit>
@@ -114,11 +115,11 @@ const ListControlPanel = () => {
 
   return (
     <>
-    <ListItemButton>
+    <ListItemButton onClick={handleClick}>
       <ListItemIcon>
         <TuneIcon/>
       </ListItemIcon>
-      <ListItemText primary={"Control Panel"} onClick={handleClick} />
+      <ListItemText primary={"Control Panel"} />
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
 
@@ -146,7 +147,7 @@ const MenuListItems = ()=>{
   return (
   <List component="nav">
     <React.Fragment>
-      <Link href="/#" style={{ color: 'inherit', textDecoration: 'none' }}>
+      <Link href={PATH_SETTINGS} style={{ color: 'inherit', textDecoration: 'none' }}>
         <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
       </Link>
       <Link href={PATH_CONSULTANCY} style={{ color: 'inherit', textDecoration: 'none' }}>

@@ -20,7 +20,7 @@ export default function ControlPanelConsultation() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Dashboard title={"Control Panel - Consultations"}>
+            <Dashboard title={"CONTROL PANEL - CONSULTATIONS"}>
                 <ConsultationDataTable data={consultationList} />
             </Dashboard>
         </ThemeProvider>
