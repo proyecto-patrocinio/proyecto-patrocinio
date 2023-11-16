@@ -221,3 +221,100 @@ export async function sendChangePassword(password, uid, token) {
     return{ok: false, detail: mns};
   };
 };
+
+
+/**
+ * Sends a request to change the user's password.
+ *
+ * @param {string} password1 - The new password.
+ * @param {string} password2 - Confirmation of the new password.
+ * @returns {Promise<{success: boolean, message: string}>} - An object with information about the result of the password change.
+ * - success: Indicates whether the password change was successful.
+ * - message: Contains an informative message about the operation's result.
+ */
+export async function changePassword(password1, password2) {
+  try {
+    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+    + process.env.REACT_APP_PATH_CHANGE_PASSWORD ;
+
+    const token = window.localStorage.getItem('loggedCaseManagerUser');
+    const csrfToken = Cookies.get("csrftoken");
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRFToken': csrfToken,
+        'Authorization': `Token ${token}`,
+      },
+      body: JSON.stringify({new_password1: password1, new_password2: password2})
+    });
+
+    if(response.ok) {
+      const mns = 'Successful Change Password.'
+      console.info(mns);
+      return {success: true, message: mns};
+    } else {
+      const error_mns = await response.json();
+      console.error('Change Password Failure.');
+      return {success: false, message: String(error_mns?.detail || error_mns?.new_password2 || error_mns)};
+    };
+  } catch (error) {
+    const mns = 'Unexpected error during change password.'
+    console.error(mns);
+    return {success: false, message:mns};
+  };
+};
+
+
+/**
+ * Updates a user fields with the provided data.
+ *
+ * @param {string} first_name - The updated first name for the user.
+ * @param {string} last_name - The updated last name for the user.
+ * @returns {Promise<{success: boolean, message: string, user: object|null}>}
+ * An object with information about the result of the update.
+ * - success: Indicates whether the update was successful.
+ * - message: Contains an informative message about the operation's result.
+ * - user: The updated user object if successful, or null otherwise.
+ */
+export const updateUser = async (first_name, last_name) => {
+  try {
+      const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                  + process.env.REACT_APP_PATH_USER;
+
+      const data = {
+        "first_name": first_name,
+        "last_name": last_name
+      };
+
+      const csrfToken = Cookies.get("csrftoken");
+      const token = window.localStorage.getItem('loggedCaseManagerUser');
+      const response = await fetch(url, {
+        method: 'PATCH',
+        credentials: 'same-origin',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken,
+          'Authorization': `Token ${token}`
+          },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+          const user = await response.json();
+          const mns = 'Update User successfull.'
+          console.info(mns);
+          return {success: true, message: mns, user: user};
+        } else {
+          const mns = 'Failed to update User.'
+          console.error(mns);
+          return {success: false, message: mns, user: null};
+        };
+
+      } catch (error) {
+        const mns = 'Unexpected error while updating User. Error: ' + error.message
+        console.error(mns);
+        console.debug(error);
+        return {success: false, message: mns, user: null};
+  };
+};
