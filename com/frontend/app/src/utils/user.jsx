@@ -245,6 +245,7 @@ export async function changePassword(password1, password2) {
       headers: {
         'X-CSRFToken': csrfToken,
         'Authorization': `Token ${token}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({new_password1: password1, new_password2: password2})
     });
@@ -255,8 +256,10 @@ export async function changePassword(password1, password2) {
       return {success: true, message: mns};
     } else {
       const error_mns = await response.json();
-      console.error('Change Password Failure.');
-      return {success: false, message: String(error_mns?.detail || error_mns?.new_password2 || error_mns)};
+      console.error('Change Password Failure: ' + error_mns);
+      return {success: false, message: String(
+        error_mns?.detail || error_mns?.new_password2 || 'Change Password Failure'
+      )};
     };
   } catch (error) {
     const mns = 'Unexpected error during change password.'
