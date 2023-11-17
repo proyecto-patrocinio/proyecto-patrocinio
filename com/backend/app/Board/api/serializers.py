@@ -29,7 +29,16 @@ class BoardListSerializer(serializers.ModelSerializer):
 class ConsultancyListSerializer(serializers.ModelSerializer):
   number_cards = serializers.IntegerField()
   cards = RequestConsultationSerializer(many = True, read_only = True)
+  todo_count = serializers.IntegerField()
+  in_progress_count = serializers.IntegerField()
+  done_count = serializers.IntegerField()
+  paused_count = serializers.IntegerField()
+  blocked_count = serializers.IntegerField()
+  incomplete_count = serializers.IntegerField()
   class Meta:
     model = Board
-    fields = ['id', 'title', 'number_cards', 'cards']
+    fields = [
+      'id', 'title', 'number_cards', 'cards', 'todo_count', 'in_progress_count',
+      'done_count', 'paused_count', 'blocked_count', 'incomplete_count'
+    ]
     read_only_fields = ("number_cards", "cards")
