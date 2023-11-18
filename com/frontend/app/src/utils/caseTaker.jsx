@@ -351,7 +351,7 @@ export async function getBoardLogs(days, boardID){
                     + process.env.REACT_APP_PATH_BOARD
                     + boardID
                     + process.env.REACT_APP_EXTRA_PATH_BOARD_LOGS
-                    + days + '/';
+                    + days;
         const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url,{
             method: 'GET',
