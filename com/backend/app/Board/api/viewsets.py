@@ -6,6 +6,7 @@ from django.db.models import Prefetch, Count
 from rest_framework.decorators import action
 from constants import CONSULTANCY_BOARD_NAME
 from Consultation.models import Consultation
+from django.db.models import F, Q
 
 
 class BoardViewSet(viewsets.ModelViewSet):
@@ -43,7 +44,16 @@ class BoardViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def consultancy_board(self, request, *args, **kwargs):
         """Custom action to retrieve consultancy data for boards."""
-        self.queryset = Board.objects.prefetch_related(
+
+        self.queryset = Board.objects.annotate(
+            number_cards=Count('panels__cards', distinct=True),
+            todo_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='TODO')),
+            in_progress_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='IN_PROGRESS')),
+            done_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='DONE')),
+            paused_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='PAUSED')),
+            blocked_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='BLOCKED')),
+            incomplete_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='INCOMPLETE')),
+        ).prefetch_related(
             Prefetch('request_consultations', to_attr='cards')
         ).annotate(
             number_cards=Count('panels__cards', distinct=True)
