@@ -209,7 +209,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Client"
+                    label="Consultant"
                     name="client"
                     variant="outlined"
                     required
