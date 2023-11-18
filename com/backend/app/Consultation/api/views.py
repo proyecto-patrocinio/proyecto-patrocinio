@@ -19,6 +19,9 @@ from Consultation.api.serializers import (
 )
 from Consultation.models import Consultation,  RequestConsultation
 from Panel.models import Panel
+from django.utils import timezone
+from datetime import timedelta
+from datetime import datetime
 
 
 logger = logging.getLogger(__name__)
@@ -91,7 +94,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         # Check if Consultation is not already assigned or has pending requests
         is_created = consultation.availability_state == "CREATED"
         is_rejected = consultation.availability_state == "REJECTED"
-        if (not is_created) and (not is_rejected):
+        is_incomplete = consultation.availability_state == "INCOMPLETE"
+        if (not is_created) and (not is_rejected) and (not is_incomplete):
             mns = f'Consultation {consultation_id} is already assigned or there exists a pending request'
             logger.error(mns)
             return Response(status=status.HTTP_409_CONFLICT, data={'error': mns})
@@ -209,6 +213,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
             # Update Consultation state
             consultation.availability_state = "ASSIGNED"
+            consultation.start_time = datetime.now()
             logger.info(f"Updated consultation {consultation_id} availability state to ASSIGNED.")
 
             # Save transaction

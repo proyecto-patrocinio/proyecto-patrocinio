@@ -1,8 +1,8 @@
 from django.db import models
+from django.urls import reverse
 from Consultation.choices import PROGRESS_STATES , AVAILABILITY_STATES
 from Clients.models import Client
 from Board.models import Board
-from django.urls import reverse
 
 class Consultation(models.Model):
     id = models.AutoField(primary_key=True)
@@ -17,6 +17,7 @@ class Consultation(models.Model):
         verbose_name="Progress State"
     )
     time_stamp = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField(null=True, blank=True)
     description = models.TextField(blank=True)
     client = models.ForeignKey(
         Client,

@@ -42,8 +42,8 @@ O reiniciar el contenedor. <br/>
 
 
 ### BIBLIOGRAFIA
-- Guia de istalacion Docker-Compose: https://docs.docker.com/compose/install/
-- Instalacion de python: https://www.python.org/downloads/
+- Guia de instalación Docker-Compose: https://docs.docker.com/compose/install/
+- Instalación de python: https://www.python.org/downloads/
 - Requerimientos: https://docs.google.com/document/d/1R_bn0gh52T_PlmQBqGulFNdGhXG1EoLetDbJw8RX9h0/edit#heading=h.pg57bvdzqaqy
 - Conf-Management: https://docs.google.com/document/d/1ZTQP-v9SodzzWGhIQaHo2NQn-SFULNu3V2kvid4Ad70/edit#heading=h.6x0jp637weid
 - Guia Deploy: https://testdriven.io/blog/dockerizing-django-with-postgres-gunicorn-and-nginx/
