@@ -26,7 +26,7 @@ const BasePanel = ({ panel, index, title, children }) => {
     textAlign: 'center',
     height: '75vh',
     width: '20vw',
-    minWidth: '200px', // Límite mínimo de ancho
+    minWidth: '200px',
   };
 
   const placeholderStyle = {

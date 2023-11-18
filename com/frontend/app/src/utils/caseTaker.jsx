@@ -337,6 +337,40 @@ export const createConsultationByDict = async (data) => {
     }
 };
 
+/**
+ * Fetches logs for a specific board that started N days ago.
+ *
+ * @param {number} days - The number of days for which logs are requested.
+ * @param {string} boardID - The ID of the board for which logs are requested.
+ * @returns {Promise<Array>} - A promise that resolves to an array of logs.
+ * @throws {Error} - If the fetch operation fails.
+ */
+export async function getBoardLogs(days, boardID){
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+                    + process.env.REACT_APP_PATH_BOARD
+                    + boardID
+                    + process.env.REACT_APP_EXTRA_PATH_BOARD_LOGS
+                    + days + '/';
+        const token = window.localStorage.getItem('loggedCaseManagerUser');
+        const response = await fetch(url,{
+            method: 'GET',
+            headers: {'Authorization': `Token ${token}`}
+        });
+        if (response.ok) {
+            const logs = await response.json();
+            return logs
+
+        } else {
+            throw new Error(`Failed to fetch logs of Board ${boardID}. Status code: ${response.status}`);
+        }
+    } catch (error) {
+        console.error(`Unexpected error while trying to fetch logs of Board ${boardID}.`);
+        console.debug(error);
+        throw error;
+    }
+};
+
 /********************** CONSULTATION REQUEST *************************/
 
 /**
