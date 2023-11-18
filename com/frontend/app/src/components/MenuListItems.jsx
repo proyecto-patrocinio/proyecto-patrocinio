@@ -129,7 +129,7 @@ const ListControlPanel = () => {
           <ListItemIconButton key={"item-consult"} text={"Consultations"}/>
         </Link>
         <Link key={"link-client"} href={PATH_CP_CLIENTS} style={{ color: 'inherit', textDecoration: 'none' }}>
-          <ListItemIconButton key={"item-client"} text={"Clients"}/>
+          <ListItemIconButton key={"item-client"} text={"Consultants"}/>
         </Link>
       </List>
     </Collapse>
