@@ -8,6 +8,9 @@ import InfoIcon from '@mui/icons-material/Info';
 import { getBoardLogs } from '../utils/caseTaker';
 
 
+const DAYS_FOR_BOARD_LOGS = 10
+
+
 /**BoardInfo Component
  *
  * Displays information about a board, including cards states and logs.
@@ -24,7 +27,7 @@ const BoardInfo = ({ panel}) => {
 
     useEffect(() => {
         const setUpLogs = async () =>{
-            const response = await getBoardLogs(10, panel.id);
+            const response = await getBoardLogs(DAYS_FOR_BOARD_LOGS, panel.id);
             console.log(response)
             setLogs(response);
         };
@@ -83,7 +86,7 @@ const BoardInfo = ({ panel}) => {
             </Popper>
 
 
-
+            {/* Display for logs */}
             <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth>
                 <DialogTitle>History of Accepted Consultations</DialogTitle>
                 <DialogContent>
