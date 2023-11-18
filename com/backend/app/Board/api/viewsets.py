@@ -1,15 +1,31 @@
 import os
-from rest_framework import viewsets
+
+from django.db.models import F, Q
+from django.db.models import Prefetch, Count
+from django.utils import timezone
+from datetime import timedelta
+from datetime import datetime
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework import status, viewsets
+
 from Board.api.serializers import BoardSerializer, BoardFullSerializer, BoardListSerializer, ConsultancyListSerializer
 from Board.models import Board
-from django.db.models import Prefetch, Count
-from rest_framework.decorators import action
+from Card.models import Card
+from Card.api.serializers import CardLogSerializer
 from constants import CONSULTANCY_BOARD_NAME
 from Consultation.models import Consultation
-from django.db.models import F, Q
 
 
 class BoardViewSet(viewsets.ModelViewSet):
+    """View set for managing board-related operations.
+
+    Methods:
+        retrieve: Retrieve details for a specific board.
+        list: List all boards with the count of associated cards.
+        consultancy_board: Retrieve consultancy data, including associated request cards, for boards.
+        logs: Retrieve cards for a specific board that started N days ago.
+    """
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
 
@@ -74,3 +90,32 @@ class BoardViewSet(viewsets.ModelViewSet):
                 request_consultation["tag"] = Consultation.objects.get(id=request_consultation["consultation"]).tag
 
         return consultancy
+
+    @action(detail=True, methods=['GET'])
+    def logs(self, request, *args, **kwargs):
+        """Retrieve cards for a specific board that started N days ago.
+
+        Requires 'days' parameter in the query string specifying the number of days.
+        Example: 'GET api/boards/board/1/logs/?days=7'
+        """
+        days_ago = request.query_params.get('days')
+        board_id = self.get_object().pk
+
+        if not days_ago:
+            return Response({'error': 'Parameter "days" is required.'},  status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            days_ago = int(days_ago)
+        except ValueError:
+            return Response({'error': 'Invalid value for parameter "days".'}, status=status.HTTP_400_BAD_REQUEST)
+
+        start_date = datetime.now() - timedelta(days=days_ago)
+
+        # Filter cards based on start_time and board_id
+        logs_cards = Card.objects.filter(
+            panel__board_id=board_id,
+            consultation__start_time__gte=start_date
+        ).all()
+
+        serializer = CardLogSerializer(logs_cards, many=True)
+        return Response(data=serializer.data,  status=status.HTTP_200_OK)
