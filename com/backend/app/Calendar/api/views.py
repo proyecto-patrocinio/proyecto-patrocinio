@@ -12,10 +12,13 @@ class CalendarViewSet(viewsets.ModelViewSet):
     serializer_class = CalendarSerializer
     permission_classes = [CheckGroupPermission]
 
-    def retrieve(self, request, *args, **kwargs):
-        self.queryset = queryset = self.queryset.prefetch_related(Prefetch("events"))
-        self.serializer_class = CalendarFullSerializer
-        return self.super().retrieve(request, *args, **kwargs)
+    def list(self, request, *args, **kwargs):
+        card_id = request.GET.get('card_id', None)
+        if card_id:
+            self.queryset =  self.queryset.filter(card=card_id)
+            self.serializer_class = CalendarFullSerializer
+            self.queryset = queryset = self.queryset.prefetch_related(Prefetch("events")).all()
+        return super().list(request, *args, **kwargs)
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -23,3 +26,9 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [CheckGroupPermission]
+
+    def list(self, request, *args, **kwargs):
+        board_id = request.GET.get('board_id', None)
+        if board_id:
+            self.queryset =  self.queryset.filter(calendar__card__panel__board=board_id).all()
+        return super().list(request, *args, **kwargs)

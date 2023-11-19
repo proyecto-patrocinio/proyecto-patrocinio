@@ -2,11 +2,13 @@ from django.db import models
 from Card.models import Card
 
 class Calendar(models.Model):
-    id = models.OneToOneField(
+    id = models.AutoField(primary_key=True)
+    card = models.OneToOneField(
         Card,
         verbose_name="Card",
         on_delete=models.CASCADE,
-        primary_key=True
+        null=False,
+        unique=True
     )
 
 

@@ -20,5 +20,5 @@ class CalendarFullSerializer(serializers.ModelSerializer):
     events = EventSerializer( many=True, read_only=True, required=False, allow_null=True)
     class Meta:
         model = Calendar
-        fields = ['id', 'events']
+        fields = ['id', 'events', 'card']
         read_only_fields = ['id',]
