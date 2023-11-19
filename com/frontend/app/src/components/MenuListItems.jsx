@@ -14,9 +14,11 @@ import  Link  from '@mui/material/Link'
 import TuneIcon from '@mui/icons-material/Tune';
 import { useUserContext } from '../context/UserContext';
 import {fetchBoardsByUser} from '../utils/board';
-import { PATH_BOARD, PATH_CONSULTANCY, PATH_CP_CLIENTS,
-  PATH_CP_CONSULT, PATH_LOGOUT, PATH_SETTINGS } from '../utils/constants';
-
+import {
+  PATH_BOARD, PATH_CONSULTANCY, PATH_CP_CLIENTS,
+  PATH_CP_CONSULT, PATH_LOGOUT, PATH_SETTINGS
+} from '../utils/constants';
+import { CASE_TAKER_ROLE, PROFESSOR_ROLE } from '../utils/constants';
 
 /**
  * Item with Icon and Text
@@ -139,25 +141,40 @@ const ListControlPanel = () => {
 
 
 /**
- * Component to display all the  menu items
- * @returns json object with all the menu items
-*/
+ * Component that renders a list of menu items based on user roles.
+ * @returns {Object} JSON object containing all the menu items.
+ */
 const MenuListItems = ()=>{
-  
+  const [roles, setRoles] = useState([]);
+  const userContext = useUserContext();
+
+  useEffect(() => {
+    const setUpRoles = async () => {
+      setRoles(userContext.user?.roles);
+    };
+    setUpRoles();
+  }, [userContext.user]);
+
   return (
   <List component="nav">
     <React.Fragment>
       <Link href={PATH_SETTINGS} style={{ color: 'inherit', textDecoration: 'none' }}>
         <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
       </Link>
-      <Link href={PATH_CONSULTANCY} style={{ color: 'inherit', textDecoration: 'none' }}>
-        <ListItemIconButton icon={<InputIcon />} text="Consultancy" />
-      </Link>
-      <ListControlPanel />
+      {roles?.includes(CASE_TAKER_ROLE) && (
+        <>
+          <Link href={PATH_CONSULTANCY} style={{ color: 'inherit', textDecoration: 'none' }}>
+            <ListItemIconButton icon={<InputIcon />} text="Consultancy" />
+          </Link>
+          <ListControlPanel />
+        </>
+      )}
+      {roles?.includes(PROFESSOR_ROLE) && ( 
+        <ListBoards />
+      )}
       <Link href={PATH_LOGOUT} style={{ color: 'inherit', textDecoration: 'none' }}>
         <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Logout"/>
       </Link>
-      <ListBoards />
     </React.Fragment>
   </List>
   );
