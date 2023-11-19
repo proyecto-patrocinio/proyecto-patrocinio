@@ -13,6 +13,7 @@ export const UserProvider = ({ children }) => {
         email: "",
         firstname: "",
         lastname: "",
+        "roles": []
     };
     const [userState, setUserState] = useState( initialState );
 

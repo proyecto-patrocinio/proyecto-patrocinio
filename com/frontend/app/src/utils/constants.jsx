@@ -10,3 +10,7 @@ export const PATH_TERMS = "/terms/"
 export const PATH_CONFIRM_EMAIL = "/confirm-email/"
 export const PATH_FORGET_PASSWORD = "/forget-password/"
 export const PATH_SETTINGS = "/settings/"
+
+// Role name as defined in the frontend app
+export const PROFESSOR_ROLE = "professor"
+export const CASE_TAKER_ROLE = "case_taker"

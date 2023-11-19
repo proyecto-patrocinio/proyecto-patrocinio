@@ -5,6 +5,10 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
+from datetime import datetime
+from rest_framework.permissions import IsAuthenticated
 
 from Board.models import Board
 from Board.api.serializers import BoardSerializer
@@ -19,9 +23,7 @@ from Consultation.api.serializers import (
 )
 from Consultation.models import Consultation,  RequestConsultation
 from Panel.models import Panel
-from django.utils import timezone
-from datetime import timedelta
-from datetime import datetime
+from User.permissions import CheckGroupPermission, ProfessorGroupPermission
 
 
 logger = logging.getLogger(__name__)
@@ -32,6 +34,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on Consultation objects."""
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
+    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
         """Custom create view that uses the ConsultationCreateSerializer."""
@@ -68,6 +71,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on RequestConsultation objects."""
     queryset = RequestConsultation.objects.all()
     serializer_class = RequestConsultationSerializer
+    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
         """Create a new Consultation and set its availability_state to "PENDING" if it meets the conditions.
@@ -163,6 +167,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def accepted(self, request, *args, **kwargs):
+        self.permission_classes = [ProfessorGroupPermission]
         self.serializer_class = RequestConsultationAceptedSerializer
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
         logger.info(f"Accepting consultation {consultation_id}...")
@@ -229,6 +234,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def rejected(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated]
         self.serializer_class = RequestConsultationRejectedSerializer
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
         logger.info(f"Rejecting consultation {consultation_id}...")

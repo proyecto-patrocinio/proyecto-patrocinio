@@ -32,6 +32,15 @@ def get_user_info_from_token(request):
     try:
         token = Token.objects.select_related('user').get(key=token_key)
         user = token.user
-        return Response({'pk': user.pk, 'username': user.username, 'email': user.email, 'first_name': user.first_name, 'last_name': user.last_name}, status=status.HTTP_200_OK)
+        roles = [group.name for group in request.user.groups.all()]
+        return Response({
+            'pk': user.pk,
+            'username': user.username,
+            'email': user.email,
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'roles': roles
+        }, status=status.HTTP_200_OK)
+
     except Token.DoesNotExist:
         raise AuthenticationFailed("Invalid or not found token.")

@@ -8,6 +8,7 @@ from datetime import datetime
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
 
 from Board.api.serializers import BoardSerializer, BoardFullSerializer, BoardListSerializer, ConsultancyListSerializer
 from Board.models import Board
@@ -15,7 +16,7 @@ from Card.models import Card
 from Card.api.serializers import CardLogSerializer
 from constants import CONSULTANCY_BOARD_NAME
 from Consultation.models import Consultation
-
+from User.permissions import CheckGroupPermission, CaseTakerGroupPermission
 
 class BoardViewSet(viewsets.ModelViewSet):
     """View set for managing board-related operations.
@@ -28,6 +29,7 @@ class BoardViewSet(viewsets.ModelViewSet):
     """
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+    permission_classes = [CheckGroupPermission]
 
     def retrieve(self, request, *args, **kwargs):
         self.serializer_class = BoardFullSerializer
@@ -60,7 +62,7 @@ class BoardViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def consultancy_board(self, request, *args, **kwargs):
         """Custom action to retrieve consultancy data for boards."""
-
+        self.permission_classes = [CaseTakerGroupPermission]
         self.queryset = Board.objects.annotate(
             number_cards=Count('panels__cards', distinct=True),
             todo_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='TODO')),
@@ -98,6 +100,8 @@ class BoardViewSet(viewsets.ModelViewSet):
         Requires 'days' parameter in the query string specifying the number of days.
         Example: 'GET api/boards/board/1/logs/?days=7'
         """
+        self.permission_classes = [IsAuthenticated]
+
         days_ago = request.query_params.get('days')
         board_id = self.get_object().pk
 

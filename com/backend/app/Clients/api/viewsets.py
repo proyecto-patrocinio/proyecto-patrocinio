@@ -2,12 +2,13 @@ from Clients.api.serializers import *
 from Clients.models import *
 from rest_framework import viewsets
 from django.db.models import Prefetch
-# list, create, retrieve, update, partial_update, destroy
+from User.permissions import CheckGroupPermission
 
 
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
+    permission_classes = [CheckGroupPermission]
 
     def list(self, request, *args, **kwargs):
         self.serializer_class = ClientFullSerializer
@@ -55,6 +56,7 @@ class PatrimonyViewSet(viewsets.ModelViewSet):
 class FamilyViewSet(viewsets.ModelViewSet):
     queryset = Family.objects.all()
     serializer_class = FamilySerializer
+    permission_classes = [CheckGroupPermission]
 
     def retrieve(self, request, *args, **kwargs):
         self.serializer_class = FamilyFullSerializer
@@ -80,6 +82,7 @@ class FamilyViewSet(viewsets.ModelViewSet):
 class SonViewSet(viewsets.ModelViewSet):
     queryset = Son.objects.all()
     serializer_class = SonSerializer
+    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
         self.serializer_class = SonCreateSerializer
@@ -88,3 +91,4 @@ class SonViewSet(viewsets.ModelViewSet):
 class TelViewSet(viewsets.ModelViewSet):
     queryset = Tel.objects.all()
     serializer_class = TelSerializer
+    permission_classes = [CheckGroupPermission]
