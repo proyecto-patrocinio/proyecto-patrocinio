@@ -26,9 +26,12 @@ python manage.py migrate
 python manage.py collectstatic --no-input --clear
 
 #load initial data (the order is important)
-python manage.py loaddata locality/load_data/nationality.json 
-python manage.py loaddata locality/load_data/province.json 
-python manage.py loaddata locality/load_data/locality.json 
+python manage.py loaddata init_load_data/nationality.json 
+python manage.py loaddata init_load_data/province.json 
+python manage.py loaddata init_load_data/locality.json 
+python manage.py loaddata init_load_data/groups_permissions.json 
+python manage.py loaddata init_load_data/sites.json 
+
 
 #run test
 python manage.py test

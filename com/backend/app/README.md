@@ -29,11 +29,13 @@ python manage.py migrate
 python manage.py collectstatic --no-input --clear
 ```
 
-Se cargan los datos geográficos necesariós para el uso de la aplicación:
+Se cargan los datos iniciales necesariós para el uso de la aplicación:
 ```bash
-python manage.py loaddata locality/load_data/nationality.json 
-python manage.py loaddata locality/load_data/province.json 
-python manage.py loaddata locality/load_data/locality.json 
+python manage.py loaddata init_load_data/nationality.json 
+python manage.py loaddata init_load_data/province.json 
+python manage.py loaddata init_load_data/locality.json 
+python manage.py loaddata init_load_data/groups_permissions.json 
+python manage.py loaddata init_load_data/sites.json 
 ```
 
 ## Correr aplicación
