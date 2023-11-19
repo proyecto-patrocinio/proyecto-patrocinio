@@ -98,6 +98,13 @@
     "permissions": [
       104,
       96,
+      121,
+      122,
+      124,
+      125,
+      126,
+      127,
+      128,
       89,
       90,
       91,
@@ -1230,6 +1237,78 @@
     "name": "Can view file",
     "content_type": 30,
     "codename": "view_file"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 121,
+  "fields": {
+    "name": "Can add calendar",
+    "content_type": 31,
+    "codename": "add_calendar"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 122,
+  "fields": {
+    "name": "Can change calendar",
+    "content_type": 31,
+    "codename": "change_calendar"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 123,
+  "fields": {
+    "name": "Can delete calendar",
+    "content_type": 31,
+    "codename": "delete_calendar"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 124,
+  "fields": {
+    "name": "Can view calendar",
+    "content_type": 31,
+    "codename": "view_calendar"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 125,
+  "fields": {
+    "name": "Can add event",
+    "content_type": 32,
+    "codename": "add_event"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 126,
+  "fields": {
+    "name": "Can change event",
+    "content_type": 32,
+    "codename": "change_event"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 127,
+  "fields": {
+    "name": "Can delete event",
+    "content_type": 32,
+    "codename": "delete_event"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 128,
+  "fields": {
+    "name": "Can view event",
+    "content_type": 32,
+    "codename": "view_event"
   }
 }
 ]

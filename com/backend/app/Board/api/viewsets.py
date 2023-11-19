@@ -29,9 +29,9 @@ class BoardViewSet(viewsets.ModelViewSet):
     """
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
-    permission_classes = [CheckGroupPermission]
 
     def retrieve(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
         self.serializer_class = BoardFullSerializer
         self.queryset = self.queryset.prefetch_related(
             Prefetch('boardusers')
@@ -53,6 +53,7 @@ class BoardViewSet(viewsets.ModelViewSet):
         return board
 
     def list(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
         self.queryset = Board.objects.annotate(
             number_cards=Count('panels__cards', distinct=True)
         )

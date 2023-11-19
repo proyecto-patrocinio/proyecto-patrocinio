@@ -33,17 +33,19 @@ logger.setLevel(logging.DEBUG)
 class CommentApiViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
-    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
         self.serializer_class = CommentCreateSerializer
         return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
         self.serializer_class = CommentEditSerializer
         return  super().update(request, *args, **kwargs)
 
     def destroy(self, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
         self.serializer_class = CommentDestroySerializer
         comment_id = self.get_object().pk
         try:
@@ -59,6 +61,7 @@ class CommentApiViewSet(ModelViewSet):
         return super().destroy(*args, **kwargs)
 
     def list(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
         # FILTER COMMENTS BY USER AND/OR CONSULTATION ID.
         self.queryset = self.queryset.prefetch_related('files')
         user_id = self.request.query_params.get('user_id', None)
@@ -73,9 +76,9 @@ class CommentApiViewSet(ModelViewSet):
 class FileViewSet(ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileGetSerializer
-    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
+            self.permission_classes = [CheckGroupPermission]
             self.serializer_class = FileUploadSerializer
             try:
                 uploadedFile = request.FILES['uploadedFile']
@@ -127,22 +130,23 @@ class FileViewSet(ModelViewSet):
             return Response(mns, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def destroy(self, request, *args, **kwargs):
-            try:
-                instance = self.get_object()
-                filename = instance.filename
-                filepath = f"{ATTACHMENT_FILES_DIRECTORY}{instance.id}"
+        self.permission_classes = [CheckGroupPermission]
+        try:
+            instance = self.get_object()
+            filename = instance.filename
+            filepath = f"{ATTACHMENT_FILES_DIRECTORY}{instance.id}"
 
-                # First remove the file from disk
-                if os.path.exists(filepath):
-                    os.remove(filepath)
-                    logger.info(f"File {filename} was successfully deleted from disk.")
+            # First remove the file from disk
+            if os.path.exists(filepath):
+                os.remove(filepath)
+                logger.info(f"File {filename} was successfully deleted from disk.")
 
-                # Then, delete from database
-                self.perform_destroy(instance)
+            # Then, delete from database
+            self.perform_destroy(instance)
 
-                return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
-            except Exception as e:
-                mns = f"Error while trying to delete file"
-                logger.error(mns, f". Error details: {str(e)}")
-                return Response(mns, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except Exception as e:
+            mns = f"Error while trying to delete file"
+            logger.error(mns, f". Error details: {str(e)}")
+            return Response(mns, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
