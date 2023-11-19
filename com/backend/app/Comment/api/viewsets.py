@@ -3,10 +3,13 @@
 '''
 import os
 import logging
+
 from constants import ATTACHMENT_FILES_DIRECTORY
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+
 from Comment.models import Comment, File
 from Comment.api.serializers import (
     CommentSerializer,
@@ -103,6 +106,7 @@ class FileViewSet(ModelViewSet):
 
     @action(detail=True, methods=['get'])
     def download(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated]
         try:
             file_id = self.get_object().pk
             download_filename = File.objects.get(id=file_id).filename

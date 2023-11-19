@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from django.db.models import Prefetch, Count
 from rest_framework import status
 from rest_framework.decorators import action
-from User.permissions import CheckGroupPermission
+from User.permissions import CheckGroupPermission, ProfessorGroupPermission
 
 
 logger = logging.getLogger(__name__)
@@ -126,4 +126,5 @@ class PanelViewSet(ModelViewSet):
         Returns:
             An HTTP response indicating whether the panel was deleted.
         """
+        self.permission_classes = [ProfessorGroupPermission]
         return super().destroy(request, *args, **kwargs)

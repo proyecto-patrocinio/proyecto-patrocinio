@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
 from datetime import datetime
+from rest_framework.permissions import IsAuthenticated
 
 from Board.models import Board
 from Board.api.serializers import BoardSerializer
@@ -22,7 +23,7 @@ from Consultation.api.serializers import (
 )
 from Consultation.models import Consultation,  RequestConsultation
 from Panel.models import Panel
-from User.permissions import CheckGroupPermission
+from User.permissions import CheckGroupPermission, ProfessorGroupPermission
 
 
 logger = logging.getLogger(__name__)
@@ -166,6 +167,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def accepted(self, request, *args, **kwargs):
+        self.permission_classes = [ProfessorGroupPermission]
         self.serializer_class = RequestConsultationAceptedSerializer
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
         logger.info(f"Accepting consultation {consultation_id}...")
@@ -232,6 +234,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def rejected(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated]
         self.serializer_class = RequestConsultationRejectedSerializer
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
         logger.info(f"Rejecting consultation {consultation_id}...")
