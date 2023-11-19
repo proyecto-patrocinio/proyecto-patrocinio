@@ -15,7 +15,7 @@ from Card.models import Card
 from Card.api.serializers import CardLogSerializer
 from constants import CONSULTANCY_BOARD_NAME
 from Consultation.models import Consultation
-
+from User.permissions import CheckGroupPermission
 
 class BoardViewSet(viewsets.ModelViewSet):
     """View set for managing board-related operations.
@@ -28,6 +28,7 @@ class BoardViewSet(viewsets.ModelViewSet):
     """
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
+    permission_classes = [CheckGroupPermission]
 
     def retrieve(self, request, *args, **kwargs):
         self.serializer_class = BoardFullSerializer

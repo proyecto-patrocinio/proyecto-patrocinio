@@ -20,6 +20,7 @@ from Comment.api.serializers import (
 from django.http import FileResponse
 from rest_framework.decorators import action
 from django.contrib.auth.models import User
+from User.permissions import CheckGroupPermission
 
 
 logger = logging.getLogger(__name__)
@@ -29,6 +30,7 @@ logger.setLevel(logging.DEBUG)
 class CommentApiViewSet(ModelViewSet):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
         self.serializer_class = CommentCreateSerializer
@@ -68,6 +70,7 @@ class CommentApiViewSet(ModelViewSet):
 class FileViewSet(ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileGetSerializer
+    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
             self.serializer_class = FileUploadSerializer

@@ -10,6 +10,7 @@ from rest_framework.response import Response
 from django.db.models import Prefetch, Count
 from rest_framework import status
 from rest_framework.decorators import action
+from User.permissions import CheckGroupPermission
 
 
 logger = logging.getLogger(__name__)
@@ -19,6 +20,7 @@ logger.setLevel(logging.DEBUG)
 class PanelViewSet(ModelViewSet):
     queryset = Panel.objects.all()
     serializer_class = PanelSerializer
+    permission_classes = [CheckGroupPermission]
 
     def retrieve(self, request, *args, **kwargs):
         """
