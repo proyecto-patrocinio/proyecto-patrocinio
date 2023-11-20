@@ -4,6 +4,10 @@ from django.db.models import Prefetch
 from Calendar.api.serializers import CalendarSerializer, EventSerializer, CalendarFullSerializer
 from Calendar.models import Calendar, Event
 from User.permissions import CheckGroupPermission
+from django.shortcuts import get_object_or_404
+from Card.models import Card
+from rest_framework.response import Response
+from rest_framework import status
 
 
 class CalendarViewSet(viewsets.ModelViewSet):
@@ -15,11 +19,14 @@ class CalendarViewSet(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         card_id = request.GET.get('card_id', None)
         if card_id:
-            self.queryset =  self.queryset.filter(card=card_id)
-            self.serializer_class = CalendarFullSerializer
-            self.queryset = queryset = self.queryset.prefetch_related(Prefetch("events")).all()
-        return super().list(request, *args, **kwargs)
+            card = get_object_or_404(Card,pk=card_id)
+            calendar, isExist = Calendar.objects.get_or_create(card=card)
+            serializer = CalendarFullSerializer(calendar)
+            if isExist:
+                return Response(serializer.data, status=200)
+            return Response(serializer.data, status=201)
 
+        return super().list(request, *args, **kwargs)
 
 class EventViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on Event objects."""

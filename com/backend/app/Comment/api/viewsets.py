@@ -1,4 +1,4 @@
-''' 
+'''
     modelViewSet is a class that allows you to create a CRUD
 '''
 import os

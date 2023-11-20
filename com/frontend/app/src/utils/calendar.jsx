@@ -22,8 +22,8 @@ export async function getCalendarByCard(cardID) {
             headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
-            const calendar = await response.json(); // Return list with 1 element
-            return  calendar.length > 0 ? calendar[0] : null;
+            const calendar = await response.json();
+            return  calendar;
         } else {
             const mns =`Failed to fetch Calendar for Card ID ${cardID}.`
             console.error(mns, " Status code: ", response.status);

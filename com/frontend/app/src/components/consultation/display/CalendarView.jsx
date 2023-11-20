@@ -20,7 +20,7 @@ const localizer = momentLocalizer(moment);
  * @param {number} cardID - The ID of the card associated with the calendar.
  * @returns {JSX.Element} - The rendered CalendarView component.
  */
-const CalendarView = ({cardID=1}) => {
+const CalendarView = ({cardID}) => {
   const [openNewDate, setOpenNewDate] = useState(false);
   const [events, setEvents] = useState([]);
   const [calendarID, setCalendarID] = useState(null);
@@ -40,7 +40,9 @@ const CalendarView = ({cardID=1}) => {
         setEvents(calendar_response?.events || []);
         setCalendarID(calendar_response.id);
       } catch (e){
-        setErrorMessage("Failed to get events.");
+        const mns = "Failed to get events.";
+        console.error(mns);
+        setErrorMessage(mns);
       }
     };
     getEvents();
