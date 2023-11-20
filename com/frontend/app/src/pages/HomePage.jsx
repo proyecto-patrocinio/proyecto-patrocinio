@@ -44,6 +44,10 @@ const TutorialModal = ({ open, handleClose }) => {
         handleClose();
     }
 
+    const handleStart = () => {
+        setStep(1);
+    };
+
     const steps = [
         'On the left, you will find the dropdown menu to switch pages.',
         'Settings: This page allows you to view and change user information.',
@@ -76,7 +80,7 @@ const TutorialModal = ({ open, handleClose }) => {
                         </Button>
                     )}
                     {step === steps.length && (
-                        <Button variant="contained" color="secondary" onClick={handleClose}>
+                        <Button variant="contained" color="secondary" onClick={handleStart}>
                             Start
                         </Button>
                     )}
