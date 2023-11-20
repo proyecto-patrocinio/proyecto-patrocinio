@@ -5,6 +5,8 @@ import InfoIcon from '@mui/icons-material/Info';
 import CommentIcon from '@mui/icons-material/Comment';
 import Comment from './CommentView.jsx';
 import ConsutationInfoView from './ConsultationInfoView.jsx';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import CalendarView from './CalendarView.jsx';
 
 
 /**
@@ -48,12 +50,14 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
         >
             <BottomNavigationAction label="Info" icon={<InfoIcon />} />
             <BottomNavigationAction label="Comments" icon={<CommentIcon />} />
+            <BottomNavigationAction label="Calendar" icon={<CalendarMonthIcon />} />
         </BottomNavigation>
 
 
         <DialogContent>
         {(windowNumber===0)&&<ConsutationInfoView consultation={consultation} updateViewTag={updateViewTag}/>}
         {(windowNumber===1)&& <Comment consultationID={consultation.consultation}/>}
+        {(windowNumber===2)&& <CalendarView cardID={consultation.consultation}/>}  {/* cardID oneToOne Consultation( primarykey ) */}
         </DialogContent>
         <Button onClick={handleClose} color="primary">
             Close

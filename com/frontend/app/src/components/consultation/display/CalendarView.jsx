@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
-import SimpleDialog from './SimpleDialog';
+import SimpleDialog from '../../SimpleDialog';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { IconButton, Paper, TextField, Typography } from '@mui/material';
-import { createEvent, deleteEvent, getCalendarByCard } from '../utils/calendar';
-import AlertSnackbar from './AlertSnackbar';
+import { createEvent, deleteEvent, getCalendarByCard } from '../../../utils/calendar';
+import AlertSnackbar from '../../AlertSnackbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const theme = createTheme();
