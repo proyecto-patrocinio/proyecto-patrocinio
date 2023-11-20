@@ -1,3 +1,6 @@
+/**************************************************************************************************************
+* This module provides functions for interacting with the backend API to perform operations related to cards. *
+***************************************************************************************************************/
 import Cookies from "js-cookie";
 
 

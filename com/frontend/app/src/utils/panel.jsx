@@ -1,3 +1,6 @@
+/**************************************************************************
+* This module houses essential functions for interacting with panel API. *
+***************************************************************************/
 import Cookies from "js-cookie";
 
 

@@ -1,3 +1,7 @@
+/*****************************************
+ *  Application Paths and Role Constants *
+ *****************************************/
+
 // PATHS
 export const PATH_ROOT = "/"
 export const PATH_SIGNUP = "/signup/"

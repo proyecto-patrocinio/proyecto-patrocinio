@@ -1,3 +1,6 @@
+/********************************************************************
+* This module contains functions for interacting with the user API. *
+*********************************************************************/
 import Cookies from "js-cookie";
 
 /**

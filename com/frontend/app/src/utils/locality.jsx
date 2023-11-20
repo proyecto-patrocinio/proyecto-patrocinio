@@ -1,6 +1,6 @@
 /**************************************************************************
 * This module houses essential functions for interacting with             *
-* Locality, Province and Province data.                                *
+* Locality, Province and Province data.                                   *
 ***************************************************************************/
 
 
