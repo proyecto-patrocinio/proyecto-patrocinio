@@ -24,10 +24,10 @@ from Panel.api.router import router_panel
 from Board.api.router import router_board
 from Comment.api.router import router_comment
 from Consultation.api.router import router_consultation
+from Calendar.api.router import router_calendar
 from dj_rest_auth.registration.views import RegisterView, ConfirmEmailView, VerifyEmailView, ResendEmailVerificationView
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
 from terms_and_policies.router import paths_terms_and_policies
-
 
 urlpatterns = [
     path('api/auth/account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),
@@ -47,6 +47,7 @@ urlpatterns = [
     path('api/boardUser/', include(router_boardUser.urls)),
     path('api/boards/', include(router_board.urls)),
     path('api/consultations/', include(router_consultation.urls)),
+    path('api/calendars/', include(router_calendar.urls)),
     path('api/comments/', include(router_comment.urls)),
     path('api/auth/user-by-token/', get_user_info_from_token, name='get_user_info'),
     *paths_terms_and_policies,

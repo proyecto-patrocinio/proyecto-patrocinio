@@ -20,7 +20,6 @@ logger.setLevel(logging.DEBUG)
 class PanelViewSet(ModelViewSet):
     queryset = Panel.objects.all()
     serializer_class = PanelSerializer
-    permission_classes = [CheckGroupPermission]
 
     def retrieve(self, request, *args, **kwargs):
         """
@@ -34,6 +33,7 @@ class PanelViewSet(ModelViewSet):
         Returns:
             An HTTP response that includes the panel and its associated cards.
         """
+        self.permission_classes = [CheckGroupPermission]
         self.serializer_class = PanelFullSerializer
         self.queryset = self.queryset.prefetch_related(
                         Prefetch('cards')
@@ -52,6 +52,7 @@ class PanelViewSet(ModelViewSet):
         Returns:
             An HTTP response that includes the list of panels with the number of associated cards.
         """
+        self.permission_classes = [CheckGroupPermission]
         self.queryset = Panel.objects.prefetch_related(
             Prefetch('cards')
         ).annotate(
@@ -72,6 +73,7 @@ class PanelViewSet(ModelViewSet):
         Returns:
             An HTTP response indicating whether the panel was deleted or if there was a conflict due to associated cards.
         """
+        self.permission_classes = [CheckGroupPermission]
         queryset = Panel.objects.prefetch_related(
             Prefetch('cards')
         ).annotate(

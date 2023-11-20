@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'terms_and_policies',
     'Comment',
     'templatetags',
+    'Calendar',
 ]
 
 MIDDLEWARE = [

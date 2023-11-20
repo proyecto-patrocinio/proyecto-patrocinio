@@ -1,3 +1,7 @@
+/************************************************************************
+* This module contains functions for interacting with the comments API. *
+*************************************************************************/
+
 import Cookies from "js-cookie";
 
 /**

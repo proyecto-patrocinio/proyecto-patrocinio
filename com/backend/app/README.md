@@ -31,11 +31,11 @@ python manage.py collectstatic --no-input --clear
 
 Se cargan los datos iniciales necesariós para el uso de la aplicación:
 ```bash
-python manage.py loaddata init_load_data/nationality.json 
-python manage.py loaddata init_load_data/province.json 
-python manage.py loaddata init_load_data/locality.json 
-python manage.py loaddata init_load_data/groups_permissions.json 
-python manage.py loaddata init_load_data/sites.json 
+python manage.py loaddata init_load_data/nationality.json
+python manage.py loaddata init_load_data/province.json
+python manage.py loaddata init_load_data/locality.json
+python manage.py loaddata init_load_data/groups_permissions.json
+python manage.py loaddata init_load_data/sites.json
 ```
 
 ## Correr aplicación
@@ -68,3 +68,7 @@ python manage.py generateschema --file openapi-schema.yml
 ```
 Esto generará un archivo .yaml que  podrá ser visualizado con pluguins dentro del editor de texto, 
 webs como redocly, o la propia documentación de Postman junto con la generación de su colleción con la importación del archivo.
+
+# Developer Notes
+Para actualizar la carga inicial de grupos y permisos desde su base de datos ejecute:
+python manage.py dumpdata auth.Group auth.Permission --indent 2 > init_load_data/groups_permissions_sites.json

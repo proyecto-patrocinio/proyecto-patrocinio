@@ -71,7 +71,6 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on RequestConsultation objects."""
     queryset = RequestConsultation.objects.all()
     serializer_class = RequestConsultationSerializer
-    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
         """Create a new Consultation and set its availability_state to "PENDING" if it meets the conditions.
@@ -80,6 +79,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         if it's eligible. It performs checks to ensure that the Consultation doesn't already exist
         or have pending requests.
         """
+        self.permission_classes = [CheckGroupPermission]
+
         # Get content from Body
         consultation_id = request.data.get("consultation")
         if not (consultation_id):
@@ -123,6 +124,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         This method handles the deletion of a Consultation instance and,
         updates its availability_state to "CREATED" to indicate the cancellation of the request.
         """
+        self.permission_classes = [CheckGroupPermission]
+
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
 
         response = super().destroy(request, *args, **kwargs)
@@ -146,6 +149,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         to 'board', it returns a dictionary grouping requests by destiny board.
         Otherwise, it calls the parent class's list method to handle standard listing.
         """
+        self.permission_classes = [CheckGroupPermission]
+
         if 'group_by' in request.GET:
             filter_string = request.GET['group_by']
             if filter_string == 'board':
