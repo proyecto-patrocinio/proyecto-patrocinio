@@ -1,52 +1,105 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import moment from 'moment';
 import SimpleDialog from './SimpleDialog';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Paper, TextField, Typography } from '@mui/material';
+import { IconButton, Paper, TextField, Typography } from '@mui/material';
+import { createEvent, deleteEvent, getCalendarByCard } from '../utils/calendar';
+import AlertSnackbar from './AlertSnackbar';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const theme = createTheme();
 
 const localizer = momentLocalizer(moment);
 
-const CalendarView = () => {
-  const [openNewDate, setOpenNewDate] = useState(false);
-  const [events, setEvents] = useState([
-    {
-      title: 'Cumpleaños de la abuela',
-      start: new Date(2023, 11, 13),
-      end: new Date(2023, 11, 13),
-    },
-    // TODO: borrar ejemplo
-  ]);
 
-  const [newEventTitle, setNewEventTitle] = useState('');
+/**
+ * CalendarView component for displaying and managing events in a calendar.
+ * @param {number} cardID - The ID of the card associated with the calendar.
+ * @returns {JSX.Element} - The rendered CalendarView component.
+ */
+const CalendarView = ({cardID=1}) => {
+  const [openNewDate, setOpenNewDate] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [calendarID, setCalendarID] = useState(null);
+  const [newEventData, setNewEventData] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
+  const [errorMenssage, setErrorMessage] = useState(null);
 
+
+  /**
+   * Fetches events for the specified card when the component mounts.
+   */
+  useEffect(()=>{
+    const getEvents = async () => {
+      try{
+        const calendar_response = await getCalendarByCard(cardID);
+        setEvents(calendar_response?.events || []);
+        setCalendarID(calendar_response.id);
+      } catch (e){
+        setErrorMessage("Failed to get events.");
+      }
+    };
+    getEvents();
+  }, [cardID])
+
+
+  /**
+   * Handles the selection of a time slot in the calendar.
+   * @param {object} event - The selected time slot event.
+   */
   const handleSelectSlot = (event) => {
-    setNewEventTitle('');
+    setNewEventData(null);
     setSelectedEvent(null);
     setSelectedDates(event);
     setOpenNewDate(true);
   };
 
-
-  const handleAddEvent = () => {
-    if (newEventTitle.trim() !== '') {
+  /**
+   * Handles the addition of a new event to the calendar.
+   */
+  const handleAddEvent = async () => {
+    if (newEventData?.title !== '') {
       const newEvent = {
-        title: newEventTitle,
+        title: newEventData?.title,
+        calendar: calendarID,
+        description: newEventData?.description,
         start: selectedDates.start,
         end: selectedDates.end,
       };
-      setEvents([...events, newEvent]);
-      setNewEventTitle('');
-      setOpenNewDate(false);
+      try {
+        const response = await createEvent(newEvent);
+        setEvents([...events, response]);
+        setNewEventData(null);
+        setOpenNewDate(false);
+      } catch (e) {
+        setErrorMessage(e);
+      }
+    } else {
+      setErrorMessage("Title is required.")
     }
   };
 
+  /**
+   * Handles the deletion of the selected event from the calendar.
+   */
+  const handleDeletedEvent = async () => {
+    try {
+      const id = selectedEvent?.id
+      await deleteEvent(id);
+      const updatedEvents = events.filter(event => event.id !== id);
+
+      setEvents(updatedEvents);
+      setNewEventData(null);
+      setSelectedEvent(null);
+      setOpenNewDate(false);
+    } catch (e) {
+      setErrorMessage(e.message);
+    }
+  };
 
   return (
     <ThemeProvider theme={theme}>
@@ -62,39 +115,50 @@ const CalendarView = () => {
           onSelectSlot={handleSelectSlot}
           onSelectEvent={setSelectedEvent}
           messages={{
-            today: 'Hoy',
-            next: 'Siguiente',
-            previous: 'Anterior',
-            month: 'Mes',
-            week: 'Semana',
-            day: 'Día',
+            today: 'Today',
+            next: 'Next',
+            previous: 'Previous',
+            month: 'Month',
+            week: 'Week',
+            day: 'Day',
           }}
         />
 
         {selectedEvent && (
           <Paper style={{ marginTop: '30px', boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', background: '#bbdefb', padding: '20px', borderRadius: '8px' }}>
             <Typography variant="h5" style={{ marginBottom: '10px', color: '#2196f3' }}>{selectedEvent.title}</Typography>
-            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Inicio: ${selectedEvent.start.toLocaleString()}`}</Typography>
-            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Fin: ${selectedEvent.end.toLocaleString()}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Description: ${selectedEvent.description}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Start: ${selectedEvent.start.toLocaleString()}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`End: ${selectedEvent.end.toLocaleString()}`}</Typography>
+            <IconButton aria-label="create" color="primary" onClick={handleDeletedEvent}>
+              <DeleteIcon />
+            </IconButton>
           </Paper>
+          
         )}
       </div>
+      <AlertSnackbar message={errorMenssage} title={"Calendar Error"} onClose={() => setErrorMessage("")} severity={"error"} />
 
       <SimpleDialog
-        title={'Nuevo Evento'}
-        description={'Ingresa el título del nuevo evento:'}
+        title={'New Event'}
+        description={'Enter the information for the new event.'}
         isOpen={openNewDate}
         onClose={() => setOpenNewDate(false)}
         onAccept={handleAddEvent}
       >
         <TextField
-          label="Título del evento"
-          value={newEventTitle}
-          onChange={(e) => setNewEventTitle(e.target.value)}
+          label="Title"
+          value={newEventData?.title}
+          onChange={(e) => setNewEventData({...newEventData, 'title': e.target.value})}
+          fullWidth
+        />
+        <TextField
+          label="Description"
+          value={newEventData?.description}
+          onChange={(e) => setNewEventData({...newEventData, 'description': e.target.value})}
           fullWidth
         />
       </SimpleDialog>
-
     </ThemeProvider>
   );
 };
