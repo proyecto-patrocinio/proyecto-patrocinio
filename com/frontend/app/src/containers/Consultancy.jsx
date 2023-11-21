@@ -82,9 +82,10 @@ const Consultancy = () => {
    * @param {Object} sourcePanel - The source panel from which the card is being moved.
    * @param {Object} destinationPanel - The destination panel to which the card will be moved.
    * @param {number} sourceCardIndex - The index of the card in the source panel.
+   * @param {Object} newConsultancy - The new consentancy state.
    * @returns {boolean} IF the API process was successful or not.
    */
-  const updateBackend = async(sourcePanel, destinationPanel, sourceCardIndex) => {
+  const updateBackend = async(sourcePanel, destinationPanel, sourceCardIndex, newConsultancy) => {
     const cardToMove = sourcePanel.cards[sourceCardIndex];
     const requestAndConsultationID = cardToMove.consultation;
     const destinyPanelID = destinationPanel.id; // Destination boards OR Input panel with the consultations.
@@ -96,7 +97,7 @@ const Consultancy = () => {
         await deleteRequest(requestAndConsultationID);
       } else {
         // ELSE No have a current request consultation.
-        consultancy.panels[0].number_cards --;
+        newConsultancy.panels[0].number_cards --;
       }
 
       if( destinyPanelID !== PANEL_INPUT_CONSULTATION_ID){
@@ -104,12 +105,13 @@ const Consultancy = () => {
         await createRequest(requestAndConsultationID, destinyPanelID);
       } else {
         // ELSE No generate a new request consultation.
-        consultancy.panels[0].number_cards ++;
+        newConsultancy.panels[0].number_cards ++;
       }
-      setConsultancy(consultancy);
+      setConsultancy(newConsultancy);
       return true;
     } catch (e) {
       console.error("Error moving request/card: " + e.message);
+      setConsultancy(consultancy);//backup
       return false;
     }
   };
@@ -157,19 +159,14 @@ const Consultancy = () => {
 
   return (
     <DragDropContext onDragEnd={handleOnDragEnd}>
-      <Droppable key={"droppeable-consultancy"} droppableId={"consultancy"} direction="horizontal">
-        {(provided) => (
-          <ConsultancyContainer
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-          >
-          <Stack
+      <ConsultancyContainer>
+        <Stack
           direction="row"
           justifyContent="center"
           alignItems="stretch"
           spacing={2}
           key={"stack-container"}
-          >
+        >
           {/*panel-0: Input Coonsultations.*/}
             <div style={{ position: "sticky", left: 0, zIndex: 1}}>
                 <ConsultationPanel
@@ -189,11 +186,8 @@ const Consultancy = () => {
                     />
                 )
             ))}
-          {provided.placeholder}
           </Stack>
           </ConsultancyContainer>
-        )}
-      </Droppable>
     </DragDropContext>
   );
 };

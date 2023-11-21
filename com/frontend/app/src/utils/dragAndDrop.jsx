@@ -68,43 +68,48 @@ const onDragEnd = async(result, board, setBoard, updateBackend) => {
       (panel) => panel.id === Number(destination.droppableId)
     );
 
-    /*** Update Backend ***/
-    const isUpdated = await updateBackend(sourcePanel, destinationPanel, source.index);
 
     /*** Update Frontend ***/
-    if (isUpdated) {
-      // Remove the card from the source panel.
-      const sourceCards = [...sourcePanel.cards];
-      const [removedCard] = sourceCards.splice(source.index, 1);
-      const updatedSourcePanel = {
-        ...sourcePanel,
-        cards: sourceCards,
-      };
+    // Remove the card from the source panel.
+    const sourceCards = [...sourcePanel.cards];
+    const [removedCard] = sourceCards.splice(source.index, 1);
+    const updatedSourcePanel = {
+      ...sourcePanel,
+      cards: sourceCards,
+    };
 
-      // Add the card to the destination panel.
-      const destinationCards = [...destinationPanel.cards];
-      destinationCards.splice(destination.index, 0, removedCard);
-      const updatedDestinationPanel = {
-        ...destinationPanel,
-        cards: destinationCards,
-      };
-      
-      // Update the board state with the updated source and destination panels.
-      const updatedPanels = board.panels.map((panel) => {
-        if (panel.id === Number(destination.droppableId)) {
-          return updatedDestinationPanel;
-        }
-        if (panel.id === Number(source.droppableId)) {
-          return updatedSourcePanel;
-        }
-        return panel;
-      });
-      
-      setBoard({
-        ...board,
-        panels: updatedPanels,
-      });
+    // Add the card to the destination panel.
+    const destinationCards = [...destinationPanel.cards];
+    destinationCards.splice(destination.index, 0, removedCard);
+    const updatedDestinationPanel = {
+      ...destinationPanel,
+      cards: destinationCards,
+    };
+    
+    // Update the board state with the updated source and destination panels.
+    const updatedPanels = board.panels.map((panel) => {
+      if (panel.id === Number(destination.droppableId)) {
+        return updatedDestinationPanel;
+      }
+      if (panel.id === Number(source.droppableId)) {
+        return updatedSourcePanel;
+      }
+      return panel;
+    });
+
+    const newBoard = {
+      ...board,
+      panels: updatedPanels,
     }
+    setBoard(newBoard);
+
+    /*** Update Backend ***/
+    try {
+      await updateBackend(sourcePanel, destinationPanel, source.index, newBoard)
+    } catch (error) {
+      console.error("Error wihle tring to move cards:", error);
+      setBoard(board); //backup
+    };
   }
 };
 
