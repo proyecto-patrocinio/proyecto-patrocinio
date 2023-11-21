@@ -57,8 +57,8 @@ export async function createComment(commentData) {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
                 'Authorization': `Token ${token}`
-                },
-                body: JSON.stringify(commentData)
+            },
+            body: JSON.stringify(commentData)
             });
         if (response.ok) {
             const comment = await response.json();

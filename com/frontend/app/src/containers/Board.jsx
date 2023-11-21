@@ -79,14 +79,15 @@ const Board = ({id}) => {
   * @param {Object} sourcePanel - The source panel from which the card is being moved.
   * @param {Object} destinationPanel - The destination panel to which the card will be moved.
   * @param {number} sourceCardIndex - The index of the card in the source panel.
+  * @param {object} newBoard - The new board state.
   * @returns {Promise<boolean>} - A Promise that resolves to `true` if the card was moved successfully, or `false` if there was an error.
   */
-  const updateBackend = async (sourcePanel, destinationPanel, sourceCardIndex ) => {
+  const updateBackend = async (sourcePanel, destinationPanel, sourceCardIndex, newBoard ) => {
     const cardToMove = sourcePanel.cards[sourceCardIndex];
     const idCardToMove = cardToMove.consultation;
-    const idDestinyPanel = destinationPanel.id;
+    const idDestinyPanel = destinationPanel?.id;
     const idOriginPanel = sourcePanel.id;
-    
+
     if(idDestinyPanel === PANEL_INPUT_REQUEST_CARDS_ID){
       // It's not possible to move a card to the input panel.
       console.error("Unable to send a card to input request.")
@@ -94,13 +95,16 @@ const Board = ({id}) => {
       setTimeout(() => {
         setShowAlert(false);
       }, 5000);
+      setBoard(board); //backup
       return false;
     }
     if(idOriginPanel === PANEL_INPUT_REQUEST_CARDS_ID){
       const isAccept = await acceptRequestConsult(idCardToMove, idDestinyPanel);
+      if (!isAccept) setBoard(board); // backup
       return isAccept;
     } else { // Move Card from CardPanel to other normal panel.
       const isMoved = await moveCard(idCardToMove, idDestinyPanel);
+      if (!isMoved) setBoard(board); // backup
       return isMoved;
     }
   };
@@ -111,8 +115,8 @@ const Board = ({id}) => {
    *
    * @param {Object} result - The result of the card's drag-and-drop event.
    */
-  const handleOnDragEnd = (result) => {
-    onDragEnd(result, board, setBoard, updateBackend);
+  const handleOnDragEnd = async (result) => {
+    await onDragEnd(result, board, setBoard, updateBackend);
   }
 
 
@@ -122,22 +126,17 @@ const Board = ({id}) => {
 
   return (
     <div>
-      <DragDropContext onDragEnd={handleOnDragEnd}>
         {showAlert && (
           <Alert severity="error">It is not possible to move a card to the input panel.</Alert>
         )}
-        <Droppable droppableId={"board"+String(id)} direction="horizontal">
-          {(provided) => (
-            <BoardContainer
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-            >
-            <Stack
-              direction="row"
-              justifyContent="center"
-              alignItems="stretch"
-              spacing={2}
-            >
+      <DragDropContext onDragEnd={handleOnDragEnd} >
+      <BoardContainer>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="stretch"
+          spacing={2}
+        >
               {/*panel-0: Input Request Cards.*/}
                 <InputRequestPanel
                   key={"0"}
@@ -155,11 +154,8 @@ const Board = ({id}) => {
                     />
                   )
                 ))}
-                {provided.placeholder}
-            </Stack>
-          </BoardContainer>
-        )}
-        </Droppable>
+        </Stack>
+      </BoardContainer>
       </DragDropContext>
     </div>
   );

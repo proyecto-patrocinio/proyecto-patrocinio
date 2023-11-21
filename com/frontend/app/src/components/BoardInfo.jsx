@@ -28,7 +28,6 @@ const BoardInfo = ({ panel}) => {
     useEffect(() => {
         const setUpLogs = async () =>{
             const response = await getBoardLogs(DAYS_FOR_BOARD_LOGS, panel.id);
-            console.log(response)
             setLogs(response);
         };
         setUpLogs();
