@@ -37,15 +37,16 @@ const SettingsPage = () => {
    */
   const saveChanges = async () => {
     const response = await updateUser(editedFirstName, editedLastName);
-    setAlertMessage(response.message);
     setAlertSuccess(response.success);
+    setAlertMessage(response.message);
     if (response.user) {
-      setUserInfo({
+      const newUser = {
         ...userInfo,
         first_name: editedFirstName,
         last_name: editedLastName,
-      });
-      userContext.setUser(response.user)
+      }
+      setUserInfo(newUser);
+      userContext.setUser(newUser);
     };
     setEditMode(false);
   };
