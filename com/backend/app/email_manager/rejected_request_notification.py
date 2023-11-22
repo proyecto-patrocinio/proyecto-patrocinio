@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import status
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.contrib.auth.models import User
 
 from Board.models import Board
 from BoardUSer.models import BoardUser
@@ -19,8 +20,15 @@ logger.setLevel(logging.INFO)
 
 def send_email_rejected_request(board, consultation):
     try:
+        # Get user of board
         boardusers = BoardUser.objects.filter(board=board).all()
-        emails = [BoardUser.user.email for BoardUser in boardusers]
+        boardusers_emails = [BoardUser.user.email for BoardUser in boardusers]
+
+        # Get Case Taker user
+        case_taker_users = User.objects.all().filter(groups__name="case_taker")
+        case_taker_emails = [ case_taker.email for case_taker in case_taker_users ]
+
+        emails = list(set(boardusers_emails + case_taker_emails))
 
         subject = f'A consultation request was rejected for "{board}" commission.'
         message = 'A Request Consultation was rejected'
