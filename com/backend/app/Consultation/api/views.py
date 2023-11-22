@@ -24,9 +24,12 @@ from Consultation.api.serializers import (
 from Consultation.models import Consultation,  RequestConsultation
 from Panel.models import Panel
 from User.permissions import CheckGroupPermission, ProfessorGroupPermission
-
+from email_manager.new_request_notification import send_email_new_request
+from email_manager.rejected_request_notification import send_email_rejected_request
+from email_manager.accepted_request_notification import send_email_accepted_request
 
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 logger.setLevel(logging.DEBUG)
 
 
@@ -112,6 +115,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation.availability_state = "PENDING"
             consultation.save()
             logger.info(f"Consultation {consultation_id} created.")
+            destiny_board = request.data.get("destiny_board")
+            send_email_new_request(destiny_board)
         else:
             logger.error(f"Error creating consultation with ID {consultation_id}.")
             logger.debug(f"Response: {response.data}")
@@ -175,7 +180,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         self.permission_classes = [ProfessorGroupPermission]
         self.serializer_class = RequestConsultationAceptedSerializer
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
-        logger.info(f"Accepting consultation {consultation_id}...")
+        destiny_board = self.get_object().destiny_board
+        logger.info(f"Accepting consultation '{consultation_id}' for '{destiny_board}' commision...")
         try:
             # Get Consultation and Panel destiny
             consultation = Consultation.objects.get(id=consultation_id)
@@ -229,6 +235,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             # Save transaction
             card_serializer.save()
             consultation.save()
+
+            send_email_accepted_request(destiny_board, consultation)
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
@@ -242,7 +250,8 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         self.permission_classes = [IsAuthenticated]
         self.serializer_class = RequestConsultationRejectedSerializer
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
-        logger.info(f"Rejecting consultation {consultation_id}...")
+        destiny_board = self.get_object().destiny_board
+        logger.info(f"Rejecting consultation '{consultation_id}' for '{destiny_board}' commision...")
         try:
             # Get Consultation and Panel destiny
             consultation = Consultation.objects.get(id=consultation_id)
@@ -260,7 +269,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation.availability_state = "REJECTED"
             consultation.save()
             logger.info(f"Updated consultation {consultation_id} availability state to REJECTED.")
-
+            send_email_rejected_request(destiny_board, consultation)
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
