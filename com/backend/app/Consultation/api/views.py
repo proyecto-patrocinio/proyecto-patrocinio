@@ -9,9 +9,11 @@ from django.utils import timezone
 from datetime import timedelta
 from datetime import datetime
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 from Board.models import Board
 from Board.api.serializers import BoardSerializer
+from Clients.models import Client
 from Card.api.serializers import CardCreateSerializer
 from Consultation.api.serializers import (
     ConsultationSerializer,
@@ -37,10 +39,10 @@ class ConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on Consultation objects."""
     queryset = Consultation.objects.all()
     serializer_class = ConsultationSerializer
-    permission_classes = [CheckGroupPermission]
 
     def create(self, request, *args, **kwargs):
         """Custom create view that uses the ConsultationCreateSerializer."""
+        self.permission_classes = [CheckGroupPermission]
         self.serializer_class = ConsultationCreateSerializer
         return super().create(request, *args, **kwargs)
 
@@ -54,6 +56,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         Example:
             'GET /consultations/?availability_state=REJECTED,PENDING'
         """
+        self.permission_classes = [CheckGroupPermission]
         state_filter = self.request.query_params.get('availability_state')
         if state_filter:
             state_list = state_filter.split(',')
@@ -67,8 +70,38 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         return super().list(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
         self.serializer_class = ConsultationUpdateSerializer
         return super().update(request, *args, **kwargs)
+
+    def destroy(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        self.super().destroy(request, *args, **kwargs)
+
+    def retrieve(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        self.super().retrieve(request, *args, **kwargs)
+
+    @action(detail=False, methods=['POST'])
+    def form(self, request, *args, **kwargs):
+        self.permission_classes = [AllowAny]
+        consultation_json = request.data
+
+        # Get ID client
+        id_client = consultation_json['client']
+        client = Client.objects.filter(id_value=id_client).first()
+        if not client:
+            return Response(f"Error: Consultant with ID value {id_client} not Found.", status=404)
+        consultation_json["client"] = client.id
+
+        serializer = ConsultationCreateSerializer(data=consultation_json)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        else:
+            return Response(serializer.errors, status=400)
+
 
 class RequestConsultationViewSet(viewsets.ModelViewSet):
     """API endpoint that allows CRUD operations on RequestConsultation objects."""
