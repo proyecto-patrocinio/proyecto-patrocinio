@@ -1,7 +1,6 @@
 import json
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from Clients.api.serializers import *
 from Clients.models import *
@@ -90,6 +89,9 @@ class ClientViewSet(viewsets.ModelViewSet):
         self.serializer_class = ClientDestroySerializer
         return super().destroy(request, *args, **kwargs)
 
+    def update(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        return super().update(request, *args, **kwargs)
 
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):
@@ -146,6 +148,10 @@ class SonViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
         return super().retrieve(request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        return super().update(request, *args, **kwargs)
 
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):
