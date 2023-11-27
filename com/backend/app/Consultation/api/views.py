@@ -76,11 +76,11 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 
     def destroy(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
-        self.super().destroy(request, *args, **kwargs)
+        return super().destroy(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
-        self.super().retrieve(request, *args, **kwargs)
+        return super().retrieve(request, *args, **kwargs)
 
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):

@@ -45,7 +45,7 @@ class ClientViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
-        self.super().create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
