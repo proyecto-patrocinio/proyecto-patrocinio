@@ -17,18 +17,9 @@ class Test_son(APITestCase):
         self.factory = APIRequestFactory()
         self.view = SonViewSet.as_view({'get': 'retrieve'})
         self.url = reverse('son-list')
-        self.client = APIClient()
-        self.user = User.objects.create(username='admin', email='admin@admin.com', password='', is_staff=True)
-        self.user.save()
-        permissions = Permission.objects.all()
-        super_group = Group.objects.create(name='super_group')
-        super_group.permissions.set(permissions)
-        self.user.groups.add(super_group)
+        setUpSuperUser(self)
 
     def test_post_positive_son(self):
-        load_nationality(self, id=1, name="Argentina")
-        load_province(self, id=1, name="Buenos Aires", nationality=1)
-        load_locality(self, id=1, name="LANUS", province=1)
         load_dummy_client(self)
         load_family(self, id=1, client=1, partner_salary=120_000)
         son_data =  {
@@ -52,9 +43,6 @@ class Test_son(APITestCase):
         self.assertEqual( response.status_code, status.HTTP_200_OK)
 
     def test_put_positive(self):
-        load_nationality(self, id=1, name="Argentina")
-        load_province(self, id=1, name="Buenos Aires", nationality=1)
-        load_locality(self, id=1, name="LANUS", province=1)
         load_dummy_client(self)
         load_family(self, id=1, client=1, partner_salary=120_000)
         load_son(self,id=1,birth_date="2023-12-10", locality=1, address="sante fe", family_client_user=1)

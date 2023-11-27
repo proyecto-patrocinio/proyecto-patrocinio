@@ -2,8 +2,25 @@ from Clients.api.viewsets import *
 from rest_framework.test import force_authenticate
 from django.urls import reverse 
 from locality.test.utils import *
+from django.contrib.auth.models import User, Group, Permission
+from rest_framework.test import APIClient
+
 
 # Auxiliary functions
+
+def setUpSuperUser(self) -> None:
+        """Set up a superuser for testing with an API client, 'admin' user, and 'super_group' with all permissions."""
+        self.client = APIClient()
+        self.user = User.objects.create(username='admin', email='admin@admin.com', password='', is_staff=True)
+        self.user.save()
+        permissions = Permission.objects.all()
+        super_group = Group.objects.create(name='super_group')
+        super_group.permissions.set(permissions)
+        case_taker_group = Group.objects.create(name='case_taker')
+        professor_group = Group.objects.create(name='professor')
+        self.user.groups.add(super_group)
+        self.user.groups.add(case_taker_group)
+        self.user.groups.add(professor_group)
 
 def load_clients(self, id, postal, address, marital_status, housing_type, studies, locality,
                 email, id_type, id_value, first_name, last_name, birth_date, sex):
