@@ -39,7 +39,9 @@ def load_family(self, id, client, partner_salary):
 def load_son(self, id, birth_date, locality, address, family_client_user):
     son_data = {
         "id": id, "birth_date": birth_date,"locality" : locality,"address": address,
-        "family_client_user": family_client_user
+        "family_client_user": family_client_user,
+        "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
+        "id_value": "dummy", "sex": "MALE"
     }
     url= reverse('son-list')
     request = self.factory.post(url,son_data)
@@ -83,7 +85,7 @@ def load_dummy_client(self):
         "id": 1, "postal": 1212, "address": "avenida santa fe",
         "marital_status": 'SINGLE',
         "housing_type": 'HOUSE', "studies": 'INCOMPLETE_PRIMARY', "locality": 1, "email": 'dummy@dummy.com',
-        "id_type": 'DOCUMENT', "id_value": "55", "first_name": "dummy_name", "last_name": "dummy_last_name",
+        "id_type": 'PASSPORT', "id_value": "dummy", "first_name": "dummy_name", "last_name": "dummy_last_name",
         "birth_date": '1995-10-10', "sex": 'MALE',
     }
     request = self.factory.post(self.url, clients_data)

@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase, APIRequestFactory
 from django.urls import reverse, resolve
 from rest_framework import status
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from Clients.api.viewsets import *
 from rest_framework.test import force_authenticate
 from django.urls import reverse 
@@ -20,6 +20,10 @@ class Test_son(APITestCase):
         self.client = APIClient()
         self.user = User.objects.create(username='admin', email='admin@admin.com', password='', is_staff=True)
         self.user.save()
+        permissions = Permission.objects.all()
+        super_group = Group.objects.create(name='super_group')
+        super_group.permissions.set(permissions)
+        self.user.groups.add(super_group)
 
     def test_post_positive_son(self):
         load_nationality(self, id=1, name="Argentina")
@@ -29,7 +33,9 @@ class Test_son(APITestCase):
         load_family(self, id=1, client=1, partner_salary=120_000)
         son_data =  {
             "id": 1, "birth_date": "2023-12-10", "locality": 1, "address": "avenida santa fe",
-            "family_client_user": 1
+            "family_client_user": 1, 
+            "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
+            "id_value": "dummy", "sex": "MALE"
         }
         request = self.factory.post(self.url, son_data)
         force_authenticate(request, user=self.user)
@@ -54,7 +60,9 @@ class Test_son(APITestCase):
         load_son(self,id=1,birth_date="2023-12-10", locality=1, address="sante fe", family_client_user=1)
         data_new =  {
             "id": 1, "birth_date": "2023-12-10", "locality" : 1,"address": "avenida santa fe",
-            "family_client_user": 1
+            "family_client_user": 1,
+            "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
+            "id_value": "dummy", "sex": "MALE"
         }
         url = reverse('son-list')
         request_update = self.factory.put(path=url, data=data_new, format='json', content_type=None)
