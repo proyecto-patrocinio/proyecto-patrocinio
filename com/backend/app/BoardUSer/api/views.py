@@ -4,10 +4,11 @@
 from rest_framework.viewsets import ModelViewSet
 from BoardUSer.api.serializers import BoardUserSerializer
 from BoardUSer.models import BoardUser
-
+from User.permissions import CheckGroupPermission
 
 
 class BoardUserViewSet(ModelViewSet):
+    permission_classes = [CheckGroupPermission]
     queryset = BoardUser.objects.all()
     serializer_class = BoardUserSerializer
     def get_queryset(self):
