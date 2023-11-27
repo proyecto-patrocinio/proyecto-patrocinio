@@ -58,6 +58,12 @@ Para la ejecución de test unitarios ejecute el siguiete comando desde el direct
 ```bash
 python manage.py test
 ```
+Para verificar el coverage ejecute:
+```bash
+coverage run --source='.' manage.py test 
+coverage report
+```
+
 
 ## Generar schema:
 Para la generación del schema de la aplicación con OpenAPI, la cual provee una documentación
