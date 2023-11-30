@@ -35,7 +35,7 @@ class Patrimony(models.Model):
     amount_other_income = models.IntegerField(verbose_name='Amount Other Income', default=0)
     amount_retirement = models.IntegerField(verbose_name='Retirement Amount', default=0)
     amount_pension = models.IntegerField(verbose_name='Pension Amount', default=0)
-    vehicle = models.CharField(max_length=125, verbose_name='Vehicle')
+    vehicle = models.CharField(max_length=300, verbose_name='Vehicle')
 
     def __str__(self) -> str:
         return f'{self.client}_{self.employment}'.replace(" ","-")

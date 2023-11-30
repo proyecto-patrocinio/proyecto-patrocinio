@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase, APIRequestFactory
 from django.urls import reverse, resolve
 from rest_framework import status
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from Clients.api.viewsets import *
 from rest_framework.test import force_authenticate
 from django.urls import reverse 
@@ -20,6 +20,10 @@ class Test_partrimony(APITestCase):
         self.client = APIClient()
         self.user = User.objects.create(username='admin', email='admin@admin.com', password='', is_staff=True)
         self.user.save()
+        permissions = Permission.objects.all()
+        super_group = Group.objects.create(name='super_group')
+        super_group.permissions.set(permissions)
+        self.user.groups.add(super_group)
 
     def test_get_negative(self):
         request = self.factory.get(self.url)
@@ -28,14 +32,11 @@ class Test_partrimony(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_post_positive_pat(self):
-        load_nationality(self, id=1, name="Argentina")
-        load_province(self, id=1, name="Buenos Aires", nationality=1)
-        load_locality(self, id=1, name="LANUS", province=1)
         load_dummy_client(self)
         pat_data = {
-            "id": 5, "client": 1, "employment": "dummy", "salary": 200_000,
+            "id": 1, "employment": "dummy", "salary": 200_000,
             "other_income": "No", "amount_other_income": 0, "amount_retirement": 6_000_000,
-            "amount_pension": 3_000_000, "vehicle": "auto",
+            "amount_pension": 3_000_000, "vehicle": "auto"
         }
         request = self.factory.post(self.url, pat_data)
         force_authenticate(request, user=self.user)

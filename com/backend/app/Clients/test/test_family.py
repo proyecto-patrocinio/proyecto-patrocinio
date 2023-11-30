@@ -1,7 +1,7 @@
 from rest_framework.test import APITestCase, APIRequestFactory
 from django.urls import reverse
 from rest_framework import status
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group, Permission
 from Clients.api.viewsets import *
 from rest_framework.test import force_authenticate
 from django.urls import reverse
@@ -20,6 +20,10 @@ class Test_family(APITestCase):
         self.client = APIClient()
         self.user = User.objects.create(username='admin', email='dummy@dummy.com', password='', is_staff=True)
         self.user.save()
+        permissions = Permission.objects.all()
+        super_group = Group.objects.create(name='super_group')
+        super_group.permissions.set(permissions)
+        self.user.groups.add(super_group)
 
     def test_get_negative(self):
         

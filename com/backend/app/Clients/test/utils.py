@@ -2,8 +2,25 @@ from Clients.api.viewsets import *
 from rest_framework.test import force_authenticate
 from django.urls import reverse 
 from locality.test.utils import *
+from django.contrib.auth.models import User, Group, Permission
+from rest_framework.test import APIClient
+
 
 # Auxiliary functions
+
+def setUpSuperUser(self) -> None:
+        """Set up a superuser for testing with an API client, 'admin' user, and 'super_group' with all permissions."""
+        self.client = APIClient()
+        self.user = User.objects.create(username='admin', email='admin@admin.com', password='', is_staff=True)
+        self.user.save()
+        permissions = Permission.objects.all()
+        super_group = Group.objects.create(name='super_group')
+        super_group.permissions.set(permissions)
+        case_taker_group = Group.objects.create(name='case_taker')
+        professor_group = Group.objects.create(name='professor')
+        self.user.groups.add(super_group)
+        self.user.groups.add(case_taker_group)
+        self.user.groups.add(professor_group)
 
 def load_clients(self, id, postal, address, marital_status, housing_type, studies, locality,
                 email, id_type, id_value, first_name, last_name, birth_date, sex):
@@ -39,7 +56,9 @@ def load_family(self, id, client, partner_salary):
 def load_son(self, id, birth_date, locality, address, family_client_user):
     son_data = {
         "id": id, "birth_date": birth_date,"locality" : locality,"address": address,
-        "family_client_user": family_client_user
+        "family_client_user": family_client_user,
+        "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
+        "id_value": "dummy", "sex": "MALE"
     }
     url= reverse('son-list')
     request = self.factory.post(url,son_data)
@@ -83,7 +102,7 @@ def load_dummy_client(self):
         "id": 1, "postal": 1212, "address": "avenida santa fe",
         "marital_status": 'SINGLE',
         "housing_type": 'HOUSE', "studies": 'INCOMPLETE_PRIMARY', "locality": 1, "email": 'dummy@dummy.com',
-        "id_type": 'DOCUMENT', "id_value": "55", "first_name": "dummy_name", "last_name": "dummy_last_name",
+        "id_type": 'PASSPORT', "id_value": "dummy", "first_name": "dummy_name", "last_name": "dummy_last_name",
         "birth_date": '1995-10-10', "sex": 'MALE',
     }
     request = self.factory.post(self.url, clients_data)

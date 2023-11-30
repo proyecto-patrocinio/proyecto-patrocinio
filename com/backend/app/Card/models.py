@@ -14,9 +14,9 @@ class Card(models.Model):
     panel = models.ForeignKey(
       Panel,
       null=False,
-      on_delete=models.CASCADE,  # on_delete attribute specifies the behavior to adopt when the referenced object is deleted.
-      related_name="cards",  # related_name attribute specifies the name of the reverse relation  
-      verbose_name='Panel',  # from the User model back to this model.
+      on_delete=models.CASCADE,
+      related_name="cards",
+      verbose_name='Panel',
     )
 
     def __str__(self):
