@@ -9,6 +9,13 @@
   {
     "model": "locality.nationality",
     "fields": {
+      "id": 2,
+      "name": "Alemania"
+    }
+  },
+  {
+    "model": "locality.nationality",
+    "fields": {
       "id": 3,
       "name": "Albania"
     }
