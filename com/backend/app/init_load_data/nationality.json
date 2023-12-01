@@ -58,6 +58,13 @@
   {
     "model": "locality.nationality",
     "fields": {
+      "id": 9,
+      "name": "Antártida"
+    }
+  },
+  {
+    "model": "locality.nationality",
+    "fields": {
       "id": 10,
       "name": "Antigua And Barbuda"
     }
