@@ -35,6 +35,7 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", '').split(" ")
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -61,6 +62,8 @@ INSTALLED_APPS = [
     'Comment',
     'templatetags',
     'Calendar',
+    'Notification',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -97,6 +100,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api_patrocinio.wsgi.application'
 
+# Web Socket
+# https://channels.readthedocs.io/en/latest/topics/channel_layers.html
+ASGI_APPLICATION = 'api_patrocinio.asgi.application'
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
+REDIS_URL = 'redis:/redis:6379/0'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
