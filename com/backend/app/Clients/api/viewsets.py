@@ -7,6 +7,7 @@ from Clients.models import *
 from rest_framework import viewsets
 from django.db.models import Prefetch
 from User.permissions import CheckGroupPermission
+from Notification.consummers import send_sync_group_message, CONSULTANCY_GROUP_NAME
 
 
 class PatrimonyViewSet(viewsets.ModelViewSet):
@@ -124,6 +125,7 @@ class ClientViewSet(viewsets.ModelViewSet):
                     obj.delete()
             return Response(str(e), status=400)
 
+        send_sync_group_message(CONSULTANCY_GROUP_NAME, "A new Client has been created from form.")
         return Response("Success: Data processed successfully.", status=200)
 
 
@@ -171,6 +173,7 @@ class SonViewSet(viewsets.ModelViewSet):
 
         if serializer.is_valid():
             serializer.save()
+            send_sync_group_message(CONSULTANCY_GROUP_NAME, f"A new child was registered for a Client {client} with ID {client.id}.")
             return Response(serializer.data, status=201)
         else:
             return Response(serializer.errors, status=400)

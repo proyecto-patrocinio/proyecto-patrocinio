@@ -29,6 +29,7 @@ from User.permissions import CheckGroupPermission, ProfessorGroupPermission
 from email_manager.new_request_notification import send_email_new_request
 from email_manager.rejected_request_notification import send_email_rejected_request
 from email_manager.accepted_request_notification import send_email_accepted_request
+from Notification.consummers import CONSULTANCY_GROUP_NAME, BOARD_BASE_GROUP_NAME, send_sync_group_message
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -97,6 +98,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         serializer = ConsultationCreateSerializer(data=consultation_json)
 
         if serializer.is_valid():
+            send_sync_group_message(CONSULTANCY_GROUP_NAME, "A new Consultation has been created from a form.")
             serializer.save()
             return Response(serializer.data, status=201)
         else:
@@ -148,8 +150,14 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation.availability_state = "PENDING"
             consultation.save()
             logger.info(f"Consultation {consultation_id} created.")
-            destiny_board = request.data.get("destiny_board")
-            send_email_new_request(destiny_board)
+            destiny_board_id = request.data.get("destiny_board")
+            board = Board.objects.get(id=destiny_board_id)
+
+            send_email_new_request(board)
+            send_sync_group_message(
+                f"{BOARD_BASE_GROUP_NAME}{destiny_board_id}",
+                f"Request Consultation '{consultation.tag}' was created for '{board}' board."
+            )
         else:
             logger.error(f"Error creating consultation with ID {consultation_id}.")
             logger.debug(f"Response: {response.data}")
@@ -165,6 +173,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         self.permission_classes = [CheckGroupPermission]
 
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
+        destiny_board = RequestConsultation.objects.get(consultation=consultation_id).destiny_board
 
         response = super().destroy(request, *args, **kwargs)
 
@@ -173,6 +182,11 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation.availability_state = "CREATED"
             consultation.save()
             logger.info(f"Request Consultation {consultation_id} deleted.")
+
+            send_sync_group_message(
+                f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
+                f"Request Consultation '{consultation.tag}' was deleted for '{destiny_board}' board."
+            )
         else:
             logger.error(f"Error deleting consultation with ID {consultation_id}.")
             logger.debug(f"Response: {response.data}")
@@ -270,6 +284,10 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation.save()
 
             send_email_accepted_request(destiny_board, consultation)
+            send_sync_group_message(
+                CONSULTANCY_GROUP_NAME,
+                f"Request Consultation '{consultation.tag}' was accepted for '{destiny_board}' board."
+            )
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
@@ -302,7 +320,12 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             consultation.availability_state = "REJECTED"
             consultation.save()
             logger.info(f"Updated consultation {consultation_id} availability state to REJECTED.")
+
             send_email_rejected_request(destiny_board, consultation)
+            send_sync_group_message(
+                CONSULTANCY_GROUP_NAME,
+                f"Request Consultation '{consultation.tag}' was rejected for '{destiny_board}' board."
+            )
             return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
