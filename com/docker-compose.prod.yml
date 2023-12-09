@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  backend-app:
-    container_name: "backend-app"
+  backend-wsgi:
+    container_name: "backend-wsgi"
     build:
       context: ./backend/app/
       dockerfile: Dockerfile.prod
@@ -17,6 +17,22 @@ services:
       - db
     hostname: appserver
 
+  backend-asgi:
+    container_name: "backend-asgi"
+    build:
+      context: ./backend/app/
+      dockerfile: Dockerfile.prod
+    volumes:
+      - static_volume_prod:/usr/src/app/django_static
+    command: daphne -b 0.0.0.0 -p 8001 api_patrocinio.asgi:application
+    expose:
+      - 8001
+    env_file:
+      - ./backend/.envs/.app.prod
+    depends_on:
+      - redis
+    hostname: appserver
+
   db:
     image: postgres:15-alpine 
     env_file: ./backend/.envs/.postgres.prod
@@ -28,16 +44,24 @@ services:
 
   nginx: 
         restart: always
-        container_name: "nginx-frontend"
+        container_name: "proxy-nginx-frontend"
         build: ./frontend/app
         ports:
             - 80:80
         volumes:
             - static_volume_prod:/usr/src/app/django_static/
-            - ./frontend/app/nginx:/etc/nginx/conf.d
+            - ./frontend/app/nginx/nginx_prod.conf:/etc/nginx/conf.d/default.conf
+            - ./frontend/app/build:/usr/share/nginx/staticfiles
         depends_on: 
-            - backend-app
+            - backend-wsgi
+            - backend-asgi
         hostname: nginxserver
+
+  redis:
+    image: "redis:alpine"
+    container_name: redis_server
+    expose:
+      - 6379
 
 volumes:
   postgres_data_prod:
