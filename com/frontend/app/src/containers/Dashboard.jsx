@@ -16,11 +16,13 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import Container from '@mui/material/Container';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import  MenuListItems from '../components/MenuListItems';
 import Copyright from '../components/Copyright';
+import { Button } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -117,6 +119,11 @@ const  Dashboard = ({title,  children}) => {
             >
               {title}
             </Typography>
+            <Button
+              color="inherit"
+              startIcon={<RefreshIcon />}
+              onClick={() => window.location.reload(true)}
+            />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>

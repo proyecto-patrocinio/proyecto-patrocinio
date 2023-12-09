@@ -32,7 +32,7 @@ export default function BoardPage( ) {
         };
         fetchBoardTitle();
     }, [id_board]);
-    
+
     const saveTitle = async (newTitle) => {
         const responseTitle = await updateBoardTitle(id_board, newTitle);
         if (responseTitle !== null && responseTitle !== undefined) {

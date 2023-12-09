@@ -17,9 +17,8 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def send_email_new_request(board_id):
+def send_email_new_request(board):
     try:
-        board = Board.objects.get(id=board_id)
         boardusers = BoardUser.objects.filter(board=board).all()
         emails = [BoardUser.user.email for BoardUser in boardusers]
 

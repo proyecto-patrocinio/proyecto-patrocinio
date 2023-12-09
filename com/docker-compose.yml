@@ -16,6 +16,7 @@ services:
       - ./backend/.envs/.app.dev
     depends_on:
       - db
+      - redis
     hostname: appserver
 
 
@@ -42,8 +43,13 @@ services:
             - backend-app
         hostname: nginxserver
 
-
-
+  redis:
+    image: "redis:alpine"
+    container_name: redis_server
+    ports:
+      - "6379:6379"
+    #volumes:
+    #  - ./redis.conf:/usr/local/etc/redis/redis.conf
 
 volumes:
   postgres_data:

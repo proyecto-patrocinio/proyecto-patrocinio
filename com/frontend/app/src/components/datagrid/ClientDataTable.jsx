@@ -9,6 +9,7 @@ import PhoneNumbersDialog from '../PhoneNumbersDialog';
 import { AutocompleteCell } from '../AutocompleteCell';
 import FamilyRestroomIcon from '@mui/icons-material/FamilyRestroom';
 import ChildrenDialog from '../ChildrenDialog';
+import { CONSULTANCY_GROUP_NAME, Notification } from '../../sockets/Notification';
 
 
 /**A React component that displays client data in a table using Material-UI DataGrid.
@@ -436,6 +437,7 @@ function setSubFamilyField(subFieldName) {
         preProcessEdit={preProcessEdit}
         isMultipleEdition={false}
       />
+      <Notification channelName={CONSULTANCY_GROUP_NAME}/>
     </div>
   );
 };
