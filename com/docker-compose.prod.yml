@@ -2,12 +2,13 @@ version: "3.8"
 
 services:
   backend-wsgi:
+    restart: always
     container_name: "backend-wsgi"
     build:
       context: ./backend/app/
       dockerfile: Dockerfile.prod
     volumes:
-      - static_volume_prod:/usr/src/app/django_static
+      - static_volume_prod:/home/app/api/django_static/
     command: gunicorn api_patrocinio.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4
     expose:
       - 8000 
@@ -18,12 +19,11 @@ services:
     hostname: appserver
 
   backend-asgi:
+    restart: always
     container_name: "backend-asgi"
     build:
       context: ./backend/app/
       dockerfile: Dockerfile.prod
-    volumes:
-      - static_volume_prod:/usr/src/app/django_static
     command: daphne -b 0.0.0.0 -p 8001 api_patrocinio.asgi:application
     expose:
       - 8001
@@ -34,6 +34,7 @@ services:
     hostname: appserver
 
   db:
+    restart: always
     image: postgres:15-alpine 
     env_file: ./backend/.envs/.postgres.prod
     expose:
@@ -58,6 +59,7 @@ services:
         hostname: nginxserver
 
   redis:
+    restart: always
     image: "redis:alpine"
     container_name: redis_server
     expose:

@@ -58,7 +58,7 @@ RUN addgroup -S app && adduser -S app -G app
 ENV HOME=/home/app
 ENV APP_HOME=/home/app/api
 RUN mkdir $APP_HOME
-RUN mkdir $APP_HOME/staticfiles
+RUN mkdir $APP_HOME/django_static
 # BASE_FILES_PATH default is /opt/patrocinio/
 ENV BASE_FILES_PATH=${ATTACHMENT_BASE_DIRECTORY:-/opt/patrocinio/}
 RUN mkdir $BASE_FILES_PATH
