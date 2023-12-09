@@ -32,8 +32,6 @@ from email_manager.accepted_request_notification import send_email_accepted_requ
 from Notification.consummers import CONSULTANCY_GROUP_NAME, BOARD_BASE_GROUP_NAME, send_sync_group_message
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-logger.setLevel(logging.DEBUG)
 
 
 class ConsultationViewSet(viewsets.ModelViewSet):

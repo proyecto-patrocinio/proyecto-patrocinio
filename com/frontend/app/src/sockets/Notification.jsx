@@ -39,6 +39,7 @@ export const Notification = ({channelName, onReceiveMessage = () => {}}) => {
             data: {
                 channel: channelName,
             },
+            message: null
         })
         }
     }, [readyState])

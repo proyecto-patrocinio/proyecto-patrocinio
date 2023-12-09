@@ -11,7 +11,6 @@ BOARD_BASE_GROUP_NAME = "group_board_"
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):
@@ -53,10 +52,10 @@ class NotificationConsumer(AsyncWebsocketConsumer):
             text_data (str|None): Text data received from the WebSocket.
             bytes_data (any): data bytes received from the WebSocket.
         """
+        user = self.scope["user"]
         try:
             text_data_json = json.loads(text_data)
             message = text_data_json['message']
-            user = self.scope["user"]
             logger.info(f"Receiving message...")
             await self.channel_layer.group_send(
                 self.room_group_name,
