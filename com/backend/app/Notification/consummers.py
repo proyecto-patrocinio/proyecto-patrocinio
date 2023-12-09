@@ -11,7 +11,6 @@ BOARD_BASE_GROUP_NAME = "group_board_"
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 class NotificationConsumer(AsyncWebsocketConsumer):

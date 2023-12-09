@@ -14,7 +14,6 @@ from Board.models import Board
 from BoardUSer.models import BoardUser
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 def send_email_accepted_request(board, consultation):

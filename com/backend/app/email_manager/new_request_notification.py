@@ -14,7 +14,6 @@ from BoardUSer.models import BoardUser
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 def send_email_new_request(board):

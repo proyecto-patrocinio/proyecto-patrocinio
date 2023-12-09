@@ -14,7 +14,6 @@ from User.permissions import CheckGroupPermission, ProfessorGroupPermission
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 class PanelViewSet(ModelViewSet):
