@@ -20,6 +20,7 @@ import ConsultationFormButton from '../components/consultation/form/Consultation
 import onDragEnd from '../utils/dragAndDrop';
 import ConsultationPanel from './ConsultationPanel';
 import RequestPanel from './RequestPanel';
+import { CONSULTANCY_GROUP_NAME, Notification } from '../sockets/Notification';
 
 const ConsultancyContainer = styled.div`
 	display: flex;
@@ -42,6 +43,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
 const Consultancy = () => {
 	const [consultancy, setConsultancy] = useState({ 'title': 'Consultancy', 'panels': [{'id':0, 'title': 'Available Consultations', 'number_cards':0 , 'cards': [] }]})
   const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
+  const [forceFetchConsultancy, setforceFetchConsultancy] = useState(0); // force refetch board from notification websocket.
 
 
 /**Initialize Consultancy Data **/
@@ -68,7 +70,7 @@ const Consultancy = () => {
   };
   
   fetchConsultancy();
-  }, []);
+  }, [forceFetchConsultancy]);
 
 
   /**
@@ -158,6 +160,7 @@ const Consultancy = () => {
 
 
   return (
+    <>
     <DragDropContext onDragEnd={handleOnDragEnd}>
       <ConsultancyContainer>
         <Stack
@@ -189,6 +192,8 @@ const Consultancy = () => {
           </Stack>
           </ConsultancyContainer>
     </DragDropContext>
+    <Notification channelName={CONSULTANCY_GROUP_NAME} onReceiveMessage={() => setforceFetchConsultancy(forceFetchConsultancy + 1)}/>
+    </>
   );
 };
 

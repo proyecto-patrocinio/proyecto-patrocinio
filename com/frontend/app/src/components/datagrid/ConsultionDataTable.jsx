@@ -7,6 +7,7 @@ import {
 } from '../../utils/caseTaker';
 import { getClientDNI2ID, getClientID2DNI } from '../../utils/tools';
 import ConsutationDisplay from '../consultation/display/ConsutationDisplay';
+import { CONSULTANCY_GROUP_NAME, Notification } from '../../sockets/Notification';
 
 
 /**
@@ -118,6 +119,7 @@ const ConsultationDataTable = ({data}) => {
       />
       <ConsutationDisplay consultation={consultationSelected} open={openDialog}
         onClose={closeConsultationHandler}/>
+      <Notification channelName={CONSULTANCY_GROUP_NAME}/>
     </div>
   );
 };

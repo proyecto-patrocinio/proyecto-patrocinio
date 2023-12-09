@@ -7,7 +7,7 @@
 ******************************************************************************************/
 
 import React, { useEffect, useState } from 'react';
-import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext } from 'react-beautiful-dnd';
 import CardPanel from './CardPanel';
 import styled from '@emotion/styled';
 import { Stack, Alert } from '@mui/material';
@@ -17,6 +17,7 @@ import {acceptRequestConsult} from '../utils/board'
 import CreatePanelButton from '../components/panel/CreatePanelButton';
 import onDragEnd from '../utils/dragAndDrop';
 import InputRequestPanel from './InputRequestPanel';
+import { BOARD_BASE_GROUP_NAME, Notification } from '../sockets/Notification';
 
 
 const BoardContainer = styled.div`
@@ -34,7 +35,7 @@ const Board = ({id}) => {
   const [board, setBoard] = useState(null);
   const [showAlert, setShowAlert] = useState(false);
   const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
-
+  const [forceFetchBoard, setForceFetchBoard] = useState(0); // force refetch board from notification websocket.
 
 /**
  * Fetch board data from the backend and initialize the board state.
@@ -52,7 +53,7 @@ const Board = ({id}) => {
       setBoard(board_data);
     };
     fetchBoard();
-  }, [id]);
+  }, [id, forceFetchBoard]);
 
 
   /**
@@ -157,6 +158,7 @@ const Board = ({id}) => {
         </Stack>
       </BoardContainer>
       </DragDropContext>
+      <Notification channelName={BOARD_BASE_GROUP_NAME + id} onReceiveMessage={() => setForceFetchBoard(forceFetchBoard + 1)}/>
     </div>
   );
 };
