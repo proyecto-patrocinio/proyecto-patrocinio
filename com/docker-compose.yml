@@ -9,7 +9,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend/app/:/usr/src/app
-      - static_volume:/usr/src/app/django_static/
+      - static_volume:/usr/share/nginx/staticfiles/cms/django/
     ports:
       - 8000:8000
     env_file:
@@ -35,11 +35,10 @@ services:
         build: ./frontend/app
         ports:
             - 80:80
-            - 587:587
         volumes:
-            - static_volume:/usr/src/app/django_static/
+            - static_volume:/usr/share/nginx/staticfiles/cms/django/
             - ./frontend/app/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
-            - ./frontend/app/build:/usr/share/nginx/staticfiles
+            - ./frontend/app/build:/usr/share/nginx/staticfiles/cms/react/
         depends_on: 
             - backend-app
         hostname: nginxserver
