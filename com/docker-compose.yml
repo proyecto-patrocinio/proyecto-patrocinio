@@ -9,7 +9,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - ./backend/app/:/usr/src/app
-      - static_volume:/usr/share/nginx/staticfiles/cms/django/
+      - static_volume:/usr/src/app/django_static
     ports:
       - 8000:8000
     env_file:
