@@ -69,6 +69,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -132,10 +133,11 @@ DATABASES = {
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator', },
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator', },
+    {'NAME': 'User.password_validation.ComplexityPasswordValidator', },
 ]
 
 
@@ -160,6 +162,9 @@ STATIC_URL = "/django_static/"
 #   will be served from the "django_static" directory:
 STATIC_ROOT = BASE_DIR / "django_static"
 
+# https://developer.mozilla.org/es/docs/Learn/Server-side/Django/Deployment
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -181,13 +186,13 @@ REST_FRAMEWORK = {
 }
 
 # User Register
-SITE_ID=1
+SITE_ID = 1
 DEFAULT_HTTP_PROTOCOL = os.environ.get('DEFAULT_HTTP_PROTOCOL', 'http')
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_CONFIRM_EMAIL_ON_GET = True
-LOGIN_URL = DEFAULT_HTTP_PROTOCOL + "://"+os.environ.get("HOSTNAME", '')
+LOGIN_URL = DEFAULT_HTTP_PROTOCOL + "://" + os.environ.get("HOSTNAME", '')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'

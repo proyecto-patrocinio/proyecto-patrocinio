@@ -17,7 +17,7 @@ ENV NODE_ENV production
 # Copy built assets from `builder` image
 COPY --from=builder /app/build /usr/share/nginx/staticfiles/cms/react/
 # Add your nginx.conf
-COPY --from=builder /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/nginx/nginx_prod.conf /etc/nginx/conf.d/default.conf
 # Expose port
 EXPOSE 80
 # Start nginx

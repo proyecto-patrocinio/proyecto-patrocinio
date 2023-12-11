@@ -1,13 +1,14 @@
 version: "3.8"
 
 services:
-  backend-app:
-    container_name: "backend-app"
+  backend-wsgi:
+    restart: always
+    container_name: "backend-wsgi"
     build:
       context: ./backend/app/
       dockerfile: Dockerfile.prod
     volumes:
-      - static_volume_prod:/usr/src/app/django_static
+      - django_static_volume:/home/app/cms/django_static/
     command: gunicorn api_patrocinio.wsgi:application --bind 0.0.0.0:8000 --workers 4 --threads 4
     expose:
       - 8000 
@@ -17,7 +18,23 @@ services:
       - db
     hostname: appserver
 
+  backend-asgi:
+    restart: always
+    container_name: "backend-asgi"
+    build:
+      context: ./backend/app/
+      dockerfile: Dockerfile.prod
+    command: daphne -b 0.0.0.0 -p 8001 api_patrocinio.asgi:application
+    expose:
+      - 8001
+    env_file:
+      - ./backend/.envs/.app.prod
+    depends_on:
+      - redis
+    hostname: appserver
+
   db:
+    restart: always
     image: postgres:15-alpine 
     env_file: ./backend/.envs/.postgres.prod
     expose:
@@ -26,19 +43,31 @@ services:
       - postgres_data_prod:/var/lib/postgresql/data
     hostname: databaseserver
 
-  nginx: 
+  nginx:
         restart: always
-        container_name: "nginx-frontend"
-        build: ./frontend/app
+        container_name: "proxy-nginx-frontend"
+        build:
+          context: ./frontend/app
+          dockerfile: Dockerfile.prod
         ports:
             - 80:80
         volumes:
-            - static_volume_prod:/usr/src/app/django_static/
-            - ./frontend/app/nginx:/etc/nginx/conf.d
+            - django_static_volume:/usr/share/nginx/staticfiles/cms/django/
+            - ./frontend/app/nginx/nginx_prod.conf:/etc/nginx/conf.d/default.conf
+            - react_static_volume:/usr/share/nginx/staticfiles/cms/react/
         depends_on: 
-            - backend-app
+            - backend-wsgi
+            - backend-asgi
         hostname: nginxserver
+
+  redis:
+    restart: always
+    image: "redis:alpine"
+    container_name: redis_server
+    expose:
+      - 6379
 
 volumes:
   postgres_data_prod:
-  static_volume_prod:
+  django_static_volume:
+  react_static_volume:
