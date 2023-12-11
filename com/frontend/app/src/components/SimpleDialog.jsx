@@ -31,10 +31,10 @@ function SimpleDialog({title, description, isOpen, onClose, onAccept, children})
           {children}
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} color="primary">
+          <Button onClick={onClose} color="primary" id="button-cancel">
             Cancel
           </Button>
-          <Button onClick={onAccept} color="primary">
+          <Button onClick={onAccept} color="primary" id="button-accept">
             Accept
           </Button>
         </DialogActions>
