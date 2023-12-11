@@ -66,7 +66,7 @@ const FamilyTableRow = ({clientData}) => {
                     <strong>Number of children: </strong>{family.children ? family.children.length : 0}
                     </p>
                 )}
-                <Button variant="outlined" onClick={toggleExpansion}>
+                <Button id="expanded-family-button" variant="outlined" onClick={toggleExpansion}>
                     {isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                 </Button>
                 </TableCell>
