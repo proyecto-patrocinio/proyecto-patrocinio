@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
-import { addChild, addPatrimony, addPhoneNumer, createClient, createFamily, deleteChild, deleteClient, deletePhoneNumer, getPatrymony, updateClient, updateFamily, updatePatrimony } from '../../utils/client';
+import {
+  addChild, addPatrimony, addPhoneNumer, createClient,
+  createFamily, deleteChild, deleteClient, deletePhoneNumer, getPatrymony,
+  updateClient, updateFamily, updatePatrimony
+} from '../../utils/client';
 import { findUniqueElementsInA, formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
 import PhoneNumbersDialog from '../PhoneNumbersDialog';
@@ -275,6 +279,7 @@ function ClientDataTable({ data }) {
       field: 'birth_date',  headerName: 'Birth Date', width: 100,
       editable: true, type: 'date',
       valueGetter: ({ value }) => value && new Date(value),
+      valueFormatter: (value) => formatDateToString(value.value)
     },
     {
       field: 'sex', headerName: 'Sex', width: 110, editable: true,

@@ -196,7 +196,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     fieldKey={"description"}
                 />
                 <TableRow>
-                <TableCell>Creation time stamp:</TableCell>
+                <TableCell>Creation time stamp (UTC):</TableCell>
                 <TableCell>{formatTimestamp(consultationData.time_stamp)}</TableCell>
                 </TableRow>
             </TableBody>
