@@ -149,12 +149,14 @@ const CalendarView = ({cardID}) => {
         onAccept={handleAddEvent}
       >
         <TextField
+          id='title'
           label="Title"
           value={newEventData?.title}
           onChange={(e) => setNewEventData({...newEventData, 'title': e.target.value})}
           fullWidth
         />
         <TextField
+          id="description"
           label="Description"
           value={newEventData?.description}
           onChange={(e) => setNewEventData({...newEventData, 'description': e.target.value})}
