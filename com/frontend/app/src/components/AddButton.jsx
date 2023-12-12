@@ -15,7 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 function AddButton({ onClick, title }) {
   return (
     <Tooltip title={title}>
-      <IconButton aria-label="create" color="primary" onClick={onClick}>
+      <IconButton id="add-icon-button" aria-label="create" color="primary" onClick={onClick}>
         <AddCircleIcon />
       </IconButton>
     </Tooltip>
