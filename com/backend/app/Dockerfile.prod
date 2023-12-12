@@ -32,6 +32,7 @@ RUN apk update \
 # is no undefined variables or imports that are not being used.
 RUN pip install --upgrade pip
 RUN pip install flake8==6.0.0
+COPY ./api_patrocinio ./api_patrocinio
 RUN flake8 --ignore=E501,F401 api_patrocinio 
 
 # install dependencies
