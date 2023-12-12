@@ -142,6 +142,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
             <Table>
             <TableBody>
                 <EditableFieldRow
+                    id={"edit-tag"}
                     tittle={"Tag:"}
                     isEditing={isFieldsEditing.tag}
                     value={isFieldsEditing.tag ? editedFields.tag : consultationData.tag }
@@ -154,6 +155,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 />
                 <ClientTableRow clientID={consultationData.client}/>
                 <EditableFieldRow
+                    id={"edit-opponent"}
                     tittle={"Opponent:"}
                     isEditing={isFieldsEditing.opponent}
                     value={isFieldsEditing.opponent ? editedFields.opponent : consultationData.opponent}
@@ -169,6 +171,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 <TableCell>{consultationData.availability_state}</TableCell>
                 </TableRow>
                 <EditableChoiceRow
+                    id={"edit-progress-state"}
                     title={"Progress State:"}
                     isEditing={isFieldsEditing.progress_state}
                     value={consultationData.progress_state}
@@ -181,6 +184,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     options={["TODO", "IN_PROGRESS", "DONE", "PAUSED", "BLOCKED"]}
                 />
                 <EditableFieldRow
+                    id={"edit-description"}
                     tittle={"Description:"}
                     isEditing={isFieldsEditing.description}
                     value={isFieldsEditing.description ? editedFields.description : consultationData.description}
@@ -192,7 +196,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     fieldKey={"description"}
                 />
                 <TableRow>
-                <TableCell>Creation time stamp:</TableCell>
+                <TableCell>Creation time stamp (UTC):</TableCell>
                 <TableCell>{formatTimestamp(consultationData.time_stamp)}</TableCell>
                 </TableRow>
             </TableBody>

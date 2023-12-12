@@ -40,6 +40,7 @@ const EditableFieldRow = ({ tittle, isEditing, value, onEdit, onSave, onChange, 
         <TableCell>
             {isEditing ? (
             <TextareaAutosize
+                id="edit-field-textarea"
                 value={value}
                 onChange={(event) => onChange(event, fieldKey)}
                 error={!!error}
@@ -55,15 +56,15 @@ const EditableFieldRow = ({ tittle, isEditing, value, onEdit, onSave, onChange, 
         <TableCell>
             {isEditing ? (
             <div>
-                <IconButton onClick={() => onSave(fieldKey)} size="small" color="primary">
+                <IconButton id="field-save-button" onClick={() => onSave(fieldKey)} size="small" color="primary">
                     <SaveIcon />
                 </IconButton>
-                <IconButton onClick={() => onCancel(fieldKey)} size="small" color="primary">
+                <IconButton id="field-cancel-button" onClick={() => onCancel(fieldKey)} size="small" color="primary">
                     <CloseIcon />
                 </IconButton>
             </div>
             ) : (
-                <IconButton onClick={() => onEdit(fieldKey)} size="small" color="primary">
+                <IconButton id="field-edit-button" onClick={() => onEdit(fieldKey)} size="small" color="primary">
                 <EditIcon />
                 </IconButton>
             )}

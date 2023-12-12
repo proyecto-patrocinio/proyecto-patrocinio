@@ -44,30 +44,30 @@ export function getRandomNumber(max, min=1) {
  * Format a timestamp into a human-readable date and time string.
  *
  * @param {string} timestamp - The timestamp in ISO 8601 format.
- * @returns {string} A formatted date and time string (e.g., "09/12/2023 02:33:01 AM").
+ * @returns {string} A formatted date and time string.
  *
  * @example
  * const timestamp = "2023-09-12T02:33:01.377806Z";
  * const formattedDateTime = formatTimestamp(timestamp);
- * console.log(formattedDateTime); // Output: "09/12/2023 02:33:01 AM"
+ * console.log(formattedDateTime); // Output: "9/12/2023 2:33:01 AM"
  */
 export function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
-    const formattedDate = date.toLocaleDateString();
-    const formattedTime = date.toLocaleTimeString();
+    const formattedDate = date.toLocaleDateString('es-AR',{timeZone:'UTC'});
+    const formattedTime = date.toLocaleTimeString('es-AR',{timeZone:'UTC'});
     return `${formattedDate} ${formattedTime}`;
 };
 
 
 /* Formats a Date object to 'YYYY-MM-DD' format.
 *
-* @param {Date} date - The Date object to format.
+* @param {Date} date - The Date object to format in UTC.
 * @returns {string} The formatted date in 'YYYY-MM-DD' format.
 */
 export function formatDateToString(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // Add leading zeros if necessary
-    const day = String(date.getDate()).padStart(2, '0'); // Add leading zeros if necessary
+    const year = String(date.getUTCFullYear());
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0'); // Add leading zeros if necessary
+    const day = String(date.getUTCDate()).padStart(2, '0'); // Add leading zeros if necessary
 
     return `${year}-${month}-${day}`;
 };

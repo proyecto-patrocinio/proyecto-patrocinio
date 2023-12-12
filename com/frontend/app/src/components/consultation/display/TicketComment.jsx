@@ -74,8 +74,8 @@ const TicketComment = ({comment}) => {
             }}
             >
             <TicketMenu showMenu={showMenu} key={"menu"}>
-                <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
-                <MenuItem onClick={handleEditClick}>Edit</MenuItem>
+                <MenuItem id="comment-menu-item-delete" onClick={handleDeleteClick}>Delete</MenuItem>
+                <MenuItem id="comment-menu-item-edit" onClick={handleEditClick}>Edit</MenuItem>
             </TicketMenu>
         </div>
     );
@@ -118,7 +118,8 @@ const TicketComment = ({comment}) => {
                                     {isEditing === true ? (
                                         <div>
                                             <TextField
-                                                placeholder="Placeholder"
+                                                id="edit-comment-area"
+                                                placeholder="Enter your comment here..."
                                                 multiline
                                                 variant="outlined"
                                                 fullWidth
@@ -127,10 +128,10 @@ const TicketComment = ({comment}) => {
                                                 autoFocus
                                             />
                                             <div  style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                                <IconButton color="primary" aria-label="menu-ticket" onClick={handleCancelateEdition}>
+                                                <IconButton id="comment-edit-cancel-button" color="primary" aria-label="menu-ticket" onClick={handleCancelateEdition}>
                                                     <CancelIcon/>
                                                 </IconButton>
-                                                <IconButton color="primary" aria-label="menu-ticket" onClick={handleConfirmEdition}>
+                                                <IconButton id="comment-edit-confim-button" color="primary" aria-label="menu-ticket" onClick={handleConfirmEdition}>
                                                     <CheckCircleIcon/>
                                                 </IconButton>
                                             </div>

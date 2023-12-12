@@ -44,7 +44,7 @@ function PhoneNumbersDialog({ open, onClose, phoneNumbers, onUpdatePhoneNumbers 
           {phoneNumbers?.map((phoneDict, index) => (
             <ListItem key={index}>
               {phoneDict?.phone_number}
-              <IconButton onClick={() => handleDelete(index)} color="secondary">
+              <IconButton id={"delete-phone-button-" + index} onClick={() => handleDelete(index)} color="secondary">
                 <Delete />
               </IconButton>
             </ListItem>
@@ -57,11 +57,11 @@ function PhoneNumbersDialog({ open, onClose, phoneNumbers, onUpdatePhoneNumbers 
             value={newPhoneNumber}
             onChange={(e) => setNewPhoneNumber(e.target.value)}
           />
-          <Button onClick={addHandler} color="primary" startIcon={<AddIcCallIcon />} />
+          <Button id={"add-phone-button"} onClick={addHandler} color="primary" startIcon={<AddIcCallIcon />} />
         </div>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeHandler} startIcon={<CloseIcon />} />
+        <Button id={"close-phone-button"} onClick={closeHandler} startIcon={<CloseIcon />} />
       </DialogActions>
     </Dialog>
   );
