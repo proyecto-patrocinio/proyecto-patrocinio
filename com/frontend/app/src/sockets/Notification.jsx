@@ -32,7 +32,6 @@ export const Notification = ({channelName, onReceiveMessage = () => {}}) => {
 
     // Run when the connection state (readyState) changes
     useEffect(() => {
-        console.log("Socket connection state changed")
         if (readyState === ReadyState.OPEN) {
         sendJsonMessage({
             event: "subscribe",
@@ -46,7 +45,7 @@ export const Notification = ({channelName, onReceiveMessage = () => {}}) => {
 
     // Run when a new WebSocket message is received (lastJsonMessage)
     useEffect(() => {
-        console.log(`Got a new notification: ${lastJsonMessage?.message}`)
+        console.info(`Got a new notification: ${lastJsonMessage?.message}`)
         setAlertMessage(lastJsonMessage?.message)
         onReceiveMessage()
     }, [lastJsonMessage])

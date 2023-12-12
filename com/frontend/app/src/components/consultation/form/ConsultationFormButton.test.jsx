@@ -2,7 +2,6 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor, debug} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import ConsultationFormButton from './ConsultationFormButton';
-import { Assessment } from '@mui/icons-material';
 
 jest.mock('../../../utils/caseTaker', () => ({
   createConsultation: (d, o, t, c) => ({

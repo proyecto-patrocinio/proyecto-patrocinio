@@ -50,6 +50,7 @@ const BoardInfo = ({ panel}) => {
     return (
         <>
         <IconButton
+            id={'board-info-button-' + panel.id}
             hidden={panel.number_cards !== undefined}
             onClick={handleToggle}
             style={{ position: 'absolute', top: 0, right: 0 }}
