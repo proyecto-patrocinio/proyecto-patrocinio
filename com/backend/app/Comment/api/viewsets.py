@@ -4,12 +4,16 @@
 import os
 import logging
 
-from constants import ATTACHMENT_FILES_DIRECTORY
+from django.db import transaction
+from django.contrib.auth.models import User
+from django.http import FileResponse
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 
+from constants import ATTACHMENT_FILES_DIRECTORY
 from Comment.models import Comment, File
 from Comment.api.serializers import (
     CommentSerializer,
@@ -20,14 +24,10 @@ from Comment.api.serializers import (
     FileCreatedSerializer,
     FileGetSerializer
 )
-from django.http import FileResponse
-from rest_framework.decorators import action
-from django.contrib.auth.models import User
 from User.permissions import CheckGroupPermission
 
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
 
 
 class CommentApiViewSet(ModelViewSet):
@@ -44,6 +44,11 @@ class CommentApiViewSet(ModelViewSet):
         self.serializer_class = CommentEditSerializer
         return  super().update(request, *args, **kwargs)
 
+    def partial_update(self, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        return  super().partial_update(request, *args, **kwargs)
+
+    @transaction.atomic
     def destroy(self, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
         self.serializer_class = CommentDestroySerializer
@@ -77,6 +82,7 @@ class FileViewSet(ModelViewSet):
     queryset = File.objects.all()
     serializer_class = FileGetSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
             self.permission_classes = [CheckGroupPermission]
             self.serializer_class = FileUploadSerializer

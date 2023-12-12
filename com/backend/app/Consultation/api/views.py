@@ -4,10 +4,11 @@ import logging
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.db.models import Q
-from django.utils import timezone
 from datetime import timedelta
 from datetime import datetime
+from django.db.models import Q
+from django.utils import timezone
+from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.permissions import AllowAny
 
@@ -30,6 +31,7 @@ from email_manager.new_request_notification import send_email_new_request
 from email_manager.rejected_request_notification import send_email_rejected_request
 from email_manager.accepted_request_notification import send_email_accepted_request
 from Notification.consummers import CONSULTANCY_GROUP_NAME, BOARD_BASE_GROUP_NAME, send_sync_group_message
+
 
 logger = logging.getLogger(__name__)
 
@@ -73,6 +75,10 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         self.serializer_class = ConsultationUpdateSerializer
         return super().update(request, *args, **kwargs)
 
+    def partial_update(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        return super().partial_update(request, *args, **kwargs)
+
     def destroy(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
         return super().destroy(request, *args, **kwargs)
@@ -88,19 +94,20 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 
         # Get ID client
         id_client = consultation_json['client']
-        client = Client.objects.filter(id_value=id_client).first()
-        if not client:
-            return Response(f"Error: Consultant with ID value {id_client} not Found.", status=404)
-        consultation_json["client"] = client.id
+        with transaction.atomic():
+            client = Client.objects.filter(id_value=id_client).first()
+            if not client:
+                return Response(f"Error: Consultant with ID value {id_client} not Found.", status=404)
+            consultation_json["client"] = client.id
 
-        serializer = ConsultationCreateSerializer(data=consultation_json)
+            serializer = ConsultationCreateSerializer(data=consultation_json)
 
-        if serializer.is_valid():
-            send_sync_group_message(CONSULTANCY_GROUP_NAME, "A new Consultation has been created from a form.")
-            serializer.save()
-            return Response(serializer.data, status=201)
-        else:
-            return Response(serializer.errors, status=400)
+            if serializer.is_valid():
+                send_sync_group_message(CONSULTANCY_GROUP_NAME, "A new Consultation has been created from a form.")
+                serializer.save()
+                return Response(serializer.data, status=201)
+            else:
+                return Response(serializer.errors, status=400)
 
 
 class RequestConsultationViewSet(viewsets.ModelViewSet):
@@ -108,6 +115,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     queryset = RequestConsultation.objects.all()
     serializer_class = RequestConsultationSerializer
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """Create a new Consultation and set its availability_state to "PENDING" if it meets the conditions.
 
@@ -162,6 +170,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
         return response
 
+    @transaction.atomic
     def destroy(self, request, *args, **kwargs):
         """Delete a Consultation and update its availability_state to "CREATED".
 
@@ -224,69 +233,71 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     def accepted(self, request, *args, **kwargs):
         self.permission_classes = [ProfessorGroupPermission]
         self.serializer_class = RequestConsultationAceptedSerializer
+
         consultation_id = self.get_object().pk  # RequestConsultation.consultation is the pk
         destiny_board = self.get_object().destiny_board
         logger.info(f"Accepting consultation '{consultation_id}' for '{destiny_board}' commision...")
         try:
-            # Get Consultation and Panel destiny
-            consultation = Consultation.objects.get(id=consultation_id)
-            destiny_panel_id = request.data.get('destiny_panel')
-            if destiny_panel_id is None or destiny_panel_id == 0:
-                logger.error(f"Error accepting consultation {consultation_id}.")
-                logger.error("Missing 'destiny_panel' query parameter.")
-                logger.debug(f"Request query params: {request.query_params}")
-                return Response(
-                    data={'error':"Missing 'destiny_panel' query parameter."},
-                    status=status.HTTP_400_BAD_REQUEST
+            with transaction.atomic():
+                # Get Consultation and Panel destiny
+                consultation = Consultation.objects.get(id=consultation_id)
+                destiny_panel_id = request.data.get('destiny_panel')
+                if destiny_panel_id is None or destiny_panel_id == 0:
+                    logger.error(f"Error accepting consultation {consultation_id}.")
+                    logger.error("Missing 'destiny_panel' query parameter.")
+                    logger.debug(f"Request query params: {request.query_params}")
+                    return Response(
+                        data={'error':"Missing 'destiny_panel' query parameter."},
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+                destiny_panel = Panel.objects.get(id=destiny_panel_id)
+                if destiny_panel is None:
+                    logger.error(f"Error accepting consultation {consultation_id}.")
+                    logger.error(f"Panel Destity {destiny_panel_id} does not exist.")
+                    return Response(
+                        f"Panel destiny {destiny_panel_id} does not exist.",
+                        status=status.HTTP_400_BAD_REQUEST
+                    )
+
+                # Create a new Card
+                new_card ={
+                    "consultation": consultation_id,
+                    "panel": destiny_panel_id,
+                    "tag": consultation.tag
+                }
+                card_serializer = CardCreateSerializer(data=new_card, many=False)
+                if card_serializer.is_valid():
+                    logger.info(f"Card {consultation_id} created successfully.")
+                else:
+                    logger.error(f"Error creating new card for consultation {consultation_id}.")
+                    logger.debug(f"Serializer errors: {card_serializer.errors}")
+                    return Response(card_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+                # Delete Request Consultation
+                response = super().destroy(request, *args, **kwargs)
+                if response.status_code == status.HTTP_204_NO_CONTENT:
+                    logger.info(f"Request Consultation {consultation_id} was deleted.")
+                else:
+                    logger.error(f"Error deleting request consultation {consultation_id}.")
+                    logger.debug(f"Response: {response.data}")
+                    card_serializer.delete()
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+
+                # Update Consultation state
+                consultation.availability_state = "ASSIGNED"
+                consultation.start_time = datetime.now()
+                logger.info(f"Updated consultation {consultation_id} availability state to ASSIGNED.")
+
+                # Save transaction
+                card_serializer.save()
+                consultation.save()
+
+                send_email_accepted_request(destiny_board, consultation)
+                send_sync_group_message(
+                    CONSULTANCY_GROUP_NAME,
+                    f"Request Consultation '{consultation.tag}' was accepted for '{destiny_board}' board."
                 )
-            destiny_panel = Panel.objects.get(id=destiny_panel_id)
-            if destiny_panel is None:
-                logger.error(f"Error accepting consultation {consultation_id}.")
-                logger.error(f"Panel Denstity {destiny_panel_id} does not exist.")
-                return Response(
-                    f"Panel destiny {destiny_panel_id} does not exist.",
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-
-            # Create a new Card
-            new_card ={
-                "consultation": consultation_id,
-                "panel": destiny_panel_id,
-                "tag": consultation.tag
-            }
-            card_serializer = CardCreateSerializer(data=new_card, many=False)
-            if card_serializer.is_valid():
-                logger.info(f"Card {consultation_id} created successfully.")
-            else:
-                logger.error(f"Error creating new card for consultation {consultation_id}.")
-                logger.debug(f"Serializer errors: {card_serializer.errors}")
-                return Response(card_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-            # Delete Request Consultation
-            response = super().destroy(request, *args, **kwargs)
-            if response.status_code == status.HTTP_204_NO_CONTENT:
-                logger.info(f"Request Consultation {consultation_id} deleted.")
-            else:
-                logger.error(f"Error deleting request consultation {consultation_id}.")
-                logger.debug(f"Response: {response.data}")
-                card_serializer.delete()
-                return Response(status=status.HTTP_400_BAD_REQUEST)
-
-            # Update Consultation state
-            consultation.availability_state = "ASSIGNED"
-            consultation.start_time = datetime.now()
-            logger.info(f"Updated consultation {consultation_id} availability state to ASSIGNED.")
-
-            # Save transaction
-            card_serializer.save()
-            consultation.save()
-
-            send_email_accepted_request(destiny_board, consultation)
-            send_sync_group_message(
-                CONSULTANCY_GROUP_NAME,
-                f"Request Consultation '{consultation.tag}' was accepted for '{destiny_board}' board."
-            )
-            return Response(status=status.HTTP_204_NO_CONTENT)
+                return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
             logger.error(f"Error accepting consultation {consultation_id}.")
@@ -302,29 +313,30 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         destiny_board = self.get_object().destiny_board
         logger.info(f"Rejecting consultation '{consultation_id}' for '{destiny_board}' commision...")
         try:
-            # Get Consultation and Panel destiny
-            consultation = Consultation.objects.get(id=consultation_id)
+            with transaction.atomic():
+                # Get Consultation and Panel destiny
+                consultation = Consultation.objects.get(id=consultation_id)
 
-            # Delete Request Consultation
-            response = super().destroy(request, *args, **kwargs)
-            if response.status_code == status.HTTP_204_NO_CONTENT:
-                logger.info(f"Request Consultation {consultation_id} deleted.")
-            else:
-                logger.error(f"Error deleting request consultation {consultation_id}.")
-                logger.debug(f"Response: {response.data}")
-                return Response(status=status.HTTP_400_BAD_REQUEST)
+                # Delete Request Consultation
+                response = super().destroy(request, *args, **kwargs)
+                if response.status_code == status.HTTP_204_NO_CONTENT:
+                    logger.info(f"Request Consultation {consultation_id} deleted.")
+                else:
+                    logger.error(f"Error deleting request consultation {consultation_id}.")
+                    logger.debug(f"Response: {response.data}")
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
 
-            # Update Consultation State
-            consultation.availability_state = "REJECTED"
-            consultation.save()
-            logger.info(f"Updated consultation {consultation_id} availability state to REJECTED.")
+                # Update Consultation State
+                consultation.availability_state = "REJECTED"
+                consultation.save()
+                logger.info(f"Updated consultation {consultation_id} availability state to REJECTED.")
 
-            send_email_rejected_request(destiny_board, consultation)
-            send_sync_group_message(
-                CONSULTANCY_GROUP_NAME,
-                f"Request Consultation '{consultation.tag}' was rejected for '{destiny_board}' board."
-            )
-            return Response(status=status.HTTP_204_NO_CONTENT)
+                send_email_rejected_request(destiny_board, consultation)
+                send_sync_group_message(
+                    CONSULTANCY_GROUP_NAME,
+                    f"Request Consultation '{consultation.tag}' was rejected for '{destiny_board}' board."
+                )
+                return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
             logger.error(f"Error rejecting consultation {consultation_id}.")

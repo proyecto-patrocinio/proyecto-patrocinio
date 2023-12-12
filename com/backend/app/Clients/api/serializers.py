@@ -8,6 +8,13 @@ class ClientSerializer(ModelSerializer):
     class Meta:
         model = Client
         fields = '__all__'
+        read_only_fields = ['id',]
+
+class PatrimonyCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Patrimony
+        fields = '__all__'
+        read_only_fields = ['id',]
 
 class PatrimonySerializer(serializers.ModelSerializer):
     class Meta:
