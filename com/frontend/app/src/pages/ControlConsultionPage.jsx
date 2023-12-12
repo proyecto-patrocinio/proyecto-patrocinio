@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Dashboard from '../containers/Dashboard';
-import ConsultationDataTable from '../components/datagrid/ConsultionDataTable';
+import ConsultationDataTable from '../components/datagrid/ConsultationDataTable';
 import { getConsultationList } from '../utils/caseTaker';
 
 const theme = createTheme();
