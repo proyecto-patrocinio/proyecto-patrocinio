@@ -31,10 +31,10 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
       const isProgressValid = progressOptions.includes(consult.progress_state);
       const isAvailableValid = availableOptions.includes(consult.availability_state);
       if (!isProgressValid){
-        consult.progress_state = progressOptions[0]
+        consult.progress_state = progressOptions[0];
       }
       if(!isAvailableValid){
-        consult.availability_state = availableOptions[0]
+        consult.availability_state = availableOptions[0];
       }
       const values = {
         "progress_state": consult.progress_state,
@@ -43,6 +43,8 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
       setEditedFields(values);
     };
     updateData();
+
+  // eslint-disable-next-line
   }, [idCard]);
 
   /**
