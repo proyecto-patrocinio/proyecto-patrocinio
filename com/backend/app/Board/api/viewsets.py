@@ -30,6 +30,18 @@ class BoardViewSet(viewsets.ModelViewSet):
     queryset = Board.objects.all()
     serializer_class = BoardSerializer
 
+    def create(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        return super().create(self, request, *args, **kwargs)
+
+    def update(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        return super().update(self, request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        self.permission_classes = [CheckGroupPermission]
+        return super().partial_update(self, request, *args, **kwargs)
+
     def retrieve(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
         self.serializer_class = BoardFullSerializer

@@ -1,7 +1,11 @@
 import json
+import logging
+
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from django.db import transaction
+
 from Clients.api.serializers import *
 from Clients.models import *
 from rest_framework import viewsets
@@ -10,9 +14,13 @@ from User.permissions import CheckGroupPermission
 from Notification.consummers import send_sync_group_message, CONSULTANCY_GROUP_NAME
 
 
+logger = logging.getLogger(__name__)
+
+
 class PatrimonyViewSet(viewsets.ModelViewSet):
     queryset = Patrimony.objects.all()
     serializer_class = PatrimonySerializer
+    permission_classes = [CheckGroupPermission]
 
 
 class FamilyViewSet(viewsets.ModelViewSet):
@@ -27,6 +35,7 @@ class FamilyViewSet(viewsets.ModelViewSet):
         )
         return super().retrieve(request, *args, **kwargs)
 
+    @transaction.atomic
     def create(self, request, *args, **kwargs):
         family = super().create(request, *args, **kwargs)
         children = request.data.get('children', None)
@@ -94,36 +103,37 @@ class ClientViewSet(viewsets.ModelViewSet):
         self.permission_classes = [CheckGroupPermission]
         return super().update(request, *args, **kwargs)
 
+
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):
         try:
-            client = patrimony = family = None
-            tels = []
-            data_body = request.data
+            with transaction.atomic():
+                serializer = ClientSerializer(data=request.data)
+                serializer.is_valid(raise_exception=True)
+                client = serializer.save()
 
-            # Get data
-            partner_salary = data_body['partner_salary']
-            tel_list = data_body['tel']
-            patrimony_keys = ('employment', 'salary', 'other_income', 'amount_other_income', 'amount_retirement', 'amount_pension', 'vehicle')
-            patrimony_json = {k: v for k, v in data_body.items() if k in patrimony_keys}
-            client_keys = ('locality', 'first_name', 'last_name', 'id_type', 'id_value', 'sex', 'birth_date', 'address', 'postal', 'marital_status', 'housing_type', 'studies', 'email')
-            client_json = {k: v for k, v in data_body.items() if k in client_keys}
-            client_json['locality'] = Locality.objects.get(pk=client_json['locality'])
+                patrimony_serializer = PatrimonyCreateSerializer(data=request.data)
+                patrimony_serializer.is_valid(raise_exception=True)
+                patrimony = patrimony_serializer.save(id=client)
 
-            # Create Objects
-            client = Client.objects.create(**client_json)
-            patrimony = Patrimony.objects.create(id=client, **patrimony_json)
-            family = Family.objects.create(id=client, partner_salary=partner_salary)
-            for tel in tel_list:
-                tels.append(Tel.objects.create(client=client,phone_number=tel))
+                family_data = {'partner_salary': request.data['partner_salary'], 'id': client.id}
+                family_serializer = FamilySerializer(data=family_data)
+                family_serializer.is_valid(raise_exception=True)
+                family = family_serializer.save()
+
+                tel_data = [{'client': client.id, 'phone_number': tel} for tel in request.data['tel']]
+                tel_serializer = TelSerializer(data=tel_data, many=True)
+                tel_serializer.is_valid(raise_exception=True)
+                tels = tel_serializer.save()
 
         except Locality.DoesNotExist:
-            return Response("Error: Locality not found", status=400)
+            mns = f"Failed to load client data from the form: Locality not found"
+            logger.error(mns)
+            return Response(mns, status=400)
         except Exception as e:
-            for obj in [client, patrimony, family] + tels:
-                if obj and obj.id:
-                    obj.delete()
-            return Response(str(e), status=400)
+            mns = f"Failed to load client data from the form: {str(e)}"
+            logger.error(mns)
+            return Response(mns, status=400)
 
         send_sync_group_message(CONSULTANCY_GROUP_NAME, "A new Client has been created from form.")
         return Response("Success: Data processed successfully.", status=200)
@@ -157,27 +167,32 @@ class SonViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):
-        child_json = request.data
+        try:
+            child_json = request.data
 
-        # Get ID family
-        id_client = child_json['id_consultant']
-        client = Client.objects.filter(id_value=id_client).first()
-        if not client:
-            return Response(f"Error: Consultant with ID value {id_client} not Found.", status=404)
-        family = Family.objects.get(pk=client.id)
-        if not family:
-            return Response(f"Error: Family for client with ID value {client.id_value} not Found.", status=404)
-        child_json["family_client_user"] = family.id
+            # Get ID family
+            id_client = child_json['id_consultant']
+            with transaction.atomic():
+                client = Client.objects.filter(id_value=id_client).first()
+                if not client:
+                    return Response(f"Error: Consultant with ID value {id_client} not Found.", status=404)
+                family = Family.objects.get(pk=client.id)
+                if not family:
+                    return Response(f"Error: Family for client with ID value {client.id_value} not Found.", status=404)
+                child_json["family_client_user"] = family.id
 
-        serializer = SonCreateSerializer(data=child_json)
+                serializer = SonCreateSerializer(data=child_json)
 
-        if serializer.is_valid():
-            serializer.save()
-            send_sync_group_message(CONSULTANCY_GROUP_NAME, f"A new child was registered for a Client {client} with ID {client.id}.")
-            return Response(serializer.data, status=201)
-        else:
-            return Response(serializer.errors, status=400)
-
+                if serializer.is_valid():
+                    serializer.save()
+                    send_sync_group_message(CONSULTANCY_GROUP_NAME, f"A new child was registered for a Client {client} with ID {client.id}.")
+                    return Response(serializer.data, status=201)
+                else:
+                    return Response(serializer.errors, status=400)
+        except Exception as e:
+            mns = f"Failed to load Child data from the form: {str(e)}"
+            logger.error(mns)
+            return Response(mns, status=400)
 
 class TelViewSet(viewsets.ModelViewSet):
     queryset = Tel.objects.all()

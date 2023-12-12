@@ -1,5 +1,8 @@
 import logging
+
 from rest_framework.viewsets import ModelViewSet
+from django.db import transaction
+
 from Panel.models import Panel
 from Panel.api.serializers import (
     PanelSerializer,
@@ -60,6 +63,7 @@ class PanelViewSet(ModelViewSet):
         self.serializer_class = PanelWithNumberCardsSerializer
         return super().list(request, *args, **kwargs)
 
+    @transaction.atomic
     def destroy(self, request, *args, **kwargs):
         """
         Delete a panel if it has no associated cards; otherwise, return an error.

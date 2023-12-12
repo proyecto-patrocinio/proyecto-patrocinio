@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 import os
+import psycopg2
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -117,6 +118,7 @@ REDIS_URL = 'redis:/redis:6379/0'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+# isolation: https://www.postgresql.org/docs/current/transaction-iso.html
 
 DATABASES = {
     "default": {
@@ -126,7 +128,10 @@ DATABASES = {
         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
         "HOST": os.environ.get("SQL_HOST", "localhost"),
         "PORT": os.environ.get("SQL_PORT", "5432"),
-    }
+    },
+    'OPTIONS': {
+        'isolation_level': psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ,
+    },
 }
 
 # Password validation
