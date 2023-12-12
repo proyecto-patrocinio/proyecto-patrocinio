@@ -41,14 +41,16 @@ export const Notification = ({channelName, onReceiveMessage = () => {}}) => {
             message: null
         })
         }
-    }, [readyState])
+
+    // eslint-disable-next-line
+    }, [readyState, channelName])
 
     // Run when a new WebSocket message is received (lastJsonMessage)
     useEffect(() => {
         console.info(`Got a new notification: ${lastJsonMessage?.message}`)
-        setAlertMessage(lastJsonMessage?.message)
-        onReceiveMessage()
-    }, [lastJsonMessage])
+        setAlertMessage(lastJsonMessage?.message);
+        onReceiveMessage();
+    }, [lastJsonMessage, onReceiveMessage])
 
 
     return <AlertSnackbar key={"notification-alert"} onClose={() => setAlertMessage("")} message={alertMessage} severity={'info'}/>

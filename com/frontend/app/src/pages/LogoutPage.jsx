@@ -40,6 +40,8 @@ const LogoutPage =  ({setIsLoggedIn}) => {
 
   useEffect(() => {
     exit();
+
+  // eslint-disable-next-line
   }, []);
 
   return <div>Loading...</div>;

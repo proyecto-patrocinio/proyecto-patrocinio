@@ -25,6 +25,8 @@ export const UserProvider = ({ children }) => {
           setUserState(newDataUser);
       }};
       saveUser();
+
+      // eslint-disable-next-line
       }, []);
 
       const setUser = (user) => {

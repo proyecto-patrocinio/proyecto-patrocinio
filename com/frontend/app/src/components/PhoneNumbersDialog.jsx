@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogActions, Button, TextField, List, ListItem, IconButton } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
