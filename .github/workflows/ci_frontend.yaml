@@ -51,6 +51,7 @@ jobs:
         with:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }} 
+
       - name: Build and Push
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
@@ -60,3 +61,18 @@ jobs:
           directory: com/frontend/app
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Latest Tag and Push Docker Image
+        run: |
+          if [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            docker tag proyectopatrocinio/frontend-patrocinio docker.io/proyectopatrocinio/frontend-patrocinio:latest
+            docker push docker.io/proyectopatrocinio/frontend-patrocinio:latest
+          elif [ "${{ github.event_name }}" = "push" ] && [ "${{ github.ref }}" = "refs/heads/dev" ]; then
+            docker tag proyectopatrocinio/frontend-patrocinio docker.io/proyectopatrocinio/frontend-patrocinio:dev-latest
+            docker push docker.io/proyectopatrocinio/frontend-patrocinio:dev-latest
+          fi
+        env:
+          DOCKER_CLI_AGGREGATE: 1
+          DOCKER_BUILDKIT: 1
+          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
