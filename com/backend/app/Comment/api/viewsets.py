@@ -44,7 +44,7 @@ class CommentApiViewSet(ModelViewSet):
         self.serializer_class = CommentEditSerializer
         return  super().update(request, *args, **kwargs)
 
-    def partial_update(self, *args, **kwargs):
+    def partial_update(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
         return  super().partial_update(request, *args, **kwargs)
 
