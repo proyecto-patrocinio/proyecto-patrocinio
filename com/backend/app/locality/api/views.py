@@ -2,8 +2,8 @@
     modelViewSet is a class that allows you to create a CRUD
 '''
 from django.db.models import Prefetch
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from User.permissions import CheckGroupPermission
 
 from locality.models import Locality, Province, Nationality
 from locality.api.serializers import LocalityOneSerializer,     \
@@ -16,7 +16,7 @@ from locality.api.serializers import LocalityOneSerializer,     \
 
 class LocalityApiViewSet(ModelViewSet): 
     queryset = Locality.objects.all() # All the data in the table
-    permission_classes = [CheckGroupPermission]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer(self, *args, **kwargs):  # Select json format
         if self.action == 'list' or self.action == 'create':  # By /api/locality/
@@ -34,7 +34,7 @@ class LocalityApiViewSet(ModelViewSet):
 
 class ProvinceApiViewSet(ModelViewSet):
     queryset = Province.objects.all()
-    permission_classes = [CheckGroupPermission]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'list' or self.action == 'create':
@@ -52,7 +52,7 @@ class ProvinceApiViewSet(ModelViewSet):
 
 class NationalityApiViewSet(ModelViewSet):
     queryset = Nationality.objects.all() 
-    permission_classes = [CheckGroupPermission]
+    permission_classes = [IsAuthenticated]
 
     def get_serializer(self, *args, **kwargs):
         if self.action == 'list' or self.action == 'create':

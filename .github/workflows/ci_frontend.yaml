@@ -54,10 +54,10 @@ jobs:
       - name: Build and Push
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
-          image: proyectopatrocinio/backend-patrocinio
+          image: proyectopatrocinio/frontend-patrocinio
           registry: docker.io
-          dockerfile: com/backend/app/Dockerfile
-          directory: com/backend/app
+          dockerfile: com/frontend/app/Dockerfile
+          directory: com/frontend/app
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           addLatest: true
