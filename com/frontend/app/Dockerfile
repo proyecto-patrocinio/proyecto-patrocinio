@@ -11,14 +11,9 @@ COPY . .
 # Build the app
 RUN npm run build --no-cache
 
-# Bundle static assets with nginx
-FROM nginx:1.21.0-alpine as production
 ENV NODE_ENV production
-# Copy built assets from `builder` image
-COPY --from=builder /app/build /usr/share/nginx/staticfiles/cms/react/
-# Add your nginx.conf
-COPY --from=builder /app/nginx/nginx.conf /etc/nginx/conf.d/default.conf
+
 # Expose port
-EXPOSE 80
+EXPOSE 3000
 # Start nginx
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT [ "npm", "start"]
