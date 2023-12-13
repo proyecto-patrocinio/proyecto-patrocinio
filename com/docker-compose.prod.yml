@@ -43,22 +43,35 @@ services:
       - postgres_data_prod:/var/lib/postgresql/data
     hostname: databaseserver
 
+  frontend:
+    restart: always
+    container_name: "frontend"
+    build:
+      context: ./frontend/app
+      dockerfile: Dockerfile
+    expose:
+        - 3000
+    depends_on: 
+        - backend-wsgi
+        - backend-asgi
+    hostname: frontend
+
   nginx:
-        restart: always
-        container_name: "proxy-nginx-frontend"
-        build:
-          context: ./frontend/app
-          dockerfile: Dockerfile.prod
-        ports:
-            - 80:80
-        volumes:
-            - django_static_volume:/usr/share/nginx/staticfiles/cms/django/
-            - ./frontend/app/nginx/nginx_prod.conf:/etc/nginx/conf.d/default.conf
-            - react_static_volume:/usr/share/nginx/staticfiles/cms/react/
-        depends_on: 
-            - backend-wsgi
-            - backend-asgi
-        hostname: nginxserver
+    restart: always
+    container_name: "proxy-nginx"
+    build:
+      context: ./frontend/app
+      dockerfile: Dockerfile.nginx.prod
+    ports:
+        - 80:80
+    volumes:
+        - django_static_volume:/usr/share/nginx/staticfiles/cms/django/
+        - ./frontend/app/nginx/nginx_prod.conf:/etc/nginx/conf.d/default.conf
+    depends_on: 
+        - frontend
+        - backend-wsgi
+        - backend-asgi
+    hostname: nginxserver
 
   redis:
     restart: always
@@ -70,4 +83,3 @@ services:
 volumes:
   postgres_data_prod:
   django_static_volume:
-  react_static_volume:
