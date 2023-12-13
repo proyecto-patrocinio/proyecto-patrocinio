@@ -56,7 +56,7 @@ jobs:
         with:
           image: proyectopatrocinio/backend-patrocinio
           registry: docker.io
-          dockerfile: com/backend/app/Dockerfile.prod
+          dockerfile: com/backend/app/Dockerfile
           directory: com/backend/app
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
