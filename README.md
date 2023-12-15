@@ -7,6 +7,14 @@ Facilitar el ingreso de datos a partir del uso de formularios amigables, simples
 ## Requerimientos previos: <br/>
  Se requiere tener instalado python 3, docker, docker-compose o docker destktop con WSL2 
 
+
+## Configuraciones y variables de entorno
+Se deberá configurar correctamente las variables de entorno y los archivos de configuración del backend y del frontend.
+* Archivos de configuración del Backend y DB: 'com\backend\.envs'
+* Archivo de variables de entorno del frontend: 'com\frontend\app\.env'
+* Archivos templates para el envío de mails: 'com\backend\app\templates'
+
+
 ## EJECUTAR LA UNIDAD DEL PROYECTO
 - Primero: <br />
 Abro la terminal en la raiz del proyecto y me dirijo al directorio "com" <br/>
@@ -22,24 +30,28 @@ Ejecuto el contenedor:
   \$ docker-compose stop
 
 - Tercero: <br />
-Ingrese al http://127.0.0.1
+Ingrese al http://localhost
 
-## CREAR UN SUPER USUARIO
-Luego de correr nuestro docker compose , ejecutamos el siguiente comando: <br/>
-\$ docker exec -ti backend-app sh <br/>
-Una vez dentro, lanzamos el comando para crear el usuario: <br/>
-\$ python manage.py createsuperuser <br/>
-Seguimos los pasos indicados por consola. <br/>
-Salimos del contenedor: <br/>
-\$ exit() <br />
-Ante algun error o cambio del modelo, se pude hacer la migracion manualmente: <br/> 
-  - docker exec -ti backend-app sh <br/>
-  - python manage.py makemigrations && python manage.py migrate <br/>
-  - python manage.py createsuperuser <br/>
 
 Es posible que, si persiste el error, debas borrar los archivos de migraciones en el directorio : com\backend\app\Clients\migrations <br/>
 O reiniciar el contenedor. <br/>
 
+
+## Confirmación de Creación de Cuenta Administrador
+
+Con el email configurado en el archivo 'com\backend\.envs\.app' para el usuario administrador de django, deberá ingresarlo en la página 'http://127.0.0.1/confirm-email/'. Esto enviará un correo electrónico de confirmación de creación de cuenta. El usuario administrador debe revisar su bandeja de entrada y seguir las instrucciones para confirmar la creación de la cuenta.
+
+
+## Configuración del Sitio
+
+Es fundamental configurar adecuadamente el sitio con el dominio correspondiente para garantizar el funcionamiento correcto de las funcionalidades, como la confirmación de creación de cuenta a través del correo electrónico.
+
+Para configurar el sitio, siga estos pasos:
+1. Ingrese al panel de administración de Django.
+2. Navegue a la sección "Sites" (Sitios).
+3. MODIFIQUE (No elimine ni agregue uno nuevo) el sitio existente para reflejar el dominio correcto de su aplicación.
+
+Asegúrese de que la configuración del sitio sea coherente con las variables seteadas en los archivos de configuración del frontend y backend.
 
 ### BIBLIOGRAFIA
 - Guia de instalación Docker-Compose: https://docs.docker.com/compose/install/
