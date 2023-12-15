@@ -176,6 +176,14 @@
   }
 },
 {
+  "model": "auth.group",
+  "pk": 4,
+  "fields": {
+    "name": "forms",
+    "permissions": []
+  }
+},
+{
   "model": "auth.permission",
   "pk": 1,
   "fields": {
