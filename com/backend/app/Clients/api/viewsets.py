@@ -3,14 +3,13 @@ import logging
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
 from django.db import transaction
 
 from Clients.api.serializers import *
 from Clients.models import *
 from rest_framework import viewsets
 from django.db.models import Prefetch
-from User.permissions import CheckGroupPermission
+from User.permissions import CheckGroupPermission, FormsGroupPermission
 from Notification.consummers import send_sync_group_message, CONSULTANCY_GROUP_NAME
 
 
@@ -106,6 +105,7 @@ class ClientViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):
+        self.permission_classes = [FormsGroupPermission]
         try:
             with transaction.atomic():
                 serializer = ClientSerializer(data=request.data)
@@ -167,6 +167,7 @@ class SonViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):
+        self.permission_classes = [FormsGroupPermission]
         try:
             child_json = request.data
 

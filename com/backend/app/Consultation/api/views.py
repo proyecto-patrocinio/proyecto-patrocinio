@@ -10,7 +10,7 @@ from django.db.models import Q
 from django.utils import timezone
 from django.db import transaction
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.permissions import AllowAny
+from User.permissions import FormsGroupPermission
 
 from Board.models import Board
 from Board.api.serializers import BoardSerializer
@@ -89,7 +89,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):
-        self.permission_classes = [AllowAny]
+        self.permission_classes = [FormsGroupPermissior]
         consultation_json = request.data
 
         # Get ID client
