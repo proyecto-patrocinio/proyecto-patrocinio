@@ -21,8 +21,8 @@ Ejecuto el contenedor:
   Para terminar el contenedor en segundo plano, ejecute el siguiente comando sobre la terminal, suponiendo que se encuentra en la carpeta "com": <br/>
   \$ docker-compose stop
 
-- Tercero <br />
-Ingrese al http://localhost
+- Tercero: <br />
+Ingrese al http://127.0.0.1
 
 ## CREAR UN SUPER USUARIO
 Luego de correr nuestro docker compose , ejecutamos el siguiente comando: <br/>
