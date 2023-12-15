@@ -60,6 +60,7 @@ class CaseTakerGroupPermission(permissions.BasePermission):
 
         return request.user.groups.filter(name='case_taker').exists()
 
+
 class ProfessorGroupPermission(permissions.BasePermission):
     """Permission class to check if the user belongs to the 'professor' group."""
 
@@ -69,3 +70,14 @@ class ProfessorGroupPermission(permissions.BasePermission):
             return False
 
         return request.user.groups.filter(name='professor').exists()
+
+
+class FormsGroupPermission(permissions.BasePermission):
+    """Permission class to check if the user belongs to the 'forms' group."""
+
+    def has_permission(self, request, view):
+
+        if not request.user or not request.user.is_authenticated:
+            return False
+
+        return request.user.groups.filter(name='forms').exists()
