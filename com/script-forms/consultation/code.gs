@@ -1,4 +1,8 @@
 function onFormSubmit(e) {
+  const scriptProperties = PropertiesService.getScriptProperties();
+  const apiUrl = scriptProperties.getProperty('SERVER_URL');
+  const apiToken = scriptProperties.getProperty('TOKEN');
+
   response_list = e.response.getItemResponses().map((preg) => preg.getResponse());
 
   var consult_json = {
@@ -8,9 +12,12 @@ function onFormSubmit(e) {
     "opponent": response_list[3],
   };
 
-  var apiUrl = 'https://535cca38-846c-44ee-a1f0-90aec9a6b8cb.mock.pstmn.io/api/consultations/consultation/form';
+  token = "Token " + apiToken
   var options = {
     "method": 'post',
+    "headers" : {
+       "Authorization" : token
+    },
     "Content-Type": 'application/json',
     "payload": JSON.stringify(consult_json)
   };
