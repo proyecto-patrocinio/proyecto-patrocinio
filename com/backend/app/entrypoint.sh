@@ -25,6 +25,17 @@ python manage.py flush --no-input # WARNING: Delete all data of database
 python manage.py migrate
 python manage.py collectstatic --no-input --clear
 
+# Render init data json
+file="init_load_data/sites.json"
+old_word="DOMAINKEY"
+new_word="$HOSTNAME"
+sed -i "s/$old_word/$new_word/g" "$file"
+
+file="init_load_data/email.json"
+old_word="ADMINEMAILKEY"
+new_word="$DJANGO_SUPERUSER_EMAIL"
+sed -i "s/$old_word/$new_word/g" "$file"
+
 #load initial data (the order is important)
 python manage.py loaddata init_load_data/nationality.json 
 python manage.py loaddata init_load_data/province.json 
@@ -38,6 +49,7 @@ python manage.py test
 
 #create superuser
 python manage.py createsuperuser --no-input
+python manage.py loaddata init_load_data/email.json
 
 
 else
