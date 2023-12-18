@@ -89,7 +89,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['POST'])
     def form(self, request, *args, **kwargs):
-        self.permission_classes = [FormsGroupPermissior]
+        self.permission_classes = [FormsGroupPermission]
         consultation_json = request.data
 
         # Get ID client
