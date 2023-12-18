@@ -12,13 +12,14 @@ function onFormSubmit(e) {
     "opponent": response_list[3],
   };
 
+
   token = "Token " + apiToken
   var options = {
     "method": 'post',
     "headers" : {
-       "Authorization" : token
+      "Authorization" : token,
+      "Content-Type": 'application/json',
     },
-    "Content-Type": 'application/json',
     "payload": JSON.stringify(consult_json)
   };
   
