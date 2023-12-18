@@ -10,9 +10,12 @@ function onFormOpen(e){
 }
 
 function onFormSubmit(e) {
+  const scriptProperties = PropertiesService.getScriptProperties();
+  const apiUrl = scriptProperties.getProperty('SERVER_URL');
+  const apiToken = scriptProperties.getProperty('TOKEN');
 
   /* Test
-  let response = FormApp.getActiveForm().getResponses()[9].getItemResponses();
+  let response = FormApp.getActiveForm().getResponses()[26].getItemResponses();
   response_list = response.map((preg) => preg.getResponse());
   */
   response_list = e.response.getItemResponses().map((preg) => preg.getResponse());
@@ -46,10 +49,8 @@ function onFormSubmit(e) {
     partner_salary: response_list[23]
   }
 
-
   // Convierte el objeto a formato JSON
   var jsonBody = JSON.stringify(response_dict, null, 2);
-
 
   /* TEST Envía el correo electrónico
   MailApp.sendEmail({
@@ -59,16 +60,27 @@ function onFormSubmit(e) {
   });
   */
 
-  var apiUrl = 'https://406abbe5-3180-4ee1-8d90-3acd3b076c1f.mock.pstmn.io/api/clients/client/clientform';
+  token = "Token " + apiToken
   var options = {
-    method: 'get',
-    'Content-Type': 'application/json',
-    payload: jsonBody,
-    followRedirects: false 
+    "method": 'post',
+    "headers" : {
+      "Authorization" : token,
+      'Content-Type': 'application/json',
+    },
+    "body": jsonBody,
+    "followRedirects": false 
   };
   
   try{
-    UrlFetchApp.fetch(apiUrl, options);
+    UrlFetchApp.fetch(apiUrl, {
+    "method": 'post',
+    "headers" : {
+      "Authorization" : token,
+      'Content-Type': 'application/json',
+    },
+    "payload": jsonBody,
+    "followRedirects": false 
+  });
   } catch (error){
     console.error(error);
     const email = response_list[8];

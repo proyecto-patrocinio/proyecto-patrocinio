@@ -7,7 +7,7 @@ function updateProperties() {
   try {
    const scriptProperties = PropertiesService.getScriptProperties();
   scriptProperties.setProperties({
-    'SERVER_URL': 'https://my-domain/api/consultations/consultation/form/',
+    'SERVER_URL': 'https://my-domain/api/clients/client/form/',
     'TOKEN': 'my-token',
   });
   } catch (err) {
