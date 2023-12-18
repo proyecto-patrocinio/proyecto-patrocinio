@@ -1,9 +1,7 @@
 /*****************************************************************************************
- * Functions to set script properties and create Menu                                    *
+ * Funciones para establecer las propiedades del script                                  *
  * Documentacion:  https://developers.google.com/apps-script/guides/properties?hl=es-419 *
 ******************************************************************************************/
-
-// const SERVER_API_FORM_URL = "myurl/api/subitem" // URL Defined in Constants.gs
 
 /**
  * Updates script properties with the provided token, user, and password.
@@ -15,12 +13,9 @@
 function updateProperties(token, user, password) {
   try {
     const scriptProperties = PropertiesService.getScriptProperties();
-
-    scriptProperties.setProperties({
-        'TOKEN': token,
-        'USER': user,
-        'PASSWORD': password
-    });
+    scriptProperties.setProperty('TOKEN', token);
+    scriptProperties.setProperty('USER', user);
+    scriptProperties.setProperty('PASSWORD', password);
 
   } catch (err) {
     console.log('Update Properties Failed With Error: %s', err.message);
@@ -68,7 +63,8 @@ function updateCredentials(){
  * @returns {boolean} True if no have a error.
  */
 function login(user, password) {
-  apiUrl = "https://proyecto-patrocinio.fcefyn.unc.edu.ar/api/auth/login/"
+  const scriptProperties = PropertiesService.getScriptProperties();
+  apiUrl = scriptProperties.getProperty('LOGIN_API_URL');
   data={
     "username": user,
     "email": "",
@@ -91,13 +87,13 @@ function login(user, password) {
 /**
  * Triggered when a Google Form is open.
  * Creates a custom menu in the Google Form interface.
- * Adds an option to update credentials by calling the showMenu function.
+ * Adds an option to update credentials and api urls by calling the showMenu function.
  */
 function onOpen() {
   var ui = FormApp.getUi();
 
   ui.createMenu('Menu')
-    .addItem('Update Credentials', 'showMenu')
+    .addItem('Configure Parameters', 'showMenu')
     .addToUi();
 }
 
@@ -111,4 +107,21 @@ function showMenu() {
     .setHeight(300);
 
   FormApp.getUi().showModalDialog(htmlOutput, 'Enter parameters');
+}
+
+
+function setURLS(login_api_url, form_api_url) {
+  try {
+    const scriptProperties = PropertiesService.getScriptProperties();
+    scriptProperties.setProperty('LOGIN_API_URL', login_api_url);
+    scriptProperties.setProperty('FORM_API_URL', form_api_url);
+
+  } catch (err) {
+    console.log('Update Properties Failed With Error: %s', err.message);
+  }
+}
+
+function configureForm(user, password, login_api_url, form_api_url) {
+  setURLS(login_api_url, form_api_url);
+  login(user, password);
 }
