@@ -16,9 +16,6 @@ jobs:
     runs-on: ubuntu-22.04 # os for running the job
     container:
       python:3.11.1-alpine
-    metadata:
-      annotations:
-        "pipelines.kubeflow.org/max_cache_staleness": P0D
 
     steps:
       - name: Checkout
@@ -48,6 +45,7 @@ jobs:
         run: |
           cd ./com/backend/app
           source  ./env/bin/activate
+          python ./manage.py makemigrations
           python ./manage.py test
         env:
           DJANGO_ALLOWED_HOSTS: "localhost 127.0.0.1 0.0.0.0 databaseserver db nginxserver"
