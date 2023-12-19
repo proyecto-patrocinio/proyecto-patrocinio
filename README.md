@@ -1,4 +1,4 @@
-# Sistema de Gestión de Casos Judiciales
+# Sistema de Gestión de Casos Judiciales v1.0.0
 
 ### Descripción
 Este proyecto se centra en proporcionar una plataforma para la gestión de casos judiciales, facilitando el proceso de seguimiento y administración de información. <br/>
