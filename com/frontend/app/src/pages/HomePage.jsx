@@ -112,8 +112,7 @@ const HomePage = () => {
                     <Typography variant="body1" gutterBottom>
                     <p>
                         <AssignmentIcon fontSize="inherit" style={{ verticalAlign: 'middle', marginRight: '1rem', color: '#4285F4' }} />
-                        Welcome to the Case Management System for the UBA sponsorship project. This platform allows lawyers and law professors
-                        to efficiently manage legal cases.
+                        Welcome! This platform allows lawyers and law professors to efficiently manage legal cases.
                     </p>
                     <p>
                         CaseManager is a comprehensive tool designed to simplify and optimize case management in academic and professional environments.

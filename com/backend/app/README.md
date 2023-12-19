@@ -1,4 +1,4 @@
-# Proyecto Patrocinio Backend
+# Sistema de Gestión de Casos
 
 
 ## Instalación
