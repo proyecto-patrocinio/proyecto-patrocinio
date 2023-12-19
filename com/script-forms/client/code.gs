@@ -11,7 +11,7 @@ function onFormOpen(e){
 
 function onFormSubmit(e) {
   const scriptProperties = PropertiesService.getScriptProperties();
-  const apiUrl = scriptProperties.getProperty('SERVER_URL');
+  const apiUrl = scriptProperties.getProperty('FORM_API_URL');
   const apiToken = scriptProperties.getProperty('TOKEN');
 
   /* Test

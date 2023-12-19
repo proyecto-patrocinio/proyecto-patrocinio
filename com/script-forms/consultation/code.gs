@@ -1,15 +1,22 @@
+/**
+ * Triggered when a Google Form is submitted. 
+ * Retrieves the authentication token from script properties and sends a POST request
+ * to the specified server API URL with form response data.
+ *
+ * @param {Object} e - The form submit event object.
+ */
 function onFormSubmit(e) {
   const scriptProperties = PropertiesService.getScriptProperties();
-  const apiUrl = scriptProperties.getProperty('SERVER_URL');
   const apiToken = scriptProperties.getProperty('TOKEN');
+  const apiURL = scriptProperties.getProperty('FORM_API_URL');
 
-  response_list = e.response.getItemResponses().map((preg) => preg.getResponse());
+  responseList = e.response.getItemResponses().map((preg) => preg.getResponse());
 
-  var consult_json = {
-    "client": response_list[0],
-    "tag": response_list[1],
-    "description": response_list[2],
-    "opponent": response_list[3],
+  var consultJson = {
+    "client": responseList[0],
+    "tag": responseList[1],
+    "description": responseList[2],
+    "opponent": responseList[3],
   };
 
 
@@ -20,8 +27,8 @@ function onFormSubmit(e) {
       "Authorization" : token,
       "Content-Type": 'application/json',
     },
-    "payload": JSON.stringify(consult_json)
+    "payload": JSON.stringify(consultJson)
   };
   
-  UrlFetchApp.fetch(apiUrl, options);
+  UrlFetchApp.fetch(apiURL, options);
 }

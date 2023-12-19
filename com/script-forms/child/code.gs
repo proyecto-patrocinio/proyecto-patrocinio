@@ -1,5 +1,6 @@
 const ID_EXCEL = '1f2F2CUQNtdbj_xzIPiaxbFYlDysxdiwtYlBh68AO3bc';
-FORM_ID = "14tjyqssjA5XzfNmi87oBuOO7dGRPcIN8luOS6ggeDQU"
+const FORM_ID = "14tjyqssjA5XzfNmi87oBuOO7dGRPcIN8luOS6ggeDQU"
+
 //Indices de respuesta del formulario
 const INDEX_NATIONALITY_RESPONSE = 7;
 const INDEX_PROVINCE_RESPONSE = INDEX_NATIONALITY_RESPONSE +1;
@@ -11,12 +12,15 @@ function onFormOpen(e){
 }
 
 function onFormSubmit(e) {
+  const scriptProperties = PropertiesService.getScriptProperties();
+  const apiUrl = scriptProperties.getProperty('FORM_API_URL');
+  const apiToken = scriptProperties.getProperty('TOKEN');
+  
   /* TEST
   let response = FormApp.getActiveForm().getResponses()[9].getItemResponses();
   response_list = response.map((preg) => preg.getResponse());
   */
   response_list = e.response.getItemResponses().map((preg) => preg.getResponse());
-
   response_dict = {
     id_consultant: response_list[0],
     first_name: response_list[1],
@@ -32,17 +36,22 @@ function onFormSubmit(e) {
   // Convierte el objeto a formato JSON
   let jsonBody = JSON.stringify(response_dict, null, 2);
   /* Test
+
   MailApp.sendEmail({
     to: email,
     subject: "Formulario",
     body: "Nuevo Hijo/a registrado:\n\n" + jsonBody,
   });
   */
-  const apiUrl = 'https://406abbe5-3180-4ee1-8d90-3acd3b076c1f.mock.pstmn.io/api/clients/client/childform';
+
+  token = "Token " + apiToken
   const options = {
-    method: 'post',
-    'Content-Type': 'application/json',
-    payload: jsonBody
+    "method": 'post',
+    "headers" : {
+      "Authorization" : token,
+      'Content-Type': 'application/json',
+    },
+    "payload": jsonBody
   };
   
   UrlFetchApp.fetch(apiUrl, options);

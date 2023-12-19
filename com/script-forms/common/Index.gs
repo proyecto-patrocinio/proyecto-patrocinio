@@ -58,13 +58,19 @@
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required><br>
 
-    <input type="button" value="Accept" onclick="updateToken();">
+    <label for="login_api_url">Login API URL:</label>
+    <input type="text" id="login_api_url" name="login_api_url" required><br>
+
+    <label for="form_api_url">Form API URL:</label>
+    <input type="text" id="form_api_url" name="form_api_url" required><br>
+
+    <input type="button" value="Accept" onclick="updateValues();">
   </form>
 
   <div id="output"></div>
 
   <script>
-    function updateToken() {
+    function updateValues() {
       function onFailure(error) {
         var div = document.getElementById('output');
         div.innerHTML = "ERROR: " + error.message;
@@ -74,11 +80,13 @@
       }
       var user = document.getElementById('user').value;
       var password = document.getElementById('password').value;
+      var login_api_url = document.getElementById('login_api_url').value;
+      var form_api_url = document.getElementById('form_api_url').value;
       google.script.run
         .withSuccessHandler(closeDialog)
         .withFailureHandler(onFailure)
         .withUserObject(this)
-        .login(user, password);
+        .configureForm(user, password, login_api_url, form_api_url);
 
     }
   </script>
