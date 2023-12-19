@@ -15,7 +15,7 @@
     * Notificar errores: ``Notificarme cada día``
 
 # Configuración Inicial
-* Form api url: 'https://my-domain/api/clients/son/form/'
+* Form api url: 'https://my-domain/api/clients/child/form/'
 * Login url: 'https://my-domain/api/auth/login/'
 * username: 'form-username'
 * password: 'form-password
