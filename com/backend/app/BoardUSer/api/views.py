@@ -2,8 +2,8 @@
     modelViewSet is a class that allows you to create a CRUD
 '''
 from rest_framework.viewsets import ModelViewSet
-from BoardUSer.api.serializers import BoardUserSerializer
-from BoardUSer.models import BoardUser
+from BoardUser.api.serializers import BoardUserSerializer
+from BoardUser.models import BoardUser
 from User.permissions import CheckGroupPermission
 
 

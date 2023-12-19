@@ -55,7 +55,7 @@ INSTALLED_APPS = [
     'Clients',
     'locality',
     'Card',
-    'BoardUSer',
+    'BoardUser',
     'Panel',
     'Board',
     'Consultation',

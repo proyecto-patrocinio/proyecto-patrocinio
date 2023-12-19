@@ -47,7 +47,7 @@ class Family(models.Model):
     def __str__(self) -> str:
         return f'{self.partner_salary}'
 
-class Son(Person):
+class Child(Person):
     id_value = models.CharField( blank=False, null=False, max_length=20, verbose_name='Document value')
     family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE, verbose_name="family", related_name="children")
 

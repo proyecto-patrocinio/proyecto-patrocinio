@@ -6,9 +6,9 @@ from django.urls import reverse
 from rest_framework.test import force_authenticate
 
 from Board.models import Board
-from BoardUSer.models import BoardUser
-from BoardUSer.api.serializers import BoardUserSerializer
-from BoardUSer.api.views import BoardUserViewSet
+from BoardUser.models import BoardUser
+from BoardUser.api.serializers import BoardUserSerializer
+from BoardUser.api.views import BoardUserViewSet
 from Clients.test.utils import setUpSuperUser
 
 
