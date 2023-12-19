@@ -37,8 +37,6 @@ jobs:
       - name: run make migrations
         run: |
           cd ./com/backend/app
-          ls -R
-          find . -name "__pycache__" -exec rm -rf {} +
           python ./manage.py makemigrations
 
       - name: run test
