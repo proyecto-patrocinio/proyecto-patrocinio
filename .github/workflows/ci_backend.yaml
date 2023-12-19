@@ -28,28 +28,20 @@ jobs:
         run: |
           set > "com/backend/.envs/.app.dev"
 
-      - name: virtual environment
-        run: |
-          cd com/backend/app/
-          python -m  venv env
-
       - name: Install Dependencies
         run: |
           cd com/backend/app/
-          source  env/bin/activate
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: run make migrations
         run: |
           cd ./com/backend/app
-          source  ./env/bin/activate
           python ./manage.py makemigrations
 
       - name: run test
         run: |
           cd ./com/backend/app
-          source  ./env/bin/activate
           export PYTHONDONTWRITEBYTECODE=1
           python ./manage.py test
         env:
