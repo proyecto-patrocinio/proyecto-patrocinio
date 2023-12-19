@@ -94,6 +94,7 @@ function onOpen() {
 
   ui.createMenu('Menu')
     .addItem('Configure Parameters', 'showMenu')
+    .addItem('Refresh Token', 'updateCredentials')
     .addToUi();
 }
 
@@ -104,7 +105,7 @@ function showMenu() {
   var htmlOutput = HtmlService
     .createHtmlOutputFromFile('Index')
     .setWidth(300)
-    .setHeight(300);
+    .setHeight(400);
 
   FormApp.getUi().showModalDialog(htmlOutput, 'Enter parameters');
 }

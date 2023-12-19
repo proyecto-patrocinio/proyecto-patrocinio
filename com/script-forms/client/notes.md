@@ -1,4 +1,4 @@
-# Activadores:
+# Activadores
 
 **Activador 1**
     * función: ``onFormOpen``
@@ -15,7 +15,7 @@
     * Notificar errores: ``Notificarme cada día``
 
 # Configuración Inicial
-* Form api url: 'https://my-domain/api/clients/son/form/'
+* Form api url: 'https://my-domain/api/clients/client/form/'
 * Login url: 'https://my-domain/api/auth/login/'
 * username: 'form-username'
 * password: 'form-password
