@@ -6,5 +6,5 @@ from Clients.models import *
 admin.site.register(Client)
 admin.site.register(Patrimony)
 admin.site.register(Family)
-admin.site.register(Son)
+admin.site.register(Child)
 admin.site.register(Tel)

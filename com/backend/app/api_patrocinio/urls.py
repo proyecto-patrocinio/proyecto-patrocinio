@@ -23,7 +23,7 @@ from locality.api.router import router_locality
 from Clients.api.router import router_clients
 from Card.api.router import router_card
 from User.views import get_user_info_from_token
-from BoardUSer.api.router import router_boardUser
+from BoardUser.api.router import router_boardUser
 from Panel.api.router import router_panel
 from Board.api.router import router_board
 from Comment.api.router import router_comment

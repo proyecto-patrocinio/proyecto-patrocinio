@@ -10,7 +10,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 from Board.models import Board
-from BoardUSer.models import BoardUser
+from BoardUser.models import BoardUser
 
 
 logger = logging.getLogger(__name__)

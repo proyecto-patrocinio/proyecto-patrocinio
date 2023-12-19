@@ -53,17 +53,17 @@ def load_family(self, id, client, partner_salary):
     return response
 
 
-def load_son(self, id, birth_date, locality, address, family_client_user):
-    son_data = {
+def load_child(self, id, birth_date, locality, address, family_client_user):
+    child_data = {
         "id": id, "birth_date": birth_date,"locality" : locality,"address": address,
         "family_client_user": family_client_user,
         "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
         "id_value": "dummy", "sex": "MALE"
     }
-    url= reverse('son-list')
-    request = self.factory.post(url,son_data)
+    url= reverse('child-list')
+    request = self.factory.post(url, child_data)
     force_authenticate(request, user=self.user)
-    view = SonViewSet.as_view({'post': 'create'})
+    view = childViewSet.as_view({'post': 'create'})
     response = view(request)
     return response
 

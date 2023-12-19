@@ -31,15 +31,15 @@ class FamilySerializer(serializers.ModelSerializer):
         model = Family
         fields = '__all__'
 
-class SonCreateSerializer(serializers.ModelSerializer):
+class ChildCreateSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Son
+        model = Child
         fields = '__all__'
         read_only_fields = ['id',]
 
-class SonSerializer(serializers.ModelSerializer):
+class ChildSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Son
+        model = Child
         fields = '__all__'
 
 class TelSerializer(serializers.ModelSerializer):
@@ -52,15 +52,15 @@ class ClientTelSerializer(serializers.ModelSerializer):
         model = Tel
         fields = ('id', 'phone_number')
 
-class SonFullSerializer(serializers.ModelSerializer):
+class ChildFullSerializer(serializers.ModelSerializer):
     locality = LocalityFullSerializer( many = False, read_only = True)
     class Meta:
-        model = Son
+        model = Child
         fields = '__all__'
         read_only_fields = ['id',]
 
 class FamilyFullSerializer(serializers.ModelSerializer):
-    children = SonFullSerializer( many = True, read_only = True)
+    children = ChildFullSerializer( many = True, read_only = True)
     class Meta:
         model = Family
         fields = ('id','partner_salary', 'children')

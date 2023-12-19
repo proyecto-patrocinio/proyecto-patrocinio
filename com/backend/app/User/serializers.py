@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from BoardUSer.api.serializers import BoardUserSerializer
+from BoardUser.api.serializers import BoardUserSerializer
 
 
 class UserSimpleSerializer(serializers.ModelSerializer):

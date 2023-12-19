@@ -835,36 +835,36 @@
   "model": "auth.permission",
   "pk": 73,
   "fields": {
-    "name": "Can add son",
+    "name": "Can add child",
     "content_type": 19,
-    "codename": "add_son"
+    "codename": "add_child"
   }
 },
 {
   "model": "auth.permission",
   "pk": 74,
   "fields": {
-    "name": "Can change son",
+    "name": "Can change child",
     "content_type": 19,
-    "codename": "change_son"
+    "codename": "change_child"
   }
 },
 {
   "model": "auth.permission",
   "pk": 75,
   "fields": {
-    "name": "Can delete son",
+    "name": "Can delete child",
     "content_type": 19,
-    "codename": "delete_son"
+    "codename": "delete_child"
   }
 },
 {
   "model": "auth.permission",
   "pk": 76,
   "fields": {
-    "name": "Can view son",
+    "name": "Can view child",
     "content_type": 19,
-    "codename": "view_son"
+    "codename": "view_child"
   }
 },
 {

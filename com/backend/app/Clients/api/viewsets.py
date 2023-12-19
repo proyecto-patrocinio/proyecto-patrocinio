@@ -44,7 +44,7 @@ class FamilyViewSet(viewsets.ModelViewSet):
                 child["family_client_user"] = Family.objects.get(pk=family.data["id"])
                 child["locality"] = Locality.objects.get(pk=child["locality"]["id"])
                 del child["id"]
-                new_child = Son.objects.create(**child).id
+                new_child = Child.objects.create(**child).id
                 family.data["children"].append(new_child)
         return family
 
@@ -140,13 +140,13 @@ class ClientViewSet(viewsets.ModelViewSet):
 
 
 
-class SonViewSet(viewsets.ModelViewSet):
-    queryset = Son.objects.all()
-    serializer_class = SonSerializer
+class childViewSet(viewsets.ModelViewSet):
+    queryset = Child.objects.all()
+    serializer_class = ChildSerializer
 
     def create(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
-        self.serializer_class = SonCreateSerializer
+        self.serializer_class = ChildCreateSerializer
         return super().create(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):
@@ -182,7 +182,7 @@ class SonViewSet(viewsets.ModelViewSet):
                     return Response(f"Error: Family for client with ID value {client.id_value} not Found.", status=404)
                 child_json["family_client_user"] = family.id
 
-                serializer = SonCreateSerializer(data=child_json)
+                serializer = ChildCreateSerializer(data=child_json)
 
                 if serializer.is_valid():
                     serializer.save()

@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.contrib.auth.models import User
 
 from Board.models import Board
-from BoardUSer.models import BoardUser
+from BoardUser.models import BoardUser
 
 
 logger = logging.getLogger(__name__)

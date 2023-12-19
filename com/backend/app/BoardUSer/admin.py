@@ -1,4 +1,4 @@
 from django.contrib import admin
-from BoardUSer.models import BoardUser
+from BoardUser.models import BoardUser
 # Register your models here.
 admin.site.register(BoardUser)

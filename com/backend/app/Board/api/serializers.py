@@ -1,6 +1,6 @@
 from Board.models import *
 from rest_framework import serializers
-from BoardUSer.api.serializers import BoardUserSerializer
+from BoardUser.api.serializers import BoardUserSerializer
 from Panel.api.serializers import PanelWithNumberCardsSerializer, PanelFullSerializer
 from Consultation.api.serializers import RequestConsultationSerializer
 
