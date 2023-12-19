@@ -88,7 +88,7 @@ function onFormSubmit(e) {
     MailApp.sendEmail({
       to: email,
       subject: "Error al Enviar Formulario de Registro",
-      body: "Ocurrió un error al enviar la solicitud de registro al Patrocinio Jurídico de la UBA.\n\n Datos de la solicitud:" + data,
+      body: "Ocurrió un error al enviar la solicitud de registro al Case Management System.\n\n Datos de la solicitud:" + data,
     });
   }
 }
