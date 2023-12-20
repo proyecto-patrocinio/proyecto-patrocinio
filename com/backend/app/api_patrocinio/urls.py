@@ -75,7 +75,7 @@ urlpatterns = [
     path('api/panels/', include(router_panel.urls)),
     path('api/geography/', include(router_locality.urls)),
     path('api/cards/', include(router_card.urls)),
-    path('api/boardUser/', include(router_boardUser.urls)),
+    path('api/boardusers/', include(router_boardUser.urls)),
     path('api/boards/', include(router_board.urls)),
     path('api/consultations/', include(router_consultation.urls)),
     path('api/calendars/', include(router_calendar.urls)),
