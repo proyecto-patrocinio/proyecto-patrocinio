@@ -5,7 +5,7 @@ import {createComment, getCommentListByConsult, uploadFile} from '../../../utils
 import {useUserContext} from '../../../context/UserContext.jsx';
 import TicketComment from './TicketComment.jsx';
 import AddButton from '../../AddButton.jsx';
-import InputFileUpload from '../../uploadFileButton.jsx';
+import InputFileUpload from '../../UploadFileButton.jsx';
 
 
 

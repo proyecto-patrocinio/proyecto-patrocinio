@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'Calendar',
     'Notification',
     'channels',
+    'User',
 ]
 
 MIDDLEWARE = [
@@ -187,7 +188,6 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
-
 }
 
 # User Register

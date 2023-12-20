@@ -1,3 +1,4 @@
+import logging
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth.models import User
@@ -7,6 +8,18 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_protect
+from django.contrib.auth.models import User
+from django.dispatch import receiver
+from allauth.account.signals import email_confirmed
+
+logger = logging.getLogger(__name__)
+
+@receiver(email_confirmed)
+def email_confirmed_(request, email_address, **kwargs):
+    user = User.objects.get(email=email_address.email)
+    logger.info('Email confirmed for user %s', user.username)
+    user.is_active = False
+    user.save()
 
 
 @api_view(http_method_names=['GET'])
