@@ -60,7 +60,7 @@ class Child(Person):
     family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE, verbose_name="family", related_name="children")
 
     def __str__(self) -> str:
-        return f'{ self.family_client_user + "/"  + self.name + "_" + self.last_name}'
+        return f"{self.first_name}_{self.last_name}"
 
     class Meta:
         verbose_name_plural = "Children"
