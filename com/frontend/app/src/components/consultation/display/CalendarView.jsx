@@ -37,6 +37,11 @@ const CalendarView = ({cardID}) => {
     const getEvents = async () => {
       try{
         const calendar_response = await getCalendarByCard(cardID);
+        calendar_response?.events?.map(event=>{
+          event.start =  moment(event.start).toDate();
+          event.end =  moment(event.end).toDate();
+          return event;
+        })
         setEvents(calendar_response?.events || []);
         setCalendarID(calendar_response.id);
       } catch (e){
@@ -69,12 +74,12 @@ const CalendarView = ({cardID}) => {
         title: newEventData?.title,
         calendar: calendarID,
         description: newEventData?.description,
-        start: selectedDates.start,
-        end: selectedDates.end,
+        start:  moment(selectedDates.start).toDate(),
+        end: moment(selectedDates.end).toDate(),
       };
       try {
-        const response = await createEvent(newEvent);
-        setEvents([...events, response]);
+        await createEvent(newEvent);
+        setEvents([...events, newEvent]);
         setNewEventData(null);
         setOpenNewDate(false);
       } catch (e) {
@@ -112,7 +117,7 @@ const CalendarView = ({cardID}) => {
           events={events}
           startAccessor="start"
           endAccessor="end"
-          views={['month', 'week', 'day']}
+          views={['month', 'week', 'day', 'agenda']}
           selectable
           onSelectSlot={handleSelectSlot}
           onSelectEvent={setSelectedEvent}
@@ -123,6 +128,7 @@ const CalendarView = ({cardID}) => {
             month: 'Month',
             week: 'Week',
             day: 'Day',
+            agenda: 'Agenda',
           }}
         />
 
