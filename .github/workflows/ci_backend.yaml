@@ -7,7 +7,12 @@ on:
     branches:
       - main
       - dev
-
+    release:
+      types: [published]
+    tags:
+      - v3.*
+      - v2.*
+      - v1.*
 
 jobs:
 
@@ -62,6 +67,7 @@ jobs:
         with:
           # Make sure the actual branch is checked out when running on pull requests
           ref: ${{ github.head_ref }} 
+
       - name: Build and Push
         uses: mr-smithers-excellent/docker-build-push@v5
         with:
