@@ -279,7 +279,7 @@ function ClientDataTable({ data }) {
       field: 'birth_date',  headerName: 'Birth Date', width: 100,
       editable: true, type: 'date',
       valueGetter: ({ value }) => value && new Date(value),
-      valueFormatter: (value) => formatDateToString(value.value)
+      valueFormatter: (value) =>  value?.value && formatDateToString(value.value)
     },
     {
       field: 'sex', headerName: 'Sex', width: 110, editable: true,

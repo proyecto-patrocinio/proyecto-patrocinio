@@ -53,7 +53,7 @@ class RequestConsultation(models.Model):
 
     class Meta:
         verbose_name = ("RequestConsultation")
-        verbose_name_plural = ("RequestConsultations")
+        verbose_name_plural = ("Request Consultations")
 
     def __str__(self):
         return f'req_consultation/{self.consultation}'.replace(" ", "_")

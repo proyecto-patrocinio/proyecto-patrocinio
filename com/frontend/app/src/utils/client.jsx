@@ -134,7 +134,9 @@ export async function deleteClient(clientID) {
     if (response.ok) {
       return response;
     } else {
-      const mns = 'Failed to delete client.'
+      const mns = response.status === 500 ?
+      'Error Deleting Client. Are there associated consultations for this client?'
+      : 'Failed to delete client.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     }

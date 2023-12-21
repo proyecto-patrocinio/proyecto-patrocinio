@@ -40,6 +40,10 @@ class Patrimony(models.Model):
     def __str__(self) -> str:
         return f'{self.client}_{self.employment}'.replace(" ","-")
 
+    class Meta:
+        verbose_name_plural = "Patrimonies"
+
+
 class Family(models.Model):
     id = models.OneToOneField( Client, on_delete=models.CASCADE, related_name="family", primary_key=True)
     partner_salary = models.IntegerField()
@@ -47,12 +51,20 @@ class Family(models.Model):
     def __str__(self) -> str:
         return f'{self.partner_salary}'
 
+    class Meta:
+        verbose_name_plural = "Families"
+
+
 class Child(Person):
     id_value = models.CharField( blank=False, null=False, max_length=20, verbose_name='Document value')
     family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE, verbose_name="family", related_name="children")
 
     def __str__(self) -> str:
-        return f'{ self.family_client_user + "/"  + self.name + "_" + self.last_name}'
+        return f"{self.first_name}_{self.last_name}"
+
+    class Meta:
+        verbose_name_plural = "Children"
+
 
 class Tel(models.Model):
     id = models.AutoField( primary_key=True)
