@@ -7,7 +7,12 @@ on:
     branches:
       - main
       - dev
-
+    release:
+      types: [published]
+    tags:
+      - v3.*
+      - v2.*
+      - v1.*
 
 jobs:
   ci: # health check job for testing and code formatting check
