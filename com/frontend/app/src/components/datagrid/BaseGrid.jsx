@@ -74,6 +74,8 @@ export default function BaseGrid({
     const handleDeleteClick = (id) => () => {
         onDeleteRow(id).then(()=> {
             setRows(rows.filter((row) => row.id !== id));
+        }).catch((e) => {
+            setAlertMessage(String(e));
         });
     };
 
