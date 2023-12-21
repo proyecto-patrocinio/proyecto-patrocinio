@@ -10,6 +10,10 @@ class Nationality(models.Model):
     def __str__(self) -> str:
         return f'{self.name}'
 
+    class Meta:
+        verbose_name_plural = "Nationalities"
+
+
 class Province(models.Model):
     id = models.IntegerField( primary_key=True, auto_created=True)
     name = models.CharField( max_length=100, verbose_name='Provincia' )
@@ -31,3 +35,6 @@ class Locality(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name}'
+
+    class Meta:
+        verbose_name_plural = "Localities"

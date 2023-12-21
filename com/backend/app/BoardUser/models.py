@@ -26,3 +26,4 @@ class BoardUser(models.Model):
 
     class Meta:
         unique_together = ('user', 'board')
+        verbose_name_plural = "Board Users"
