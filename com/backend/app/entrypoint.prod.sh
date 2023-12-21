@@ -13,16 +13,42 @@ then
 
   echo "PostgreSQL started"
 fi
+
+migrations=$(python manage.py showmigrations --list | grep "\[ \]")
+
+# Check if migrations are pending
+if [ -n "$migrations" ]; then
+echo "Pending migrations found, applying..."
 #migrations
-python manage.py makemigrations 
-python manage.py flush --no-input
+python manage.py makemigrations
 python manage.py migrate
+python manage.py collectstatic --no-input --clear
+
+# Render init data json
+file="init_load_data/sites.json"
+old_word="DOMAINKEY"
+new_word="$HOSTNAME"
+sed -i "s/$old_word/$new_word/g" "$file"
+
+file="init_load_data/email.json"
+old_word="ADMINEMAILKEY"
+new_word="$DJANGO_SUPERUSER_EMAIL"
+sed -i "s/$old_word/$new_word/g" "$file"
 
 #load initial data (the order is important)
-python manage.py loaddata locality/load_data/nationality.json 
-python manage.py loaddata locality/load_data/province.json 
-python manage.py loaddata locality/load_data/locality.json 
+python manage.py loaddata init_load_data/nationality.json 
+python manage.py loaddata init_load_data/province.json 
+python manage.py loaddata init_load_data/locality.json 
+python manage.py loaddata init_load_data/groups_permissions.json 
+python manage.py loaddata init_load_data/sites.json
 
-#run test
-python manage.py test
-exec "$@"
+#create superuser
+python manage.py createsuperuser --no-input
+python manage.py loaddata init_load_data/email.json
+
+
+else
+  echo "No pending migrations, database tables already exist."
+fi
+
+exec "$@"  # execute the command that was passed to docker run

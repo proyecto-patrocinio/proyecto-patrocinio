@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react';
+import React,{useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,20 +13,28 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Copyright from '../components/Copyright';
 import  Alert  from '@mui/material/Alert';
 import { Snackbar } from '@mui/material';
-import { UserContext } from '../context/UserContext';
-
+import { useUserContext } from '../context/UserContext';
+import {loginUser} from '../utils/user';
+import { PATH_FORGET_PASSWORD } from '../utils/constants';
 const theme = createTheme();
 
 export default function SignIn( props) {
-  const user =  useContext(UserContext);
+  const userContext =  useUserContext();
   const [open, setOpen] = useState(false);
   const [loginError, setLoginError] = useState("");
 
+  const onLoginSuccess = (user) => {
+    userContext.setUser(user);
+    props.setIsLoggedIn(true);
+  };
 
-  
+  const onLoginError = (errorMensage) => {
+  setLoginError(errorMensage);
+  setOpen(true);
+  };
 
   //Conect to API
-  const handleValidation = (event) => {  
+  const handleValidation = (event) => {
     
       //get data from form
       const data = new FormData(event.currentTarget);
@@ -37,43 +45,15 @@ export default function SignIn( props) {
     if (data_username === "" || data_password === "") {
       setLoginError("Complete all fields.");
       setOpen(true);
-    }else {      
-      //send data to API
-      const requestURL = 'http://127.0.0.1:80/api/auth/login/';
-      const request = new XMLHttpRequest();
-      request.open('POST', requestURL);
-      request.setRequestHeader( 'Content-Type', 'application/json');
-      request.onreadystatechange = () => { // Call a function when the state changes.
-        if (request.readyState === XMLHttpRequest.DONE ) {
-          if( request.status === 200){
-            setOpen(false); 
-            //update user context 
-            user.setUser(JSON.parse( request.response).user);
-            props.setIsLoggedIn(true);
-          }
-          else if( request.status !== 400 ){
-            setLoginError("Unable to login. Please try again later");
-            setOpen(true);
-          }
-          else {
-            setLoginError("The username or password is incorrect");
-            setOpen(true);
-          }
-        }
-      }
-      request.send(
-          JSON.stringify({
-              "username": data_username,
-              "email": "",
-              "password": data_password,
-          }));
-    
+    }else {
+      setOpen(false);
+      const dataUser = {username: data_username, password: data_password};
+      loginUser(dataUser, onLoginSuccess, onLoginError);
     }
     return () => {}
-  }
-  
+  };
 
-  //Handle submit when click on button ("Sign in") 
+  //Handle submit when click on button ("Sign in")
   const handleSubmit = (event) => {
     event.preventDefault();
     handleValidation(event);
@@ -88,7 +68,6 @@ export default function SignIn( props) {
   };
 
 
-  
   return (
     <ThemeProvider theme={theme}>
     
@@ -147,7 +126,7 @@ export default function SignIn( props) {
       
             <Grid container>
               <Grid item xs>
-                <Link href="#" variant="body2">
+                <Link href={PATH_FORGET_PASSWORD} variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
@@ -163,4 +142,4 @@ export default function SignIn( props) {
       </Container>
     </ThemeProvider>
   );
-}
+};

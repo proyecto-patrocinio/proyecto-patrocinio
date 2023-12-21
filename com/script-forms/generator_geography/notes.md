@@ -1,0 +1,2 @@
+- Remplazar las variables para obtener el ID del formilario destino.
+- Cargue a mano las asignaciones a la próxima pregunta según la selección.

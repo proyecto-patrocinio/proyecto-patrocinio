@@ -15,11 +15,50 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include, re_path
-from locality.api.router import router_locality
-from user.api.router import router_user
-from Clients.api.router import router_clients
+from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
 from dj_rest_auth.registration.views import RegisterView, ConfirmEmailView, VerifyEmailView, ResendEmailVerificationView
+
+from locality.api.router import router_locality
+from Clients.api.router import router_clients
+from Card.api.router import router_card
+from User.views import get_user_info_from_token
+from BoardUser.api.router import router_boardUser
+from Panel.api.router import router_panel
+from Board.api.router import router_board
+from Comment.api.router import router_comment
+from Consultation.api.router import router_consultation
+from Calendar.api.router import router_calendar
 from dj_rest_auth.views import PasswordResetView, PasswordResetConfirmView
+from terms_and_policies.router import paths_terms_and_policies
+
+
+def secure_admin_login():
+    """
+    Secure the Django admin login by applying the staff_member_required decorator.
+
+    This function decorates the default Django admin login view with staff_member_required,
+    ensuring that only staff members can access the admin login page. It redirects
+    non-authenticated users to the specified login URL.
+
+    Note: Apply this function during the initialization of the Django application.
+
+    Example:
+    ```
+    # your_app/urls.py
+
+    from django.conf import settings
+    from django.contrib import admin
+    from django.contrib.admin.views.decorators import staff_member_required
+
+    # Apply the secure_admin_login function to the admin login view
+    admin.site.login = secure_admin_login()
+    ```
+    """
+    return staff_member_required(admin.site.login, login_url=settings.LOGIN_URL)
+
+
+admin.site.login = secure_admin_login()
 
 urlpatterns = [
     path('api/auth/account-confirm-email/<str:key>/', ConfirmEmailView.as_view()),
@@ -31,8 +70,16 @@ urlpatterns = [
     path('api/auth/resend-email/', ResendEmailVerificationView.as_view(), name='resend-email-verification'),
     path('api/auth/password/reset/', PasswordResetView.as_view()),
     path('api/auth/password/reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(), name='password_reset_confirm'),
-    path('api/users/', include(router_user.urls)),
     path('admin/', admin.site.urls),
     path('api/clients/', include(router_clients.urls)),
+    path('api/panels/', include(router_panel.urls)),
     path('api/geography/', include(router_locality.urls)),
+    path('api/cards/', include(router_card.urls)),
+    path('api/boardusers/', include(router_boardUser.urls)),
+    path('api/boards/', include(router_board.urls)),
+    path('api/consultations/', include(router_consultation.urls)),
+    path('api/calendars/', include(router_calendar.urls)),
+    path('api/comments/', include(router_comment.urls)),
+    path('api/auth/user-by-token/', get_user_info_from_token, name='get_user_info'),
+    *paths_terms_and_policies,
 ]

@@ -1,3 +1,11 @@
+/************************************************************************************************************
+ * Dashboard Component                                                                                      *
+ *                                                                                                          *
+ * This file contains the definition of the Dashboard component, which serves as the main layout            *
+ * for the application. It includes a responsive app bar, a collapsible drawer, and a content area          *
+ * for displaying the application's main content.                                                           *
+ *                                                                                                          *
+ ************************************************************************************************************/
 import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,17 +16,17 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import Container from '@mui/material/Container';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import  MenuListItems from '../components/MenuListItems';
 import Copyright from '../components/Copyright';
+import { Button } from '@mui/material';
 
 const drawerWidth = 240;
 
+/******************************** STYLES **************************************/
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -65,6 +73,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const mdTheme = createTheme();
 
+/**************************** COMPONENT *************************************/
+
+/**
+ * Dashboard component that represents the main layout of the application.
+ *
+ * @param {string} title - The title of the dashboard.
+ * @param {React.ReactNode} children - The content to be displayed inside the dashboard.
+ * @returns {React.ReactNode} - The Dashboard component.
+ */
 const  Dashboard = ({title,  children}) => {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
@@ -102,11 +119,11 @@ const  Dashboard = ({title,  children}) => {
             >
               {title}
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            <Button
+              color="inherit"
+              startIcon={<RefreshIcon />}
+              onClick={() => window.location.reload(true)}
+            />
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -138,11 +155,11 @@ const  Dashboard = ({title,  children}) => {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <main> 
+          <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+          <main>
             {children}
-        </main>
-            <Copyright sx={{ pt: 4 }} />
+          </main>
+          <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
       </Box>

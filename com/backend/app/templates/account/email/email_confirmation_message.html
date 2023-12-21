@@ -1,0 +1,17 @@
+{% load i18n %}
+
+{% blocktrans with site_name=current_site.name %}Welcome to {{ site_name }}!{% endblocktrans %}
+
+<p>{% blocktrans %}You're receiving this email because you recently registered an account on our site.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}To confirm your email address, please click the following link:{% endblocktrans %}</p>
+
+<p>{% blocktrans with domain=current_site.domain key=key %}<a href="https://{{ domain }}/api/auth/account-confirm-email/{{ key }}/">"https://{{ domain }}/api/auth/account-confirm-email/{{ key }}/"</a>{% endblocktrans %}</p>
+
+<p>{% blocktrans %}If you did not register on our site, please disregard this email.{% endblocktrans %}</p>
+
+<p>{% blocktrans with site_name=current_site.name %}Thank you for using {{ site_name }}!{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Sincerely,{% endblocktrans %}</p>
+
+<p>{{ site_name }}</p>

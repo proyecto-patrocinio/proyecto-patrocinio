@@ -1,25 +1,41 @@
-import { createContext, useState } from "react";
+import { createContext, useState , useContext, useEffect} from "react";
+import { getDataUserByToken } from "../utils/user";
 
-export const UserContext = createContext();
+const UserContext = createContext();
+
+export const useUserContext = () => useContext(UserContext);
+
 
 export const UserProvider = ({ children }) => {
-    const [id, setId] = useState(0);
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [firstname, setFirstname] = useState("");
-    const [lastname, setLastname] = useState("");
-
-    const setUser = (user) => {
-        setId(user.pk);
-        setUsername(user.username);
-        setEmail(user.email);
-        setFirstname(user.first_name);
-        setLastname(user.last_name);
+    const initialState = {
+        pk: "0",
+        username: "",
+        email: "",
+        firstname: "",
+        lastname: "",
+        "roles": []
     };
+    const [userState, setUserState] = useState( initialState );
+
+    useEffect(() => {
+      const saveUser = async() => {
+        const loggedUserToken = window.localStorage.getItem('loggedCaseManagerUser');
+        if( userState === initialState && loggedUserToken){
+          const newDataUser = await getDataUserByToken(loggedUserToken);
+          setUserState(newDataUser);
+      }};
+      saveUser();
+
+      // eslint-disable-next-line
+      }, []);
+
+      const setUser = (user) => {
+        setUserState(user);
+      };
+
     return (
-        <UserContext.Provider value={{id, username,email,firstname,lastname, setUser}}>
+        <UserContext.Provider value={{user: userState, setUser}}>
         {children}
         </UserContext.Provider>
     );
-}
- 
+};

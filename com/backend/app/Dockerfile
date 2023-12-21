@@ -16,16 +16,12 @@ ENV PYTHONDONTWRITEBYTECODE 1
 # install psycopg2 dependencies
 RUN apk update \
     && apk add postgresql-dev gcc python3-dev musl-dev \
-    && apk add dos2unix 
+    && apk add dos2unix redis
 
 # install dependencies
 RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
-
-
-# copy entrypoint.sh
-
 
 # if you are using windows, you need to run this command
 RUN sed -i 's/\r$//g' /usr/src/app/entrypoint.sh
@@ -33,10 +29,6 @@ RUN dos2unix /usr/src/app/entrypoint.sh
 
 # give permissions to entrypoint.sh
 RUN chmod +x /usr/src/app/entrypoint.sh
-
-# copy project files
-
-
 
 # run entrypoint.sh
 ENTRYPOINT ["/usr/src/app/entrypoint.sh"]

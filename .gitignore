@@ -3,13 +3,15 @@
 *.pot
 *.pyc
 media/
+proyecto-patrocinio\com\backend\app\enviroment
+proyecto-patrocinio\enviroment
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 
 # C extensions
 *.so
-
+my_env/
 # Distribution / packaging
 .Python
 env/
@@ -60,9 +62,21 @@ docs/_build/
 
 # PyBuilder
 target/
+*.lock
 
 /dist/
 /node_modules/
 
 com/backend/app/env/*
+com/backend/app/enviroment/*
 gherkin.feature
+
+#static files
+com/backend/app/django_static/*
+com/backend/app/db.sqlite3
+.idea/misc.xml
+.idea/proyecto_patrocinio.iml
+.gitignore
+.idea/inspectionProfiles/profiles_settings.xml
+.idea/vcs.xml
+.idea
