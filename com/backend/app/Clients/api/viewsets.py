@@ -1,5 +1,6 @@
 import json
 import logging
+from django.http import QueryDict
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -54,6 +55,9 @@ class ClientViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
+        if isinstance(request.data, QueryDict):
+            request.data._mutable = True
+        request.data['id_value'] = request.data['id_value'].upper()  # PASSPORT use Upper Case.
         return super().create(request, *args, **kwargs)
 
     def list(self, request, *args, **kwargs):

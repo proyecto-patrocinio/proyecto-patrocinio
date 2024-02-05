@@ -26,7 +26,7 @@ class Test_child(APITestCase):
             "id": 1, "birth_date": "2023-12-10", "locality": 1, "address": "avenida santa fe",
             "family_client_user": 1, 
             "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
-            "id_value": "dummy", "sex": "MALE"
+            "id_value": "DUMMY", "sex": "MALE"
         }
         request = self.factory.post(self.url, child_data)
         force_authenticate(request, user=self.user)
@@ -50,7 +50,7 @@ class Test_child(APITestCase):
             "id": 1, "birth_date": "2023-12-10", "locality" : 1,"address": "avenida santa fe",
             "family_client_user": 1,
             "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
-            "id_value": "dummy", "sex": "MALE"
+            "id_value": "DUMMY", "sex": "MALE"
         }
         url = reverse('child-list')
         request_update = self.factory.put(path=url, data=data_new, format='json', content_type=None)

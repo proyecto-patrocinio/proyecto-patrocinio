@@ -93,11 +93,13 @@ class ConsultationViewSet(viewsets.ModelViewSet):
         consultation_json = request.data
 
         # Get ID client
-        id_client = consultation_json['client']
+        id_client = consultation_json['client'].upper()  # PASSPORT use Upper Case
         with transaction.atomic():
             client = Client.objects.filter(id_value=id_client).first()
             if not client:
-                return Response(f"Error: Consultant with ID value {id_client} not Found.", status=404)
+                mns = f"Error: Consultant with ID value {id_client} not Found."
+                logger.error(mns)
+                return Response(mns, status=404)
             consultation_json["client"] = client.id
 
             serializer = ConsultationCreateSerializer(data=consultation_json)
