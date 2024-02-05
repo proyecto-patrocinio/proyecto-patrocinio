@@ -5,7 +5,7 @@
 Generar un entorno virtual como por ejemplo con "conda" para python 3.11.
 
 ```bash
-Conda create -n patrocinio python=3.11
+conda create -n patrocinio python=3.11
 conda activate patrocinio
 ```
 
