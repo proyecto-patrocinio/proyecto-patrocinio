@@ -78,7 +78,8 @@ const CalendarView = ({cardID}) => {
         end: moment(selectedDates.end).toDate(),
       };
       try {
-        await createEvent(newEvent);
+        const response = await createEvent(newEvent);
+        newEvent.id = response.id;
         setEvents([...events, newEvent]);
         setNewEventData(null);
         setOpenNewDate(false);
@@ -138,7 +139,7 @@ const CalendarView = ({cardID}) => {
             <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Description: ${selectedEvent.description}`}</Typography>
             <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Start: ${selectedEvent.start.toLocaleString()}`}</Typography>
             <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`End: ${selectedEvent.end.toLocaleString()}`}</Typography>
-            <IconButton aria-label="create" color="primary" onClick={handleDeletedEvent}>
+            <IconButton aria-label="delete-event-button" color="primary" onClick={handleDeletedEvent}>
               <DeleteIcon />
             </IconButton>
           </Paper>
