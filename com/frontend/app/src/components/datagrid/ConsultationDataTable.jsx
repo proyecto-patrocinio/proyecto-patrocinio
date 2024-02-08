@@ -51,7 +51,8 @@ const ConsultationDataTable = ({data}) => {
      */
     const formatConsultation = (ConsultationData) => {
       let consultationFormatted = ConsultationData
-      const formatID = clientDNI2ID[ConsultationData['client']];
+      const clientIDValue = ConsultationData['client'].toUpperCase()  // PASSPORT use Upper Case
+      const formatID = clientDNI2ID[clientIDValue];
       consultationFormatted.client = formatID;
       return consultationFormatted;
     };
@@ -88,7 +89,7 @@ const ConsultationDataTable = ({data}) => {
         { field: 'description', headerName: 'Description', width: 200, editable: true },
         { field: 'opponent', headerName: 'Opponent', width: 150, editable: true },
         { field: 'tag', headerName: 'Tag', width: 150, editable: true },
-        { field: 'client','type': 'number', headerName: 'Client', width: 100, editable: true,
+        { field: 'client', headerName: 'Client', width: 100, editable: true,
           valueGetter: ({ value }) => clientID2DNI[value],
         },
   ];

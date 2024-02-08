@@ -58,7 +58,7 @@ def load_child(self, id, birth_date, locality, address, family_client_user):
         "id": id, "birth_date": birth_date,"locality" : locality,"address": address,
         "family_client_user": family_client_user,
         "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
-        "id_value": "dummy", "sex": "MALE"
+        "id_value": "DUMMY", "sex": "MALE"
     }
     url= reverse('child-list')
     request = self.factory.post(url, child_data)
@@ -102,7 +102,7 @@ def load_dummy_client(self):
         "id": 1, "postal": 1212, "address": "avenida santa fe",
         "marital_status": 'SINGLE',
         "housing_type": 'HOUSE', "studies": 'INCOMPLETE_PRIMARY', "locality": 1, "email": 'dummy@dummy.com',
-        "id_type": 'PASSPORT', "id_value": "dummy", "first_name": "dummy_name", "last_name": "dummy_last_name",
+        "id_type": 'PASSPORT', "id_value": "DUMMY", "first_name": "dummy_name", "last_name": "dummy_last_name",
         "birth_date": '1995-10-10', "sex": 'MALE',
     }
     request = self.factory.post(self.url, clients_data)
