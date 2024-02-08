@@ -22,7 +22,7 @@ import AlertSnackbar from '../AlertSnackbar';
  */
 export function EditToolbar({setRows, setRowModesModel, emptyRecord, setIsAnyRowEditing, canCreateRow, preProcessEdit=()=>{}}) {
   const [alertMessage, setAlertMessage] = React.useState(null);
-
+  const today = new Date().toISOString();
   const handleClick = () => {
     if(canCreateRow){
       preProcessEdit();
@@ -45,7 +45,7 @@ export function EditToolbar({setRows, setRowModesModel, emptyRecord, setIsAnyRow
       </Button>
       <GridToolbarExport
       csvOptions={{
-        fileName: 'clientsDataBase',
+        fileName: `data_table_${today}`,
         delimiter: ';',
         utf8WithBom: true,
       }} />
