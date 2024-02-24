@@ -14,16 +14,7 @@ function Copyright(props) {
       >
         Case Management System
       </Link>{' '}
-      by{' '}
-      <Link
-        href="https://github.com/prietojulii"
-        target="_blank"
-        rel="noopener noreferrer"
-        color="inherit"
-      >
-        J. Prieto
-      </Link>{' '}
-      is licensed under MIT ©
+      is licensed under MIT © 2024
     </Typography>
   );
 };
