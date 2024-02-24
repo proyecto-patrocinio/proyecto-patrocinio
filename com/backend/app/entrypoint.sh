@@ -20,7 +20,7 @@ migrations=$(python manage.py showmigrations --list | grep "\[ \]")
 if [ -n "$migrations" ]; then
 echo "Pending migrations found, applying..."
 #migrations
-python manage.py makemigrations 
+python manage.py makemigrations
 python manage.py flush --no-input # WARNING: Delete all data of database
 python manage.py migrate
 python manage.py collectstatic --no-input --clear

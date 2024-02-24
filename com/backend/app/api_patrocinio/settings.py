@@ -208,6 +208,7 @@ EMAIL_PORT = 587
 ACCOUNT_LOGIN_ATTEMPTS_LIMIT = 5
 ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 300
 
+
 # CORS- Cross-Origin
 # https://pypi.org/project/django-cors-headers/
 
