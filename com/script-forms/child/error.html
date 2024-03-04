@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error al Enviar Formulario de Información Familiar</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #d9534f;
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        .error-message {
+            color: #d9534f;
+            font-weight: bold;
+        }
+        .error-details {
+        font-family: 'Courier New', monospace;
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 10px;
+        border: 1px solid #f5c6cb;
+        border-radius: 5px;
+        white-space: pre-wrap;
+      }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Error al Enviar Formulario de Información Familiar</h2>
+        <p>Hola, lamentamos informarte que la solicitud de registro para su hijo/a '<?= firstname ?> <?= lastname ?>' al Patrocinio Jurídico Gratuito de la UBA no se procesó correctamente.</p>
+       
+        <p class="error-message">Ocurrió un error durante el envío del formulario: </p>
+        <pre class="error-details"><?= error ?></pre>
+
+        <p>Por favor, inténtelo de nuevo más tarde.</p>
+        <br/>
+        <a href="https://forms.gle/NS3uiEWXdPisQ1eC6">Formulario de Información Familiar: https://forms.gle/NS3uiEWXdPisQ1eC6</a>
+
+        <!-- Nota de Seguridad -->
+        <p class="security-note">Para garantizar su seguridad, nunca le solicitaremos iniciar sesión ni solicitaremos contraseñas, información bancaria o archivos importantes por correo electrónico.</p>
+        
+        <!-- Firma Profesional -->
+        <p class="signature">Atentamente,<br>Equipo del Proyecto Patrocinio Jurídico<br>Universidad de Buenos Aires</p>
+    
+    </div>
+</body>
+</html>
