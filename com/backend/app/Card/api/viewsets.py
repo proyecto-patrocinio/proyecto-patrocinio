@@ -3,6 +3,7 @@ from Card.models import Card
 from rest_framework import viewsets
 from django.db.models import Count
 from User.permissions import CheckGroupPermission
+from Notification.consummers import send_sync_group_message, BOARD_BASE_GROUP_NAME
 
 
 class CardViewSet(viewsets.ModelViewSet):
@@ -18,3 +19,13 @@ class CardViewSet(viewsets.ModelViewSet):
         """
         self.serializer_class = CardCreateSerializer
         return super().create(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        destiny_panel = request.data["panel"]
+        if destiny_panel:
+            # Move card to other panel in the same board.
+            send_sync_group_message(
+                f"{BOARD_BASE_GROUP_NAME}{self.get_object().panel.board.id}",
+                f"Changes occurred in the '{self.get_object().tag}' card."
+            )
+        return super().partial_update(request, *args, **kwargs)

@@ -166,6 +166,10 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 f"{BOARD_BASE_GROUP_NAME}{destiny_board_id}",
                 f"Request Consultation '{consultation.tag}' was created for '{board}' board."
             )
+            send_sync_group_message(
+                CONSULTANCY_GROUP_NAME,
+                f"Request Consultation '{consultation.tag}' was created for '{board}' board."
+            )
         else:
             logger.error(f"Error creating consultation with ID {consultation_id}.")
             logger.debug(f"Response: {response.data}")
@@ -194,6 +198,10 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
             send_sync_group_message(
                 f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
+                f"Request Consultation '{consultation.tag}' was deleted for '{destiny_board}' board."
+            )
+            send_sync_group_message(
+                CONSULTANCY_GROUP_NAME,
                 f"Request Consultation '{consultation.tag}' was deleted for '{destiny_board}' board."
             )
         else:

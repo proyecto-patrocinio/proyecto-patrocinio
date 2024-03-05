@@ -20,7 +20,7 @@ import CalendarView from './CalendarView.jsx';
  */
 const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
     const [windowNumber, setWindowNumber] = useState(0);
-
+    const isCard = Boolean(consultation?.panel);  // If it's a card type, it includes a calendar; standalone consultations do not have a calendar.
     /**
      * Close the dialog.
      */
@@ -50,7 +50,9 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
         >
             <BottomNavigationAction label="Info" icon={<InfoIcon />} />
             <BottomNavigationAction label="Comments" icon={<CommentIcon />} />
-            <BottomNavigationAction label="Calendar" icon={<CalendarMonthIcon />} />
+            <BottomNavigationAction label="Calendar" disabled={!isCard}
+                icon={isCard ? <CalendarMonthIcon/> : <CalendarMonthIcon color={'disabled'}/>}
+            />
         </BottomNavigation>
 
 
