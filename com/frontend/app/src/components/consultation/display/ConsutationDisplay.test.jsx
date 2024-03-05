@@ -24,7 +24,7 @@ describe('ConsutationDisplay Component', () => {
     // Render the component
     render(
       <ConsutationDisplay
-        consultation={{ consultation: 1, id: 1 }}
+        consultation={{ consultation: 1, id: 1, panel: 1}}
         open={true}
         onClose={() => {}}
         updateViewTag={() => {}}
