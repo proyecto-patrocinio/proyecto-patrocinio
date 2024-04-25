@@ -49,11 +49,11 @@ const TutorialModal = ({ open, handleClose }) => {
     };
 
     const steps = [
-        'On the left, you will find the dropdown menu to switch pages.',
-        'Settings: This page allows you to view and change user information.',
-        'Consultancy: This page allows case takers to create, submit, and manage cases.',
-        'Control Panel: On this page, you can view client and consultation information in a table format.',
-        'Board: Here, you will find a list of the boards you have access to. In each board, professors can record case progress.',
+        'A la izquierda, encontrarás el menú desplegable para cambiar de páginas.',
+        'Configuración: Esta página te permite ver y cambiar la información del usuario.',
+        'Consultoría: Esta página permite a los responsables de casos crear, enviar y gestionar casos.',
+        'Panel de Control: En esta página, puedes ver la información de clientes y consultas en formato de tabla.',
+        'Tablero: Aquí encontrarás una lista de los tableros a los que tienes acceso. En cada tablero, los profesores pueden registrar el progreso de los casos.',
     ];
 
     return (

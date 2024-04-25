@@ -18,7 +18,7 @@ export default function ControlPanelClient( ) {
 
     return (
         <ThemeProvider theme={theme}>
-            <Dashboard title={"CONTROL PANEL - CLIENTS"}>
+            <Dashboard title={"PANEL DE CONTROL - CONSULTANTES"}>
             <ClientDataTable data={clientList} />
             </Dashboard>
         </ThemeProvider>

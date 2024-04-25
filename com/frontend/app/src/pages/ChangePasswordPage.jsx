@@ -43,7 +43,7 @@ function ChangePasswordPage() {
 
         if (password !== confirmPassword) {
             setSuccess(false);
-            setAlertMessage("Passwords do not match");
+            setAlertMessage("Las contraseñas no coinciden");
             return;
         }
 
@@ -72,7 +72,7 @@ function ChangePasswordPage() {
                         <LockOpenIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Change Password
+                        Cambiar Contraseña
                     </Typography>
                     <Box component="form" onSubmit={handlePasswordChangeSubmit}>
                         <TextField
@@ -80,7 +80,7 @@ function ChangePasswordPage() {
                             required
                             fullWidth
                             name="password"
-                            label="New Password"
+                            label="Nueva contraseña"
                             type="password"
                             variant="outlined"
                             value={password}
@@ -91,7 +91,7 @@ function ChangePasswordPage() {
                             required
                             fullWidth
                             name="confirmPassword"
-                            label="Confirm New Password"
+                            label="Confirmar nueva contraseña"
                             type="password"
                             variant="outlined"
                             value={confirmPassword}
@@ -104,12 +104,12 @@ function ChangePasswordPage() {
                             color="primary"
                             disabled={isButtonDisabled}
                         >
-                            {isButtonDisabled ? 'The password was changed' : 'Change Password'}
+                            {isButtonDisabled ? 'La contraseña ha sido cambiada' : 'Cambiar contraseña'}
                         </Button>
                         <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
                             <Grid item>
                                 <Link href={PATH_ROOT} variant="body2">
-                                    Back to Home
+                                    Volver al inicio
                                 </Link>
                             </Grid>
                         </Grid>
