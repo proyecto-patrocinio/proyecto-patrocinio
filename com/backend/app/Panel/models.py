@@ -14,3 +14,7 @@ class Panel(models.Model):
     )
     def __str__(self):
         return f'{self.title}_{self.board}'
+
+    class Meta:
+        verbose_name_plural = "Paneles"
+        verbose_name = "Panel"

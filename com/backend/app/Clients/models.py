@@ -27,6 +27,10 @@ class Client(Person):
     def __str__(self) -> str:
         return f'{self.last_name} {self.first_name}'
 
+    class Meta:
+        verbose_name_plural = "Consultantes"
+        verbose_name = "Consulta"
+
 class Patrimony(models.Model):
     id = models.OneToOneField(Client, on_delete=models.CASCADE, related_name="patrimony", primary_key=True)
     employment = models.CharField(max_length=45, verbose_name='Employment')
@@ -41,8 +45,8 @@ class Patrimony(models.Model):
         return f'{self.client}_{self.employment}'.replace(" ","-")
 
     class Meta:
-        verbose_name_plural = "Patrimonies"
-
+        verbose_name_plural = "Patrimonios"
+        verbose_name = "Patrimonio"
 
 class Family(models.Model):
     id = models.OneToOneField( Client, on_delete=models.CASCADE, related_name="family", primary_key=True)
@@ -52,8 +56,8 @@ class Family(models.Model):
         return f'{self.partner_salary}'
 
     class Meta:
-        verbose_name_plural = "Families"
-
+        verbose_name_plural = "Familias"
+        verbose_name = "Familia"
 
 class Child(Person):
     id_value = models.CharField( blank=False, null=False, max_length=20, verbose_name='Document value')
@@ -63,8 +67,8 @@ class Child(Person):
         return f"{self.first_name}_{self.last_name}"
 
     class Meta:
-        verbose_name_plural = "Children"
-
+        verbose_name_plural = "Hijos"
+        verbose_name = "Hijo"
 
 class Tel(models.Model):
     id = models.AutoField( primary_key=True)
@@ -73,3 +77,7 @@ class Tel(models.Model):
 
     def __str__(self) -> str:
         return f'{self.phone_number}'
+
+    class Meta:
+        verbose_name_plural = "Teléfonos"
+        verbose_name = "Teléfono"

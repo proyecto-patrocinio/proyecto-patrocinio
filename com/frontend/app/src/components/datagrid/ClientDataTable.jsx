@@ -260,7 +260,7 @@ function ClientDataTable({ data }) {
         { value: 'INCOMPLETE_TERTIARY', label: 'Terciario incompleto' },
         { value: 'COMPLETE_TERTIARY', label: 'Terciario completo' },
         { value: 'INCOMPLETE_UNIVERSITY', label: 'Universidad incompleta' },
-        { value: 'COMPLETE_UNIVERSITY', label: 'Univercidad Completa' }
+        { value: 'COMPLETE_UNIVERSITY', label: 'Univercidad completa' }
       ]
     },
     { field: 'email', headerName: 'Email', width: 200, editable: true },
@@ -348,7 +348,7 @@ function ClientDataTable({ data }) {
             startIcon={<LocalPhoneIcon />}
             onClick={() => setIsPhoneNumbersDialogOpen(true)}
           >
-          Manage Tels
+          Editar Tel
           </Button>
           <PhoneNumbersDialog
             open={isPhoneNumbersDialogOpen}
@@ -366,17 +366,17 @@ function ClientDataTable({ data }) {
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('salary'),},
     { field: 'patrimony.other_income', headerName: 'Otros ingresos', width: 110, editable: true,
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('other_income'),},
-    { field: 'patrimony.amount_other_income', headerName: 'Ingreso por otros ingresos', width: 120, editable: true, 'type': 'number',
+    { field: 'patrimony.amount_other_income', headerName: 'Ingreso por otros ingresos', width: 130, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_other_income'),},
-    { field: 'patrimony.amount_retirement', headerName: 'Ingreso por jubilación', width: 100, editable: true, 'type': 'number',
+    { field: 'patrimony.amount_retirement', headerName: 'Ingreso por jubilación', width: 130, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_retirement'),},
-    { field: 'patrimony.amount_pension', headerName: 'Ingreso por pensión', width: 110, editable: true, 'type': 'number',
+    { field: 'patrimony.amount_pension', headerName: 'Ingreso por pensión', width: 120, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_pension'),},
     { field: 'patrimony.vehicle', headerName: 'Vehiculos', width: 120, editable: true,
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('vehicle'),},
 
       //FAMILY
-      { field: 'family.partner_salary', headerName: 'Salario de la pareja', width: 100, editable: true,
+      { field: 'family.partner_salary', headerName: 'Salario de la pareja', width: 125, editable: true,
         type: 'number', valueGetter: getSubField, valueSetter: setSubFamilyField('partner_salary'),},
       { field: 'family.children', headerName: 'Hijos', editable: true, width: 180,
       valueGetter: getSubField,
@@ -390,7 +390,7 @@ function ClientDataTable({ data }) {
               startIcon={<FamilyRestroomIcon />}
               onClick={() => setIsFamilyDialogOpen(true)}
             >
-              Administrar Familia
+              Editar Familia
             </Button>
             <ChildrenDialog
               open={isFamilyDialogOpen}

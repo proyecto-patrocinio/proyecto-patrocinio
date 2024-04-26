@@ -32,6 +32,10 @@ class Consultation(models.Model):
     def __str__(self):
         return f'{self.client}/{self.id}/{self.tag}'.replace(" ", "_")
 
+    class Meta:
+        verbose_name_plural = "Consultas"
+        verbose_name = "Consulta"
+
 
 class RequestConsultation(models.Model):
 
@@ -52,8 +56,8 @@ class RequestConsultation(models.Model):
     )
 
     class Meta:
-        verbose_name = ("RequestConsultation")
-        verbose_name_plural = ("Request Consultations")
+        verbose_name = ("Solicitud de Consulta")
+        verbose_name_plural = ("Solicitudes de Consultas")
 
     def __str__(self):
         return f'req_consultation/{self.consultation}'.replace(" ", "_")

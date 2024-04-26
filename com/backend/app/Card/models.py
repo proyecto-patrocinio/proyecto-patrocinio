@@ -24,3 +24,5 @@ class Card(models.Model):
 
     class Meta:
         ordering = ['tag']
+        verbose_name_plural = "Tarjetas"
+        verbose_name = "Tarjetas"
