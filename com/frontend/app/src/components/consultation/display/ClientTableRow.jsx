@@ -40,7 +40,7 @@ const ClientTableRow = ({clientID}) => {
     if (clientData == null) {
         return (
             <TableRow>
-                <TableCell>Client:</TableCell>
+                <TableCell>Consultante:</TableCell>
                 <TableCell>{"-"}</TableCell>
             </TableRow>
         );
@@ -54,33 +54,33 @@ const ClientTableRow = ({clientID}) => {
     return (
 
         <TableRow>
-        <TableCell>Client:</TableCell>
+        <TableCell>Consultante:</TableCell>
         <TableCell>
         {isExpanded ? (
             <div>
 
                 <TableRow>
-                <TableCell>First Name:</TableCell>
+                <TableCell>Nombre:</TableCell>
                 <TableCell>{clientData.first_name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Last Name:</TableCell>
+                <TableCell>Apellido:</TableCell>
                 <TableCell>{clientData.last_name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>ID Type:</TableCell>
+                <TableCell>Tipo de documento:</TableCell>
                 <TableCell>{clientData.id_type}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>ID Value:</TableCell>
+                <TableCell>Num. de documento:</TableCell>
                 <TableCell>{clientData.id_value}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Sex:</TableCell>
+                <TableCell>Sexo:</TableCell>
                 <TableCell>{clientData.sex}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Birthdate:</TableCell>
+                <TableCell>Nacimiento:</TableCell>
                 <TableCell>{clientData.birth_date}</TableCell>
                 </TableRow>
                 <TableRow>
@@ -90,7 +90,7 @@ const ClientTableRow = ({clientID}) => {
                 <FamilyTableRow clientData={clientData}/>
 
                 <TableRow>
-                <TableCell>Telephones:</TableCell>
+                <TableCell>Teléfono:</TableCell>
                 <TableCell>
                 {clientData.tels.length > 0 ? (
                     <ul>
@@ -105,68 +105,68 @@ const ClientTableRow = ({clientID}) => {
                 </TableRow>
 
                 <TableRow>
-                <TableCell>Nationality:</TableCell>
+                <TableCell>Nacionalidad:</TableCell>
                 <TableCell>{clientData.locality.province.nationality.name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>province:</TableCell>
+                <TableCell>Provincia:</TableCell>
                 <TableCell>{clientData.locality.province.name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Locality:</TableCell>
+                <TableCell>Localidad:</TableCell>
                 <TableCell>{clientData.locality.name}</TableCell>
                 </TableRow>
 
                 <TableRow>
-                <TableCell>Address:</TableCell>
+                <TableCell>Dirección:</TableCell>
                 <TableCell>{clientData.address}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Postal Code:</TableCell>
+                <TableCell>Código postal:</TableCell>
                 <TableCell>{clientData.postal}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Marital Status:</TableCell>
+                <TableCell>Estado civil:</TableCell>
                 <TableCell>{clientData.marital_status}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Housing Type:</TableCell>
+                <TableCell>Vivienda:</TableCell>
                 <TableCell>{clientData.housing_type}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Studies:</TableCell>
+                <TableCell>Estudios:</TableCell>
                 <TableCell>{clientData.studies}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Patrimony:</TableCell>
+                <TableCell>Patrimonio:</TableCell>
                 <TableCell>
                 <ul>
                     <li key={1}>
-                    <strong>Employment: </strong>
+                    <strong>Empleo: </strong>
                     {clientData?.patrimony?.employment}
                     </li>
                     <li key={2}>
-                    <strong>Salary: </strong>
+                    <strong>Salario: </strong>
                     {clientData?.patrimony?.salary}
                     </li>
                     <li key={3}>
-                    <strong>Other Income: </strong>
+                    <strong>Otros ingresos: </strong>
                     {clientData?.patrimony?.other_income}
                     </li>
                     <li key={4}>
-                    <strong>Amount Other Income: </strong>
+                    <strong>Ingreso por otros ingresos: </strong>
                     {clientData?.patrimony?.amount_other_income}
                     </li>
                     <li key={5}>
-                    <strong>Amount Retirement: </strong>
+                    <strong>Ingreso por jubilación: </strong>
                     {clientData?.patrimony?.amount_retirement}
                     </li>
                     <li key={6}>
-                    <strong>Amount Pension: </strong>
+                    <strong>Ingreso por pensión: </strong>
                     {clientData?.patrimony?.amount_pension}
                     </li>
                     <li key={7}>
-                    <strong>Vehicle: </strong>
+                    <strong>Vehículo: </strong>
                     {clientData?.patrimony?.vehicle}
                     </li>
                 </ul>

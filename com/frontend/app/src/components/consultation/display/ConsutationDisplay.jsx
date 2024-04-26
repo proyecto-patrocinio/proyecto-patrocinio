@@ -32,7 +32,7 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
     return (
         <Dialog fullWidth={true} maxWidth={'md'} open={open} onClose={handleClose} >
         <DialogTitle variant="h5" sx={{ textAlign: 'center' }}>
-            Consultation Details
+            Detalle de Consulta
         </DialogTitle>
         <BottomNavigation
             sx={{
@@ -49,8 +49,8 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
             }}
         >
             <BottomNavigationAction label="Info" icon={<InfoIcon />} />
-            <BottomNavigationAction label="Comments" icon={<CommentIcon />} />
-            <BottomNavigationAction label="Calendar" disabled={!isCard}
+            <BottomNavigationAction label="Comentarios" icon={<CommentIcon />} />
+            <BottomNavigationAction label="Calendario" disabled={!isCard}
                 icon={isCard ? <CalendarMonthIcon/> : <CalendarMonthIcon color={'disabled'}/>}
             />
         </BottomNavigation>

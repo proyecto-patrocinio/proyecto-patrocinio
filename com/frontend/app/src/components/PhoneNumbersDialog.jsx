@@ -52,7 +52,7 @@ function PhoneNumbersDialog({ open, onClose, phoneNumbers, onUpdatePhoneNumbers 
         </List>
         <div style={{ display: 'flex', alignItems: 'center' }}>
           <TextField
-            label="Add Phone Number"
+            label="Agregar Teléfono"
             fullWidth
             value={newPhoneNumber}
             onChange={(e) => setNewPhoneNumber(e.target.value)}

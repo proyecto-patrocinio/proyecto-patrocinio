@@ -23,20 +23,20 @@ describe('ConsutationInfoView Component', () => {
   test('renders and allows editing fields', async () => {
     const component = render(<ConsutationInfoView consultation={{ consultation: 1 }} />);
 
-    await waitFor(() => expect(screen.getByText('Tag:')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Etiqueta:')).toBeInTheDocument());
 
     // Check if the initial consultation data is rendered
-    expect(screen.getByText('Tag:')).toBeInTheDocument();
+    expect(screen.getByText('Etiqueta:')).toBeInTheDocument();
     expect(screen.getByText('Test Tag')).toBeInTheDocument();
-    expect(screen.getByText('Opponent:')).toBeInTheDocument();
+    expect(screen.getByText('Oponente:')).toBeInTheDocument();
     expect(screen.getByText('Test Opponent')).toBeInTheDocument();
-    expect(screen.getByText('Availability State:')).toBeInTheDocument();
+    expect(screen.getByText('Estado de disponibilidad:')).toBeInTheDocument();
     expect(screen.getByText('Available')).toBeInTheDocument();
-    expect(screen.getByText('Progress State:')).toBeInTheDocument();
+    expect(screen.getByText('Estado de progreso:')).toBeInTheDocument();
     expect(screen.getByText('TODO')).toBeInTheDocument();
-    expect(screen.getByText('Description:')).toBeInTheDocument();
+    expect(screen.getByText('Descripción:')).toBeInTheDocument();
     expect(screen.getByText('Test Description')).toBeInTheDocument();
-    expect(screen.getByText('Creation time stamp (UTC):')).toBeInTheDocument();
+    expect(screen.getByText('Tiempo de creación (UTC):')).toBeInTheDocument();
 
     // Change the value in the edit field
     fireEvent.click(component.container.querySelector("tr:nth-of-type(6) [data-testid='EditIcon']"));

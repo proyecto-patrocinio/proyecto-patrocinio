@@ -46,7 +46,7 @@ const Board = ({id}) => {
       const board_data = await getDataBoard(id);
       const inputPanel = { 
         'id': PANEL_INPUT_REQUEST_CARDS_ID,
-        'title': 'New Requests',
+        'title': 'Nueva Solicitud',
         'cards': board_data.request_consultations
       }
       board_data.panels.unshift(inputPanel)
@@ -91,7 +91,7 @@ const Board = ({id}) => {
 
     if(idDestinyPanel === PANEL_INPUT_REQUEST_CARDS_ID){
       // It's not possible to move a card to the input panel.
-      console.error("Unable to send a card to input request.")
+      console.error("No se puede enviar una tarjeta al panel de solicitud de entrada.")
       setShowAlert(true)
       setTimeout(() => {
         setShowAlert(false);

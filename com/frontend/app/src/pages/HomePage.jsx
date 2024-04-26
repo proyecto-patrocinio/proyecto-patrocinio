@@ -52,7 +52,7 @@ const TutorialModal = ({ open, handleClose }) => {
         'A la izquierda, encontrarás el menú desplegable para cambiar de páginas.',
         'Configuración: Esta página te permite ver y cambiar la información del usuario.',
         'Consultoría: Esta página permite a los responsables de casos crear, enviar y gestionar casos.',
-        'Panel de Control: En esta página, puedes ver la información de clientes y consultas en formato de tabla.',
+        'Panel de Control: En esta página, puedes ver la información de consultantes y consultas en formato de tabla.',
         'Tablero: Aquí encontrarás una lista de los tableros a los que tienes acceso. En cada tablero, los profesores pueden registrar el progreso de los casos.',
     ];
 
@@ -69,19 +69,19 @@ const TutorialModal = ({ open, handleClose }) => {
             <Fade in={open}>
                 <Paper sx={{ padding: 4, maxWidth: 400, margin: 'auto', textAlign: 'center' }}>
                     <Typography variant="h6" gutterBottom>
-                        Welcome to the Tutorial!
+                       ¡Bienvenido al tutorial!
                     </Typography>
                     <Typography variant="body1" paragraph>
-                        <strong>Step {step}:</strong> {steps[step - 1]}
+                        <strong>Paso {step}:</strong> {steps[step - 1]}
                     </Typography>
                     {step < steps.length && (
                         <Button variant="contained" color="secondary" onClick={handleNextStep}>
-                            Next
+                            Siguiente
                         </Button>
                     )}
                     {step === steps.length && (
                         <Button variant="contained" color="secondary" onClick={handleStart}>
-                            Start
+                            Comenzar
                         </Button>
                     )}
                 </Paper>
@@ -107,57 +107,57 @@ const HomePage = () => {
                 <Box sx={{ m: 4, maxWidth: '800px', margin: 'auto', display: 'flex', flexDirection: 'column' }}>
                     <Typography variant="h4" gutterBottom>
                         <InfoIcon fontSize="inherit" style={{ verticalAlign: 'middle', marginRight: '1rem', color: '#4285F4' }} />
-                        Case Management System
+                        Sistema de Gestión de Casos
                     </Typography>
                     <Typography variant="body1" gutterBottom>
                     <p>
                         <AssignmentIcon fontSize="inherit" style={{ verticalAlign: 'middle', marginRight: '1rem', color: '#4285F4' }} />
-                        Welcome! This platform allows lawyers and law professors to efficiently manage legal cases.
+                        ¡Bienvenido! Esta plataforma permite a abogados y profesores de derecho gestionar eficientemente casos legales.
                     </p>
                     <p>
-                        CaseManager is a comprehensive tool designed to simplify and optimize case management in academic and professional environments.
+                        Esta herramienta esta diseñada para simplificar y optimizar la gestión de casos en entornos académicos y profesionales.
                         <br/>
-                        <strong>Main Features:</strong>
+                        <strong>Principales Características:</strong>
                         <ol>
                             <li>
-                                <strong>Client and Case Management:</strong>
+                                <strong>Gestión de Consultas y Consultantes:</strong>
                                 <ul>
-                                    <li>Case handlers can easily add clients and specific details for each case, ensuring clear and complete data entry.</li>
-                                    <li>The intuitive interface allows quick recording of essential information, such as key dates, client details, and detailed case descriptions.</li>
+                                    <li>Los gestores de casos pueden agregar fácilmente consultantes y detalles específicos para cada caso, asegurando una entrada de datos clara y completa.</li>
+                                    <li>La interfaz intuitiva permite el rápido registro de información esencial, como fechas clave, detalles del consultante y descripciones detalladas del caso.</li>
                                 </ul>
                             </li>
                             <li>
-                                <strong>Commission Board:</strong>
+                                <strong>Junta de Comisión:</strong>
                                 <ul>
-                                    <li>Cases can be submitted to a commission board, where professors and commission heads have an overview of all pending cases.</li>
-                                    <li>Effective organization facilitates quick review and assignment of cases to the respective responsible parties.</li>
+                                    <li>Los casos pueden ser enviados a una junta de comisión, donde profesores y jefes de comisión tienen una visión general de todos los casos pendientes.</li>
+                                    <li>La organización efectiva facilita la rápida revisión y asignación de casos a las partes responsables respectivas.</li>
                                 </ul>
                             </li>
                             <li>
-                                <strong>Approval and Rejection:</strong>
+                                <strong>Aprobación y Rechazo:</strong>
                                 <ul>
-                                    <li>Professors and commission heads can review assigned cases, make informed decisions, and efficiently approve or reject each request.</li>
-                                    <li>Automatic notifications keep all users updated on the status of their cases.</li>
+                                    <li>Profesores y jefes de comisión pueden revisar casos asignados, tomar decisiones informadas y aprobar o rechazar eficientemente cada solicitud.</li>
+                                    <li>Las notificaciones automáticas mantienen a todos los usuarios actualizados sobre el estado de sus casos.</li>
                                 </ul>
                             </li>
                             <li>
-                                <strong>Comprehensive Administration:</strong>
+                                <strong>Administración Integral:</strong>
                                 <ul>
-                                    <li>Full administration features allow users to track the status of each case, record significant changes, and maintain a detailed history of actions taken.</li>
+                                    <li>Las características de administración completa permiten a los usuarios rastrear el estado de cada caso, registrar cambios significativos y mantener un historial detallado de acciones realizadas.</li>
                                 </ul>
                             </li>
                             <li>
-                                <strong>Tracking with Comments and Files:</strong>
+                                <strong>Seguimiento con Comentarios y Archivos:</strong>
                                 <ul>
-                                    <li>The integrated comment system facilitates communication among those involved in a case, enabling clear and documented information exchange.</li>
-                                    <li>Relevant files can be attached to support shared information.</li>
+                                    <li>El sistema de comentarios integrado facilita la comunicación entre los involucrados en un caso, permitiendo un intercambio de información claro y documentado.</li>
+                                    <li>Se pueden adjuntar archivos relevantes para respaldar la información compartida.</li>
                                 </ul>
                             </li>
                             <li>
-                                <strong>Table Format Visualization:</strong>
+                                <strong>Visualización en Formato de Tabla:</strong>
                                 <ul>
-                                    <li>All cases and clients are presented in a clear and organized table format, providing an easily understandable overview.</li>
-                                    <li>Filtering and search functions make it easy to locate specific information.</li>
+                                    <li>Todas las consultas (casos) y coonsultantes se presentan en un formato de tabla claro y organizado, proporcionando una visión general fácilmente comprensible.</li>
+                                    <li>Las funciones de filtrado y búsqueda facilitan la ubicación de información específica.</li>
                                 </ul>
                             </li>
                         </ol>
@@ -165,13 +165,13 @@ const HomePage = () => {
 
                     </Typography>
                     <Button variant="contained" color="secondary" sx={{ width: 'fit-content' }} onClick={handleTutorialOpen}>
-                        Start
+                        Comenzar
                     </Button>
                     <TutorialModal open={tutorialOpen} handleClose={handleTutorialClose} />
                     </Box>
             </Dashboard>
         </ThemeProvider>
     );
-};
+}
 
 export default HomePage;

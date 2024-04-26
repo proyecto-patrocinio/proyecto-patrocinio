@@ -57,7 +57,7 @@ export default function BaseGrid({
 
     const handleEditClick = (id) => () => {
         if ((!isMultipleEdition) && isAnyRowEditing) {
-                setAlertMessage("There is already a record in editing.");
+                setAlertMessage("Ya existe un registro en edición.");
                 return;
         }
         setIsAnyRowEditing(true);
@@ -116,7 +116,7 @@ export default function BaseGrid({
         {
             field: 'actions',
             type: 'actions',
-            headerName: 'Actions',
+            headerName: 'Acciones',
             width: 100,
             cellClassName: 'actions',
             getActions: ({ id }) => {
@@ -126,7 +126,7 @@ export default function BaseGrid({
                 return [
                 <GridActionsCellItem
                     icon={<SaveIcon />}
-                    label="Save"
+                    label="Guardar"
                     sx={{
                     color: 'primary.main',
                     }}
@@ -134,7 +134,7 @@ export default function BaseGrid({
                 />,
                 <GridActionsCellItem
                     icon={<CancelIcon />}
-                    label="Cancel"
+                    label="Cancelar"
                     className="textPrimary"
                     onClick={handleCancelClick(id)}
                     color="inherit"
@@ -145,14 +145,14 @@ export default function BaseGrid({
             return [
                 <GridActionsCellItem
                 icon={<EditIcon />}
-                label="Edit"
+                label="Editar"
                 className="textPrimary"
                 onClick={handleEditClick(id)}
                 color="inherit"
                 />,
                 <GridActionsCellItem
                 icon={<DeleteIcon />}
-                label="Delete"
+                label="Eliminar"
                 onClick={handleDeleteClick(id)}
                 color="inherit"
                 />,

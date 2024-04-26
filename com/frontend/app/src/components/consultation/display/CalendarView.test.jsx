@@ -28,12 +28,12 @@ describe('CalendarView', () => {
   test('renders the component', async () => {
     render(<CalendarView cardID={1} />);
     // Assertions based on component's rendering
-    expect(screen.getByText('Today')).toBeInTheDocument();
-    expect(screen.getByText('Next')).toBeInTheDocument();
-    expect(screen.getByText('Previous')).toBeInTheDocument();
-    expect(screen.getByText('Month')).toBeInTheDocument();
-    expect(screen.getByText('Week')).toBeInTheDocument();
-    expect(screen.getByText('Day')).toBeInTheDocument();
+    expect(screen.getByText('Hoy')).toBeInTheDocument();
+    expect(screen.getByText('Siguiente')).toBeInTheDocument();
+    expect(screen.getByText('Anterior')).toBeInTheDocument();
+    expect(screen.getByText('Mes')).toBeInTheDocument();
+    expect(screen.getByText('Semana')).toBeInTheDocument();
+    expect(screen.getByText('Día')).toBeInTheDocument();
   });
 
 

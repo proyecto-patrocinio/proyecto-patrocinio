@@ -58,7 +58,7 @@ const ListItemIconButton = ( {icon, text} ) => {
     }, [userContext.user.pk]);
 
   return (
-      <ListItemCollapseButton text="Boards" sub_list={boards}/>
+      <ListItemCollapseButton text="Pizarras" sub_list={boards}/>
   );
 };
 
@@ -121,7 +121,7 @@ const ListControlPanel = () => {
       <ListItemIcon>
         <TuneIcon/>
       </ListItemIcon>
-      <ListItemText primary={"Control Panel"} />
+      <ListItemText primary={"Panel de Control"} />
       {open ? <ExpandLess /> : <ExpandMore />}
     </ListItemButton>
 
@@ -159,12 +159,12 @@ const MenuListItems = ()=>{
   <List component="nav">
     <React.Fragment>
       <Link href={PATH_SETTINGS} style={{ color: 'inherit', textDecoration: 'none' }}>
-        <ListItemIconButton icon={<SettingsIcon />} text="Settings" />
+        <ListItemIconButton icon={<SettingsIcon />} text="Configuración" />
       </Link>
       {roles?.includes(CASE_TAKER_ROLE) && (
         <>
           <Link href={PATH_CONSULTANCY} style={{ color: 'inherit', textDecoration: 'none' }}>
-            <ListItemIconButton icon={<InputIcon />} text="Consultancy" />
+            <ListItemIconButton icon={<InputIcon />} text="Consultoría" />
           </Link>
           <ListControlPanel />
         </>
@@ -173,7 +173,7 @@ const MenuListItems = ()=>{
         <ListBoards />
       )}
       <Link href={PATH_LOGOUT} style={{ color: 'inherit', textDecoration: 'none' }}>
-        <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Logout"/>
+        <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Salir"/>
       </Link>
     </React.Fragment>
   </List>

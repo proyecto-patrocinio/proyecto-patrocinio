@@ -22,26 +22,26 @@ describe('ConsultationFormButton Component', () => {
     render(<ConsultationFormButton addNewConsultation={addNewConsultationMock} />);
 
     // Open the dialog
-    expect(screen.queryByText('Load New Consultation')).not.toBeInTheDocument();
+    expect(screen.queryByText('Cargar nueva consulta')).not.toBeInTheDocument();
     fireEvent.click(document.getElementById("add-icon-button"));
-    expect(screen.queryByText('Load New Consultation')).toBeInTheDocument();
+    expect(screen.queryByText('Cargar nueva consulta')).toBeInTheDocument();
     
     // Fill out the form
-    fireEvent.change(screen.getByLabelText(/Description/), {
+    fireEvent.change(screen.getByLabelText(/Descripción/), {
       target: { value: 'Test Description' },
     });
-    fireEvent.change(screen.getByLabelText(/Opponent/), {
+    fireEvent.change(screen.getByLabelText(/Oponente/), {
       target: { value: 'Test Opponent' },
     });
-    fireEvent.change(screen.getByLabelText(/Tag/), {
+    fireEvent.change(screen.getByLabelText(/Etiqueta/), {
       target: { value: 'Test Tag' },
     });
-    fireEvent.change(screen.getByLabelText(/Consultant/), {
+    fireEvent.change(screen.getByLabelText(/Consultante/), {
       target: { value: 'DNI123' }, 
     });
 
     expect(screen.getByText('Test Description')).toBeInTheDocument();
-    expect(screen.getByLabelText(/Opponent/).value).toEqual('Test Opponent');
-    expect(screen.getByLabelText(/Tag/).value).toEqual('Test Tag');
+    expect(screen.getByLabelText(/Oponente/).value).toEqual('Test Opponent');
+    expect(screen.getByLabelText(/Etiqueta/).value).toEqual('Test Tag');
   });
 });

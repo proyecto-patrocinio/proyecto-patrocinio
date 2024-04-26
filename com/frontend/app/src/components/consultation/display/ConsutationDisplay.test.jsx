@@ -31,10 +31,10 @@ describe('ConsutationDisplay Component', () => {
       />
     );
 
-    expect(screen.getByText(/Consultation Details/)).toBeInTheDocument();
+    expect(screen.getByText(/Detalle de Consulta/)).toBeInTheDocument();
     expect(screen.getByText("Info")).toBeInTheDocument();
-    expect(screen.getByText("Comments")).toBeInTheDocument();
-    expect(screen.getByText("Calendar")).toBeInTheDocument();
+    expect(screen.getByText("Comentarios")).toBeInTheDocument();
+    expect(screen.getByText("Calendario")).toBeInTheDocument();
 
     // Verify that the default window is "Info"
     expect(screen.getByTestId('info-component')).toBeInTheDocument();
@@ -42,13 +42,13 @@ describe('ConsutationDisplay Component', () => {
     expect(screen.queryByTestId('calendar-component')).toBeNull();
 
     // Switch to "Comments" window
-    fireEvent.click(screen.getByText("Comments").closest('button'));
+    fireEvent.click(screen.getByText("Comentarios").closest('button'));
     expect(screen.getByTestId('comment-component')).toBeInTheDocument();
     expect(screen.queryByTestId('info-component')).toBeNull();
     expect(screen.queryByTestId('calendar-component')).toBeNull();
 
     // Switch to "Calendar" window
-    fireEvent.click(screen.getByText('Calendar').closest('button'));
+    fireEvent.click(screen.getByText('Calendario').closest('button'));
     expect(screen.getByTestId('calendar-component')).toBeInTheDocument();
     expect(screen.queryByTestId('info-component')).toBeNull();
     expect(screen.queryByTestId('comment-component')).toBeNull();
