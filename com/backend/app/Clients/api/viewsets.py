@@ -139,7 +139,7 @@ class ClientViewSet(viewsets.ModelViewSet):
             logger.error(mns)
             return Response(mns, status=400)
 
-        send_sync_group_message(CONSULTANCY_GROUP_NAME, "A new Client has been created from form.")
+        send_sync_group_message(CONSULTANCY_GROUP_NAME, "Se ha creado un nuevo cliente a partir del formulario.")
         return Response("Success: Data processed successfully.", status=200)
 
 
