@@ -128,10 +128,10 @@ const ListControlPanel = () => {
     <Collapse in={open} timeout="auto" unmountOnExit>
       <List component="div" disablePadding>
         <Link key={"link-consult"} href={PATH_CP_CONSULT} style={{ color: 'inherit', textDecoration: 'none' }}>
-          <ListItemIconButton key={"item-consult"} text={"Consultations"}/>
+          <ListItemIconButton key={"item-consult"} text={"Consultas"}/>
         </Link>
         <Link key={"link-client"} href={PATH_CP_CLIENTS} style={{ color: 'inherit', textDecoration: 'none' }}>
-          <ListItemIconButton key={"item-client"} text={"Clients"}/>
+          <ListItemIconButton key={"item-client"} text={"Consultantes"}/>
         </Link>
       </List>
     </Collapse>

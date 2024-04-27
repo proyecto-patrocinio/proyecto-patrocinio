@@ -62,7 +62,7 @@ const ConsutationDisplay = ({consultation, open, onClose, updateViewTag }) => {
         {(windowNumber===2)&& <CalendarView cardID={consultation.consultation}/>}  {/* cardID oneToOne Consultation( primarykey ) */}
         </DialogContent>
         <Button onClick={handleClose} color="primary">
-            Close
+            Cerrar
         </Button>
         </Dialog>
     );

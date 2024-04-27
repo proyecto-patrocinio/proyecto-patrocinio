@@ -64,11 +64,11 @@ export function loginUser(dataUser, onLoginSuccess, onLoginError){
         onLoginSuccess(user);
       }
       else if( request.status !== 400 ){
-        const errorMensage = "Unable to login. Please try again later.";
+        const errorMensage = "No se puede iniciar sesión. Por favor, inténtalo de nuevo más tarde.";
         onLoginError(errorMensage);
       }
       else {
-        const errorMensage = "The username or password is incorrect.";
+        const errorMensage = "El nombre de usuario o la contraseña son incorrectos.";
         onLoginError(errorMensage);
       }
     }

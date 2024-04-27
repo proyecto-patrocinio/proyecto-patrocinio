@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -16,6 +15,7 @@ import { Snackbar } from '@mui/material';
 import { useUserContext } from '../context/UserContext';
 import {loginUser} from '../utils/user';
 import { PATH_FORGET_PASSWORD } from '../utils/constants';
+import logo from '../resources/favicon.ico'
 const theme = createTheme();
 
 export default function SignIn( props) {
@@ -85,12 +85,12 @@ export default function SignIn( props) {
             flexDirection: 'column',
             alignItems: 'center',
           }}
-        > 
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+        >
+          <Avatar sx={{ m: 3, bgcolor: 'secondary.main', width: '60px', height: '60px' }}>
+            <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography component="h1" variant="h5" align="center" color="primary" gutterBottom>
+            Sistema de Gestión de Casos
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField

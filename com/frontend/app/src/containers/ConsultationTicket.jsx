@@ -43,7 +43,7 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   return (
     <BaseTicket ticket={card} index={index} cardContentProps={cardContentProps}>
       <TicketMenu showMenu={showMenu}>
-        <MenuItem onClick={handleDeleteClick}>Delete Consultation</MenuItem>
+        <MenuItem onClick={handleDeleteClick}>Eliminar Consulta</MenuItem>
       </TicketMenu>
     </BaseTicket>
   );

@@ -12,9 +12,9 @@ function Copyright(props) {
         rel="noopener noreferrer"
         color="inherit"
       >
-        Case Management System
+        Sistema de Gestión de Casos
       </Link>{' '}
-      is licensed under MIT © 2024
+      está licenciado bajo MIT © 2024
     </Typography>
   );
 };

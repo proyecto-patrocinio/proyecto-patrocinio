@@ -12,6 +12,30 @@ import EditableChoiceRow from '../../EditableChoiceRow.jsx';
 import {formatTimestamp} from '../../../utils/tools.jsx';
 
 
+
+    // Translate the variables defined in the database based on their references in Spanish
+    const OPTION_EN_TO_ES = {
+        'CREATED': 'Creado, sin asignar',
+        'PENDING': 'Solicitud de asignación pendiente',
+        'ASSIGNED': 'Asignado',
+        'REJECTED': 'Rechazado, sin asignar',
+        'ARCHIVED': 'Archivado',
+        "TODO": "Por hacer",
+        "IN_PROGRESS": "En progreso",
+        "DONE": "Terminado",
+        "PAUSED": "Pausado",
+        "BLOCKED": "Bloqueado"
+    }
+
+    const OPTION_ES_TO_EN = {
+        "Por hacer": "TODO",
+        "En progreso": "IN_PROGRESS",
+        "Terminado": "DONE",
+        "Pausado": "PAUSED",
+        "Bloqueado": "BLOCKED"
+      };
+
+
 /**
  * Component for displaying consultation information.
  * @param {Object} consultation - Consultation data to display.
@@ -38,7 +62,6 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
         "opponent": "",
         "progress_state": "",
     });
-
 
     /**
      * Handles the click event to enable editing of a specific field.
@@ -70,9 +93,11 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 await updateConsultationField(consultationData.id, fieldKey, editedFields[fieldKey])
                 fieldsError[fieldKey] = "";
                 setFieldsError(fieldsError);
+                const editedValue = editedFields[fieldKey]
+                const englishValue = OPTION_ES_TO_EN[editedValue] || editedValue;
                 setConsultation((prevConsultation) => ({
                     ...prevConsultation,
-                    [fieldKey]: editedFields[fieldKey],
+                    [fieldKey]: englishValue,
                 }));
                 isFieldsEditing[fieldKey] = false;
                 setIsFieldsEditing(isFieldsEditing);
@@ -125,7 +150,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     setConsultation(consultationResponse)
                 }
             } catch (error) {
-                console.error("Error al recuperar la consulta.");
+                console.error("Error retrieving the consultation.");
                 console.debug(error);
             }
         };
@@ -168,20 +193,20 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 />
                 <TableRow>
                 <TableCell>Estado de disponibilidad:</TableCell>
-                <TableCell>{consultationData.availability_state}</TableCell>
+                <TableCell>{OPTION_EN_TO_ES[consultationData.availability_state]}</TableCell>
                 </TableRow>
                 <EditableChoiceRow
                     id={"edit-progress-state"}
                     title={"Estado de progreso:"}
                     isEditing={isFieldsEditing.progress_state}
-                    value={consultationData.progress_state}
+                    value={OPTION_EN_TO_ES[consultationData.progress_state] || consultationData.progress_state}
                     onEdit={handleEditClick}
                     onSave={handleSaveClick}
                     onChange={handleOnChange}
                     onCancel={handleOnCancel}
                     error={fieldsError.progress_state}
                     fieldKey={"progress_state"}
-                    options={["TODO", "IN_PROGRESS", "DONE", "PAUSED", "BLOCKED"]}
+                    options={["Por hacer", "En progreso", "Terminado", "Pausado", "Bloqueado"]}
                 />
                 <EditableFieldRow
                     id={"edit-description"}
