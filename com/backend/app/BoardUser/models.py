@@ -6,7 +6,7 @@ class BoardUser(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        verbose_name='User',
+        verbose_name='Usuario',
         related_name="boardusers",
         null=False,
     )
@@ -14,7 +14,7 @@ class BoardUser(models.Model):
     board = models.ForeignKey(
         Board,
         on_delete=models.CASCADE,
-        verbose_name='Board',
+        verbose_name='Pizarra',
         related_name="boardusers",
         null=False,
     )

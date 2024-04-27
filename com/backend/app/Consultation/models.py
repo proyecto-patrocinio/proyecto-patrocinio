@@ -9,12 +9,12 @@ class Consultation(models.Model):
     availability_state = models.CharField(
         max_length=12, choices=AVAILABILITY_STATES,
         default="CREATED",
-        verbose_name="Availability State"
+        verbose_name="Estado de disponibilidad"
     )
     progress_state = models.CharField(
         max_length=12, choices=PROGRESS_STATES,
         default="TODO",
-        verbose_name="Progress State"
+        verbose_name="Estado de progreso"
     )
     time_stamp = models.DateTimeField(auto_now_add=True)
     start_time = models.DateTimeField(null=True, blank=True)
@@ -23,7 +23,7 @@ class Consultation(models.Model):
         Client,
         on_delete=models.DO_NOTHING,  # on_delete attribute specifies the behavior to adopt when the referenced object is deleted.
         related_name="consultations",  # related_name attribute specifies the name of the reverse relation.
-        verbose_name="Client",  # from the User model back to this model.
+        verbose_name="Consultante",
         null=False
     )
     opponent = models.CharField(max_length=500)

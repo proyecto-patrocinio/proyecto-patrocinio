@@ -11,14 +11,14 @@ class Comment(models.Model):
         Consultation,
         on_delete=models.CASCADE,
         related_name="comment",
-        verbose_name="consultation",
+        verbose_name="Consulta",
         null=False
     )
     user = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
         related_name="comment",
-        verbose_name="user",
+        verbose_name="Usuario",
         null=False
     )
 
@@ -37,7 +37,7 @@ class File(models.Model):
         Comment,
         on_delete=models.CASCADE,
         related_name="files",
-        verbose_name="comment",
+        verbose_name="Comentario",
         null=False
     )
     filename = models.CharField(max_length=255, blank=False)

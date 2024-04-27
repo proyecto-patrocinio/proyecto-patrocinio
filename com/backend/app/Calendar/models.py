@@ -5,7 +5,7 @@ class Calendar(models.Model):
     id = models.AutoField(primary_key=True)
     card = models.OneToOneField(
         Card,
-        verbose_name="Card",
+        verbose_name="Tarjeta",
         on_delete=models.CASCADE,
         null=False,
         unique=True

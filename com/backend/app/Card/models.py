@@ -7,7 +7,7 @@ class Card(models.Model):
       Consultation,
       on_delete=models.CASCADE,
       related_name="card",
-      verbose_name="Consultation",
+      verbose_name="Consulta",
       primary_key=True,
     )
     tag = models.CharField(max_length=256)
