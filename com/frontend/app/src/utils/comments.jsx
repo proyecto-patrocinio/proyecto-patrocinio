@@ -24,7 +24,7 @@ export async function getCommentListByConsult(consultID) {
             const comments = await response.json();
             return comments;
         } else {
-            const mns =`Failed to fetch list of comments for the Consultation ID ${consultID}.`
+            const mns =`No se pudieron obtener la lista de comentarios para el ID de Consulta ${consultID}.`
             console.error(mns, " Status code: ", response.status);
             throw new Error(mns);
         }
@@ -64,7 +64,7 @@ export async function createComment(commentData) {
             const comment = await response.json();
             return comment;
         } else {
-            const mns = 'Failed to create a new Comment.';
+            const mns = 'No se pudo crear el comentario.';
             console.error(mns, " Status: ", response.status);
             throw new Error(mns);
         };
@@ -102,7 +102,7 @@ export async function deleteComment(commentID) {
         if (response.ok) {
             return response;
         } else {
-            const mns = 'Failed to delete Comment.'
+            const mns = 'No se pudo elimnar el comentario.'
             console.error(mns, " Status: ", response.status);
             throw new Error(mns);
         }
@@ -143,7 +143,7 @@ export async function updateComment(commentID, commentData) {
             const comment = await response.json();
             return comment;
         } else {
-            const mns = 'Failed to update a Comment.';
+            const mns = 'No se pudo actualizar el comentario.';
             console.error(mns, " Status: ", response.status);
             throw new Error(mns);
         };
@@ -181,7 +181,7 @@ export async function uploadFile(fileData) {
             const file = await response.json();
             return file;
         } else {
-            const mns = 'Failed to upload a new File.';
+            const mns = 'Falló la carga del nuevo archivo.';
             console.error(mns, " Status: ", response.status);
             console.error(mns, " Status: ", response);
             throw new Error(mns);
@@ -213,7 +213,7 @@ export async function getContentFile(fileID) {
         if (response.ok) {
             return response.text();
         } else {
-            const mns = 'Failed to get content file.'
+            const mns = 'Fallo la obtención del archivo.'
             console.error(mns, " Status: ", response.status);
             throw new Error(mns);
         }

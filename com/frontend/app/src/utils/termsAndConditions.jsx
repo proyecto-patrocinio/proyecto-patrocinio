@@ -14,7 +14,7 @@ export default async function getTerms() {
         return board;
     } else {
         console.error('Failed to fetch board:', response.status);
-        throw new Error('Failed to fetch board');
+        throw new Error('Falló la obtención de la pizarra');
     }
     } catch (error) {
     console.error('Unexpected error occurred while try to get terms: ', error);

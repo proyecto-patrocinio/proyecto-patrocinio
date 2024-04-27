@@ -28,7 +28,7 @@ export async function getDataClient(clientID) {
         return client;
       } else {
         console.error('Failed to fetch client:', response.status);
-        throw new Error('Failed to fetch client');
+        throw new Error('Falló la obtención del consultante');
       }
     } catch (error) {
       console.error('Error while try to get client:', error);
@@ -59,7 +59,7 @@ export async function getClientList() {
       return client;
     } else {
       console.error('Failed to fetch list of client:', response.status);
-      throw new Error('Failed to fetch list of client');
+      throw new Error('Falló la obtención de los consultantes');
     }
   } catch (error) {
     console.error('Error while try to get list of client:', error);
@@ -96,7 +96,7 @@ export async function createClient(clientData) {
       const client = await response.json();
       return client;
     } else {
-      const mns = 'Failed to create a new client.';
+      const mns = `No se pudo crear el consultante: ${response.content}`;
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -135,8 +135,8 @@ export async function deleteClient(clientID) {
       return response;
     } else {
       const mns = response.status === 500 ?
-      'Error Deleting Client. Are there associated consultations for this client?'
-      : 'Failed to delete client.';
+      'Error al eliminar el cliente. ¿Existen consultas asociadas para este cliente?'
+      : 'No se pudo eliminar el cliente.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     }
@@ -178,7 +178,7 @@ export async function updateClient(clientData) {
       const client = await response.json();
       return client;
     } else {
-      const mns = 'Failed to update a new Client.';
+      const mns = 'Falló la actualización del consultante.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -213,7 +213,7 @@ export async function addPhoneNumer(phone){
       console.info(`Phone with ID ${phone.id} is added successfuly.`)
       return phone;
     } else {
-      const mns = 'Failed to create a new Phone Number.';
+      const mns = 'No se pudo crear un nuevo número de teléfono.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -245,7 +245,7 @@ export async function deletePhoneNumer(phone){
     if (response.ok) {
       console.info(`Phone with ID ${phone.id} is deleted successfuly.`)
     } else {
-      const mns = 'Failed to delete Phone Number.';
+      const mns = 'No se pudo eliminar el número de teléfono.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -299,7 +299,7 @@ export async function addPatrimony(idClient, patrimonyData){
       console.info(`Patrimony data for user ID ${idClient} is added successfuly.`)
       return patrimony;
     } else {
-      const mns = 'The patrimony data could not be added.';
+      const mns = "No se pudo agregar los datos del patrimonio.";
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -353,7 +353,7 @@ export async function updatePatrimony(idClient, patrimonyData){
       console.info(`Patrimony data for user ID ${idClient} is updated successfuly.`)
       return patrimony;
     } else {
-      const mns = 'The Patrimony data could not be updated.';
+      const mns = 'No se pudieron actualizar los datos del patrimonio.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -429,7 +429,7 @@ export async function createFamily(family){
       console.info(`Family data with ID ${family.id} is added successfuly.`)
       return family;
     } else {
-      const mns = 'The family data could not be added.';
+      const mns = 'No se pudieron agregar los datos familiares.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -475,7 +475,7 @@ export async function updateFamily(family){
       if (response.status === 404) {
         return {success:false, content:null};
     }
-      const mns = 'The family data could not be updatted.';
+      const mns = 'No se pudieron actualizar los datos familiares.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -513,7 +513,7 @@ export async function deleteChild(child){
     if (response.ok) {
       console.info(`Child with ID ${child.id} is deleted successfuly.`)
     } else {
-      const mns = 'Failed to delete Child.';
+      const mns = 'Falló la eliminación del hijo/a.';
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };
@@ -567,7 +567,7 @@ export async function addChild(child){
       console.info(`Child data with ID ${child.id} is added successfuly.`)
       return child;
     } else {
-      const mns = 'The child data could not be added.';
+      const mns = "No se pudieron agregar los datos del hijo/a.";
       console.error(mns, " Status: ", response.status);
       throw new Error(mns);
     };

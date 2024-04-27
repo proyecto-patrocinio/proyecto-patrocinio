@@ -27,7 +27,7 @@ export async function getDataUserByToken(token) {
         return user;
       } else {
         console.error('Failed to fetch User by token:', response.status);
-        throw new Error('Failed to fetch User by token');
+        throw new Error('No se pudo obtener el usuario mediante el token.');
       }
     } catch (error) {
       console.error('Error while try to get User by token:', error);
