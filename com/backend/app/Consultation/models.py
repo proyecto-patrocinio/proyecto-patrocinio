@@ -56,8 +56,8 @@ class RequestConsultation(models.Model):
     )
 
     class Meta:
-        verbose_name = ("Solicitud de Consulta")
-        verbose_name_plural = ("Solicitudes de Consultas")
+        verbose_name = ("Solicitud de consulta")
+        verbose_name_plural = ("Solicitudes de consultas")
 
     def __str__(self):
         return f'req_consultation/{self.consultation}'.replace(" ", "_")

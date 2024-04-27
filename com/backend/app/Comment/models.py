@@ -25,6 +25,10 @@ class Comment(models.Model):
     def __str__(self):
         return f'{self.consultation}_{self.id}'
 
+    class Meta:
+        verbose_name_plural = "Comentarios"
+        verbose_name = "Comentario"
+
 
 class File(models.Model):
     id = models.AutoField(primary_key=True)
@@ -40,3 +44,7 @@ class File(models.Model):
 
     def __str__(self):
         return f'{self.comment}_{self.time_stamp}'
+
+    class Meta:
+        verbose_name_plural = "Archivos"
+        verbose_name = "Archivo"
