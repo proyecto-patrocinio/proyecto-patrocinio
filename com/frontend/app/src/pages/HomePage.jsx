@@ -127,9 +127,9 @@ const HomePage = () => {
                                 </ul>
                             </li>
                             <li>
-                                <strong>Pizarra de Comisión:</strong>
+                                <strong>Tableros de Comisión:</strong>
                                 <ul>
-                                    <li>Los casos pueden ser enviados a una Pizarra de comisión, donde profesores y jefes de comisión tienen una visión general de todos los casos pendientes.</li>
+                                    <li>Los casos pueden ser enviados a un Tablero de comisión, donde profesores y jefes de comisión tienen una visión general de todos los casos pendientes.</li>
                                     <li>La organización efectiva facilita la rápida revisión y asignación de casos a las partes responsables respectivas.</li>
                                 </ul>
                             </li>

@@ -67,13 +67,13 @@ const BoardInfo = ({ panel}) => {
             >
                 <Paper>
                     <Box p={2}>
-                        <Typography variant='h6'>Información de Pizarra</Typography>
+                        <Typography variant='h6'>Información de Tablero</Typography>
                         <Typography>{`* ${panel.number_cards} consultas totales`}</Typography>
                         <Typography>{`* ${panel.todo_count} consultas por hacer`}</Typography>
                         <Typography>{`* ${panel.in_progress_count} consultas en progreso`}</Typography>
                         <Typography>{`* ${(panel.paused_count + panel.blocked_count) || 0} consultas detenidas`}</Typography>
                         <Divider sx={{ mb: 3 }} />
-                        <Typography variant='h6'>Logs de Pizarra</Typography>
+                        <Typography variant='h6'>Logs de Tablero</Typography>
                         {logs.slice(0, 5).map( (log)=> <Typography>{`* ${log.start_time.split('T')[0]} | ${log.tag}`}</Typography> )}
                     </Box>
                     {

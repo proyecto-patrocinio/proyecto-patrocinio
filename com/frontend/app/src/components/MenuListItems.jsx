@@ -58,7 +58,7 @@ const ListItemIconButton = ( {icon, text} ) => {
     }, [userContext.user.pk]);
 
   return (
-      <ListItemCollapseButton text="Pizarras" sub_list={boards}/>
+      <ListItemCollapseButton text="Tableros" sub_list={boards}/>
   );
 };
 

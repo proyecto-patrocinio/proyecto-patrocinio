@@ -14,7 +14,7 @@ class BoardUser(models.Model):
     board = models.ForeignKey(
         Board,
         on_delete=models.CASCADE,
-        verbose_name='Pizarra',
+        verbose_name='Tablero',
         related_name="boardusers",
         null=False,
     )
@@ -26,5 +26,5 @@ class BoardUser(models.Model):
 
     class Meta:
         unique_together = ('user', 'board')
-        verbose_name_plural = "Pizarras - Usuarios"
-        verbose_name = "Pizarra - Usuario"
+        verbose_name_plural = "Tableros - Usuarios"
+        verbose_name = "Tablero - Usuario"

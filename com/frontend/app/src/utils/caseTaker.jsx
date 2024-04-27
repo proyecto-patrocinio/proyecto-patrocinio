@@ -362,7 +362,7 @@ export async function getBoardLogs(days, boardID){
             return logs
 
         } else {
-            throw new Error(`Falló la obtención de los logs de la pizarra ${boardID}. Código de respuesta: ${response.status}`);
+            throw new Error(`Falló la obtención de los logs del tablero ${boardID}. Código de respuesta: ${response.status}`);
         }
     } catch (error) {
         console.error(`Unexpected error while trying to fetch logs of Board ${boardID}.`);

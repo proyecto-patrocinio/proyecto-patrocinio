@@ -9,7 +9,7 @@ class Panel(models.Model):
         Board,
         on_delete=models.CASCADE,
         related_name="panels",
-        verbose_name='Pizarra',
+        verbose_name='Tablero',
         null=False
     )
     def __str__(self):

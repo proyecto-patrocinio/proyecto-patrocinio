@@ -8,5 +8,5 @@ class Board(models.Model):
         return self.title
 
     class Meta:
-        verbose_name = "Pizarra"
-        verbose_name_plural = "Pizarras"
+        verbose_name = "Tablero"
+        verbose_name_plural = "Tableros"

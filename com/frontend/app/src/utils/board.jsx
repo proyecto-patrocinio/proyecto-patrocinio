@@ -28,7 +28,7 @@ async function getDataBoard(boardID) {
       return board;
     } else {
       console.error('Failed to fetch board:', response.status);
-      throw new Error('Falló la obtención de la pizarra');
+      throw new Error('Falló la obtención del tablero');
     }
   } catch (error) {
     console.error('Error:', error);
@@ -180,7 +180,7 @@ export const getListBoard = async () => {
           const boardList = await response.json();
           return boardList;
       } else {
-          throw new Error('Falló la obtención de las pizarras. Respuesta con código: ' , response.status);
+          throw new Error('Falló la obtención del tablero. Respuesta con código: ' , response.status);
       };
 
   } catch (error) {

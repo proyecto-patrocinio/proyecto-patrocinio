@@ -164,11 +164,11 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             send_email_new_request(board)
             send_sync_group_message(
                 f"{BOARD_BASE_GROUP_NAME}{destiny_board_id}",
-                f"La solicitud de consulta '{consultation.tag}' fue creada para la pizarra '{board}' exitosamente."
+                f"La solicitud de consulta '{consultation.tag}' fue creada para el tablero '{board}' exitosamente."
             )
             send_sync_group_message(
                 CONSULTANCY_GROUP_NAME,
-                f"La solicitud de consulta '{consultation.tag}' fue creada para la pizarra '{board}'."
+                f"La solicitud de consulta '{consultation.tag}' fue creada para el tablero '{board}'."
             )
         else:
             logger.error(f"Error creating consultation with ID {consultation_id}.")
@@ -198,11 +198,11 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
             send_sync_group_message(
                 f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
-                f"La solicitud de consulta '{consultation.tag}' para la pizarra '{destiny_board}' fue eliminada."
+                f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue eliminada."
             )
             send_sync_group_message(
                 CONSULTANCY_GROUP_NAME,
-                f"La solicitud de consulta '{consultation.tag}' para la pizarra '{destiny_board}' fue eliminada."
+                f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue eliminada."
             )
         else:
             logger.error(f"Error deleting consultation with ID {consultation_id}.")
@@ -305,7 +305,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 send_email_accepted_request(destiny_board, consultation)
                 send_sync_group_message(
                     CONSULTANCY_GROUP_NAME,
-                    f"La solicitud de consulta '{consultation.tag}' para la pizarra '{destiny_board}' fue aceptada."
+                    f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue aceptada."
                 )
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -344,7 +344,7 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 send_email_rejected_request(destiny_board, consultation)
                 send_sync_group_message(
                     CONSULTANCY_GROUP_NAME,
-                    f"La solicitud de consulta '{consultation.tag}' para la pizarra '{destiny_board}' fue rechazada."
+                    f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue rechazada."
                 )
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
