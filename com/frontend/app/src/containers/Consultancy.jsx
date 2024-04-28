@@ -41,7 +41,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
  * card movement with drag-and-drop, and initializing consultancy data.
  */
 const Consultancy = () => {
-	const [consultancy, setConsultancy] = useState({ 'title': 'Consultoría', 'panels': [{'id':0, 'title': 'Available Consultations', 'number_cards':0 , 'cards': [] }]})
+	const [consultancy, setConsultancy] = useState({ 'title': 'Consultoría', 'panels': [{'id':0, 'title': 'Consultas Disponibles', 'number_cards':0 , 'cards': [] }]})
   const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
   const [forceFetchConsultancy, setforceFetchConsultancy] = useState(0); // force refetch board from notification websocket.
 
