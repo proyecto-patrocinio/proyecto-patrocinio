@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -16,6 +15,7 @@ import { Snackbar } from '@mui/material';
 import { useUserContext } from '../context/UserContext';
 import {loginUser} from '../utils/user';
 import { PATH_FORGET_PASSWORD } from '../utils/constants';
+import logo from '../resources/favicon.ico'
 const theme = createTheme();
 
 export default function SignIn( props) {
@@ -43,7 +43,7 @@ export default function SignIn( props) {
 
       //check if data is empty
     if (data_username === "" || data_password === "") {
-      setLoginError("Complete all fields.");
+      setLoginError("Complete todos los campos.");
       setOpen(true);
     }else {
       setOpen(false);
@@ -85,12 +85,12 @@ export default function SignIn( props) {
             flexDirection: 'column',
             alignItems: 'center',
           }}
-        > 
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            <LockOutlinedIcon />
+        >
+          <Avatar sx={{ m: 3, bgcolor: 'secondary.main', width: '60px', height: '60px' }}>
+            <img src={logo} alt="Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </Avatar>
-          <Typography component="h1" variant="h5">
-            Sign in
+          <Typography component="h1" variant="h5" align="center" color="primary" gutterBottom>
+            Sistema de Gestión de Casos
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -98,7 +98,7 @@ export default function SignIn( props) {
               required
               fullWidth
               name="username" 
-              label="Username"
+              label="Nombre de usuario"
               type={"text"}
               id="username"
               autoComplete="username"
@@ -109,7 +109,7 @@ export default function SignIn( props) {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Contraseña"
               type="password"
               id="password"
               autoComplete="current-password" 
@@ -121,18 +121,18 @@ export default function SignIn( props) {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Iniciar Sesión
             </Button>
       
             <Grid container>
               <Grid item xs>
                 <Link href={PATH_FORGET_PASSWORD} variant="body2">
-                  Forgot password?
+                  ¿Olvidaste la contraseña?
                 </Link>
               </Grid>
               <Grid item>
                 <Link href="signup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {"¿No tienes una cuenta? Regístrate"}
                 </Link>
               </Grid>
             </Grid>

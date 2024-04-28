@@ -26,6 +26,6 @@ class CardViewSet(viewsets.ModelViewSet):
             # Move card to other panel in the same board.
             send_sync_group_message(
                 f"{BOARD_BASE_GROUP_NAME}{self.get_object().panel.board.id}",
-                f"Changes occurred in the '{self.get_object().tag}' card."
+                f"Se han producido cambios en la tarjeta '{self.get_object().tag}'."
             )
         return super().partial_update(request, *args, **kwargs)

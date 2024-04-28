@@ -78,13 +78,13 @@ const ConsultationFormButton = ({addNewConsultation}) => {
 
     requiredFields.forEach((field) => {
       if (formData[field].trim() === "") {
-        newError[field] = 'This field is required';
+        newError[field] = 'Este campo es requerido';
         hasError = true;
       }
     });
 
     if (!clientDNI2ID[formData.client]) {
-      newError.client = 'Client ID does not exist';
+      newError.client = 'No existe un consultante con ese ID';
     } else {
       formData.client = clientDNI2ID[formData.client] // Set ID of the client
     }
@@ -144,10 +144,10 @@ const ConsultationFormButton = ({addNewConsultation}) => {
   return (
     <div>
       {/* Button to open the dialog */}
-      <AddButton title={"Add New Consultation"} onClick={handleOpenDialog}/>
+      <AddButton title={"Agregar nueva consulta"} onClick={handleOpenDialog}/>
       <SimpleDialog
-        title={"Load New Consultation"}
-        description={"Please enter the following details to load the form:"}
+        title={"Cargar nueva consulta"}
+        description={"Por favor, ingresa los siguientes datos para cargar el formulario:"}
         onClose={handleCloseDialog}
         onAccept={handleSubmit}
         isOpen={isDialogOpen}
@@ -161,7 +161,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
                   multiline
                   minRows={2}
                   fullWidth
-                  label="Description"
+                  label="Descripción"
                   name="description"
                   variant="outlined"
                   value={formData.description}
@@ -174,7 +174,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Opponent"
+                  label="Oponente"
                   name="opponent"
                   variant="outlined"
                   value={formData.opponent}
@@ -187,7 +187,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
               <Grid item xs={12}>
                 <TextField
                   fullWidth
-                  label="Tag"
+                  label="Etiqueta"
                   name="tag"
                   variant="outlined"
                   value={formData.tag}
@@ -209,7 +209,7 @@ const ConsultationFormButton = ({addNewConsultation}) => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Consultant"
+                    label="Consultante"
                     name="client"
                     variant="outlined"
                     required

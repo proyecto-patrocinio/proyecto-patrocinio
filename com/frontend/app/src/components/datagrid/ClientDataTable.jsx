@@ -227,69 +227,69 @@ function ClientDataTable({ data }) {
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70, editable: false},
-    { field: 'postal', 'type': 'number', headerName: 'Postal', width: 80, editable: true },
-    { field: 'address', headerName: 'Address', width: 150, editable: true },
+    { field: 'postal', 'type': 'number', headerName: 'Código Postal', width: 80, editable: true },
+    { field: 'address', headerName: 'Dirección', width: 150, editable: true },
     {
-      field: 'marital_status', headerName: 'Marital Status', width: 120, editable: true,
+      field: 'marital_status', headerName: 'Estado Civil', width: 120, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        {value: 'SINGLE', label: 'Single'},
-        {value: 'MARRIED', label: 'Married'},
-        {value: 'DIVORCED', label: 'Divorced'},
-        {value: 'WIDOWER', label: 'Widower'},
+        {value: 'SINGLE', label: 'Soltero/a'},
+        {value: 'MARRIED', label: 'Casado/a'},
+        {value: 'DIVORCED', label: 'Divorciado/a'},
+        {value: 'WIDOWER', label: 'Viudo/a'},
       ]
     },
     {
-      field: 'housing_type', headerName: 'Housing Type', width: 200, editable: true,
+      field: 'housing_type', headerName: 'Vivienda', width: 200, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        { value: 'HOUSE', label: 'House' },
-        { value: 'DEPARTMENT', label: 'Department' },
-        { value: 'TRAILER', label: 'Trailer' },
-        { value: 'STREET_SITUATION', label: 'Street Situation' },
+        { value: 'HOUSE', label: 'Casa' },
+        { value: 'DEPARTMENT', label: 'Departamento' },
+        { value: 'TRAILER', label: 'Remolque' },
+        { value: 'STREET_SITUATION', label: 'Situación de calle' },
       ]
     },
     {
-      field: 'studies', headerName: 'Education Level', width: 180, editable: true,
+      field: 'studies', headerName: 'Estudios', width: 180, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        { value: 'INCOMPLETE_PRIMARY', label: 'Incomplete Primary' },
-        { value: 'COMPLETE_PRIMARY', label: 'Complete Primary' },
-        { value: 'INCOMPLETE_SECONDARY', label: 'Incomplete Secondary' },
-        { value: 'COMPLETE_SECONDARY', label: 'Complete Secondary' },
-        { value: 'INCOMPLETE_TERTIARY', label: 'Incomplete Tertiary' },
-        { value: 'COMPLETE_TERTIARY', label: 'Complete Tertiary' },
-        { value: 'INCOMPLETE_UNIVERSITY', label: 'Incomplete University' },
-        { value: 'COMPLETE_UNIVERSITY', label: 'Complete University' }
+        { value: 'INCOMPLETE_PRIMARY', label: 'Primario incompleto' },
+        { value: 'COMPLETE_PRIMARY', label: 'Primario completo' },
+        { value: 'INCOMPLETE_SECONDARY', label: 'Secundario incompleto' },
+        { value: 'COMPLETE_SECONDARY', label: 'Secundario completo' },
+        { value: 'INCOMPLETE_TERTIARY', label: 'Terciario incompleto' },
+        { value: 'COMPLETE_TERTIARY', label: 'Terciario completo' },
+        { value: 'INCOMPLETE_UNIVERSITY', label: 'Universidad incompleta' },
+        { value: 'COMPLETE_UNIVERSITY', label: 'Universidad completa' }
       ]
     },
     { field: 'email', headerName: 'Email', width: 200, editable: true },
     {
-      field: 'id_type', headerName: 'ID Type', width: 100, editable: true,
+      field: 'id_type', headerName: 'Tipo de documento', width: 100, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        {value: 'DOCUMENT', label: 'Document'},
-        {value: 'PASSPORT', label: 'Passport'},
+        {value: 'DOCUMENT', label: 'DNI'},
+        {value: 'PASSPORT', label: 'Pasaporte'},
       ]
     },
-    { field: 'id_value', headerName: 'ID Value', width: 120, editable: true },
-    { field: 'first_name', headerName: 'First Name', width: 150, editable: true },
-    { field: 'last_name', headerName: 'Last Name', width: 150, editable: true },
+    { field: 'id_value', headerName: 'Num. de documento', width: 120, editable: true },
+    { field: 'first_name', headerName: 'Nombre', width: 150, editable: true },
+    { field: 'last_name', headerName: 'Apellido', width: 150, editable: true },
     {
-      field: 'birth_date',  headerName: 'Birth Date', width: 100,
+      field: 'birth_date',  headerName: 'Nacimiento', width: 100,
       editable: true, type: 'date',
       valueGetter: ({ value }) => value && new Date(value),
       valueFormatter: (value) =>  value?.value && formatDateToString(value.value)
     },
     {
-      field: 'sex', headerName: 'Sex', width: 110, editable: true,
+      field: 'sex', headerName: 'Sexo', width: 110, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        {value: 'MALE', label: 'Male'},
-        {value: 'FEMALE', label: 'Female'},
+        {value: 'MALE', label: 'Masculino'},
+        {value: 'FEMALE', label: 'Femenino'},
       ]
     },
-    { field: 'nationality', headerName: 'Nationality',
+    { field: 'nationality', headerName: 'Nacionalidad',
       width: 150, editable: true,
       renderEditCell: (params) => (
         <AutocompleteCell {...params} optionsNameID={nationalityOptions} model={geographyModel?.nationality}
@@ -305,7 +305,7 @@ function ClientDataTable({ data }) {
       ),
       valueFormatter: (value) => value.value?.name,
     },
-    { field: 'province', headerName: 'Province', editable: true,  width: 200,
+    { field: 'province', headerName: 'Provincia', editable: true,  width: 200,
       valueFormatter: (value) => value.value?.name,
       renderEditCell: (params) => (
         <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel?.province}
@@ -319,7 +319,7 @@ function ClientDataTable({ data }) {
         />
       )
     },
-    { field: 'locality', headerName: 'Locality',
+    { field: 'locality', headerName: 'Localidad',
       width: 200, editable: true,
       renderEditCell: (params) => (
         <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel?.locality}
@@ -336,7 +336,7 @@ function ClientDataTable({ data }) {
     },
     {
       field: 'tels',
-      headerName: 'Phone Numbers',
+      headerName: 'Tel',
       valueFormatter: (value) => value?.value?.map((tel)=> tel?.phone_number),
       width: 180, editable: true,
       renderEditCell: (params) => {
@@ -348,7 +348,7 @@ function ClientDataTable({ data }) {
             startIcon={<LocalPhoneIcon />}
             onClick={() => setIsPhoneNumbersDialogOpen(true)}
           >
-          Manage Tels
+          Editar Tel
           </Button>
           <PhoneNumbersDialog
             open={isPhoneNumbersDialogOpen}
@@ -360,27 +360,27 @@ function ClientDataTable({ data }) {
       )},
     },
     // PATRIMONY
-    { field: 'patrimony.employment', headerName: 'Employment', width: 180, editable: true,
+    { field: 'patrimony.employment', headerName: 'Empleo', width: 180, editable: true,
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('employment'),},
-    { field: 'patrimony.salary', headerName: 'Salary', width: 100, editable: true, 'type': 'number',
+    { field: 'patrimony.salary', headerName: 'Salario', width: 100, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('salary'),},
-    { field: 'patrimony.other_income', headerName: 'Other Incomet', width: 110, editable: true,
+    { field: 'patrimony.other_income', headerName: 'Otros ingresos', width: 110, editable: true,
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('other_income'),},
-    { field: 'patrimony.amount_other_income', headerName: 'Amount Other Incomet', width: 120, editable: true, 'type': 'number',
+    { field: 'patrimony.amount_other_income', headerName: 'Ingreso por otros ingresos', width: 130, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_other_income'),},
-    { field: 'patrimony.amount_retirement', headerName: 'Amount Retirement', width: 100, editable: true, 'type': 'number',
+    { field: 'patrimony.amount_retirement', headerName: 'Ingreso por jubilación', width: 130, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_retirement'),},
-    { field: 'patrimony.amount_pension', headerName: 'Amount Pension', width: 110, editable: true, 'type': 'number',
+    { field: 'patrimony.amount_pension', headerName: 'Ingreso por pensión', width: 120, editable: true, 'type': 'number',
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_pension'),},
-    { field: 'patrimony.vehicle', headerName: 'Vehicle', width: 120, editable: true,
+    { field: 'patrimony.vehicle', headerName: 'Vehículo', width: 120, editable: true,
       valueGetter: getSubField, valueSetter: setSubPatrimonyField('vehicle'),},
 
       //FAMILY
-      { field: 'family.partner_salary', headerName: 'Partner Salary', width: 100, editable: true,
+      { field: 'family.partner_salary', headerName: 'Salario de la pareja', width: 125, editable: true,
         type: 'number', valueGetter: getSubField, valueSetter: setSubFamilyField('partner_salary'),},
-      { field: 'family.children', headerName: 'Children', editable: true, width: 180,
+      { field: 'family.children', headerName: 'Hijos', editable: true, width: 180,
       valueGetter: getSubField,
-        valueFormatter: (value) => (value?.value?.length || 0 ) + " children",
+        valueFormatter: (value) => (value?.value?.length || 0 ) + " hijos",
         renderEditCell: (params) => {
           return(
             <div>
@@ -390,7 +390,7 @@ function ClientDataTable({ data }) {
               startIcon={<FamilyRestroomIcon />}
               onClick={() => setIsFamilyDialogOpen(true)}
             >
-            Manage Family
+              Editar Familia
             </Button>
             <ChildrenDialog
               open={isFamilyDialogOpen}

@@ -105,7 +105,7 @@ class ConsultationViewSet(viewsets.ModelViewSet):
             serializer = ConsultationCreateSerializer(data=consultation_json)
 
             if serializer.is_valid():
-                send_sync_group_message(CONSULTANCY_GROUP_NAME, "A new Consultation has been created from a form.")
+                send_sync_group_message(CONSULTANCY_GROUP_NAME, "Se ha creado una nueva consulta a partir de un formulario.")
                 serializer.save()
                 return Response(serializer.data, status=201)
             else:
@@ -164,11 +164,11 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             send_email_new_request(board)
             send_sync_group_message(
                 f"{BOARD_BASE_GROUP_NAME}{destiny_board_id}",
-                f"Request Consultation '{consultation.tag}' was created for '{board}' board."
+                f"La solicitud de consulta '{consultation.tag}' fue creada para el tablero '{board}' exitosamente."
             )
             send_sync_group_message(
                 CONSULTANCY_GROUP_NAME,
-                f"Request Consultation '{consultation.tag}' was created for '{board}' board."
+                f"La solicitud de consulta '{consultation.tag}' fue creada para el tablero '{board}'."
             )
         else:
             logger.error(f"Error creating consultation with ID {consultation_id}.")
@@ -198,11 +198,11 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
             send_sync_group_message(
                 f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
-                f"Request Consultation '{consultation.tag}' was deleted for '{destiny_board}' board."
+                f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue eliminada."
             )
             send_sync_group_message(
                 CONSULTANCY_GROUP_NAME,
-                f"Request Consultation '{consultation.tag}' was deleted for '{destiny_board}' board."
+                f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue eliminada."
             )
         else:
             logger.error(f"Error deleting consultation with ID {consultation_id}.")
@@ -305,7 +305,11 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 send_email_accepted_request(destiny_board, consultation)
                 send_sync_group_message(
                     CONSULTANCY_GROUP_NAME,
-                    f"Request Consultation '{consultation.tag}' was accepted for '{destiny_board}' board."
+                    f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue aceptada."
+                )
+                send_sync_group_message(
+                    f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
+                    f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue aceptada."
                 )
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -344,7 +348,11 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 send_email_rejected_request(destiny_board, consultation)
                 send_sync_group_message(
                     CONSULTANCY_GROUP_NAME,
-                    f"Request Consultation '{consultation.tag}' was rejected for '{destiny_board}' board."
+                    f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue rechazada."
+                )
+                send_sync_group_message(
+                    f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
+                    f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue aceptada."
                 )
                 return Response(status=status.HTTP_204_NO_CONTENT)
 

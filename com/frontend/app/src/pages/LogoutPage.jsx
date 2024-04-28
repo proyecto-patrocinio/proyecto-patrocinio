@@ -44,7 +44,7 @@ const LogoutPage =  ({setIsLoggedIn}) => {
   // eslint-disable-next-line
   }, []);
 
-  return <div>Loading...</div>;
+  return <div>Cargando...</div>;
 };
 
   export default LogoutPage;

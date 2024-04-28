@@ -21,7 +21,7 @@ export async function getNationalityList() {
             const nationalityList = await response.json();
             return nationalityList;
         } else {
-            const mns = 'Failed to fetch Nationality List.'
+            const mns = 'Falló la obtención de la lista de nacionalidades.'
             console.error(mns, " Status Code: ", response.status);
             throw new Error(mns);
         }
@@ -51,7 +51,7 @@ export async function getProvinceList( NationalityID ) {
             const provinceList = await response.json();
             return provinceList.provinces;
         } else {
-            const mns = 'Failed to fetch Province List.'
+            const mns = 'Falló la obtención de la lista de provincias.'
             console.error(mns, " Status Code: ", response.status);
             throw new Error(mns);
         }
@@ -81,7 +81,7 @@ export async function getLocalityList( ProvinceID ) {
             const localityList = await response.json();
             return localityList.localities;
         } else {
-            const mns = 'Failed to fetch Locality List.'
+            const mns = 'Falló la obtención de la lista de localidades.'
             console.error(mns, " Status Code: ", response.status);
             throw new Error(mns);
         }
@@ -111,7 +111,7 @@ export async function getLocalityByID( localityID ) {
             const locality = await response.json();
             return locality;
         } else {
-            const mns = 'Failed to fetch Locality.'
+            const mns = 'Falló la obtención de la localidad.'
             console.error(mns, " Status Code: ", response.status);
             throw new Error(mns);
         }

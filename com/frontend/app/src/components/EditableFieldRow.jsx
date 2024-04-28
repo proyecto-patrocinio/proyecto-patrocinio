@@ -10,7 +10,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 /**
  * A component for displaying an editable field in a table row.
- * @param {string} tittle - The title of the field.
+ * @param {string} title - The title of the field.
  * @param {boolean} isEditing - Indicates if the field is in edit mode.
  * @param {any} value - The value of the field.
  * @param {function} onEdit - The function to handle the edit action.
@@ -22,7 +22,7 @@ import CloseIcon from '@mui/icons-material/Close';
  * @returns {JSX.Element} - The rendered component.
  * @example
  * <EditableFieldRow
- *   tittle={"My Field Title"}
+ *   title={"My Field Title"}
  *   isEditing={isEditState}
  *   value={isEditState ? editedValueState : TrueDataValue}
  *   onEdit={handleEditClick}
@@ -33,10 +33,10 @@ import CloseIcon from '@mui/icons-material/Close';
  *   FieldKey="name field key"
  * />
  */
-const EditableFieldRow = ({ tittle, isEditing, value, onEdit, onSave, onChange, onCancel, error, fieldKey}) => {
+const EditableFieldRow = ({ title, isEditing, value, onEdit, onSave, onChange, onCancel, error, fieldKey}) => {
     return (
         <TableRow>
-        <TableCell>{tittle}</TableCell>
+        <TableCell>{title}</TableCell>
         <TableCell>
             {isEditing ? (
             <TextareaAutosize

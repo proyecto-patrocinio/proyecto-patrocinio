@@ -17,7 +17,7 @@ const theme = createTheme();
  */
 export default function BoardPage( ) {
     const { id_board } = useParams();
-    const [title, setTitle] = React.useState('Undefine Title');
+    const [title, setTitle] = React.useState('sin título');
 
     useEffect(() => {
         const fetchBoardTitle = async () => {

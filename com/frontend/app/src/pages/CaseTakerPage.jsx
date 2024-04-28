@@ -8,7 +8,7 @@ export default function CaseTaker( ) {
 
     return (
         <ThemeProvider theme={theme}>
-            <Dashboard title={"CONSULTANCY"}>
+            <Dashboard title={"CONSULTORÍA"}>
                 <Consultancy/>
             </Dashboard>
         </ThemeProvider>

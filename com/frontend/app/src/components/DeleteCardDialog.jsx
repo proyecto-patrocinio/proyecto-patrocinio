@@ -24,6 +24,12 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
     "availability_state": "",
   });
 
+  const optionDict = {
+    "ARCHIVED": "Archivado",
+    "REJECTED": "Rechazado",
+    "DONE": "Terminado",
+    "INCOMPLETE": "Incompleto"
+  }
 
   useEffect(() => {
     const updateData = async() => {
@@ -82,8 +88,8 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
 
   return (
     <SimpleDialog
-      title={"Delete Card"}
-      description={"Confirm delete card."}
+      title={"Eliminar tarjeta"}
+      description={"Confirmar eliminar tarjeta."}
       isOpen={isOpen}
       onClose={()=>{setOpen(false)}}
       onAccept={handleConfirmDelete}
@@ -103,7 +109,7 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
           {/* Progress Field */}
             <TableRow>
               <TableCell>
-              Progress State
+              Estado de progreso
               <Select
               value={editedFields.progress_state}
               onChange={(event)=>{handleOnChange(event,'progress_state')}}
@@ -111,7 +117,7 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
               >
               {progressOptions.map((option) => (
                 <MenuItem key={option} value={option}>
-                  {option}
+                  {optionDict[option] || option}
                 </MenuItem>
               ))}
               </Select>
@@ -126,7 +132,7 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
           {/* Availability Field */}
             <TableRow>
               <TableCell>
-              Availability State
+              Estado de disponibilidad
               <Select
               value={editedFields.availability_state}
               onChange={(event)=>{handleOnChange(event,'availability_state')}}
@@ -134,7 +140,7 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
               >
               {availableOptions.map((option) => (
                 <MenuItem key={option} value={option}>
-                  {option}
+                  {optionDict[option] || option}
                 </MenuItem>
               ))}
               </Select>
@@ -156,11 +162,11 @@ export default function ConfirmDeleteDialog ({idCard, deleteViewCard, isOpen, se
 };
 
 const statesAvailabilityDescription = `
-ARCHIVED: Used for elements that are no longer active or relevant in the current context, but have been archived for future reference or historical record.
-REJECTED: Task or request has been rejected or not approved for some reason and needs to be reviewed for reassignment or evaluation by case takers.
-`
+ARCHIVADO: Se usa para elementos que ya no están activos o relevantes en el contexto actual, pero han sido archivados para referencia futura o registro histórico.
+RECHAZADO: La tarea o solicitud ha sido rechazada o no aprobada por alguna razón y necesita ser revisada para ser reasignada o evaluada por los responsables de casos.
+`;
 
 const statesProgressDescription = `
-DONE: Task has been successfully completed, and the intended goal has been achieved.
-INCOMPLETE: Task has not yet been fully completed or has progressed but has not reached the "done" state.
-`
+COMPLETADO: La tarea ha sido completada con éxito y se ha logrado el objetivo previsto.
+INCOMPLETO: La tarea aún no ha sido completada completamente o ha progresado pero no ha alcanzado el estado de "completado".
+`;

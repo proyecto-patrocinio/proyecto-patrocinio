@@ -5,12 +5,14 @@ class Calendar(models.Model):
     id = models.AutoField(primary_key=True)
     card = models.OneToOneField(
         Card,
-        verbose_name="Card",
+        verbose_name="Tarjeta",
         on_delete=models.CASCADE,
         null=False,
         unique=True
     )
-
+    class Meta:
+        verbose_name_plural = "Calendarios"
+        verbose_name = "Calendario"
 
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
@@ -27,3 +29,7 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = "Eventos"
+        verbose_name = "Evento"

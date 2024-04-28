@@ -41,7 +41,7 @@ const PANEL_INPUT_CONSULTATION_ID = 0
  * card movement with drag-and-drop, and initializing consultancy data.
  */
 const Consultancy = () => {
-	const [consultancy, setConsultancy] = useState({ 'title': 'Consultancy', 'panels': [{'id':0, 'title': 'Available Consultations', 'number_cards':0 , 'cards': [] }]})
+	const [consultancy, setConsultancy] = useState({ 'title': 'Consultoría', 'panels': [{'id':0, 'title': 'Consultas Disponibles', 'number_cards':0 , 'cards': [] }]})
   const [updateCounter, setUpdateCounter] = useState(0);  // force view refresh
   const [forceFetchConsultancy, setforceFetchConsultancy] = useState(0); // force refetch board from notification websocket.
 
@@ -56,7 +56,7 @@ const Consultancy = () => {
 			// Create Consultancy
 			const inputPanel = { 
         'id': PANEL_INPUT_CONSULTATION_ID,
-				'title': 'Available Consultations',
+				'title': 'Consultas disponibles',
 				'number_cards': inputConsultations.length,
 				'cards': inputConsultations
       }
@@ -64,7 +64,7 @@ const Consultancy = () => {
       setConsultancy(allConsultancyData)
 
 		} catch (error) {
-      console.error("Failed to fetch cards in Consultancy.");
+      console.error("No se pudieron recuperar las tarjetas en Consultoría.");
 			console.debug(error);
 		}
   };
@@ -112,7 +112,7 @@ const Consultancy = () => {
       setConsultancy(newConsultancy);
       return true;
     } catch (e) {
-      console.error("Error moving request/card: " + e.message);
+      console.error("Error al mover consulta:" + e.message);
       setConsultancy(consultancy);//backup
       return false;
     }

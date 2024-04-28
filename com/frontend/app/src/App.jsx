@@ -30,7 +30,7 @@ import SettingsPage from "./pages/SettingsPage";
 
 
 const App = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(null);
 
     /**
      * Check for a user token in local storage.
@@ -44,17 +44,15 @@ const App = () => {
             setIsLoggedIn(false);
         } else {
             getDataUserByToken(tokenUser).then( (user) => {
-                if(user){
-                    setIsLoggedIn(true);
-                }
-                else{
-                    setIsLoggedIn(false);
-                }
+                setIsLoggedIn(!!user)
             });
     };
     }, []);
 
     const getPage  = (children) => {
+        if(isLoggedIn == null){
+            return null; // Don't render anything if isLoggedIn is null
+        }
         return (
             <div>
             {isLoggedIn ? children :<SignIn setIsLoggedIn={setIsLoggedIn} />}

@@ -26,12 +26,12 @@ describe('PhoneNumbersDialog', () => {
     expect(screen.getByText(/1234567890/)).toBeInTheDocument();
     expect(screen.getByText(/9876543210/)).toBeInTheDocument();
 
-    expect(screen.getByLabelText('Add Phone Number')).toBeInTheDocument();
+    expect(screen.getByLabelText('Agregar Teléfono')).toBeInTheDocument();
 
-    fireEvent.change(screen.getByLabelText('Add Phone Number'), { target: { value: '5555555555' } });
+    fireEvent.change(screen.getByLabelText('Agregar Teléfono'), { target: { value: '5555555555' } });
     fireEvent.click(document.getElementById('add-phone-button'));
 
-    expect(screen.getByLabelText('Add Phone Number')).toHaveValue('');
+    expect(screen.getByLabelText('Agregar Teléfono')).toHaveValue('');
 
   });
 

@@ -45,7 +45,7 @@ const CalendarView = ({cardID}) => {
         setEvents(calendar_response?.events || []);
         setCalendarID(calendar_response.id);
       } catch (e){
-        const mns = "Failed to get events.";
+        const mns = "Falló la obtención de eventos.";
         console.error(mns);
         setErrorMessage(mns);
       }
@@ -87,7 +87,7 @@ const CalendarView = ({cardID}) => {
         setErrorMessage(e);
       }
     } else {
-      setErrorMessage("Title is required.")
+      setErrorMessage("El título es requerido.")
     }
   };
 
@@ -123,12 +123,12 @@ const CalendarView = ({cardID}) => {
           onSelectSlot={handleSelectSlot}
           onSelectEvent={setSelectedEvent}
           messages={{
-            today: 'Today',
-            next: 'Next',
-            previous: 'Previous',
-            month: 'Month',
-            week: 'Week',
-            day: 'Day',
+            today: 'Hoy',
+            next: 'Siguiente',
+            previous: 'Anterior',
+            month: 'Mes',
+            week: 'Semana',
+            day: 'Día',
             agenda: 'Agenda',
           }}
         />
@@ -136,9 +136,9 @@ const CalendarView = ({cardID}) => {
         {selectedEvent && (
           <Paper style={{ marginTop: '30px', boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', background: '#bbdefb', padding: '20px', borderRadius: '8px' }}>
             <Typography variant="h5" style={{ marginBottom: '10px', color: '#2196f3' }}>{selectedEvent.title}</Typography>
-            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Description: ${selectedEvent.description}`}</Typography>
-            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Start: ${selectedEvent.start.toLocaleString()}`}</Typography>
-            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`End: ${selectedEvent.end.toLocaleString()}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Descripción: ${selectedEvent.description || ""}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Desde: ${selectedEvent.start.toLocaleString()}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Hasta: ${selectedEvent.end.toLocaleString()}`}</Typography>
             <IconButton aria-label="delete-event-button" color="primary" onClick={handleDeletedEvent}>
               <DeleteIcon />
             </IconButton>
@@ -149,22 +149,22 @@ const CalendarView = ({cardID}) => {
       <AlertSnackbar message={errorMenssage} title={"Calendar Error"} onClose={() => setErrorMessage("")} severity={"error"} />
 
       <SimpleDialog
-        title={'New Event'}
-        description={'Enter the information for the new event.'}
+        title={'Nuevo Evento'}
+        description={'Ingresa la información para el nuevo evento.'}
         isOpen={openNewDate}
         onClose={() => setOpenNewDate(false)}
         onAccept={handleAddEvent}
       >
         <TextField
           id='title'
-          label="Title"
+          label="Título"
           value={newEventData?.title}
           onChange={(e) => setNewEventData({...newEventData, 'title': e.target.value})}
           fullWidth
         />
         <TextField
           id="description"
-          label="Description"
+          label="Descripción"
           value={newEventData?.description}
           onChange={(e) => setNewEventData({...newEventData, 'description': e.target.value})}
           fullWidth
