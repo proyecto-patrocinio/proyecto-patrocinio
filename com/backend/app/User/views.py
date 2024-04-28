@@ -52,7 +52,8 @@ def get_user_info_from_token(request):
             'email': user.email,
             'first_name': user.first_name,
             'last_name': user.last_name,
-            'roles': roles
+            'roles': roles,
+            'is_staff': user.is_staff
         }, status=status.HTTP_200_OK)
 
     except Token.DoesNotExist:

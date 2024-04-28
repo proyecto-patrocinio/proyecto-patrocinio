@@ -10,13 +10,14 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import TableChartIcon from '@mui/icons-material/TableChart';
 import InputIcon from '@mui/icons-material/Input';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import  Link  from '@mui/material/Link'
 import TuneIcon from '@mui/icons-material/Tune';
 import { useUserContext } from '../context/UserContext';
 import {fetchBoardsByUser} from '../utils/board';
 import {
   PATH_BOARD, PATH_CONSULTANCY, PATH_CP_CLIENTS,
-  PATH_CP_CONSULT, PATH_LOGOUT, PATH_SETTINGS
+  PATH_CP_CONSULT, PATH_LOGOUT, PATH_SETTINGS, PATH_ADMIN
 } from '../utils/constants';
 import { CASE_TAKER_ROLE, PROFESSOR_ROLE } from '../utils/constants';
 
@@ -146,11 +147,13 @@ const ListControlPanel = () => {
  */
 const MenuListItems = ()=>{
   const [roles, setRoles] = useState([]);
+  const [is_staff, seIsStaff] = useState(false);
   const userContext = useUserContext();
 
   useEffect(() => {
     const setUpRoles = async () => {
       setRoles(userContext.user?.roles);
+      seIsStaff(userContext.user?.is_staff)
     };
     setUpRoles();
   }, [userContext.user]);
@@ -171,6 +174,11 @@ const MenuListItems = ()=>{
       )}
       {roles?.includes(PROFESSOR_ROLE) && ( 
         <ListBoards />
+      )}
+      {is_staff && (
+      <Link href={PATH_ADMIN} style={{ color: 'inherit', textDecoration: 'none' }}>
+        <ListItemIconButton icon={<ArrowOutwardIcon />} text="Sitio administrativo"/>
+      </Link>
       )}
       <Link href={PATH_LOGOUT} style={{ color: 'inherit', textDecoration: 'none' }}>
         <ListItemIconButton icon={<PowerSettingsNewIcon />} text="Salir"/>

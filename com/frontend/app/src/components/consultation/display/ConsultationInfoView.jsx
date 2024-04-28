@@ -168,7 +168,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
             <TableBody>
                 <EditableFieldRow
                     id={"edit-tag"}
-                    tittle={"Etiqueta:"}
+                    title={"Etiqueta:"}
                     isEditing={isFieldsEditing.tag}
                     value={isFieldsEditing.tag ? editedFields.tag : consultationData.tag }
                     onEdit={handleEditClick}
@@ -181,7 +181,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 <ClientTableRow clientID={consultationData.client}/>
                 <EditableFieldRow
                     id={"edit-opponent"}
-                    tittle={"Oponente:"}
+                    title={"Oponente:"}
                     isEditing={isFieldsEditing.opponent}
                     value={isFieldsEditing.opponent ? editedFields.opponent : consultationData.opponent}
                     onEdit={handleEditClick}
@@ -210,7 +210,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 />
                 <EditableFieldRow
                     id={"edit-description"}
-                    tittle={"Descripción:"}
+                    title={"Descripción:"}
                     isEditing={isFieldsEditing.description}
                     value={isFieldsEditing.description ? editedFields.description : consultationData.description}
                     onEdit={handleEditClick}

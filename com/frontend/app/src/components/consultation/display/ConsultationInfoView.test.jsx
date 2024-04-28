@@ -11,7 +11,7 @@ jest.mock('../../../utils/caseTaker.jsx', () => ({
     client: 123,
     tag: 'Test Tag',
     opponent: 'Test Opponent',
-    availability_state: 'Available',
+    availability_state: 'CREATED',
     progress_state: 'TODO',
     description: 'Test Description',
     time_stamp: new Date().toISOString(),
@@ -31,9 +31,9 @@ describe('ConsutationInfoView Component', () => {
     expect(screen.getByText('Oponente:')).toBeInTheDocument();
     expect(screen.getByText('Test Opponent')).toBeInTheDocument();
     expect(screen.getByText('Estado de disponibilidad:')).toBeInTheDocument();
-    expect(screen.getByText('Available')).toBeInTheDocument();
+    expect(screen.getByText('Creado, sin asignar')).toBeInTheDocument();
     expect(screen.getByText('Estado de progreso:')).toBeInTheDocument();
-    expect(screen.getByText('TODO')).toBeInTheDocument();
+    expect(screen.getByText('Por hacer')).toBeInTheDocument();
     expect(screen.getByText('Descripción:')).toBeInTheDocument();
     expect(screen.getByText('Test Description')).toBeInTheDocument();
     expect(screen.getByText('Tiempo de creación (UTC):')).toBeInTheDocument();
