@@ -110,7 +110,7 @@ function Register() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Registrarse
+            Crear Cuenta
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -178,7 +178,7 @@ function Register() {
               sx={{ mt: 3, mb: 2 }}
               disabled={!termsAccepted || loading}
             >
-            {loading ? <CircularProgress size={24} /> : 'Crear Cuenta'}
+            {loading ? <CircularProgress size={24} /> : 'Registrarse'}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
