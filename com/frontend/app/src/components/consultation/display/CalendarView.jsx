@@ -136,9 +136,9 @@ const CalendarView = ({cardID}) => {
         {selectedEvent && (
           <Paper style={{ marginTop: '30px', boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)', background: '#bbdefb', padding: '20px', borderRadius: '8px' }}>
             <Typography variant="h5" style={{ marginBottom: '10px', color: '#2196f3' }}>{selectedEvent.title}</Typography>
-            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Description: ${selectedEvent.description}`}</Typography>
-            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Start: ${selectedEvent.start.toLocaleString()}`}</Typography>
-            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`End: ${selectedEvent.end.toLocaleString()}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Descripción: ${selectedEvent.description || ""}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Desde: ${selectedEvent.start.toLocaleString()}`}</Typography>
+            <Typography style={{ fontSize: '14px', color: '#546e7a' }}>{`Hasta: ${selectedEvent.end.toLocaleString()}`}</Typography>
             <IconButton aria-label="delete-event-button" color="primary" onClick={handleDeletedEvent}>
               <DeleteIcon />
             </IconButton>

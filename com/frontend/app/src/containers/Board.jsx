@@ -74,6 +74,10 @@ const Board = ({id}) => {
   };
 
 
+  const handleNotification = () => {
+    setForceFetchBoard(forceFetchBoard + 1);  // force view refresh
+  };
+
   /**
    * Update the backend when moving a card from one panel to another.
   *
@@ -128,7 +132,7 @@ const Board = ({id}) => {
   return (
     <div>
         {showAlert && (
-          <Alert severity="error">It is not possible to move a card to the input panel.</Alert>
+          <Alert severity="error">No es posible mover una tarjeta al panel de entrada.</Alert>
         )}
       <DragDropContext onDragEnd={handleOnDragEnd} >
       <BoardContainer>
@@ -158,7 +162,7 @@ const Board = ({id}) => {
         </Stack>
       </BoardContainer>
       </DragDropContext>
-      <Notification channelName={BOARD_BASE_GROUP_NAME + id} onReceiveMessage={() => setForceFetchBoard(forceFetchBoard + 1)}/>
+      <Notification channelName={BOARD_BASE_GROUP_NAME + id} onReceiveMessage={handleNotification}/>
     </div>
   );
 };

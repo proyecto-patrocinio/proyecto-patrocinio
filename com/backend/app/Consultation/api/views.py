@@ -307,6 +307,10 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                     CONSULTANCY_GROUP_NAME,
                     f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue aceptada."
                 )
+                send_sync_group_message(
+                    f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
+                    f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue aceptada."
+                )
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
         except Exception as e:
@@ -345,6 +349,10 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 send_sync_group_message(
                     CONSULTANCY_GROUP_NAME,
                     f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue rechazada."
+                )
+                send_sync_group_message(
+                    f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
+                    f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue aceptada."
                 )
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
