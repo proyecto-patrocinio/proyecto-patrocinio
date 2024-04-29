@@ -432,7 +432,9 @@ export async function createRequest(consultationID, destinationBoardID) {
             },
             body: JSON.stringify({
                 "consultation": consultationID,
-                "destiny_board": destinationBoardID
+                "destiny_board": destinationBoardID,
+                "state": "PENDING",
+                "resolution_timestamp": null
             }),
         })
 

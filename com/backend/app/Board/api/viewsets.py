@@ -15,7 +15,7 @@ from Board.models import Board
 from Card.models import Card
 from Card.api.serializers import CardLogSerializer
 from constants import CONSULTANCY_BOARD_NAME
-from Consultation.models import Consultation
+from Consultation.models import Consultation, RequestConsultation
 from User.permissions import CheckGroupPermission, CaseTakerGroupPermission
 
 class BoardViewSet(viewsets.ModelViewSet):
@@ -52,7 +52,7 @@ class BoardViewSet(viewsets.ModelViewSet):
             'panels__cards'
         )
         self.queryset = self.queryset.prefetch_related(
-            'request_consultations'
+            Prefetch('request_consultations', queryset=RequestConsultation.objects.filter(state='PENDING'))
         )
         board = super().retrieve(request, *args, **kwargs)
 
