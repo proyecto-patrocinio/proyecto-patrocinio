@@ -85,7 +85,7 @@ class BoardViewSet(viewsets.ModelViewSet):
             blocked_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='BLOCKED')),
             incomplete_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='INCOMPLETE')),
         ).prefetch_related(
-            Prefetch('request_consultations', to_attr='cards')
+            Prefetch('request_consultations', queryset=RequestConsultation.objects.filter(state='PENDING') ,to_attr='cards')
         ).annotate(
             number_cards=Count('panels__cards', distinct=True)
         )
