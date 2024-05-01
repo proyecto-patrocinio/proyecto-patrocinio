@@ -3,9 +3,9 @@ import { Button } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
 import {
-  addChild, addPatrimony, addPhoneNumer, createClient,
-  createFamily, deleteChild, deleteClient, deletePhoneNumer, getPatrymony,
-  updateClient, updateFamily, updatePatrimony
+  addChild, addPhoneNumer, createClient,
+  createFamily, deleteChild, deleteClient, deletePhoneNumer, 
+  updateClient
 } from '../../utils/client';
 import { findUniqueElementsInA, formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
@@ -43,28 +43,6 @@ function ClientDataTable({ data }) {
     updateGeographic();
   },[geographyModel]);
 
-  /**
-   * Processes a family, updating or creating it along with its children.
-   *
-   * @param {Object} family - The family data to be processed.
-   * @returns {Promise<Object>} - A promise that resolves to the processed family data.
-   */
-  const processFamily = async (family) => {
-    const FamilyIsNew = family.id.toString().includes('NEW');
-    if (!FamilyIsNew){
-        const originalChildren = family.children;
-        const newChildren = await processChildren(originalChildren);
-        const response = await updateFamily(family);
-        const isUpdated = response.success;
-        if(isUpdated){
-          const newFamily = response.content;
-          newFamily.children = newChildren;
-          return newFamily;
-        } // false 404 -> not found, should be created
-    }
-      const newFamily = await createFamily({...family, children: children});
-      return newFamily;
-  }
 
   /**
    * Processes children, updating, adding, or deleting them as needed.
@@ -116,22 +94,6 @@ function ClientDataTable({ data }) {
     return updatedPhoneNumbers;
   };
 
-  /**
-   * Process Patrimony - Retrieves, updates, or adds patrimony data for a client based on the client's ID.
-   * @param {number} idClient - The ID of the client.
-   * @param {Object} patrimonyData - The patrimony data to be updated or added.
-   * @returns {Promise<Object>} The processed patrimony data.
-   */
-  const processPatrimony = async (idClient, patrimonyData) => {
-    let patrimony = await getPatrymony(idClient);
-    const patrymonyExists = patrimony != null;
-    if (patrymonyExists) {
-      patrimony = await updatePatrimony(idClient, patrimonyData);
-    } else {
-      patrimony = await addPatrimony(idClient, patrimonyData);
-    }
-    return patrimony;
-  };
 
   /**
    * Create a new client with processed phone numbers.
@@ -142,10 +104,9 @@ function ClientDataTable({ data }) {
     let createdClient = await createClient(client);
     createdClient.tels = [];
     createdClient.tels =  await processPhoneNumbers(createdClient);
-    const patrimony = await processPatrimony(createdClient.id, client.patrimony);
-    createdClient = Object.assign(createdClient, {patrimony: patrimony});
-    if (client.family){
-      createdClient.family = await createFamily({partner_salary:client.family.partner_salary, id: createdClient.id, children: children});
+
+    if (children){
+      createdClient.children = await createFamily({client_id: createdClient.id, children: children})["children"]
     }
     return createdClient;
   };
@@ -158,11 +119,8 @@ function ClientDataTable({ data }) {
   const updateRowHandler = async (client) => {
     let updatedClient = await updateClient(client);
     updatedClient.tels =  await processPhoneNumbers(client);
-    const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
-    updatedClient = Object.assign(updatedClient, {patrimony: patrimony});
-    if (client.family) {
-      updatedClient.family = await processFamily({...client.family, id:client.id});
-      }
+
+    updatedClient.children = await processChildren(client.children || []);
     return updatedClient;
   };
 
@@ -187,11 +145,6 @@ function ClientDataTable({ data }) {
     clientRendered.nationality = {
       'id': localityData.province.nationality.id, 'name': localityData.province.nationality.name
     };
-    if(clientRendered.patrimony){
-      Object.keys(clientRendered.patrimony).forEach(subField => {
-        clientRendered[`patrimony.${subField}`] = clientRendered.patrimony[subField];
-      });
-    }
     return clientRendered;
   };
 
@@ -222,7 +175,7 @@ function ClientDataTable({ data }) {
       setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id});
       // Init States of Phone Number
       setPhoneNumbers(row?.tels || []);
-      setChildren(row?.family?.children || []);
+      setChildren(row?.children || []);
     };
 
   const columns = [
@@ -360,26 +313,17 @@ function ClientDataTable({ data }) {
       )},
     },
     // PATRIMONY
-    { field: 'patrimony.employment', headerName: 'Empleo', width: 180, editable: true,
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('employment'),},
-    { field: 'patrimony.salary', headerName: 'Salario', width: 100, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('salary'),},
-    { field: 'patrimony.other_income', headerName: 'Otros ingresos', width: 110, editable: true,
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('other_income'),},
-    { field: 'patrimony.amount_other_income', headerName: 'Ingreso por otros ingresos', width: 130, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_other_income'),},
-    { field: 'patrimony.amount_retirement', headerName: 'Ingreso por jubilación', width: 130, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_retirement'),},
-    { field: 'patrimony.amount_pension', headerName: 'Ingreso por pensión', width: 120, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_pension'),},
-    { field: 'patrimony.vehicle', headerName: 'Vehículo', width: 120, editable: true,
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('vehicle'),},
+    { field: 'employment', headerName: 'Empleo', width: 180, editable: true},
+    { field: 'salary', headerName: 'Salario', width: 100, editable: true, 'type': 'number'},
+    { field: 'other_income', headerName: 'Otros ingresos', width: 110, editable: true},
+    { field: 'amount_other_income', headerName: 'Ingreso por otros ingresos', width: 130, editable: true, 'type': 'number'},
+    { field: 'amount_retirement', headerName: 'Ingreso por jubilación', width: 130, editable: true, 'type': 'number'},
+    { field: 'amount_pension', headerName: 'Ingreso por pensión', width: 120, editable: true, 'type': 'number'},
+    { field: 'vehicle', headerName: 'Vehículo', width: 120, editable: true,},
 
       //FAMILY
-      { field: 'family.partner_salary', headerName: 'Salario de la pareja', width: 125, editable: true,
-        type: 'number', valueGetter: getSubField, valueSetter: setSubFamilyField('partner_salary'),},
-      { field: 'family.children', headerName: 'Hijos', editable: true, width: 180,
-      valueGetter: getSubField,
+      { field: 'partner_salary', headerName: 'Salario de la pareja', width: 125, editable: true},
+      { field: 'children', headerName: 'Hijos', editable: true, width: 180,
         valueFormatter: (value) => (value?.value?.length || 0 ) + " hijos",
         renderEditCell: (params) => {
           return(
@@ -397,34 +341,13 @@ function ClientDataTable({ data }) {
               onClose={() => setIsFamilyDialogOpen(false)}
               children={children}
               onUpdateChildren={setChildren}
-              familyID={params?.row?.id}
+              clientID={params?.row?.id}
             />
           </div>
         )},
       },
 ];
 
-function getSubField(params) {
-  const [fieldName, subFieldName] = params?.field?.toString().split('.')
-  const field =  params?.row[fieldName]
-  return field? field[subFieldName] : null;
-};
-
-function setSubPatrimonyField(subFieldName) {
-  return (params) => {
-    const field = { ...params.row.patrimony };
-    field[subFieldName] = params.value;
-    return { ...params.row, patrimony: field };
-  };
-};
-
-function setSubFamilyField(subFieldName) {
-  return (params) => {
-    const field = { ...params.row.family };
-    field[subFieldName] = params.value;
-    return { ...params.row, family: field };
-  };
-};
 
 
   return (

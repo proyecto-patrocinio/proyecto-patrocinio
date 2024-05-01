@@ -20,7 +20,7 @@ const EMPTY_CHILD = {
   sex:null,
   birth_date:null,
   address:"",
-  family_client_user:0
+  client_user:0
 };
 
 
@@ -30,8 +30,9 @@ const EMPTY_CHILD = {
  * @param {function} onClose - Function to close the dialog.
  * @param {Array} children - List of child.
  * @param {function} onUpdateChildren - Function to update the list of children.
+ * @param {Number} clientID - ID of client.
  */
-function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID }) {
+function ChildrenDialog({ open, onClose, children, onUpdateChildren, clientID }) {
   const [newChild, setNewChild] = useState(EMPTY_CHILD);
   const [nationalityOptions, setNationalityOptions] = useState(null);
   const [provinceOptions, setProvinceOptions] = useState(null);
@@ -61,13 +62,13 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
       && newChild?.birth_date !== null
       && newChild?.address !== ''
       && geographyModel?.locality != null
-      && familyID
+      && clientID
     ) {
       const child = {
         ...newChild,
         id: ("NEW" + getRandomNumber(Number.MAX_SAFE_INTEGER)),
         locality: {...geographyModel?.locality, province: {...geographyModel?.province, nationality: geographyModel?.nationality}},
-        family_client_user: familyID
+        client_user: clientID
       };
       child.birth_date = child?.birth_date?.$d?.toISOString().split('T')[0];
       onUpdateChildren([...children, child]);
@@ -95,7 +96,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
   };
 
   return (
-    <Dialog maxWidth={'md'}  open={open} onClose={closeHandler} key={"dialog-family-" + familyID}>
+    <Dialog maxWidth={'md'}  open={open} onClose={closeHandler} key={"dialog-family-" + clientID}>
       <DialogContent>
         <List>
           {children && children?.map((child, index) => (
