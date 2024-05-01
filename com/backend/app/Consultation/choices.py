@@ -14,3 +14,10 @@ AVAILABILITY_STATES = (
     ('REJECTED', 'Rechazado, sin asignar'),
     ('ARCHIVED', 'Archivado'),
 )
+
+
+REQUEST_STATES = (
+    ('PENDING', 'Pendiente'),
+    ('ACCEPTED', 'Aceptado'),
+    ('REJECTED', 'Rechazado'),
+)

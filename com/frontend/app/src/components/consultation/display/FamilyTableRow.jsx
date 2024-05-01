@@ -14,14 +14,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
  */
 const FamilyTableRow = ({clientData}) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const family = clientData.family;
 
     // If there is no family information, return an empty string.
-    if (family === null){
+    if (!clientData?.children){
         return (
             <TableRow>
             <TableCell>Familia:</TableCell>
-            <TableCell>{"-"}</TableCell>
+            <TableCell>0 hijos</TableCell>
             </TableRow>
         );
     }
@@ -39,11 +38,9 @@ const FamilyTableRow = ({clientData}) => {
                 <TableCell>
                 {isExpanded ? (
                     <ul>
-                    <li><strong>Salario de la pareja: </strong>${family.partner_salary}</li>
-                    <li><strong>Información de Hijos:</strong></li>
-                    {family.children ? (
+                    {clientData.children ? (
                         <ul>
-                        {family.children.map((child, childIndex) => (
+                        {clientData.children.map((child, childIndex) => (
                             <li key={childIndex}>
                             <h4>Hijo {childIndex + 1}:</h4>
                             <ul>
@@ -67,8 +64,7 @@ const FamilyTableRow = ({clientData}) => {
                     </ul>
                 ) : (
                     <p>
-                    <strong>Salario de la pareja: </strong> ${family.partner_salary}.<br />
-                    <strong>Num. de hijos: </strong>{family.children ? family.children.length : 0}
+                    {clientData.children ? clientData.children.length : 0} hijos
                     </p>
                 )}
                 <Button id="expanded-family-button" variant="outlined" onClick={toggleExpansion}>

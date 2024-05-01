@@ -23,6 +23,14 @@ class Client(Person):
     housing_type = models.CharField(choices=housing_type, max_length=20, verbose_name='Vivienda')
     studies = models.CharField(choices=studies, max_length=30, verbose_name='Estudios')
     email = models.EmailField(unique=True, verbose_name='Email')
+    employment = models.CharField(max_length=45, verbose_name='Empleo', default="Desempleado")
+    salary = models.IntegerField(verbose_name='Salario', default=0)
+    other_income = models.CharField(max_length=45, verbose_name='Otros Ingresos', default="No posee")
+    amount_other_income = models.IntegerField(verbose_name='Ingreso por otros ingresos', default=0)
+    amount_retirement = models.IntegerField(verbose_name='Ingreso por jubilación', default=0)
+    amount_pension = models.IntegerField(verbose_name='Ingreso por pensión', default=0)
+    vehicle = models.CharField(max_length=300, verbose_name='Vehículo', default="No posee")
+    partner_salary = models.IntegerField(default=0)
 
     def __str__(self) -> str:
         return f'{self.last_name} {self.first_name}'
@@ -31,37 +39,11 @@ class Client(Person):
         verbose_name_plural = "Consultantes"
         verbose_name = "Consulta"
 
-class Patrimony(models.Model):
-    id = models.OneToOneField(Client, on_delete=models.CASCADE, related_name="patrimony", primary_key=True)
-    employment = models.CharField(max_length=45, verbose_name='Empleo')
-    salary = models.IntegerField(verbose_name='Salario', default=0)
-    other_income = models.CharField(max_length=45, verbose_name='Otros Ingresos')
-    amount_other_income = models.IntegerField(verbose_name='Ingreso por otros ingresos', default=0)
-    amount_retirement = models.IntegerField(verbose_name='Ingreso por jubilación', default=0)
-    amount_pension = models.IntegerField(verbose_name='Ingreso por pensión', default=0)
-    vehicle = models.CharField(max_length=300, verbose_name='Vehículo')
 
-    def __str__(self) -> str:
-        return f'{self.client}_{self.employment}'.replace(" ","-")
-
-    class Meta:
-        verbose_name_plural = "Patrimonios"
-        verbose_name = "Patrimonio"
-
-class Family(models.Model):
-    id = models.OneToOneField( Client, on_delete=models.CASCADE, related_name="family", primary_key=True)
-    partner_salary = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f'{self.partner_salary}'
-
-    class Meta:
-        verbose_name_plural = "Familias"
-        verbose_name = "Familia"
 
 class Child(Person):
     id_value = models.CharField( blank=False, null=False, max_length=20, verbose_name='Num. de documento')
-    family_client_user = models.ForeignKey(Family, on_delete=models.CASCADE, verbose_name="familia", related_name="children")
+    client_user = models.ForeignKey(Client, null=False, on_delete=models.CASCADE, verbose_name="familia", related_name="children")
 
     def __str__(self) -> str:
         return f"{self.first_name}_{self.last_name}"

@@ -7,7 +7,7 @@ import FamilyTableRow from './FamilyTableRow.jsx';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
-
+import {HOUSING_TYPE, MARITAL_STATUS, SEX, STUDIES, ID_TYPE} from './dictionaryEs.jsx';
 
 /**
  * Functional component for displaying client information in a table row.
@@ -69,7 +69,7 @@ const ClientTableRow = ({clientID}) => {
                 </TableRow>
                 <TableRow>
                 <TableCell>Tipo de documento:</TableCell>
-                <TableCell>{clientData.id_type}</TableCell>
+                <TableCell>{ID_TYPE[clientData.id_type]}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Num. de documento:</TableCell>
@@ -77,7 +77,7 @@ const ClientTableRow = ({clientID}) => {
                 </TableRow>
                 <TableRow>
                 <TableCell>Sexo:</TableCell>
-                <TableCell>{clientData.sex}</TableCell>
+                <TableCell>{SEX[clientData.sex]}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Nacimiento:</TableCell>
@@ -87,8 +87,11 @@ const ClientTableRow = ({clientID}) => {
                 <TableCell>Email:</TableCell>
                 <TableCell>{clientData.email}</TableCell>
                 </TableRow>
+                <TableRow>
+                <TableCell>Salario de la pareja:</TableCell>
+                <TableCell>{clientData.partner_salary}</TableCell>
+                </TableRow>
                 <FamilyTableRow clientData={clientData}/>
-
                 <TableRow>
                 <TableCell>Teléfono:</TableCell>
                 <TableCell>
@@ -103,74 +106,65 @@ const ClientTableRow = ({clientID}) => {
                 )}
                 </TableCell>
                 </TableRow>
-
                 <TableRow>
                 <TableCell>Nacionalidad:</TableCell>
-                <TableCell>{clientData.locality.province.nationality.name}</TableCell>
+                <TableCell>{clientData?.locality?.province?.nationality?.name}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Provincia:</TableCell>
-                <TableCell>{clientData.locality.province.name}</TableCell>
+                <TableCell>{clientData?.locality?.province?.name}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Localidad:</TableCell>
-                <TableCell>{clientData.locality.name}</TableCell>
+                <TableCell>{clientData?.locality?.name}</TableCell>
                 </TableRow>
-
                 <TableRow>
                 <TableCell>Dirección:</TableCell>
-                <TableCell>{clientData.address}</TableCell>
+                <TableCell>{clientData?.address}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Código postal:</TableCell>
-                <TableCell>{clientData.postal}</TableCell>
+                <TableCell>{clientData?.postal}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Estado civil:</TableCell>
-                <TableCell>{clientData.marital_status}</TableCell>
+                <TableCell>{MARITAL_STATUS[clientData?.marital_status]}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Vivienda:</TableCell>
-                <TableCell>{clientData.housing_type}</TableCell>
+                <TableCell>{HOUSING_TYPE[clientData?.housing_type]}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Estudios:</TableCell>
-                <TableCell>{clientData.studies}</TableCell>
+                <TableCell>{STUDIES[clientData?.studies]}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Patrimonio:</TableCell>
-                <TableCell>
-                <ul>
-                    <li key={1}>
-                    <strong>Empleo: </strong>
-                    {clientData?.patrimony?.employment}
-                    </li>
-                    <li key={2}>
-                    <strong>Salario: </strong>
-                    {clientData?.patrimony?.salary}
-                    </li>
-                    <li key={3}>
-                    <strong>Otros ingresos: </strong>
-                    {clientData?.patrimony?.other_income}
-                    </li>
-                    <li key={4}>
-                    <strong>Ingreso por otros ingresos: </strong>
-                    {clientData?.patrimony?.amount_other_income}
-                    </li>
-                    <li key={5}>
-                    <strong>Ingreso por jubilación: </strong>
-                    {clientData?.patrimony?.amount_retirement}
-                    </li>
-                    <li key={6}>
-                    <strong>Ingreso por pensión: </strong>
-                    {clientData?.patrimony?.amount_pension}
-                    </li>
-                    <li key={7}>
-                    <strong>Vehículo: </strong>
-                    {clientData?.patrimony?.vehicle}
-                    </li>
-                </ul>
-                </TableCell>
+                <TableCell>Empleo:</TableCell>
+                <TableCell>{clientData?.employment}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Salario:</TableCell>
+                <TableCell>{clientData?.salary}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Ingreso por jubilación:</TableCell>
+                <TableCell>{clientData?.amount_retirement}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Ingreso por pensión:</TableCell>
+                <TableCell>{clientData?.amount_pension}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Otros ingresos:</TableCell>
+                <TableCell>{clientData?.amount_other_income}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Motivo de otros ingresos:</TableCell>
+                <TableCell>{clientData?.other_income}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Vehículo:</TableCell>
+                <TableCell>{clientData?.vehicle}</TableCell>
                 </TableRow>
             </div>
                 ) : (

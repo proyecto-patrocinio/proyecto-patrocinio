@@ -257,146 +257,6 @@ export async function deletePhoneNumer(phone){
 };
 
 
-/**
- * Adds patrimony data for a client.
- *
- * @param {number} idClient - The ID of the client.
- * @param {Object} patrimonyData - The patrimony data to be added.
- * @returns {Promise<Object>} The added patrimony data.
- */
-export async function addPatrimony(idClient, patrimonyData){
-  try {
-    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-      + process.env.REACT_APP_PATH_PATRIMONY;
-
-    const patrimony = {
-      "employment": patrimonyData.employment,
-      "salary": patrimonyData.salary,
-      "other_income": patrimonyData.other_income,
-      "amount_other_income": patrimonyData.amount_other_income,
-      "amount_retirement": patrimonyData.amount_retirement,
-      "amount_pension": patrimonyData.amount_pension,
-      "vehicle": patrimonyData.vehicle,
-      "client": idClient,
-      "id": idClient
-    };
-
-    const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
-    const response = await fetch(url, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
-      },
-      body: JSON.stringify(patrimony)
-    });
-
-    if (response.ok) {
-      const patrimony = await response.json();
-      console.info(`Patrimony data for user ID ${idClient} is added successfuly.`)
-      return patrimony;
-    } else {
-      const mns = "No se pudo agregar los datos del patrimonio.";
-      console.error(mns, " Status: ", response.status);
-      throw new Error(mns);
-    };
-
-  } catch (error) {
-    console.error('Error while try to add patrimony data: ', error);
-    throw error;
-  };
-};
-
-
-/**
- * Updates patrimony data for a client.
- *
- * @param {number} idClient - The ID of the client.
- * @param {Object} patrimonyData - The updated patrimony data.
- * @returns {Promise<Object>} The updated patrimony data.
- */
-export async function updatePatrimony(idClient, patrimonyData){
-  try {
-    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-      + process.env.REACT_APP_PATH_PATRIMONY
-      + idClient + "/";
-
-    const patrimony = {
-      "employment": patrimonyData.employment,
-      "salary": patrimonyData.salary,
-      "other_income": patrimonyData.other_income,
-      "amount_other_income": patrimonyData.amount_other_income,
-      "amount_retirement": patrimonyData.amount_retirement,
-      "amount_pension": patrimonyData.amount_pension,
-      "vehicle": patrimonyData.vehicle,
-      "id": idClient
-    };
-
-    const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
-    const response = await fetch(url, {
-      method: 'PUT',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
-      },
-      body: JSON.stringify(patrimony)
-    });
-
-    if (response.ok) {
-      const patrimony = await response.json();
-      console.info(`Patrimony data for user ID ${idClient} is updated successfuly.`)
-      return patrimony;
-    } else {
-      const mns = 'No se pudieron actualizar los datos del patrimonio.';
-      console.error(mns, " Status: ", response.status);
-      throw new Error(mns);
-    };
-
-  } catch (error) {
-    console.error('Error while try to update patrimony data: ', error);
-    throw error;
-  };
-};
-
-
-/**
- * Get patrimony data for a client.
- *
- * @param {number} idClient - The ID of the client.
- * @returns {Promise<Object|null>} The patrimony data or null if not found.
- */
-export async function getPatrymony(idClient){
-  try {
-    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-      + process.env.REACT_APP_PATH_PATRIMONY
-      + idClient + "/";
-
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Token ${token}`
-      },
-    });
-
-    if (response.ok) {
-      const patrimony = await response.json();
-      return patrimony;
-    } else {
-      return null;
-    };
-
-  } catch (error) {
-    console.error('Error while try to get patrimony data: ', error);
-    throw error;
-  };
-};
 
 
 /**
@@ -409,7 +269,9 @@ export async function getPatrymony(idClient){
 export async function createFamily(family){
   try {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-      + process.env.REACT_APP_PATH_FAMILY;
+      + process.env.REACT_APP_PATH_CLIENTS
+      + family.client_id + '/'
+      + process.env.REACT_APP_PATH_CREATE_CHILDS;
 
     const csrfToken = Cookies.get("csrftoken");
     const token = window.localStorage.getItem('loggedCaseManagerUser');
@@ -441,50 +303,6 @@ export async function createFamily(family){
 };
 
 
-/**
- * Updates an existing family by sending a PUT request to the API.
- *
- * @param {Object} family - The updated family data.
- * @returns {Promise<{ success: boolean, content: Object }>} - A promise that resolves to an object indicating the success of the update and the updated family data.
- * @throws {Error} - If there is an error during the request or if the response is not okay.
- */
-export async function updateFamily(family){
-  try {
-    const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-      + process.env.REACT_APP_PATH_FAMILY
-      + family.id + "/";
-
-    const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
-    const response = await fetch(url, {
-      method: 'PUT',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
-      },
-      body: JSON.stringify(family)
-    });
-
-    if (response.ok) {
-      const family = await response.json();
-      console.info(`Family data with ID ${family.id} is updatted successfuly.`)
-      return {success:true, content:family};;
-    } else {
-      if (response.status === 404) {
-        return {success:false, content:null};
-    }
-      const mns = 'No se pudieron actualizar los datos familiares.';
-      console.error(mns, " Status: ", response.status);
-      throw new Error(mns);
-    };
-
-  } catch (error) {
-    console.error('Error while try to update family data: ', error);
-    throw error;
-  };
-};
 
 
 /**
@@ -546,7 +364,7 @@ export async function addChild(child){
       "address": child.address,
       "id_value": child.id_value,
       "locality": child.locality.id,
-      "family_client_user": child.family_client_user
+      "client_user": child.client_user
   }
 
     const csrfToken = Cookies.get("csrftoken");

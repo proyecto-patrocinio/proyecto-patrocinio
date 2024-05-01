@@ -5,18 +5,15 @@ import FamilyTableRow from './FamilyTableRow';
 
 describe('FamilyTableRow Component', () => {
   test('renders with no family information', () => {
-    const clientData = { family: null };
+    const clientData = { children: [] };
     render(<FamilyTableRow clientData={clientData} />);
 
     // Ensure that the component renders properly when there is no family information
     expect(screen.getByText('Familia:')).toBeInTheDocument();
-    expect(screen.getByText('-')).toBeInTheDocument();
   });
 
   test('renders with expanded family information', () => {
     const clientData = {
-      family: {
-        partner_salary: 50000,
         children: [
           {
             birth_date: '2000-01-01',
@@ -35,17 +32,13 @@ describe('FamilyTableRow Component', () => {
             last_name: 'Dummy',
           },
         ],
-      },
     };
 
     render(<FamilyTableRow clientData={clientData} />);
 
     // Ensure that the component renders properly with expanded family information
     expect(screen.getByText('Familia:')).toBeInTheDocument();
-    expect(screen.getByText(/Salario de la pareja:/)).toBeInTheDocument();
-    expect(screen.getByText(/50000/)).toBeInTheDocument();
-    expect(screen.getByText(/Num. de hijos:/)).toBeInTheDocument();
-    expect(screen.getByText(/1/)).toBeInTheDocument();
+    expect(screen.getByText(/1 hijos/)).toBeInTheDocument();
 
     fireEvent.click(document.getElementById("expanded-family-button"))
     expect(screen.getByText('Hijo 1:')).toBeInTheDocument();
@@ -63,8 +56,6 @@ describe('FamilyTableRow Component', () => {
 
   test('toggles expansion when button is clicked', () => {
     const clientData = {
-      family: {
-        partner_salary: 50000,
         children: [
           {
             birth_date: '2000-01-01',
@@ -78,7 +69,6 @@ describe('FamilyTableRow Component', () => {
             address: 'Address1',
           },
         ],
-      },
     };
 
     render(<FamilyTableRow clientData={clientData} />);

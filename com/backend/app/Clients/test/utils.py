@@ -39,24 +39,10 @@ def load_clients(self, id, postal, address, marital_status, housing_type, studie
     return response
 
 
-def load_family(self, id, client, partner_salary):
-    family_data = {
-        "id": id, 
-        "client": client,
-        "partner_salary": partner_salary
-    }
-    url= reverse('family-list')
-    request = self.factory.post(url, family_data)
-    force_authenticate(request, user=self.user)
-    view = FamilyViewSet.as_view({'post': 'create'})
-    response = view(request)
-    return response
-
-
-def load_child(self, id, birth_date, locality, address, family_client_user):
+def load_child(self, id, birth_date, locality, address, client_user):
     child_data = {
         "id": id, "birth_date": birth_date,"locality" : locality,"address": address,
-        "family_client_user": family_client_user,
+        "client_user": client_user,
         "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
         "id_value": "DUMMY", "sex": "MALE"
     }
@@ -78,20 +64,6 @@ def load_tel(self,id,phone_number,client):
     return response
 
 
-def load_patrimony(self, id, client, employment, salary, other_income,
-                   amount_other_income, amount_retirement, amount_pension, vehicle):
-    pat_data = {
-        "id": id, "client": client, "employment": employment, "salary": salary,
-        "other_income": other_income, "amount_other_income": amount_other_income,
-        "amount_retirement": amount_retirement, "amount_pension": amount_pension, 
-        "vehicle": vehicle,
-    }
-    url = reverse('patrimony-list')
-    request = self.factory.post(path=url, data=pat_data, format='json')
-    force_authenticate(request, user=self.user)
-    view = PatrimonyViewSet.as_view({'post': 'create'})
-    response = view(request)
-    return response
 
 
 def load_dummy_client(self):
