@@ -15,7 +15,7 @@ from Board.models import Board
 from Card.models import Card
 from Card.api.serializers import CardLogSerializer
 from constants import CONSULTANCY_BOARD_NAME
-from Consultation.models import Consultation
+from Consultation.models import Consultation, RequestConsultation
 from User.permissions import CheckGroupPermission, CaseTakerGroupPermission
 
 class BoardViewSet(viewsets.ModelViewSet):
@@ -32,15 +32,15 @@ class BoardViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
-        return super().create(self, request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
     def update(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
-        return super().update(self, request, *args, **kwargs)
+        return super().update(request, *args, **kwargs)
 
     def partial_update(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
-        return super().partial_update(self, request, *args, **kwargs)
+        return super().partial_update(request, *args, **kwargs)
 
     def retrieve(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
@@ -52,7 +52,7 @@ class BoardViewSet(viewsets.ModelViewSet):
             'panels__cards'
         )
         self.queryset = self.queryset.prefetch_related(
-            'request_consultations'
+            Prefetch('request_consultations', queryset=RequestConsultation.objects.filter(state='PENDING'))
         )
         board = super().retrieve(request, *args, **kwargs)
 
@@ -85,7 +85,7 @@ class BoardViewSet(viewsets.ModelViewSet):
             blocked_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='BLOCKED')),
             incomplete_count=Count('panels__cards__consultation', filter=Q(panels__cards__consultation__progress_state='INCOMPLETE')),
         ).prefetch_related(
-            Prefetch('request_consultations', to_attr='cards')
+            Prefetch('request_consultations', queryset=RequestConsultation.objects.filter(state='PENDING') ,to_attr='cards')
         ).annotate(
             number_cards=Count('panels__cards', distinct=True)
         )

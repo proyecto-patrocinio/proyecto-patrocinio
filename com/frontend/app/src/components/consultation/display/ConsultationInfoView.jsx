@@ -12,6 +12,30 @@ import EditableChoiceRow from '../../EditableChoiceRow.jsx';
 import {formatTimestamp} from '../../../utils/tools.jsx';
 
 
+
+    // Translate the variables defined in the database based on their references in Spanish
+    const OPTION_EN_TO_ES = {
+        'CREATED': 'Creado, sin asignar',
+        'PENDING': 'Solicitud de asignación pendiente',
+        'ASSIGNED': 'Asignado',
+        'REJECTED': 'Rechazado, sin asignar',
+        'ARCHIVED': 'Archivado',
+        "TODO": "Por hacer",
+        "IN_PROGRESS": "En progreso",
+        "DONE": "Terminado",
+        "PAUSED": "Pausado",
+        "BLOCKED": "Bloqueado"
+    }
+
+    const OPTION_ES_TO_EN = {
+        "Por hacer": "TODO",
+        "En progreso": "IN_PROGRESS",
+        "Terminado": "DONE",
+        "Pausado": "PAUSED",
+        "Bloqueado": "BLOCKED"
+      };
+
+
 /**
  * Component for displaying consultation information.
  * @param {Object} consultation - Consultation data to display.
@@ -39,7 +63,6 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
         "progress_state": "",
     });
 
-
     /**
      * Handles the click event to enable editing of a specific field.
      * @param {string} fieldKey - The key of the field to be edited.
@@ -63,16 +86,18 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
         || editedFields[fieldKey] === undefined
         || editedFields[fieldKey] === null
         ) {
-            fieldsError[fieldKey] = "This field cannot be empty."
+            fieldsError[fieldKey] = "Este campo no puede estar vacío."
             setFieldsError(fieldsError);
         } else {
             try {
                 await updateConsultationField(consultationData.id, fieldKey, editedFields[fieldKey])
                 fieldsError[fieldKey] = "";
                 setFieldsError(fieldsError);
+                const editedValue = editedFields[fieldKey]
+                const englishValue = OPTION_ES_TO_EN[editedValue] || editedValue;
                 setConsultation((prevConsultation) => ({
                     ...prevConsultation,
-                    [fieldKey]: editedFields[fieldKey],
+                    [fieldKey]: englishValue,
                 }));
                 isFieldsEditing[fieldKey] = false;
                 setIsFieldsEditing(isFieldsEditing);
@@ -80,7 +105,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     updateViewTag(editedFields.tag)
                 }
             } catch(e) {
-                fieldsError[fieldKey] = "Error updating field. Please try again."
+                fieldsError[fieldKey] = "Error actualizando el campo. Por favor, inténtalo de nuevo."
                 setFieldsError(fieldsError);
             }
         }
@@ -125,7 +150,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     setConsultation(consultationResponse)
                 }
             } catch (error) {
-                console.error("Failed to fetch Consultation in Card.");
+                console.error("Error retrieving the consultation.");
                 console.debug(error);
             }
         };
@@ -143,7 +168,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
             <TableBody>
                 <EditableFieldRow
                     id={"edit-tag"}
-                    tittle={"Tag:"}
+                    title={"Etiqueta:"}
                     isEditing={isFieldsEditing.tag}
                     value={isFieldsEditing.tag ? editedFields.tag : consultationData.tag }
                     onEdit={handleEditClick}
@@ -156,7 +181,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 <ClientTableRow clientID={consultationData.client}/>
                 <EditableFieldRow
                     id={"edit-opponent"}
-                    tittle={"Opponent:"}
+                    title={"Oponente:"}
                     isEditing={isFieldsEditing.opponent}
                     value={isFieldsEditing.opponent ? editedFields.opponent : consultationData.opponent}
                     onEdit={handleEditClick}
@@ -167,25 +192,25 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     fieldKey={"opponent"}
                 />
                 <TableRow>
-                <TableCell>Availability State:</TableCell>
-                <TableCell>{consultationData.availability_state}</TableCell>
+                <TableCell>Estado de disponibilidad:</TableCell>
+                <TableCell>{OPTION_EN_TO_ES[consultationData.availability_state]}</TableCell>
                 </TableRow>
                 <EditableChoiceRow
                     id={"edit-progress-state"}
-                    title={"Progress State:"}
+                    title={"Estado de progreso:"}
                     isEditing={isFieldsEditing.progress_state}
-                    value={consultationData.progress_state}
+                    value={OPTION_EN_TO_ES[consultationData.progress_state] || consultationData.progress_state}
                     onEdit={handleEditClick}
                     onSave={handleSaveClick}
                     onChange={handleOnChange}
                     onCancel={handleOnCancel}
                     error={fieldsError.progress_state}
                     fieldKey={"progress_state"}
-                    options={["TODO", "IN_PROGRESS", "DONE", "PAUSED", "BLOCKED"]}
+                    options={["Por hacer", "En progreso", "Terminado", "Pausado", "Bloqueado"]}
                 />
                 <EditableFieldRow
                     id={"edit-description"}
-                    tittle={"Description:"}
+                    title={"Descripción:"}
                     isEditing={isFieldsEditing.description}
                     value={isFieldsEditing.description ? editedFields.description : consultationData.description}
                     onEdit={handleEditClick}
@@ -196,7 +221,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     fieldKey={"description"}
                 />
                 <TableRow>
-                <TableCell>Creation time stamp (UTC):</TableCell>
+                <TableCell>Tiempo de creación (UTC):</TableCell>
                 <TableCell>{formatTimestamp(consultationData.time_stamp)}</TableCell>
                 </TableRow>
             </TableBody>

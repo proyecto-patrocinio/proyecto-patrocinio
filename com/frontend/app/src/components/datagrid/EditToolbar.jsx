@@ -34,14 +34,14 @@ export function EditToolbar({setRows, setRowModesModel, emptyRecord, setIsAnyRow
       }));
       setIsAnyRowEditing(true);
     } else {
-      setAlertMessage("There is already a record in editing.");
+      setAlertMessage("Ya hay un registro en edición.");
     }
   };
 
   return (
     <GridToolbarContainer>
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
+        Agregar registro
       </Button>
       <GridToolbarExport
       csvOptions={{

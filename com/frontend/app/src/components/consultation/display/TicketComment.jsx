@@ -74,8 +74,8 @@ const TicketComment = ({comment}) => {
             }}
             >
             <TicketMenu showMenu={showMenu} key={"menu"}>
-                <MenuItem id="comment-menu-item-delete" onClick={handleDeleteClick}>Delete</MenuItem>
-                <MenuItem id="comment-menu-item-edit" onClick={handleEditClick}>Edit</MenuItem>
+                <MenuItem id="comment-menu-item-delete" onClick={handleDeleteClick}>Eliminar</MenuItem>
+                <MenuItem id="comment-menu-item-edit" onClick={handleEditClick}>Editar</MenuItem>
             </TicketMenu>
         </div>
     );
@@ -119,7 +119,7 @@ const TicketComment = ({comment}) => {
                                         <div>
                                             <TextField
                                                 id="edit-comment-area"
-                                                placeholder="Enter your comment here..."
+                                                placeholder="Ingrese su comentario aquí..."
                                                 multiline
                                                 variant="outlined"
                                                 fullWidth

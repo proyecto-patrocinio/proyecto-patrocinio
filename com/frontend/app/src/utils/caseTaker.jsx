@@ -28,7 +28,7 @@ export const getConsultationList = async () => {
             const data = await response.json();
             return data;
         } else {
-            throw new Error('Failed in fetch Consultation List. Status Code:', response.status);
+            throw new Error('Falló la obtención de las consultas. Respuesta con código:', response.status);
         }
     } catch (error) {
         console.error('Failed in fetch Consultation List.');
@@ -79,7 +79,7 @@ export const getConsultationsByAvailability = async (availability) => {
                 consultation: item.id
             }));
         } else {
-            throw new Error(`Failed in fetch Consultations with status ${availability}. Status Code:`, response.status);
+            throw new Error(`Falló la obtención de consultas con estado ${availability}. Respuesta con código: `, response.status);
         }
     } catch (error) {
         console.error(`Failed in fetch Consultations with status ${availability}.`);
@@ -107,10 +107,10 @@ export const getConsultancyBoard = async () => {
             return requestConsultationsList
 
         } else {
-            throw new Error('Failed to fetch Request Card. Status code: ' + response.status);
+            throw new Error('Falló la obtención de la consultoría. Respuesta con código: ' + response.status);
         }
     } catch (error) {
-        console.error('Failed to fetch Request Card.');
+        console.error('Failed to fetch Consultancy board.');
         console.debug(error);
         throw error;
     }
@@ -136,7 +136,7 @@ export const getConsultation = async (id) => {
             const data = await response.json();
             return data;
         } else {
-            throw new Error("Failed in fetch Consultation with ID " + id +". Status Code:" + response.status);
+            throw new Error("Falló la obtención de la consulta con ID " + id +". Respuesta con código:" + response.status);
         }
     } catch (error) {
         console.error("Failed in fetch Consultation with ID " + id);
@@ -184,7 +184,7 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
             }
 
         } else {
-            const mns = `Failed to update the '${fieldName}' field of Consultation.`
+            const mns = `Falló la actualización del campo '${fieldName}' de la consulta.`
             console.warn(mns);
             throw new Error(mns);
         }
@@ -221,7 +221,7 @@ export async function deleteConsultation(consultationID) {
         })
 
         if (!response.ok) {
-            const mns = `Failed to DELETE Consultation with ID ${consultationID}.`
+            const mns = `No se pudo eliminar la consulta con ID ${consultationID}.`
             console.error(mns ,' Status code:', response.status);
             throw new Error(mns);
             }
@@ -275,7 +275,7 @@ export const updateConsultation = async (data) => {
             const consultation = await response.json();
             return consultation;
         } else {
-            const mns = `Failed to update Consultation with ID '${data.id}'.`
+            const mns = `No se pudo actualizar la consulta con ID '${data.id}'.`
             console.warn(mns, "Status: " + response.status);
             throw new Error(mns);
         }
@@ -324,7 +324,7 @@ export const createConsultationByDict = async (data) => {
             return consultation;
         } else {
             if (responseJson.client != null || responseJson.client !== undefined) {
-                responseJson.client = "[Must be a valid Client DNI or Passport]"
+                responseJson.client = "[Por favor, ingresar un DNI o pasaporte de cliente existente válido.]"
             };
             const mns = (JSON.stringify(responseJson)).replace(/["{}]/g, '');
             console.warn(mns, "Status: " + response.status);
@@ -362,7 +362,7 @@ export async function getBoardLogs(days, boardID){
             return logs
 
         } else {
-            throw new Error(`Failed to fetch logs of Board ${boardID}. Status code: ${response.status}`);
+            throw new Error(`Falló la obtención de los logs del tablero ${boardID}. Código de respuesta: ${response.status}`);
         }
     } catch (error) {
         console.error(`Unexpected error while trying to fetch logs of Board ${boardID}.`);
@@ -398,7 +398,7 @@ export async function deleteRequest(requestID) {
 
         if (!response.ok) {
             console.error('Failed to DELETE request Consultation', requestID ,'. Status code:', response.status);
-            throw new Error('Failed to DELETE request consultation.');
+            throw new Error('No se pudo eliminar la solicitud de consulta.');
         };
 
         console.info("Successful delete Request for Consultation ID:", requestID)
@@ -432,13 +432,15 @@ export async function createRequest(consultationID, destinationBoardID) {
             },
             body: JSON.stringify({
                 "consultation": consultationID,
-                "destiny_board": destinationBoardID
+                "destiny_board": destinationBoardID,
+                "state": "PENDING",
+                "resolution_timestamp": null
             }),
         })
 
         if(!response.ok) {
             console.error('Failed to POST request Consultation:', response.status);
-            throw new Error('Failed to POST request consultation.');
+            throw new Error('Falló la creación de la Solicitud de Consulta');
         }
         console.info("Successfull Create Reques for Consultatio ID:", consultationID)
     } catch (error) {

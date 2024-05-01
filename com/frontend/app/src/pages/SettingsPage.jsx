@@ -66,21 +66,21 @@ const SettingsPage = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Dashboard title="SETTINGS">
+      <Dashboard title="CONFIGURACIONES">
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} md={6}>
             <Paper sx={{ p: 4 }}>
               <Typography variant="h4" sx={{ mb: 3, color: '#1976D2' }}>
-                User Profile
+                Perfil de usuario
               </Typography>
 
               <Box sx={{ textAlign: 'left', mb: 3 }}>
                 <Typography variant="h6" color="primary">
-                  User Data
+                  Datos del usuario
                 </Typography>
-                <p><strong>Username:</strong> {userInfo.username}</p>
-                <p><strong>First Name:</strong> {userInfo.first_name}</p>
-                <p><strong>Last Name:</strong> {userInfo.last_name}</p>
+                <p><strong>Nombre de Usuario:</strong> {userInfo.username}</p>
+                <p><strong>Nombre:</strong> {userInfo.first_name}</p>
+                <p><strong>Apellido:</strong> {userInfo.last_name}</p>
                 <p><strong>Email:</strong> {userInfo.email}</p>
               </Box>
 
@@ -91,7 +91,7 @@ const SettingsPage = () => {
                   <>
                     <Grid item xs={12}>
                       <TextField
-                        label="New First Name"
+                        label="Nuevo Nombre"
                         fullWidth
                         value={editedFirstName}
                         onChange={(e) => setEditedFirstName(e.target.value)}
@@ -100,7 +100,7 @@ const SettingsPage = () => {
                     </Grid>
                     <Grid item xs={12}>
                       <TextField
-                        label="New Last Name"
+                        label="Nuevo Apellido"
                         fullWidth
                         value={editedLastName}
                         onChange={(e) => setEditedLastName(e.target.value)}
@@ -129,13 +129,13 @@ const SettingsPage = () => {
                       startIcon={<EditIcon />}
                       fullWidth
                     >
-                      Edit Profile
+                      Editar Perfil
                     </Button>
                   </Grid>
                 )}
                 <Grid item xs={12} md={6}>
                   <Button variant="outlined" color="primary" onClick={()=>{setChangePasswordMode(true)}} fullWidth>
-                    Change Password
+                    Cambiar Contraseña
                   </Button>
                 </Grid>
               </Grid>
@@ -144,7 +144,7 @@ const SettingsPage = () => {
                 <Grid container spacing={2} sx={{ mt: 3 }}>
                   <Grid item xs={12}>
                     <TextField
-                      label="New Password"
+                      label="Nueva Contraseña"
                       type="password"
                       fullWidth
                       value={newPassword}
@@ -154,7 +154,7 @@ const SettingsPage = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                      label="Confirm New Password"
+                      label="Confirmar nueva Contraseña"
                       type="password"
                       fullWidth
                       value={confirmNewPassword}
@@ -170,7 +170,7 @@ const SettingsPage = () => {
                       startIcon={<SaveIcon />}
                       fullWidth
                     >
-                      Save Password
+                      Guardar Contraseña
                     </Button>
                   </Grid>
                 </Grid>

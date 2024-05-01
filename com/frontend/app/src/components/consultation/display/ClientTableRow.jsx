@@ -7,7 +7,7 @@ import FamilyTableRow from './FamilyTableRow.jsx';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Button from '@mui/material/Button';
-
+import {HOUSING_TYPE, MARITAL_STATUS, SEX, STUDIES, ID_TYPE} from './dictionaryEs.jsx';
 
 /**
  * Functional component for displaying client information in a table row.
@@ -40,7 +40,7 @@ const ClientTableRow = ({clientID}) => {
     if (clientData == null) {
         return (
             <TableRow>
-                <TableCell>Client:</TableCell>
+                <TableCell>Consultante:</TableCell>
                 <TableCell>{"-"}</TableCell>
             </TableRow>
         );
@@ -54,43 +54,46 @@ const ClientTableRow = ({clientID}) => {
     return (
 
         <TableRow>
-        <TableCell>Client:</TableCell>
+        <TableCell>Consultante:</TableCell>
         <TableCell>
         {isExpanded ? (
             <div>
 
                 <TableRow>
-                <TableCell>First Name:</TableCell>
+                <TableCell>Nombre:</TableCell>
                 <TableCell>{clientData.first_name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Last Name:</TableCell>
+                <TableCell>Apellido:</TableCell>
                 <TableCell>{clientData.last_name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>ID Type:</TableCell>
-                <TableCell>{clientData.id_type}</TableCell>
+                <TableCell>Tipo de documento:</TableCell>
+                <TableCell>{ID_TYPE[clientData.id_type]}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>ID Value:</TableCell>
+                <TableCell>Num. de documento:</TableCell>
                 <TableCell>{clientData.id_value}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Sex:</TableCell>
-                <TableCell>{clientData.sex}</TableCell>
+                <TableCell>Sexo:</TableCell>
+                <TableCell>{SEX[clientData.sex]}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Birthdate:</TableCell>
+                <TableCell>Nacimiento:</TableCell>
                 <TableCell>{clientData.birth_date}</TableCell>
                 </TableRow>
                 <TableRow>
                 <TableCell>Email:</TableCell>
                 <TableCell>{clientData.email}</TableCell>
                 </TableRow>
-                <FamilyTableRow clientData={clientData}/>
-
                 <TableRow>
-                <TableCell>Telephones:</TableCell>
+                <TableCell>Salario de la pareja:</TableCell>
+                <TableCell>{clientData.partner_salary}</TableCell>
+                </TableRow>
+                <FamilyTableRow clientData={clientData}/>
+                <TableRow>
+                <TableCell>Teléfono:</TableCell>
                 <TableCell>
                 {clientData.tels.length > 0 ? (
                     <ul>
@@ -103,74 +106,65 @@ const ClientTableRow = ({clientID}) => {
                 )}
                 </TableCell>
                 </TableRow>
-
                 <TableRow>
-                <TableCell>Nationality:</TableCell>
-                <TableCell>{clientData.locality.province.nationality.name}</TableCell>
+                <TableCell>Nacionalidad:</TableCell>
+                <TableCell>{clientData?.locality?.province?.nationality?.name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>province:</TableCell>
-                <TableCell>{clientData.locality.province.name}</TableCell>
+                <TableCell>Provincia:</TableCell>
+                <TableCell>{clientData?.locality?.province?.name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Locality:</TableCell>
-                <TableCell>{clientData.locality.name}</TableCell>
-                </TableRow>
-
-                <TableRow>
-                <TableCell>Address:</TableCell>
-                <TableCell>{clientData.address}</TableCell>
+                <TableCell>Localidad:</TableCell>
+                <TableCell>{clientData?.locality?.name}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Postal Code:</TableCell>
-                <TableCell>{clientData.postal}</TableCell>
+                <TableCell>Dirección:</TableCell>
+                <TableCell>{clientData?.address}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Marital Status:</TableCell>
-                <TableCell>{clientData.marital_status}</TableCell>
+                <TableCell>Código postal:</TableCell>
+                <TableCell>{clientData?.postal}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Housing Type:</TableCell>
-                <TableCell>{clientData.housing_type}</TableCell>
+                <TableCell>Estado civil:</TableCell>
+                <TableCell>{MARITAL_STATUS[clientData?.marital_status]}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Studies:</TableCell>
-                <TableCell>{clientData.studies}</TableCell>
+                <TableCell>Vivienda:</TableCell>
+                <TableCell>{HOUSING_TYPE[clientData?.housing_type]}</TableCell>
                 </TableRow>
                 <TableRow>
-                <TableCell>Patrimony:</TableCell>
-                <TableCell>
-                <ul>
-                    <li key={1}>
-                    <strong>Employment: </strong>
-                    {clientData?.patrimony?.employment}
-                    </li>
-                    <li key={2}>
-                    <strong>Salary: </strong>
-                    {clientData?.patrimony?.salary}
-                    </li>
-                    <li key={3}>
-                    <strong>Other Income: </strong>
-                    {clientData?.patrimony?.other_income}
-                    </li>
-                    <li key={4}>
-                    <strong>Amount Other Income: </strong>
-                    {clientData?.patrimony?.amount_other_income}
-                    </li>
-                    <li key={5}>
-                    <strong>Amount Retirement: </strong>
-                    {clientData?.patrimony?.amount_retirement}
-                    </li>
-                    <li key={6}>
-                    <strong>Amount Pension: </strong>
-                    {clientData?.patrimony?.amount_pension}
-                    </li>
-                    <li key={7}>
-                    <strong>Vehicle: </strong>
-                    {clientData?.patrimony?.vehicle}
-                    </li>
-                </ul>
-                </TableCell>
+                <TableCell>Estudios:</TableCell>
+                <TableCell>{STUDIES[clientData?.studies]}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Empleo:</TableCell>
+                <TableCell>{clientData?.employment}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Salario:</TableCell>
+                <TableCell>{clientData?.salary}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Ingreso por jubilación:</TableCell>
+                <TableCell>{clientData?.amount_retirement}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Ingreso por pensión:</TableCell>
+                <TableCell>{clientData?.amount_pension}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Otros ingresos:</TableCell>
+                <TableCell>{clientData?.amount_other_income}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Motivo de otros ingresos:</TableCell>
+                <TableCell>{clientData?.other_income}</TableCell>
+                </TableRow>
+                <TableRow>
+                <TableCell>Vehículo:</TableCell>
+                <TableCell>{clientData?.vehicle}</TableCell>
                 </TableRow>
             </div>
                 ) : (

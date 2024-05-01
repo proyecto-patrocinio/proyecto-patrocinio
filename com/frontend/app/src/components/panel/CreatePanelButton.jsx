@@ -36,7 +36,7 @@ function CreatePanelButton({boardID, addPanel}) {
   // Function to handle the 'Accept' button click
   const handleAccept = async () => {
     if (title.trim() === '') {
-      setError('The title cannot be empty.');
+      setError('El título no puede estar vacío.');
     } else {
       setOpen(false);
       setError('');
@@ -48,7 +48,7 @@ function CreatePanelButton({boardID, addPanel}) {
         setSuccess(true);
       } else {
         // Show an error notification
-        setError('Failed to create panel. Please try again later.');
+        setError("No se pudo crear el panel. Por favor, inténtalo de nuevo más tarde.");
       }
     }
   };
@@ -66,10 +66,10 @@ function CreatePanelButton({boardID, addPanel}) {
   return (
     <div>
       {/* Tooltip to provide a hint for the IconButton */}
-      <AddButton title={"Create CardPanel"} onClick={handleClickOpen}/>
+      <AddButton title={"Crear Panel"} onClick={handleClickOpen}/>
       <SimpleDialog
-          title={"Create CardPanel"}
-          description={"Please enter a title and click 'Accept' to create a panel."}
+          title={"Crear Panel"}
+          description={"Por favor, ingresa un título y haz clic en 'Aceptar' para crear un panel."}
           isOpen={open}
           onAccept={handleAccept}
           onClose={handleClose}
@@ -77,7 +77,7 @@ function CreatePanelButton({boardID, addPanel}) {
         <TextField
             autoFocus
             margin="dense"
-            label="Title"
+            label="Título"
             type="text"
             fullWidth
             value={title}
@@ -87,7 +87,7 @@ function CreatePanelButton({boardID, addPanel}) {
         />
       </SimpleDialog>
       <AlertSnackbar
-          message={success ? "Panel created successfully!" : null}
+          message={success ? "Panel creado exitosamente!" : null}
           onClose={handleCloseSuccessSnackbar}
       />
     </div>

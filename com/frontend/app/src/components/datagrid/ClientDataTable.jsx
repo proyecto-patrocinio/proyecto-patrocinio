@@ -3,9 +3,9 @@ import { Button } from '@mui/material';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import BaseGrid from './BaseGrid';
 import {
-  addChild, addPatrimony, addPhoneNumer, createClient,
-  createFamily, deleteChild, deleteClient, deletePhoneNumer, getPatrymony,
-  updateClient, updateFamily, updatePatrimony
+  addChild, addPhoneNumer, createClient,
+  createFamily, deleteChild, deleteClient, deletePhoneNumer, 
+  updateClient
 } from '../../utils/client';
 import { findUniqueElementsInA, formatDateToString } from '../../utils/tools';
 import { getLocalityByID, getLocalityList, getNationalityList, getProvinceList } from '../../utils/locality';
@@ -43,28 +43,6 @@ function ClientDataTable({ data }) {
     updateGeographic();
   },[geographyModel]);
 
-  /**
-   * Processes a family, updating or creating it along with its children.
-   *
-   * @param {Object} family - The family data to be processed.
-   * @returns {Promise<Object>} - A promise that resolves to the processed family data.
-   */
-  const processFamily = async (family) => {
-    const FamilyIsNew = family.id.toString().includes('NEW');
-    if (!FamilyIsNew){
-        const originalChildren = family.children;
-        const newChildren = await processChildren(originalChildren);
-        const response = await updateFamily(family);
-        const isUpdated = response.success;
-        if(isUpdated){
-          const newFamily = response.content;
-          newFamily.children = newChildren;
-          return newFamily;
-        } // false 404 -> not found, should be created
-    }
-      const newFamily = await createFamily({...family, children: children});
-      return newFamily;
-  }
 
   /**
    * Processes children, updating, adding, or deleting them as needed.
@@ -116,22 +94,6 @@ function ClientDataTable({ data }) {
     return updatedPhoneNumbers;
   };
 
-  /**
-   * Process Patrimony - Retrieves, updates, or adds patrimony data for a client based on the client's ID.
-   * @param {number} idClient - The ID of the client.
-   * @param {Object} patrimonyData - The patrimony data to be updated or added.
-   * @returns {Promise<Object>} The processed patrimony data.
-   */
-  const processPatrimony = async (idClient, patrimonyData) => {
-    let patrimony = await getPatrymony(idClient);
-    const patrymonyExists = patrimony != null;
-    if (patrymonyExists) {
-      patrimony = await updatePatrimony(idClient, patrimonyData);
-    } else {
-      patrimony = await addPatrimony(idClient, patrimonyData);
-    }
-    return patrimony;
-  };
 
   /**
    * Create a new client with processed phone numbers.
@@ -142,10 +104,9 @@ function ClientDataTable({ data }) {
     let createdClient = await createClient(client);
     createdClient.tels = [];
     createdClient.tels =  await processPhoneNumbers(createdClient);
-    const patrimony = await processPatrimony(createdClient.id, client.patrimony);
-    createdClient = Object.assign(createdClient, {patrimony: patrimony});
-    if (client.family){
-      createdClient.family = await createFamily({partner_salary:client.family.partner_salary, id: createdClient.id, children: children});
+
+    if (children){
+      createdClient.children = await createFamily({client_id: createdClient.id, children: children})["children"]
     }
     return createdClient;
   };
@@ -158,11 +119,8 @@ function ClientDataTable({ data }) {
   const updateRowHandler = async (client) => {
     let updatedClient = await updateClient(client);
     updatedClient.tels =  await processPhoneNumbers(client);
-    const patrimony = await processPatrimony(updatedClient.id, client.patrimony);
-    updatedClient = Object.assign(updatedClient, {patrimony: patrimony});
-    if (client.family) {
-      updatedClient.family = await processFamily({...client.family, id:client.id});
-      }
+
+    updatedClient.children = await processChildren(client.children || []);
     return updatedClient;
   };
 
@@ -187,11 +145,6 @@ function ClientDataTable({ data }) {
     clientRendered.nationality = {
       'id': localityData.province.nationality.id, 'name': localityData.province.nationality.name
     };
-    if(clientRendered.patrimony){
-      Object.keys(clientRendered.patrimony).forEach(subField => {
-        clientRendered[`patrimony.${subField}`] = clientRendered.patrimony[subField];
-      });
-    }
     return clientRendered;
   };
 
@@ -222,74 +175,74 @@ function ClientDataTable({ data }) {
       setGeographyModel({locality: locality, province: province, nationality: nationality, rowID: row?.id});
       // Init States of Phone Number
       setPhoneNumbers(row?.tels || []);
-      setChildren(row?.family?.children || []);
+      setChildren(row?.children || []);
     };
 
   const columns = [
     { field: 'id', headerName: 'ID', width: 70, editable: false},
-    { field: 'postal', 'type': 'number', headerName: 'Postal', width: 80, editable: true },
-    { field: 'address', headerName: 'Address', width: 150, editable: true },
+    { field: 'postal', 'type': 'number', headerName: 'Código Postal', width: 80, editable: true },
+    { field: 'address', headerName: 'Dirección', width: 150, editable: true },
     {
-      field: 'marital_status', headerName: 'Marital Status', width: 120, editable: true,
+      field: 'marital_status', headerName: 'Estado Civil', width: 120, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        {value: 'SINGLE', label: 'Single'},
-        {value: 'MARRIED', label: 'Married'},
-        {value: 'DIVORCED', label: 'Divorced'},
-        {value: 'WIDOWER', label: 'Widower'},
+        {value: 'SINGLE', label: 'Soltero/a'},
+        {value: 'MARRIED', label: 'Casado/a'},
+        {value: 'DIVORCED', label: 'Divorciado/a'},
+        {value: 'WIDOWER', label: 'Viudo/a'},
       ]
     },
     {
-      field: 'housing_type', headerName: 'Housing Type', width: 200, editable: true,
+      field: 'housing_type', headerName: 'Vivienda', width: 200, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        { value: 'HOUSE', label: 'House' },
-        { value: 'DEPARTMENT', label: 'Department' },
-        { value: 'TRAILER', label: 'Trailer' },
-        { value: 'STREET_SITUATION', label: 'Street Situation' },
+        { value: 'HOUSE', label: 'Casa' },
+        { value: 'DEPARTMENT', label: 'Departamento' },
+        { value: 'TRAILER', label: 'Remolque' },
+        { value: 'STREET_SITUATION', label: 'Situación de calle' },
       ]
     },
     {
-      field: 'studies', headerName: 'Education Level', width: 180, editable: true,
+      field: 'studies', headerName: 'Estudios', width: 180, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        { value: 'INCOMPLETE_PRIMARY', label: 'Incomplete Primary' },
-        { value: 'COMPLETE_PRIMARY', label: 'Complete Primary' },
-        { value: 'INCOMPLETE_SECONDARY', label: 'Incomplete Secondary' },
-        { value: 'COMPLETE_SECONDARY', label: 'Complete Secondary' },
-        { value: 'INCOMPLETE_TERTIARY', label: 'Incomplete Tertiary' },
-        { value: 'COMPLETE_TERTIARY', label: 'Complete Tertiary' },
-        { value: 'INCOMPLETE_UNIVERSITY', label: 'Incomplete University' },
-        { value: 'COMPLETE_UNIVERSITY', label: 'Complete University' }
+        { value: 'INCOMPLETE_PRIMARY', label: 'Primario incompleto' },
+        { value: 'COMPLETE_PRIMARY', label: 'Primario completo' },
+        { value: 'INCOMPLETE_SECONDARY', label: 'Secundario incompleto' },
+        { value: 'COMPLETE_SECONDARY', label: 'Secundario completo' },
+        { value: 'INCOMPLETE_TERTIARY', label: 'Terciario incompleto' },
+        { value: 'COMPLETE_TERTIARY', label: 'Terciario completo' },
+        { value: 'INCOMPLETE_UNIVERSITY', label: 'Universidad incompleta' },
+        { value: 'COMPLETE_UNIVERSITY', label: 'Universidad completa' }
       ]
     },
     { field: 'email', headerName: 'Email', width: 200, editable: true },
     {
-      field: 'id_type', headerName: 'ID Type', width: 100, editable: true,
+      field: 'id_type', headerName: 'Tipo de documento', width: 100, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        {value: 'DOCUMENT', label: 'Document'},
-        {value: 'PASSPORT', label: 'Passport'},
+        {value: 'DOCUMENT', label: 'DNI'},
+        {value: 'PASSPORT', label: 'Pasaporte'},
       ]
     },
-    { field: 'id_value', headerName: 'ID Value', width: 120, editable: true },
-    { field: 'first_name', headerName: 'First Name', width: 150, editable: true },
-    { field: 'last_name', headerName: 'Last Name', width: 150, editable: true },
+    { field: 'id_value', headerName: 'Num. de documento', width: 120, editable: true },
+    { field: 'first_name', headerName: 'Nombre', width: 150, editable: true },
+    { field: 'last_name', headerName: 'Apellido', width: 150, editable: true },
     {
-      field: 'birth_date',  headerName: 'Birth Date', width: 100,
+      field: 'birth_date',  headerName: 'Nacimiento', width: 100,
       editable: true, type: 'date',
       valueGetter: ({ value }) => value && new Date(value),
       valueFormatter: (value) =>  value?.value && formatDateToString(value.value)
     },
     {
-      field: 'sex', headerName: 'Sex', width: 110, editable: true,
+      field: 'sex', headerName: 'Sexo', width: 110, editable: true,
       type: 'singleSelect',
       valueOptions: [
-        {value: 'MALE', label: 'Male'},
-        {value: 'FEMALE', label: 'Female'},
+        {value: 'MALE', label: 'Masculino'},
+        {value: 'FEMALE', label: 'Femenino'},
       ]
     },
-    { field: 'nationality', headerName: 'Nationality',
+    { field: 'nationality', headerName: 'Nacionalidad',
       width: 150, editable: true,
       renderEditCell: (params) => (
         <AutocompleteCell {...params} optionsNameID={nationalityOptions} model={geographyModel?.nationality}
@@ -305,7 +258,7 @@ function ClientDataTable({ data }) {
       ),
       valueFormatter: (value) => value.value?.name,
     },
-    { field: 'province', headerName: 'Province', editable: true,  width: 200,
+    { field: 'province', headerName: 'Provincia', editable: true,  width: 200,
       valueFormatter: (value) => value.value?.name,
       renderEditCell: (params) => (
         <AutocompleteCell {...params} optionsNameID={provinceOptions} model={geographyModel?.province}
@@ -319,7 +272,7 @@ function ClientDataTable({ data }) {
         />
       )
     },
-    { field: 'locality', headerName: 'Locality',
+    { field: 'locality', headerName: 'Localidad',
       width: 200, editable: true,
       renderEditCell: (params) => (
         <AutocompleteCell {...params} optionsNameID={localityOptions}  model={geographyModel?.locality}
@@ -336,7 +289,7 @@ function ClientDataTable({ data }) {
     },
     {
       field: 'tels',
-      headerName: 'Phone Numbers',
+      headerName: 'Tel',
       valueFormatter: (value) => value?.value?.map((tel)=> tel?.phone_number),
       width: 180, editable: true,
       renderEditCell: (params) => {
@@ -348,7 +301,7 @@ function ClientDataTable({ data }) {
             startIcon={<LocalPhoneIcon />}
             onClick={() => setIsPhoneNumbersDialogOpen(true)}
           >
-          Manage Tels
+          Editar Tel
           </Button>
           <PhoneNumbersDialog
             open={isPhoneNumbersDialogOpen}
@@ -360,27 +313,18 @@ function ClientDataTable({ data }) {
       )},
     },
     // PATRIMONY
-    { field: 'patrimony.employment', headerName: 'Employment', width: 180, editable: true,
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('employment'),},
-    { field: 'patrimony.salary', headerName: 'Salary', width: 100, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('salary'),},
-    { field: 'patrimony.other_income', headerName: 'Other Incomet', width: 110, editable: true,
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('other_income'),},
-    { field: 'patrimony.amount_other_income', headerName: 'Amount Other Incomet', width: 120, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_other_income'),},
-    { field: 'patrimony.amount_retirement', headerName: 'Amount Retirement', width: 100, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_retirement'),},
-    { field: 'patrimony.amount_pension', headerName: 'Amount Pension', width: 110, editable: true, 'type': 'number',
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('amount_pension'),},
-    { field: 'patrimony.vehicle', headerName: 'Vehicle', width: 120, editable: true,
-      valueGetter: getSubField, valueSetter: setSubPatrimonyField('vehicle'),},
+    { field: 'employment', headerName: 'Empleo', width: 180, editable: true},
+    { field: 'salary', headerName: 'Salario', width: 100, editable: true, 'type': 'number'},
+    { field: 'other_income', headerName: 'Otros ingresos', width: 110, editable: true},
+    { field: 'amount_other_income', headerName: 'Ingreso por otros ingresos', width: 130, editable: true, 'type': 'number'},
+    { field: 'amount_retirement', headerName: 'Ingreso por jubilación', width: 130, editable: true, 'type': 'number'},
+    { field: 'amount_pension', headerName: 'Ingreso por pensión', width: 120, editable: true, 'type': 'number'},
+    { field: 'vehicle', headerName: 'Vehículo', width: 120, editable: true,},
 
       //FAMILY
-      { field: 'family.partner_salary', headerName: 'Partner Salary', width: 100, editable: true,
-        type: 'number', valueGetter: getSubField, valueSetter: setSubFamilyField('partner_salary'),},
-      { field: 'family.children', headerName: 'Children', editable: true, width: 180,
-      valueGetter: getSubField,
-        valueFormatter: (value) => (value?.value?.length || 0 ) + " children",
+      { field: 'partner_salary', headerName: 'Salario de la pareja', width: 125, editable: true},
+      { field: 'children', headerName: 'Hijos', editable: true, width: 180,
+        valueFormatter: (value) => (value?.value?.length || 0 ) + " hijos",
         renderEditCell: (params) => {
           return(
             <div>
@@ -390,41 +334,20 @@ function ClientDataTable({ data }) {
               startIcon={<FamilyRestroomIcon />}
               onClick={() => setIsFamilyDialogOpen(true)}
             >
-            Manage Family
+              Editar Familia
             </Button>
             <ChildrenDialog
               open={isFamilyDialogOpen}
               onClose={() => setIsFamilyDialogOpen(false)}
               children={children}
               onUpdateChildren={setChildren}
-              familyID={params?.row?.id}
+              clientID={params?.row?.id}
             />
           </div>
         )},
       },
 ];
 
-function getSubField(params) {
-  const [fieldName, subFieldName] = params?.field?.toString().split('.')
-  const field =  params?.row[fieldName]
-  return field? field[subFieldName] : null;
-};
-
-function setSubPatrimonyField(subFieldName) {
-  return (params) => {
-    const field = { ...params.row.patrimony };
-    field[subFieldName] = params.value;
-    return { ...params.row, patrimony: field };
-  };
-};
-
-function setSubFamilyField(subFieldName) {
-  return (params) => {
-    const field = { ...params.row.family };
-    field[subFieldName] = params.value;
-    return { ...params.row, family: field };
-  };
-};
 
 
   return (

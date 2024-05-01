@@ -1,6 +1,7 @@
 import json
 import logging
 from django.http import QueryDict
+from rest_framework import status
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -16,39 +17,6 @@ from Notification.consummers import send_sync_group_message, CONSULTANCY_GROUP_N
 
 logger = logging.getLogger(__name__)
 
-
-class PatrimonyViewSet(viewsets.ModelViewSet):
-    queryset = Patrimony.objects.all()
-    serializer_class = PatrimonySerializer
-    permission_classes = [CheckGroupPermission]
-
-
-class FamilyViewSet(viewsets.ModelViewSet):
-    queryset = Family.objects.all()
-    serializer_class = FamilySerializer
-    permission_classes = [CheckGroupPermission]
-
-    def retrieve(self, request, *args, **kwargs):
-        self.serializer_class = FamilyFullSerializer
-        self.queryset = self.queryset = self.queryset.prefetch_related(
-            Prefetch('children__locality')
-        )
-        return super().retrieve(request, *args, **kwargs)
-
-    @transaction.atomic
-    def create(self, request, *args, **kwargs):
-        family = super().create(request, *args, **kwargs)
-        children = request.data.get('children', None)
-        family.data["children"] = []
-        if children:
-            for child in children:
-                child["family_client_user"] = Family.objects.get(pk=family.data["id"])
-                child["locality"] = Locality.objects.get(pk=child["locality"]["id"])
-                del child["id"]
-                new_child = Child.objects.create(**child).id
-                family.data["children"].append(new_child)
-        return family
-
 class ClientViewSet(viewsets.ModelViewSet):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
@@ -60,6 +28,24 @@ class ClientViewSet(viewsets.ModelViewSet):
         request.data['id_value'] = request.data['id_value'].upper()  # PASSPORT use Upper Case.
         return super().create(request, *args, **kwargs)
 
+    @action(detail=True, methods=['POST'])
+    @transaction.atomic
+    def create_family(self, request, *args, **kwargs):
+        try:
+            children = request.data.get('children', None)
+            data = {"children": []}
+            if children:
+                for child in children:
+                    child["client_user"] = self.get_object()
+                    child["locality"] = Locality.objects.get(pk=child["locality"]["id"])
+                    del child["id"]
+                    new_child = Child.objects.create(**child).id
+                    data["children"].append(new_child)
+            return Response(status=status.HTTP_201_CREATED, data=data)
+        except Exception as e:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"children": [], "error": f"No se pudo crear los hijos. Detalle: {str(e)}"})
+
+
     def list(self, request, *args, **kwargs):
         self.permission_classes = [CheckGroupPermission]
         self.serializer_class = ClientFullSerializer
@@ -67,13 +53,10 @@ class ClientViewSet(viewsets.ModelViewSet):
             Prefetch('locality')
         )
         self.queryset = self.queryset.prefetch_related(
-            Prefetch('patrimony')
-        )
-        self.queryset = self.queryset.prefetch_related(
             Prefetch('tels')
         )
         self.queryset = self.queryset.prefetch_related(
-            'family__children'
+            Prefetch('children')
         )
         client_list = super().list(request, *args, **kwargs)
         for client in client_list.data:
@@ -87,13 +70,10 @@ class ClientViewSet(viewsets.ModelViewSet):
         self.permission_classes = [CheckGroupPermission]
         self.serializer_class = ClientFullSerializer
         self.queryset = self.queryset.prefetch_related(
-            Prefetch('patrimony')
-        )
-        self.queryset = self.queryset.prefetch_related(
             Prefetch('tels')
         )
         self.queryset = self.queryset.prefetch_related(
-            'family__children'
+            Prefetch('children')
         )
         return super().retrieve(request, *args, **kwargs)
 
@@ -116,14 +96,6 @@ class ClientViewSet(viewsets.ModelViewSet):
                 serializer.is_valid(raise_exception=True)
                 client = serializer.save()
 
-                patrimony_serializer = PatrimonyCreateSerializer(data=request.data)
-                patrimony_serializer.is_valid(raise_exception=True)
-                patrimony = patrimony_serializer.save(id=client)
-
-                family_data = {'partner_salary': request.data['partner_salary'], 'id': client.id}
-                family_serializer = FamilySerializer(data=family_data)
-                family_serializer.is_valid(raise_exception=True)
-                family = family_serializer.save()
 
                 tel_data = [{'client': client.id, 'phone_number': tel} for tel in request.data['tel']]
                 tel_serializer = TelSerializer(data=tel_data, many=True)
@@ -139,7 +111,7 @@ class ClientViewSet(viewsets.ModelViewSet):
             logger.error(mns)
             return Response(mns, status=400)
 
-        send_sync_group_message(CONSULTANCY_GROUP_NAME, "A new Client has been created from form.")
+        send_sync_group_message(CONSULTANCY_GROUP_NAME, "Se ha creado un nuevo cliente a partir del formulario.")
         return Response("Success: Data processed successfully.", status=200)
 
 
@@ -181,10 +153,7 @@ class childViewSet(viewsets.ModelViewSet):
                 client = Client.objects.filter(id_value=id_client).first()
                 if not client:
                     return Response(f"Error: Consultant with ID value {id_client} not Found.", status=404)
-                family = Family.objects.get(pk=client.id)
-                if not family:
-                    return Response(f"Error: Family for client with ID value {client.id_value} not Found.", status=404)
-                child_json["family_client_user"] = family.id
+                child_json["client_user"] = client.id
 
                 serializer = ChildCreateSerializer(data=child_json)
 

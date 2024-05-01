@@ -27,7 +27,7 @@ export async function getDataUserByToken(token) {
         return user;
       } else {
         console.error('Failed to fetch User by token:', response.status);
-        throw new Error('Failed to fetch User by token');
+        throw new Error('No se pudo obtener el usuario mediante el token.');
       }
     } catch (error) {
       console.error('Error while try to get User by token:', error);
@@ -64,11 +64,11 @@ export function loginUser(dataUser, onLoginSuccess, onLoginError){
         onLoginSuccess(user);
       }
       else if( request.status !== 400 ){
-        const errorMensage = "Unable to login. Please try again later.";
+        const errorMensage = "No se puede iniciar sesión. Por favor, inténtalo de nuevo más tarde.";
         onLoginError(errorMensage);
       }
       else {
-        const errorMensage = "The username or password is incorrect.";
+        const errorMensage = "El nombre de usuario o la contraseña son incorrectos.";
         onLoginError(errorMensage);
       }
     }

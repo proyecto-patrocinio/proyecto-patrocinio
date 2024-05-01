@@ -9,8 +9,12 @@ class Panel(models.Model):
         Board,
         on_delete=models.CASCADE,
         related_name="panels",
-        verbose_name='Board',
+        verbose_name='Tablero',
         null=False
     )
     def __str__(self):
         return f'{self.title}_{self.board}'
+
+    class Meta:
+        verbose_name_plural = "Paneles"
+        verbose_name = "Panel"

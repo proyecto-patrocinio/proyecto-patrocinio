@@ -46,7 +46,7 @@ const CardTicket = ({ card, index }) => {
     <div>
     <BaseTicket ticket={card} index={index} cardContentProps={cardContentProps}>
       <TicketMenu showMenu={showMenu}>
-        <MenuItem onClick={() => {setShowConfirm(true)}}>Delete Card</MenuItem>
+        <MenuItem onClick={() => {setShowConfirm(true)}}>Eliminar Consulta</MenuItem>
       </TicketMenu>
     </BaseTicket>
     <DeleteCardDialog

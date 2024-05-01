@@ -74,10 +74,10 @@ function EmailConfirmationPage() {
                 <EmailIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-                Email Confirmation
+                Confirmación de Email
             </Typography>
             <Typography variant="subtitle1" color="textSecondary">
-                Please enter your email address below, and we'll send a confirmation email to you.
+                Por favor, introduce tu dirección de correo electrónico abajo, y te enviaremos un correo electrónico de confirmación.
             </Typography>
             <Box component="form" onSubmit={handleSendEmail} sx={{ mt: 4 }}>
                 <TextField
@@ -85,7 +85,7 @@ function EmailConfirmationPage() {
                 required
                 fullWidth
                 name="email"
-                label="Email Address"
+                label="Correo electrónico"
                 variant="outlined"
                 value={email}
                 onChange={handleEmailChange}
@@ -98,12 +98,12 @@ function EmailConfirmationPage() {
                 disabled={isButtonDisabled}
                 sx={{ mt: 3 }}
                 >
-                {isButtonDisabled ? `Resend in ${countdown} seconds` : 'Send Confirmation Email'}
+                {isButtonDisabled ? `Reenviar en ${countdown} segundos`: 'Enviar email de confirmación'}
                 </Button>
                 <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
                 <Grid item>
                     <Link href={PATH_ROOT} variant="body2">
-                    Back to Home
+                    Volver al inicio
                     </Link>
                 </Grid>
                 </Grid>

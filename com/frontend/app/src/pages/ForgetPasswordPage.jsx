@@ -77,10 +77,10 @@ function ForgetPasswordPage() {
                         <LockOpenIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Password Reset
+                        Restablecimiento de contraseña
                     </Typography>
                     <Typography variant="subtitle1" color="textSecondary">
-                        Please enter your email to search for your account.
+                        Por favor, introduce tu correo electrónico para buscar tu cuenta
                     </Typography>
                     <Box component="form" onSubmit={handleEmailSubmit} sx={{ mt: 4 }}>
                         <TextField
@@ -88,7 +88,7 @@ function ForgetPasswordPage() {
                             required
                             fullWidth
                             name="email"
-                            label="Email Address"
+                            label="Correo electrónico"
                             type="email"
                             variant="outlined"
                             value={email}
@@ -102,12 +102,12 @@ function ForgetPasswordPage() {
                             disabled={isButtonDisabled}
                             sx={{ mt: 3 }}
                         >
-                            {isButtonDisabled ? `Resend in ${countdown} seconds` : 'Send Password Reset Email'}
+                            {isButtonDisabled ? `Reenviar en ${countdown} segundos` : 'Enviar correo electrónico de restablecimiento de contraseña'}
                         </Button>
                         <Grid container justifyContent="flex-end" sx={{ mt: 2 }}>
                             <Grid item>
                                 <Link href={PATH_ROOT} variant="body2">
-                                    Back to Home
+                                    Volver al inicio
                                 </Link>
                             </Grid>
                         </Grid>

@@ -14,14 +14,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
  */
 const FamilyTableRow = ({clientData}) => {
     const [isExpanded, setIsExpanded] = useState(false);
-    const family = clientData.family;
 
     // If there is no family information, return an empty string.
-    if (family === null){
+    if (!clientData?.children){
         return (
             <TableRow>
-            <TableCell>Family:</TableCell>
-            <TableCell>{"-"}</TableCell>
+            <TableCell>Familia:</TableCell>
+            <TableCell>0 hijos</TableCell>
             </TableRow>
         );
     }
@@ -35,28 +34,26 @@ const FamilyTableRow = ({clientData}) => {
 
     return (
             <TableRow>
-                <TableCell>Family:</TableCell>
+                <TableCell>Familia:</TableCell>
                 <TableCell>
                 {isExpanded ? (
                     <ul>
-                    <li><strong>Partner Salary: </strong>${family.partner_salary}</li>
-                    <li><strong>Children Information:</strong></li>
-                    {family.children ? (
+                    {clientData.children ? (
                         <ul>
-                        {family.children.map((child, childIndex) => (
+                        {clientData.children.map((child, childIndex) => (
                             <li key={childIndex}>
-                            <h4>Child {childIndex + 1}:</h4>
+                            <h4>Hijo {childIndex + 1}:</h4>
                             <ul>
-                                <li><strong>First Name: </strong>{child.first_name}</li>
-                                <li><strong>Last Name: </strong>{child.last_name}</li>
-                                <li><strong>ID Type: </strong>{child.id_type}</li>
-                                <li><strong>ID Value: </strong>{child.id_value}</li>
-                                <li><strong>Sex: </strong>{child.sex}</li>
-                                <li><strong>Birthdate: </strong>{child.birth_date}</li>
-                                <li><strong>Nationality: </strong>{child.locality.province.nationality.name}</li>
-                                <li><strong>Province: </strong>{child.locality.province.name}</li>
-                                <li><strong>Locality: </strong>{child.locality.name}</li>
-                                <li><strong>Address: </strong>{child.address}</li>
+                                <li><strong>Nombre: </strong>{child.first_name}</li>
+                                <li><strong>Apellido: </strong>{child.last_name}</li>
+                                <li><strong>Tipo de documento: </strong>{child.id_type}</li>
+                                <li><strong>Num. de documento: </strong>{child.id_value}</li>
+                                <li><strong>Sexo: </strong>{child.sex}</li>
+                                <li><strong>Nacimiento: </strong>{child.birth_date}</li>
+                                <li><strong>Nacionalidad: </strong>{child.locality.province.nationality.name}</li>
+                                <li><strong>Provincia: </strong>{child.locality.province.name}</li>
+                                <li><strong>Localidad: </strong>{child.locality.name}</li>
+                                <li><strong>Dirección: </strong>{child.address}</li>
                             </ul>
                             </li>
                         ))}
@@ -67,8 +64,7 @@ const FamilyTableRow = ({clientData}) => {
                     </ul>
                 ) : (
                     <p>
-                    <strong>Partner Salary: </strong> ${family.partner_salary}.<br />
-                    <strong>Number of children: </strong>{family.children ? family.children.length : 0}
+                    {clientData.children ? clientData.children.length : 0} hijos
                     </p>
                 )}
                 <Button id="expanded-family-button" variant="outlined" onClick={toggleExpansion}>

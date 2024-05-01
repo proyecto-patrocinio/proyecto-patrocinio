@@ -24,14 +24,13 @@ class RequestConsultationSerializer(serializers.ModelSerializer):
         model = RequestConsultation
         fields = '__all__'
 
-class RequestConsultationAceptedSerializer(serializers.ModelSerializer):
-    destiny_panel = serializers.IntegerField()
+class ConsultationAceptedSerializer(serializers.ModelSerializer):
+    destiny_panel = serializers.IntegerField()  # Destiny panel*
     class Meta:
         model = RequestConsultation
-        fields = ['destiny_panel',]
+        fields = ['destiny_panel']
 
-class RequestConsultationRejectedSerializer(serializers.ModelSerializer):
-    destiny_panel = serializers.IntegerField()
+class ConsultationRejectedSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequestConsultation
-        fields = ['destiny_panel',]
+        fields = []

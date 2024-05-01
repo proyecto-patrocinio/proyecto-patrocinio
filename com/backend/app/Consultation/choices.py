@@ -1,16 +1,23 @@
 PROGRESS_STATES = (
-    ('TODO', 'To Do'),
-    ('IN_PROGRESS', 'In Progress'),
-    ('DONE', 'Done'),
-    ('PAUSED', 'Paused'),
-    ('BLOCKED', 'Blocked'),
-    ('INCOMPLETE','Incomplete'),
+    ('TODO', 'Por hacer'),
+    ('IN_PROGRESS', 'En progreso'),
+    ('DONE', 'Terminado'),
+    ('PAUSED', 'Pausado'),
+    ('BLOCKED', 'Bloqueado'),
+    ('INCOMPLETE','Incompleto'),
 )
 
 AVAILABILITY_STATES = (
-    ('CREATED', 'Unassigned Created'),
-    ('PENDING', 'Pending Assignment Request'),
-    ('ASSIGNED', 'Assigned'),
-    ('REJECTED', 'Unassigned Rejected'),
-    ('ARCHIVED', 'Archived'),
+    ('CREATED', 'Creado, sin asignar'),
+    ('PENDING', 'Solicitud de asignación pendiente'),
+    ('ASSIGNED', 'Asignado'),
+    ('REJECTED', 'Rechazado, sin asignar'),
+    ('ARCHIVED', 'Archivado'),
+)
+
+
+REQUEST_STATES = (
+    ('PENDING', 'Pendiente'),
+    ('ACCEPTED', 'Aceptado'),
+    ('REJECTED', 'Rechazado'),
 )

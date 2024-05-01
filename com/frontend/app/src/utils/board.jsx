@@ -28,7 +28,7 @@ async function getDataBoard(boardID) {
       return board;
     } else {
       console.error('Failed to fetch board:', response.status);
-      throw new Error('Failed to fetch board');
+      throw new Error('Falló la obtención del tablero');
     }
   } catch (error) {
     console.error('Error:', error);
@@ -78,15 +78,15 @@ export const fetchBoardsByUser = async (idUser) => {
 /**
  * Accepts a consultation request by sending a POST request to the API.
  *
- * @param {number} requestConsultationID - The ID of the consultation request to accept.
+ * @param {number} consultationID - The ID of the consultation to accept.
  * @param {number} panelID - The ID of the panel where the consultation request will be accepted.
  * @return {boolean} True if the request was accepted, false otherwise.
  */
-export const acceptRequestConsult = async(requestConsultationID, panelID) => {
+export const acceptRequestConsult = async(consultationID, panelID) => {
   try{
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-    + process.env.REACT_APP_PATH_REQUEST_CARDS
-    + String(requestConsultationID)
+    + process.env.REACT_APP_PATH_CONSULTATIONS
+    + String(consultationID)
     + process.env.REACT_APP_EXTRA_PATH_ACCEPT_REQUEST_CARDS;
 
     const csrfToken = Cookies.get("csrftoken");
@@ -105,7 +105,7 @@ export const acceptRequestConsult = async(requestConsultationID, panelID) => {
     });
 
     if (response.ok) {
-      const successMessage = `Request Consultation ${requestConsultationID} accepted successfully`;
+      const successMessage = `Consultation ${consultationID} accepted successfully`;
       console.info(successMessage);
       return true;
     } else {
@@ -122,13 +122,13 @@ export const acceptRequestConsult = async(requestConsultationID, panelID) => {
 /**
  * Rejects a consultation request by sending a POST request to the API.
  *
- * @param {number} id - The ID of the request Consultation to reject.
+ * @param {number} id - The ID of the Consultation to reject.
  * @return {boolean} True if the request was rejected, false otherwise.
  */
 export const rejectRequestConsult = async(id) => {
   try{
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-    + process.env.REACT_APP_PATH_REQUEST_CARDS
+    + process.env.REACT_APP_PATH_CONSULTATIONS
     + String(id)
     + process.env.REACT_APP_EXTRA_PATH_REJECTED_REQUEST_CARDS;
 
@@ -180,7 +180,7 @@ export const getListBoard = async () => {
           const boardList = await response.json();
           return boardList;
       } else {
-          throw new Error('Failed to fetch board. Status Code: ' , response.status);
+          throw new Error('Falló la obtención del tablero. Respuesta con código: ' , response.status);
       };
 
   } catch (error) {

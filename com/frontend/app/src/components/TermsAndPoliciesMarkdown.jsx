@@ -18,10 +18,10 @@ function TermsAndPoliciesMarkdown() {
         if (fileContent !== null) {
             setContent(fileContent);
         } else {
-            setContent("Sorry, the content could not be loaded.");
+            setContent("Lo siento, el contenido no pudo ser cargado.");
         }
     }).catch((err) => {
-        setContent("Sorry, the content could not be loaded.");
+        setContent("Lo siento, el contenido no pudo ser cargado.");
     });
     }, []);
 

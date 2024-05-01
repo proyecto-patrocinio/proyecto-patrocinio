@@ -25,7 +25,7 @@ export async function getCalendarByCard(cardID) {
             const calendar = await response.json();
             return  calendar;
         } else {
-            const mns =`Failed to fetch Calendar for Card ID ${cardID}.`
+            const mns =`Falló la obtención del calendario para la consulta con ID ${cardID}.`
             console.error(mns, " Status code: ", response.status);
             throw new Error(mns);
         }
@@ -57,7 +57,7 @@ export async function getEventsByBoard(boardID) {
             const events = await response.json();
             return events;
         } else {
-            const mns =`Failed to fetch Events for Board ID ${boardID}.`
+            const mns =`Falló la obtención de eventos para la pizzara co ID ${boardID}.`
             console.error(mns, " Status code: ", response.status);
             throw new Error(mns);
         }
@@ -96,7 +96,7 @@ export async function createEvent(eventData) {
             const event = await response.json();
             return event;
         } else {
-            const mns = 'Failed to create a new Event.';
+            const mns = 'Falló la creación del evento.';
             console.error(mns, " Status: ", response.status);
             throw new Error(mns);
         };
@@ -134,7 +134,7 @@ export async function deleteEvent(eventID) {
         if (response.ok) {
             return response;
         } else {
-            const mns = 'Failed to delete Event.'
+            const mns = 'Falló la eliminación del evento.'
             console.error(mns, " Status: ", response.status);
             throw new Error(mns);
         }

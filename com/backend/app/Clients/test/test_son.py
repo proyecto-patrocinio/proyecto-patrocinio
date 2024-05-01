@@ -21,12 +21,13 @@ class Test_child(APITestCase):
 
     def test_post_positive_child(self):
         load_dummy_client(self)
-        load_family(self, id=1, client=1, partner_salary=120_000)
         child_data =  {
             "id": 1, "birth_date": "2023-12-10", "locality": 1, "address": "avenida santa fe",
-            "family_client_user": 1, 
+            "client_user": 1, "partner_salary": 120_000,
             "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
-            "id_value": "DUMMY", "sex": "MALE"
+            "id_value": "DUMMY", "sex": "MALE", "employment": "dummy", "salary": 200_000,
+            "other_income": "No", "amount_other_income": 0, "amount_retirement": 6_000_000,
+            "amount_pension": 3_000_000, "vehicle": "auto"
         }
         request = self.factory.post(self.url, child_data)
         force_authenticate(request, user=self.user)
@@ -44,13 +45,14 @@ class Test_child(APITestCase):
 
     def test_put_positive(self):
         load_dummy_client(self)
-        load_family(self, id=1, client=1, partner_salary=120_000)
-        load_child(self,id=1,birth_date="2023-12-10", locality=1, address="sante fe", family_client_user=1)
+        load_child(self,id=1,birth_date="2023-12-10", locality=1, address="sante fe", client_user=1)
         data_new =  {
             "id": 1, "birth_date": "2023-12-10", "locality" : 1,"address": "avenida santa fe",
-            "family_client_user": 1,
+            "client_user": 1, "partner_salary": 120_000,
             "first_name": "dummy_name", "last_name": "dummy_last_name", "id_type": "PASSPORT",
-            "id_value": "DUMMY", "sex": "MALE"
+            "id_value": "DUMMY", "sex": "MALE", "employment": "dummy", "salary": 200_000,
+            "other_income": "No", "amount_other_income": 0, "amount_retirement": 6_000_000,
+            "amount_pension": 3_000_000, "vehicle": "auto"
         }
         url = reverse('child-list')
         request_update = self.factory.put(path=url, data=data_new, format='json', content_type=None)

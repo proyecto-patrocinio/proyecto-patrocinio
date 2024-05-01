@@ -11,19 +11,23 @@ class Comment(models.Model):
         Consultation,
         on_delete=models.CASCADE,
         related_name="comment",
-        verbose_name="consultation",
+        verbose_name="Consulta",
         null=False
     )
     user = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
         related_name="comment",
-        verbose_name="user",
+        verbose_name="Usuario",
         null=False
     )
 
     def __str__(self):
         return f'{self.consultation}_{self.id}'
+
+    class Meta:
+        verbose_name_plural = "Comentarios"
+        verbose_name = "Comentario"
 
 
 class File(models.Model):
@@ -33,10 +37,14 @@ class File(models.Model):
         Comment,
         on_delete=models.CASCADE,
         related_name="files",
-        verbose_name="comment",
+        verbose_name="Comentario",
         null=False
     )
     filename = models.CharField(max_length=255, blank=False)
 
     def __str__(self):
         return f'{self.comment}_{self.time_stamp}'
+
+    class Meta:
+        verbose_name_plural = "Archivos"
+        verbose_name = "Archivo"

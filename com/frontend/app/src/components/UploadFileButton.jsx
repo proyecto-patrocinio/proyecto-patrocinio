@@ -35,7 +35,7 @@ const InputFileUpload = ({file, setFile }) => {
             </Button>
             </>
           ) : (
-            'Upload file'
+            'Cargar archivo'
           )}
         </Button>
       </label>

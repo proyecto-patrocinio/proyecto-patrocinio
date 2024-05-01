@@ -76,7 +76,7 @@ function Register() {
       }
       return () => {}
   } catch {
-    console.error("Unexpected error occurred during request processing.")
+    console.error("Se produjo un error inesperado durante el procesamiento de la solicitud.")
     setLoading(false);
   }
 }
@@ -84,7 +84,7 @@ function Register() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!termsAccepted) {
-      enqueueSnackbar("Please accept the terms and conditions.", { variant: 'error' });
+      enqueueSnackbar("Por favor, acepta los términos y condiciones.", { variant: 'error' });
     } else {
       handleValidation(event);
     }
@@ -110,7 +110,7 @@ function Register() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Crear Cuenta
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -121,7 +121,7 @@ function Register() {
                   required
                   fullWidth
                   id="username"
-                  label="Username"
+                  label="Nombre de usuario"
                   autoFocus
                 />
               </Grid>
@@ -130,7 +130,7 @@ function Register() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Correo electrónico"
                   name="email"
                   autoComplete="email"
                   type="email"
@@ -141,7 +141,7 @@ function Register() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Contraseña"
                   type="password"
                   id="password"
                   autoComplete="new-password"
@@ -152,7 +152,7 @@ function Register() {
                   required
                   fullWidth
                   name="password2"
-                  label="repeat-password"
+                  label="Repetir contraseña"
                   type="password"
                   id="password2"
                   autoComplete="repeat-password"
@@ -164,8 +164,8 @@ function Register() {
                 control={<Checkbox value="termAndCond" color="primary" onChange={handleCheckboxChange} />}
                 label={
                   <div>
-                  I have read and accept the <a href={PATH_TERMS}
-                    target="_blank" rel="noreferrer"> terms and conditions</a>.
+                  He leído y acepto los <a href={PATH_TERMS}
+                    target="_blank" rel="noreferrer">términos y condiciones</a>.
                   </div>
                 }
               />
@@ -178,17 +178,17 @@ function Register() {
               sx={{ mt: 3, mb: 2 }}
               disabled={!termsAccepted || loading}
             >
-            {loading ? <CircularProgress size={24} /> : 'Sign Up'}
+            {loading ? <CircularProgress size={24} /> : 'Registrarse'}
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href={PATH_ROOT} variant="body2">
-                  Already have an account? Sign in
+                ¿Ya tienes una cuenta? Inicia sesión.
                 </Link>
               </Grid>
               <Grid item>
                 <Link href={PATH_CONFIRM_EMAIL} variant="body2">
-                  Did you not receive the email?
+                ¿No recibiste el correo electrónico?
                 </Link>
               </Grid>
             </Grid>

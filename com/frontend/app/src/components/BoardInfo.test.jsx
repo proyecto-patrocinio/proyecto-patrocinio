@@ -30,14 +30,14 @@ describe('BoardInfo', () => {
     });
 
     /* assert on the output */
-    expect(screen.getByText('Board Information')).toBeInTheDocument();
-    expect(screen.getByText('* 10 total cards')).toBeInTheDocument();
-    expect(screen.getByText('* 5 cards to do')).toBeInTheDocument();
-    expect(screen.getByText('* 3 cards in progress')).toBeInTheDocument();
-    expect(screen.getByText('* 2 cards stopped')).toBeInTheDocument();
-    expect(screen.getByText('Board Logs')).toBeInTheDocument();
+    expect(screen.getByText('Información de Tablero')).toBeInTheDocument();
+    expect(screen.getByText('* 10 consultas totales')).toBeInTheDocument();
+    expect(screen.getByText('* 5 consultas por hacer')).toBeInTheDocument();
+    expect(screen.getByText('* 3 consultas en progreso')).toBeInTheDocument();
+    expect(screen.getByText('* 2 consultas detenidas')).toBeInTheDocument();
+    expect(screen.getByText('Logs de Tablero')).toBeInTheDocument();
 
-    expect(screen.queryByText(/Show More/)).toBeNull(); 
+    expect(screen.queryByText(/Ver Mas/)).toBeNull(); 
     expect(getBoardLogs).toHaveBeenCalledWith(10, panel.id);
   });
 

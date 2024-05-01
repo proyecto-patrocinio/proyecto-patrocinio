@@ -67,19 +67,19 @@ const BoardInfo = ({ panel}) => {
             >
                 <Paper>
                     <Box p={2}>
-                        <Typography variant='h6'>Board Information</Typography>
-                        <Typography>{`* ${panel.number_cards} total cards`}</Typography>
-                        <Typography>{`* ${panel.todo_count} cards to do`}</Typography>
-                        <Typography>{`* ${panel.in_progress_count} cards in progress`}</Typography>
-                        <Typography>{`* ${(panel.paused_count + panel.blocked_count) || 0} cards stopped`}</Typography>
+                        <Typography variant='h6'>Información de Tablero</Typography>
+                        <Typography>{`* ${panel.number_cards} consultas totales`}</Typography>
+                        <Typography>{`* ${panel.todo_count} consultas por hacer`}</Typography>
+                        <Typography>{`* ${panel.in_progress_count} consultas en progreso`}</Typography>
+                        <Typography>{`* ${(panel.paused_count + panel.blocked_count) || 0} consultas detenidas`}</Typography>
                         <Divider sx={{ mb: 3 }} />
-                        <Typography variant='h6'>Board Logs</Typography>
+                        <Typography variant='h6'>Logs de Tablero</Typography>
                         {logs.slice(0, 5).map( (log)=> <Typography>{`* ${log.start_time.split('T')[0]} | ${log.tag}`}</Typography> )}
                     </Box>
                     {
                         logs.length > 5 ? (
                         <Button onClick={handleDialogOpen}>
-                            Show More
+                            Ver Mas
                         </Button>
                     ): ""}
                 </Paper>
@@ -88,16 +88,16 @@ const BoardInfo = ({ panel}) => {
 
             {/* Display for logs */}
             <Dialog open={openDialog} onClose={handleDialogClose} maxWidth="md" fullWidth>
-                <DialogTitle>History of Accepted Consultations</DialogTitle>
+                <DialogTitle>Historial de Consultas Aceptadas</DialogTitle>
                 <DialogContent>
 
                 <TableContainer component={Paper}>
                 <Table>
                     <TableHead>
                     <TableRow>
-                        <TableCell>Consultation ID</TableCell>
-                        <TableCell>Response Time (Accepted)</TableCell>
-                        <TableCell>Tag</TableCell>
+                        <TableCell>ID de consulta</TableCell>
+                        <TableCell>Fecha de aceptación</TableCell>
+                        <TableCell>Etiqueta</TableCell>
                     </TableRow>
                     </TableHead>
                     <TableBody>
@@ -116,7 +116,7 @@ const BoardInfo = ({ panel}) => {
                 <DialogActions>
 
                     <Button onClick={handleDialogClose} color="primary">
-                        Close
+                        Cerrar
                     </Button>
                 </DialogActions>
             </Dialog>

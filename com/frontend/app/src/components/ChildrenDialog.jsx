@@ -20,7 +20,7 @@ const EMPTY_CHILD = {
   sex:null,
   birth_date:null,
   address:"",
-  family_client_user:0
+  client_user:0
 };
 
 
@@ -30,8 +30,9 @@ const EMPTY_CHILD = {
  * @param {function} onClose - Function to close the dialog.
  * @param {Array} children - List of child.
  * @param {function} onUpdateChildren - Function to update the list of children.
+ * @param {Number} clientID - ID of client.
  */
-function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID }) {
+function ChildrenDialog({ open, onClose, children, onUpdateChildren, clientID }) {
   const [newChild, setNewChild] = useState(EMPTY_CHILD);
   const [nationalityOptions, setNationalityOptions] = useState(null);
   const [provinceOptions, setProvinceOptions] = useState(null);
@@ -61,21 +62,21 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
       && newChild?.birth_date !== null
       && newChild?.address !== ''
       && geographyModel?.locality != null
-      && familyID
+      && clientID
     ) {
       const child = {
         ...newChild,
         id: ("NEW" + getRandomNumber(Number.MAX_SAFE_INTEGER)),
         locality: {...geographyModel?.locality, province: {...geographyModel?.province, nationality: geographyModel?.nationality}},
-        family_client_user: familyID
+        client_user: clientID
       };
       child.birth_date = child?.birth_date?.$d?.toISOString().split('T')[0];
       onUpdateChildren([...children, child]);
       setNewChild(EMPTY_CHILD);
     } else {
       setNewChild(EMPTY_CHILD);
-      console.error("Error submitting new child.")
-      setAlertMessage("Please complete all required fields before submitting.");
+      console.error("Error al enviar nuevo hijo.")
+      setAlertMessage("Por favor completa todos los campos obligatorios antes de enviar.");
     }
   };
 
@@ -95,7 +96,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
   };
 
   return (
-    <Dialog maxWidth={'md'}  open={open} onClose={closeHandler} key={"dialog-family-" + familyID}>
+    <Dialog maxWidth={'md'}  open={open} onClose={closeHandler} key={"dialog-family-" + clientID}>
       <DialogContent>
         <List>
           {children && children?.map((child, index) => (
@@ -113,15 +114,15 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
                       </Typography>
                       <Typography variant="body2">
                         <strong>ID:</strong> {child?.id} |{' '}
-                        <strong>ID Type:</strong> {child?.id_type} |{' '}
-                        <strong>ID Value:</strong> {child?.id_value} |{' '}
-                        <strong>Locality:</strong>{' '}
+                        <strong>Tipo de documento:</strong> {child?.id_type} |{' '}
+                        <strong>Num. de documento:</strong> {child?.id_value} |{' '}
+                        <strong>Localidad:</strong>{' '}
                           {child?.locality?.province?.nationality?.name},{' '}
                           {child?.locality?.province?.name},{' '}
                           {child?.locality?.name} |{' '}
-                        <strong>Address:</strong> {child?.address} |{' '}
-                        <strong>Sex:</strong> {child?.sex} |{' '}
-                        <strong>Birth Date:</strong>{' '}
+                        <strong>Dirección:</strong> {child?.address} |{' '}
+                        <strong>Sexo:</strong> {child?.sex} |{' '}
+                        <strong>Nacimiento:</strong>{' '}
                         {child?.birth_date}
                       </Typography>
                       <IconButton onClick={() => handleDelete(index)} color="secondary">
@@ -137,7 +138,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
         <Divider />
 
         <Typography variant="h6" style={{ marginTop: '20px', marginBottom: '10px' }}>
-          Add New Child
+          Agregar nuevo hijo
         </Typography>
 
 
@@ -146,47 +147,47 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
           <div style={{ display: 'flex', flexDirection: 'row', gap: '10px'}}>
             <TextField
               key={"form-child-first-name"}
-              label="First Name"
+              label="Nombre"
               fullWidth
               value={newChild?.first_name}
               onChange={(e) => handleChange("first_name", e.target.value)}
             />
             <TextField
               key={"form-child-last-name"}
-              label="Last Name"
+              label="Apellido"
               fullWidth
               value={newChild?.last_name}
               onChange={(e) => handleChange("last_name", e.target.value)}
             />
             <FormControl fullWidth>
-              <InputLabel id="form-child-id-type">ID Type</InputLabel>
+              <InputLabel id="form-child-id-type">Tipo de documento</InputLabel>
               <Select
                 labelId={"form-child-id-type"}
                 label="id_type"
                 value={newChild?.id_type}
                 onChange={(e) => handleChange("id_type",  e.target.value)}
               >
-                <MenuItem value={"PASSPORT"}>PASSPORT</MenuItem>
-                <MenuItem value={"DOCUMENT"}>DOCUMENT</MenuItem>
+                <MenuItem value={"PASSPORT"}>Pasaporte</MenuItem>
+                <MenuItem value={"DOCUMENT"}>DNI</MenuItem>
               </Select>
             </FormControl>
             <TextField
               key={"form-child-id-value"}
-              label="ID Value"
+              label="Num. de documento"
               fullWidth
               value={newChild?.id_value}
               onChange={(e) => handleChange("id_value", e.target.value)}
             />
             <FormControl fullWidth>
-              <InputLabel id="form-child-sex">Sex</InputLabel>
+              <InputLabel id="form-child-sex">Sexo</InputLabel>
               <Select
                 labelId={"form-child-sex"}
                 label="sex"
                 value={newChild?.sex}
                 onChange={(e) => handleChange("sex",  e.target.value)}
               >
-                <MenuItem value={"FEMALE"}>FEMALE</MenuItem>
-                <MenuItem value={"MALE"}>MALE</MenuItem>
+                <MenuItem value={"FEMALE"}>Femenino</MenuItem>
+                <MenuItem value={"MALE"}>Masculino</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -196,7 +197,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
             <AutocompleteCell optionsNameID={nationalityOptions} model={geographyModel?.nationality}
               key={"form-child-nationality"}
               fullWidth
-              label={"Nationality"}
+              label={"Nacionalidad"}
               handleChange={
                 (id, name) => {
                   const newModel = {};
@@ -209,7 +210,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
             <AutocompleteCell optionsNameID={provinceOptions} model={geographyModel?.province}
               key={"form-child-province"}
               fullWidth
-              label={"Province"}
+              label={"Provincia"}
               handleChange={(id, name) => {
                 const newModel = {};
                 newModel['nationality'] = geographyModel?.nationality;
@@ -221,7 +222,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
             <AutocompleteCell optionsNameID={localityOptions}  model={geographyModel?.locality}
               key={"form-child-locality"}
               fullWidth
-              label={"Locality"}
+              label={"Localidad"}
               handleChange={(id, name) =>{
                 const newModel = {}
                 newModel['nationality'] = geographyModel?.nationality;
@@ -232,7 +233,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
             />
             <TextField
               key={"form-child-address"}
-              label="Address"
+              label="Dirección"
               fullWidth
               value={newChild?.address}
               onChange={(e) => handleChange("address", e.target.value)}
@@ -240,7 +241,7 @@ function ChildrenDialog({ open, onClose, children, onUpdateChildren, familyID })
           </div>
           <DatePicker
               key={"form-child-birth_date"}
-              label="Birthdate"
+              label="Nacimiento"
               value={newChild?.birth_date}
               onChange={(newValue) => handleChange("birth_date", newValue)}
             />
