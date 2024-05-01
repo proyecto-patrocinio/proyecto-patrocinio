@@ -1,3 +1,4 @@
+import json
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework.test import force_authenticate
 from rest_framework.test import APIClient
@@ -72,11 +73,16 @@ class RequestConsultationViewSetTestCase(APITestCase):
             description="dummy", client=self.consultant, opponent="dummy", tag="dummy"
         )
 
+    def tearDown(self) -> None:
+        RequestConsultation.objects.all().delete()
+        return super().tearDown()
 
     def test_create_request_consultation(self):
         data = {
             'consultation': self.consultation.pk,
-            'destiny_board': self.board.pk
+            'destiny_board': self.board.pk,
+            'resolution_timestamp': "",
+            "state": "PENDING",
         }
         request = self.factory.post(self.url, data)
         force_authenticate(request, user=self.user)
@@ -91,12 +97,18 @@ class RequestConsultationViewSetTestCase(APITestCase):
         )
         data = {
             'consultation': consultation_assigned.pk,
-            'destiny_board': self.board.pk
+            'destiny_board': self.board.pk,
+            'resolution_timestamp': "",
+            "state": "PENDING",
         }
         request = self.factory.post(self.url, data)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(
+            "Consultation 2 is already assigned or there exists a pending request" ,
+            response.data['error']
+        )
 
     def test_list_request_consultations(self):
         request = self.factory.get(self.url)
