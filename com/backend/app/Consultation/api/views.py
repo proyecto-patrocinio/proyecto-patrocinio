@@ -1,6 +1,6 @@
 import json
 import logging
-
+from django.db import connection
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -27,7 +27,7 @@ from Consultation.api.serializers import (
 )
 from Consultation.models import Consultation,  RequestConsultation
 from Panel.models import Panel
-from User.permissions import CheckGroupPermission, ProfessorGroupPermission
+from User.permissions import CheckGroupPermission, ProfessorGroupPermission, CaseTakerGroupPermission
 from email_manager.new_request_notification import send_email_new_request
 from email_manager.rejected_request_notification import send_email_rejected_request
 from email_manager.accepted_request_notification import send_email_accepted_request
@@ -35,6 +35,7 @@ from Notification.consummers import CONSULTANCY_GROUP_NAME, BOARD_BASE_GROUP_NAM
 
 
 logger = logging.getLogger(__name__)
+create_locks = {}
 
 
 class ConsultationViewSet(viewsets.ModelViewSet):
@@ -112,6 +113,32 @@ class ConsultationViewSet(viewsets.ModelViewSet):
             else:
                 return Response(serializer.errors, status=400)
 
+
+    @action(detail=True, methods=['POST'])
+    def clear(self, request, *args, **kwargs):
+        """Limpia las solicitudes de consulta pendientes dejando la consulta en estado 'CREATED'."""
+        self.permission_classes = [CaseTakerGroupPermission]
+        consultation = self.get_object()
+        try:
+            with transaction.atomic():
+                with connection.cursor() as cursor:
+                    cursor.execute('SELECT * FROM  public."Consultation_consultation" WHERE id = %s FOR UPDATE', [consultation.id]) # LOCK from DB
+
+                    pending_requests = RequestConsultation.objects.filter(consultation=consultation.id, state='PENDING')
+                    for req in pending_requests:
+                        req.delete()
+                    consultation.availability_state = 'CREATED'
+                    consultation.save()
+            if pending_requests:
+                message = 'Se eliminaron las solicitudes de consulta pendientes correctamente.'
+            else:
+                message = 'No hay solicitudes pendientes a eliminar para la consulta.'
+            return Response(data={'message': message}, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            # Manejar cualquier error
+            message = f'Error al eliminar las solicitudes de consulta pendientes: {str(e)}'
+            return Response(data={'error': message}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     @action(detail=True, methods=['POST'])
     def accepted(self, request, *args, **kwargs):
@@ -261,7 +288,6 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
     queryset = RequestConsultation.objects.all()
     serializer_class = RequestConsultationSerializer
 
-    @transaction.atomic
     def create(self, request, *args, **kwargs):
         """Create a new Consultation and set its availability_state to "PENDING" if it meets the conditions.
 
@@ -269,10 +295,11 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
         if it's eligible. It performs checks to ensure that the Consultation doesn't already exist
         or have pending requests.
         """
-        self.permission_classes = [CheckGroupPermission]
 
-        # Get content from Body
+        self.permission_classes = [CheckGroupPermission]
         consultation_id = request.data.get("consultation")
+        # Get content from Body
+
         if not (consultation_id):
             logger.error('Error creating request: ', 'The key "consultation" is not present in the JSON.')
             return Response(data={'error': 'El campo "consultation" es obligatorio.'}, status=400)
@@ -285,22 +312,31 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
             logger.error('Error creating request: ' + mns)
             return Response(status=status.HTTP_400_BAD_REQUEST, data={'error': mns})
 
-        # Check if Consultation is not already assigned or has pending requests
-        is_created = consultation.availability_state == "CREATED"
-        is_rejected = consultation.availability_state == "REJECTED"
-        is_incomplete = consultation.availability_state == "INCOMPLETE"
-        if (not is_created) and (not is_rejected) and (not is_incomplete):
-            mns = f'Consultation {consultation_id} is already assigned or there exists a pending request'
-            logger.error(mns)
-            return Response(status=status.HTTP_409_CONFLICT, data={'error': mns})
+        with transaction.atomic(using=RequestConsultation.objects.db):
+            with connection.cursor() as cursor:
+                cursor.execute('SELECT * FROM  public."Consultation_consultation" WHERE id = %s FOR UPDATE', [consultation_id]) # LOCK from DB
 
-        # Create a new Request Consultation
-        response = super().create(request, *args, **kwargs)
+                # Check if Consultation is not already assigned or has pending requests
+                if consultation.availability_state not in ["CREATED", "REJECTED", "PENDING"]:
+                    mns = f'La consulta {consultation_id} ya está asignada o rechazada'
+                    logger.error(mns)
+                    return Response(status=status.HTTP_409_CONFLICT, data={'error': mns})
+
+                # Check if there is already a pending request for the consultation
+                RequestConsultation.objects.filter(consultation=consultation, state='PENDING').delete()
+
+                # Create a new Request Consultation
+                response = super().create(request, *args, **kwargs)
+
+                if response.status_code == 201:
+                    consultation.availability_state = "PENDING"
+                    consultation.save()
+                    logger.info(f"Consultation {consultation_id} created.")
+                else:
+                    logger.error(f"Error creating consultation with ID {consultation_id}.")
+                    logger.debug(f"Response: {response.data}")
 
         if response.status_code == 201:
-            consultation.availability_state = "PENDING"
-            consultation.save()
-            logger.info(f"Consultation {consultation_id} created.")
             destiny_board_id = request.data.get("destiny_board")
             board = Board.objects.get(id=destiny_board_id)
 
@@ -313,10 +349,6 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
                 CONSULTANCY_GROUP_NAME,
                 f"La solicitud de consulta '{consultation.tag}' fue creada para el tablero '{board}'."
             )
-        else:
-            logger.error(f"Error creating consultation with ID {consultation_id}.")
-            logger.debug(f"Response: {response.data}")
-
         return response
 
     @transaction.atomic

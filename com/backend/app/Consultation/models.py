@@ -79,15 +79,11 @@ class RequestConsultation(models.Model):
 
     def clean(self):
         self.clean_fields()
+
         if self.state == 'PENDING':
-            existing_requests = RequestConsultation.objects.filter(
-                consultation=self.consultation,
-                state='PENDING'
-            )
-            if self.pk:
-                existing_requests = existing_requests.exclude(pk=self.pk)
-            if existing_requests.exists():
-                raise ValidationError('Ya existe una solicitud de consulta pendiente para esta consulta.')
+            existing_pending_request = RequestConsultation.objects.filter(consultation=self.consultation, state='PENDING').exclude(pk=self.pk).first()
+            if existing_pending_request:
+                raise ValidationError('Ya existe una solicitud pendiente para esta consulta.')
 
     class Meta:
         verbose_name = ("Solicitud de consulta")

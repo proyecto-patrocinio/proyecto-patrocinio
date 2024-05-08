@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'django_filters',
     'Clients',
     'locality',
     'Card',
@@ -188,6 +189,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+
 }
 
 # User Register
@@ -216,3 +219,8 @@ CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', 'http://0.0.0.0').
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS', 'http://0.0.0.0').split(' ')
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_USE_SESSION = True
+
+# Tiempo de sesion y de inactividad
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_COOKIE_AGE = int(os.environ.get('SESSION_COOKIE_AGE', 720)) # inactive default time
+SESSION_SAVE_EVERY_REQUEST = True
