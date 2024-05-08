@@ -40,7 +40,7 @@ const InputRequestTicket = ({card,index}) => {
   return (
     <BaseTicket ticket={card} index={index} cardContentProps={cardContentProps}>
       <TicketMenu showMenu={showMenu}>
-        <MenuItem onClick={handleRejectedClick}>Rejected</MenuItem>
+        <MenuItem onClick={handleRejectedClick}>Rechazar</MenuItem>
       </TicketMenu>
     </BaseTicket>
   );

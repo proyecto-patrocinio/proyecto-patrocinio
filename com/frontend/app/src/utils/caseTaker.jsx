@@ -19,10 +19,8 @@ export const getConsultationList = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_CONSULTATIONS
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
                 method: 'GET',
-                headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const data = await response.json();
@@ -67,10 +65,8 @@ export const getConsultationsByAvailability = async (availability) => {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_FILTER_CONSULTATIONS_BY_AVAILABILITY
                 + availability;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
                 method: 'GET',
-                headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const data = await response.json();
@@ -97,10 +93,8 @@ export const getConsultancyBoard = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                     + process.env.REACT_APP_PATH_REQUEST_CONSULTANCY_BOARD;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url,{
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const requestConsultationsList = await response.json();
@@ -127,10 +121,8 @@ export const getConsultation = async (id) => {
                 + process.env.REACT_APP_PATH_CONSULTATIONS
                 + String(id)
                 + "/";
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
                 method: 'GET',
-                headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const data = await response.json();
@@ -162,14 +154,12 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
                     + "/";
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PATCH',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
                 [fieldName]: fieldValue
@@ -209,14 +199,12 @@ export async function deleteConsultation(consultationID) {
         + "/"
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
         })
 
@@ -258,14 +246,12 @@ export const updateConsultation = async (data) => {
         }
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PUT',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newData),
         })
@@ -306,14 +292,12 @@ export const createConsultationByDict = async (data) => {
         }
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newData),
         })
@@ -352,10 +336,8 @@ export async function getBoardLogs(days, boardID){
                     + boardID
                     + process.env.REACT_APP_EXTRA_PATH_BOARD_LOGS
                     + days;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url,{
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const logs = await response.json();
@@ -385,14 +367,12 @@ export async function deleteRequest(requestID) {
         + "/"
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
         });
 
@@ -421,14 +401,12 @@ export async function createRequest(consultationID, destinationBoardID) {
         + process.env.REACT_APP_PATH_REQUEST_CARDS
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
                 "consultation": consultationID,
@@ -472,14 +450,12 @@ export async function createConsultation(description, opponent, tag, clientID) {
         };
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newConsult),
         })

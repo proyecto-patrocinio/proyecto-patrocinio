@@ -66,7 +66,7 @@ const SettingsPage = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Dashboard title="CONFIGURACIONES">
+      <Dashboard title="CONFIGURACIÓN">
         <Grid container spacing={3} justifyContent="center">
           <Grid item xs={12} md={6}>
             <Paper sx={{ p: 4 }}>
@@ -116,7 +116,7 @@ const SettingsPage = () => {
                         fullWidth
                         sx={{ mb: 2 }}
                       >
-                        Save Changes
+                        Guardar Cambios
                       </Button>
                     </Grid>
                   </>

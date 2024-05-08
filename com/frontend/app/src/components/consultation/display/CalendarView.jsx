@@ -10,6 +10,8 @@ import { createEvent, deleteEvent, getCalendarByCard } from '../../../utils/cale
 import AlertSnackbar from '../../AlertSnackbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 
+require('moment/locale/es.js')
+
 const theme = createTheme();
 
 const localizer = momentLocalizer(moment);
@@ -130,6 +132,14 @@ const CalendarView = ({cardID}) => {
             week: 'Semana',
             day: 'Día',
             agenda: 'Agenda',
+            date: 'Fecha',
+            time: 'Hora',
+            event: 'Evento',
+            allDay: 'Todo el día',
+            work_week: 'Semana laboral',
+            yesterday: 'Ayer',
+            tomorrow: 'Mañana',
+            noEventsInRange: 'No hay eventos en este rango',
           }}
         />
 

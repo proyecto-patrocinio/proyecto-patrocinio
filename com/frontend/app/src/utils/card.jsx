@@ -19,14 +19,12 @@ async function moveCard(cardID, destinyPanelID) {
       + "/";
 
       const csrfToken = Cookies.get("csrftoken");
-      const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url, {
         method: 'PATCH',
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken,
-          'Authorization': `Token ${token}`
         },
         body: JSON.stringify({"panel": destinyPanelID,}),
       });
@@ -60,10 +58,8 @@ export const getCard = async(cardID) => {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_CARDS
       + cardID;
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
         method: 'GET',
-        headers: {'Authorization': `Token ${token}`}
       }
     );
     if (response.ok) {
@@ -97,14 +93,12 @@ export const updateCardField = async (id, fieldName, fieldValue) => {
                   + "/";
 
       const csrfToken = Cookies.get("csrftoken");
-      const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url, {
         method: 'PATCH',
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken,
-          'Authorization': `Token ${token}`
           },
         body: JSON.stringify({
           [fieldName]: fieldValue
@@ -139,14 +133,12 @@ export const deleteCard = async(cardID) => {
       + cardID;
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url,{
       method: 'DELETE',
       credentials: 'same-origin',
           headers: {
               'Content-Type': 'application/json',
               'X-CSRFToken': csrfToken,
-              'Authorization': `Token ${token}`
           },
     });
     if (response.ok) {

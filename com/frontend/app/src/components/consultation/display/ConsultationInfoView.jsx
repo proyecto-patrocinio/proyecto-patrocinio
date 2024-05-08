@@ -58,7 +58,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
     });
     const [fieldsError, setFieldsError] = useState({
         "description": "",
-        tag: "",
+        "tag": "",
         "opponent": "",
         "progress_state": "",
     });
@@ -90,11 +90,11 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
             setFieldsError(fieldsError);
         } else {
             try {
-                await updateConsultationField(consultationData.id, fieldKey, editedFields[fieldKey])
+                const editedValue = editedFields[fieldKey];
+                const englishValue = OPTION_ES_TO_EN[editedValue] || editedValue;
+                await updateConsultationField(consultationData.id, fieldKey, englishValue);
                 fieldsError[fieldKey] = "";
                 setFieldsError(fieldsError);
-                const editedValue = editedFields[fieldKey]
-                const englishValue = OPTION_ES_TO_EN[editedValue] || editedValue;
                 setConsultation((prevConsultation) => ({
                     ...prevConsultation,
                     [fieldKey]: englishValue,
@@ -104,12 +104,12 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 if (fieldKey === "tag") {
                     updateViewTag(editedFields.tag)
                 }
+                setUpdateViewCounter(updateViewCounter + 1);
             } catch(e) {
                 fieldsError[fieldKey] = "Error actualizando el campo. Por favor, inténtalo de nuevo."
                 setFieldsError(fieldsError);
             }
         }
-        setUpdateViewCounter(updateViewCounter + 1);
     };
 
     /**
@@ -221,7 +221,7 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                     fieldKey={"description"}
                 />
                 <TableRow>
-                <TableCell>Tiempo de creación (UTC):</TableCell>
+                <TableCell>Tiempo de creación:</TableCell>
                 <TableCell>{formatTimestamp(consultationData.time_stamp)}</TableCell>
                 </TableRow>
             </TableBody>

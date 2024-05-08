@@ -17,14 +17,12 @@ async function createPanel(titlePanel, boardID) {
 
     try {
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
             title: titlePanel,
@@ -69,14 +67,12 @@ export const updatPanelTitle = async (id, newTitle) => {
                     + "/";
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PATCH',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
                 "title": newTitle
@@ -118,14 +114,12 @@ export const deletePanel = async(id) => {
     try {
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
             credentials: 'same-origin',
             headers: {
                 'X-CSRFToken': csrfToken,
                 'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`
             },
         });
 
