@@ -89,12 +89,11 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
             fieldsError[fieldKey] = "Este campo no puede estar vacío."
             setFieldsError(fieldsError);
         } else {
+            const editedValue = editedFields[fieldKey];
+            const englishValue = OPTION_ES_TO_EN[editedValue] || editedValue;
             try {
-                const editedValue = editedFields[fieldKey];
-                const englishValue = OPTION_ES_TO_EN[editedValue] || editedValue;
                 await updateConsultationField(consultationData.id, fieldKey, englishValue);
-                fieldsError[fieldKey] = "";
-                setFieldsError(fieldsError);
+                setFieldsError({ ...fieldsError, [fieldKey]: "" })
                 setConsultation((prevConsultation) => ({
                     ...prevConsultation,
                     [fieldKey]: englishValue,
@@ -104,12 +103,15 @@ const ConsutationInfoView = ({consultation, updateViewTag=()=>{} }) => {
                 if (fieldKey === "tag") {
                     updateViewTag(editedFields.tag)
                 }
-                setUpdateViewCounter(updateViewCounter + 1);
             } catch(e) {
-                fieldsError[fieldKey] = "Error actualizando el campo. Por favor, inténtalo de nuevo."
-                setFieldsError(fieldsError);
+                if (fieldKey === "tag" && String(editedValue).length > 30) {
+                    setFieldsError({ ...fieldsError, [fieldKey]: "El campo 'tag' no puede tener mas de 30 caracteres." })
+                } else{
+                    setFieldsError({ ...fieldsError, [fieldKey]: String(e) })
+                }
             }
         }
+        setUpdateViewCounter(updateViewCounter + 1);
     };
 
     /**

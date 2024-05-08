@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from Board.models import Board
 
+
 class BoardUser(models.Model):
     user = models.ForeignKey(
         User,

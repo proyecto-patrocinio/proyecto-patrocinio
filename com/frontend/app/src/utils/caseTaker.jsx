@@ -185,6 +185,39 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
     }
 };
 
+/**
+ * Archive a Request Consultation.
+ * @param {int} requestID request consultation id.
+ */
+export async function archiveRequest(requestID) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+        + process.env.REACT_APP_PATH_CONSULTATIONS
+        + String(requestID)
+        + process.env.REACT_APP_EXTRA_PATH_ARCHIVED_REQUEST_CARDS;
+
+        const csrfToken = Cookies.get("csrftoken");
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+        });
+
+        if (!response.ok) {
+            console.error('Could not be archived for request Consultation', requestID ,'. Status code:', response.status);
+            throw new Error('No se pudo archivar la solicitud de consulta.');
+        };
+
+        console.info("Successful delete Request for Consultation ID:", requestID)
+    } catch (error) {
+        console.error('Error in delete request consultation.');
+        console.debug(error)
+        throw error;
+    };
+};
 
 /**
  * Delete a Consultation.

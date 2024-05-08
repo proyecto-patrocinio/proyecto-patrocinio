@@ -1,6 +1,7 @@
 from datetime import datetime
 import random
 from django.db import models
+from django.forms import ValidationError
 from django.urls import reverse
 from Consultation.choices import PROGRESS_STATES , AVAILABILITY_STATES, REQUEST_STATES
 from Clients.models import Client
@@ -74,6 +75,19 @@ class RequestConsultation(models.Model):
         else:
             self.resolution_timestamp = None
         super().save(*args, **kwargs)
+
+
+    def clean(self):
+        self.clean_fields()
+        if self.state == 'PENDING':
+            existing_requests = RequestConsultation.objects.filter(
+                consultation=self.consultation,
+                state='PENDING'
+            )
+            if self.pk:
+                existing_requests = existing_requests.exclude(pk=self.pk)
+            if existing_requests.exists():
+                raise ValidationError('Ya existe una solicitud de consulta pendiente para esta consulta.')
 
     class Meta:
         verbose_name = ("Solicitud de consulta")

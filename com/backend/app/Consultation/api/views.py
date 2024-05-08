@@ -194,6 +194,26 @@ class ConsultationViewSet(viewsets.ModelViewSet):
             logger.debug(f"Exception: {e}")
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR, data={"error": str(e)})
 
+    @action(detail=True, methods=['POST'])
+    def archived(self, request, *args, **kwargs):
+        self.permission_classes = [IsAuthenticated]
+        self.serializer_class = ConsultationRejectedSerializer
+        consultation = self.get_object()
+        logger.info(f"Consultation '{consultation}' commision was archived...")
+        try:
+            consultation.availability_state = "ARCHIVED"
+            consultation.save()
+            logger.info(f"Updated consultation {consultation.id} availability state to ARCHIVED.")
+            send_sync_group_message(
+                CONSULTANCY_GROUP_NAME,
+                f"La consulta '{consultation.tag}' fue archivada desde la consultoría."
+            )
+            return Response(status=status.HTTP_204_NO_CONTENT)
+
+        except Exception as e:
+            logger.error(f"Error archiving consultation {consultation.id}.")
+            logger.debug(f"Exception: {e}")
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR, data={"error": str(e)})
 
     @action(detail=True, methods=['POST'])
     def rejected(self, request, *args, **kwargs):
@@ -321,10 +341,6 @@ class RequestConsultationViewSet(viewsets.ModelViewSet):
 
             send_sync_group_message(
                 f"{BOARD_BASE_GROUP_NAME}{destiny_board.id}",
-                f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue eliminada."
-            )
-            send_sync_group_message(
-                CONSULTANCY_GROUP_NAME,
                 f"La solicitud de consulta '{consultation.tag}' para el tablero '{destiny_board}' fue eliminada."
             )
         else:
