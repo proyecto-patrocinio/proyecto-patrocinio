@@ -6,7 +6,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from '@mui/icons-material/Edit';
 import { TextareaAutosize } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-
+import AlertSnackbar from './AlertSnackbar';
 
 /**
  * A component for displaying an editable field in a table row.
@@ -43,8 +43,6 @@ const EditableFieldRow = ({ title, isEditing, value, onEdit, onSave, onChange, o
                 id="edit-field-textarea"
                 value={value}
                 onChange={(event) => onChange(event, fieldKey)}
-                error={!!error}
-                helperText={error}
                 style={{ width: '100%' }}
             />
             ) : (
@@ -69,6 +67,7 @@ const EditableFieldRow = ({ title, isEditing, value, onEdit, onSave, onChange, o
                 </IconButton>
             )}
         </TableCell>
+        <AlertSnackbar onClose={() => {}} message={error} severity={"error"}/>
         </TableRow>
     );
 };

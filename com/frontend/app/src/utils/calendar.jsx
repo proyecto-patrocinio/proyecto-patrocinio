@@ -16,10 +16,8 @@ export async function getCalendarByCard(cardID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_CALENDAR
             + `?card_id=${cardID}`;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const calendar = await response.json();
@@ -48,10 +46,8 @@ export async function getEventsByBoard(boardID) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_CALENDAR_EVENT
             + `?board_id=${boardID}`;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const events = await response.json();
@@ -81,14 +77,12 @@ export async function createEvent(eventData) {
             + process.env.REACT_APP_PATH_CALENDAR_EVENT;
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
                 },
                 body: JSON.stringify(eventData)
             });
@@ -121,14 +115,12 @@ export async function deleteEvent(eventID) {
             + eventID + '/';
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
         });
         if (response.ok) {

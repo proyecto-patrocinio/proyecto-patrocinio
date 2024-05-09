@@ -112,9 +112,10 @@ class PanelViewSet(ModelViewSet):
             return response
 
         else:
-            logger.error('Panel has cards assigned and cannot be deleted')
+            mns = "El panel tiene tarjetas asignadas y no puede ser eliminado."
+            logger.error(mns)
             return Response(
-                data={"message": "Panel has cards assigned and cannot be deleted"},
+                data={"message": mns},
                 status=status.HTTP_409_CONFLICT
             )
 

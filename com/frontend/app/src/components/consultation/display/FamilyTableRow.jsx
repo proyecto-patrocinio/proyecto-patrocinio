@@ -4,7 +4,7 @@ import TableCell from '@mui/material/TableCell';
 import Button from '@mui/material/Button';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
+import {ID_TYPE, SEX} from './dictionaryEs.jsx'
 
 /**
  * Functional component for displaying family information in a table row.
@@ -46,9 +46,9 @@ const FamilyTableRow = ({clientData}) => {
                             <ul>
                                 <li><strong>Nombre: </strong>{child.first_name}</li>
                                 <li><strong>Apellido: </strong>{child.last_name}</li>
-                                <li><strong>Tipo de documento: </strong>{child.id_type}</li>
+                                <li><strong>Tipo de documento: </strong>{ID_TYPE[child.id_type]}</li>
                                 <li><strong>Num. de documento: </strong>{child.id_value}</li>
-                                <li><strong>Sexo: </strong>{child.sex}</li>
+                                <li><strong>Sexo: </strong>{SEX[child.sex]}</li>
                                 <li><strong>Nacimiento: </strong>{child.birth_date}</li>
                                 <li><strong>Nacionalidad: </strong>{child.locality.province.nationality.name}</li>
                                 <li><strong>Provincia: </strong>{child.locality.province.name}</li>

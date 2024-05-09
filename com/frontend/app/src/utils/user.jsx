@@ -137,9 +137,9 @@ export async function sendConfirmationEmail(email){
       body: JSON.stringify({email: email})
     })
     if(response.ok) {
-      return{ok: true, detail: 'Successful send email.'};
+      return{ok: true, detail: "Envío de correo electrónico exitoso."};
     } else {
-      return{ok: false, detail: 'Failed to send email. Server response not okay.'};
+      return{ok: false, detail: "Fallo al enviar el correo electrónico. La respuesta del servidor no fue satisfactoria."};
     };
     
   } catch (error) {
@@ -168,9 +168,9 @@ export async function sendResetPasswordEmail(email){
       body: JSON.stringify({email: email})
     })
     if(response.ok) {
-      return{ok: true, detail: 'Successful send email.'};
+      return{ok: true, detail: "Envío de correo electrónico exitoso."};
     } else {
-      return{ok: false, detail: 'Failed to send email. Server response not okay.'};
+      return{ok: false, detail: "Fallo al enviar el correo electrónico. La respuesta del servidor no fue satisfactoria."};
     };
     
   } catch (error) {
@@ -254,18 +254,18 @@ export async function changePassword(password1, password2) {
     });
 
     if(response.ok) {
-      const mns = 'Successful Change Password.'
+      const mns = "Cambio de contraseña exitoso."
       console.info(mns);
       return {success: true, message: mns};
     } else {
       const error_mns = await response.json();
       console.error('Change Password Failure: ' + error_mns);
       return {success: false, message: String(
-        error_mns?.detail || error_mns?.new_password2 || 'Change Password Failure'
+        error_mns?.detail || error_mns?.new_password2 || "Fallo al cambiar la contraseña."
       )};
     };
   } catch (error) {
-    const mns = 'Unexpected error during change password.'
+    const mns = "Error inesperado durante el cambio de contraseña."
     console.error(mns);
     return {success: false, message:mns};
   };
@@ -308,17 +308,17 @@ export const updateUser = async (first_name, last_name) => {
 
       if (response.ok) {
           const user = await response.json();
-          const mns = 'Update User successfull.'
+          const mns = "Usuario actualizado exitosamente"
           console.info(mns);
           return {success: true, message: mns, user: user};
         } else {
-          const mns = 'Failed to update User.'
+          const mns = "Fallo al actualizar el usuario."
           console.error(mns);
           return {success: false, message: mns, user: null};
         };
 
       } catch (error) {
-        const mns = 'Unexpected error while updating User. Error: ' + error.message
+        const mns = "Error inesperado al actualizar el usuario. Error: " + error.message
         console.error(mns);
         console.debug(error);
         return {success: false, message: mns, user: null};

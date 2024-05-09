@@ -44,7 +44,12 @@ const App = () => {
             setIsLoggedIn(false);
         } else {
             getDataUserByToken(tokenUser).then( (user) => {
+                if(!user){
+                    window.localStorage.removeItem("loggedCaseManagerUser");
+                }
                 setIsLoggedIn(!!user)
+            }).catch(()=>{
+                window.localStorage.removeItem("loggedCaseManagerUser");
             });
     };
     }, []);

@@ -57,7 +57,7 @@ const CardPanel = ({ panel, index }) => {
       }}
     >
       <TicketMenu showMenu={showMenu} key={"menu"}>
-        <MenuItem onClick={handleDeleteClick}>Delete</MenuItem>
+        <MenuItem onClick={handleDeleteClick}>Eliminar</MenuItem>
       </TicketMenu>
     </div>
   );

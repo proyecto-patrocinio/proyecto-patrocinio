@@ -16,11 +16,9 @@ async function getDataBoard(boardID) {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_BOARD
       + boardID;
-      const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url,
         {
           method: 'GET',
-          headers: {'Authorization': `Token ${token}`}
         }
       );
     if (response.ok) {
@@ -51,11 +49,9 @@ export const fetchBoardsByUser = async (idUser) => {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_USERBOARD_BY_USER
       + idUser;
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url,
       {
         method: 'GET',
-        headers: {'Authorization': `Token ${token}`}
       }
     );
     if (response.ok) {
@@ -90,14 +86,12 @@ export const acceptRequestConsult = async(consultationID, panelID) => {
     + process.env.REACT_APP_EXTRA_PATH_ACCEPT_REQUEST_CARDS;
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       },
       body: JSON.stringify({
         "destiny_panel": panelID
@@ -133,14 +127,12 @@ export const rejectRequestConsult = async(id) => {
     + process.env.REACT_APP_EXTRA_PATH_REJECTED_REQUEST_CARDS;
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       },
     });
 
@@ -170,10 +162,8 @@ export const getListBoard = async () => {
       const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                   + process.env.REACT_APP_PATH_BOARD;
 
-      const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url, {
           method: 'GET',
-          headers: {'Authorization': `Token ${token}`}
         }
         );
       if (response.ok) {
@@ -206,14 +196,12 @@ export const updateBoardTitle = async (id, newTitle) => {
                   + "/";
 
       const csrfToken = Cookies.get("csrftoken");
-      const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url, {
         method: 'PATCH',
         credentials: 'same-origin',
         headers: {
           'Content-Type': 'application/json',
           'X-CSRFToken': csrfToken,
-          'Authorization': `Token ${token}`
         },
         body: JSON.stringify({
           "title": newTitle

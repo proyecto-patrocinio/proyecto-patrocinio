@@ -9,7 +9,7 @@ export async function getClientDNI2ID () {
     const clients = await getClientList()
     const clientDNItoIdMapping = {};
     clients.forEach((client) => {
-    clientDNItoIdMapping[client.id_value] = client.id;
+    clientDNItoIdMapping[String(client.id_value)] = client.id;
     });
     return clientDNItoIdMapping;
 };
@@ -53,8 +53,8 @@ export function getRandomNumber(max, min=1) {
  */
 export function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
-    const formattedDate = date.toLocaleDateString('es-AR',{timeZone:'UTC'});
-    const formattedTime = date.toLocaleTimeString('es-AR',{timeZone:'UTC'});
+    const formattedDate = date.toLocaleDateString('es-AR');
+    const formattedTime = date.toLocaleTimeString('es-AR');
     return `${formattedDate} ${formattedTime}`;
 };
 

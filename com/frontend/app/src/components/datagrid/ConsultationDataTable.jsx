@@ -51,7 +51,7 @@ const ConsultationDataTable = ({data}) => {
      */
     const formatConsultation = (ConsultationData) => {
       let consultationFormatted = ConsultationData
-      const clientIDValue = ConsultationData['client'].toUpperCase()  // PASSPORT use Upper Case
+      const clientIDValue = String(ConsultationData['client']).toUpperCase()  // PASSPORT use Upper Case
       const formatID = clientDNI2ID[clientIDValue];
       consultationFormatted.client = formatID;
       return consultationFormatted;

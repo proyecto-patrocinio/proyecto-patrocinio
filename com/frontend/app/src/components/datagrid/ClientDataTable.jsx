@@ -322,7 +322,7 @@ function ClientDataTable({ data }) {
     { field: 'vehicle', headerName: 'Vehículo', width: 120, editable: true,},
 
       //FAMILY
-      { field: 'partner_salary', headerName: 'Salario de la pareja', width: 125, editable: true},
+      { field: 'partner_salary', headerName: 'Salario de la pareja', width: 125, editable: true, 'type': 'number'},
       { field: 'children', headerName: 'Hijos', editable: true, width: 180,
         valueFormatter: (value) => (value?.value?.length || 0 ) + " hijos",
         renderEditCell: (params) => {

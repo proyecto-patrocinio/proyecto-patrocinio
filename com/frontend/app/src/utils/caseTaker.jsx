@@ -19,10 +19,8 @@ export const getConsultationList = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_CONSULTATIONS
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
                 method: 'GET',
-                headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const data = await response.json();
@@ -67,10 +65,8 @@ export const getConsultationsByAvailability = async (availability) => {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                 + process.env.REACT_APP_PATH_FILTER_CONSULTATIONS_BY_AVAILABILITY
                 + availability;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
                 method: 'GET',
-                headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const data = await response.json();
@@ -97,10 +93,8 @@ export const getConsultancyBoard = async () => {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
                     + process.env.REACT_APP_PATH_REQUEST_CONSULTANCY_BOARD;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url,{
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const requestConsultationsList = await response.json();
@@ -127,10 +121,8 @@ export const getConsultation = async (id) => {
                 + process.env.REACT_APP_PATH_CONSULTATIONS
                 + String(id)
                 + "/";
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
                 method: 'GET',
-                headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const data = await response.json();
@@ -162,14 +154,12 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
                     + "/";
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PATCH',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
                 [fieldName]: fieldValue
@@ -195,6 +185,39 @@ export const updateConsultationField = async (id, fieldName, fieldValue) => {
     }
 };
 
+/**
+ * Archive a Request Consultation.
+ * @param {int} requestID request consultation id.
+ */
+export async function archiveRequest(requestID) {
+    try {
+        const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
+        + process.env.REACT_APP_PATH_CONSULTATIONS
+        + String(requestID)
+        + process.env.REACT_APP_EXTRA_PATH_ARCHIVED_REQUEST_CARDS;
+
+        const csrfToken = Cookies.get("csrftoken");
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
+            },
+        });
+
+        if (!response.ok) {
+            console.error('Could not be archived for request Consultation', requestID ,'. Status code:', response.status);
+            throw new Error('No se pudo archivar la solicitud de consulta.');
+        };
+
+        console.info("Successful achive Request for Consultation ID:", requestID)
+    } catch (error) {
+        console.error('Error in archive request consultation.');
+        console.debug(error)
+        throw error;
+    };
+};
 
 /**
  * Delete a Consultation.
@@ -209,14 +232,12 @@ export async function deleteConsultation(consultationID) {
         + "/"
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'DELETE',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
         })
 
@@ -258,14 +279,12 @@ export const updateConsultation = async (data) => {
         }
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'PUT',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newData),
         })
@@ -306,14 +325,12 @@ export const createConsultationByDict = async (data) => {
         }
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newData),
         })
@@ -352,10 +369,8 @@ export async function getBoardLogs(days, boardID){
                     + boardID
                     + process.env.REACT_APP_EXTRA_PATH_BOARD_LOGS
                     + days;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url,{
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const logs = await response.json();
@@ -374,34 +389,32 @@ export async function getBoardLogs(days, boardID){
 /********************** CONSULTATION REQUEST *************************/
 
 /**
- * Delete a Request Consultation.
- * @param {int} requestID request consultation id.
+ * Delete pending Request by Consultation.
+ * @param {int} consultID consultation id to remove pending request.
  */
-export async function deleteRequest(requestID) {
+export async function deleteRequest(consultID) {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
-        + process.env.REACT_APP_PATH_REQUEST_CARDS
-        + String(requestID)
-        + "/"
+        + process.env.REACT_APP_PATH_CONSULTATIONS
+        + String(consultID)
+        + process.env.REACT_APP_EXTRA_PATH_CLEAR_REQUEST;
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
-            method: 'DELETE',
+            method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
         });
 
         if (!response.ok) {
-            console.error('Failed to DELETE request Consultation', requestID ,'. Status code:', response.status);
+            console.error('Failed to clear request for Consultation ', consultID ,'. Status code:', response.status);
             throw new Error('No se pudo eliminar la solicitud de consulta.');
         };
 
-        console.info("Successful delete Request for Consultation ID:", requestID)
+        console.info("Successful delete Request for Consultation ID:", consultID)
     } catch (error) {
         console.error('Error in delete request consultation.');
         console.debug(error)
@@ -421,14 +434,12 @@ export async function createRequest(consultationID, destinationBoardID) {
         + process.env.REACT_APP_PATH_REQUEST_CARDS
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify({
                 "consultation": consultationID,
@@ -472,14 +483,12 @@ export async function createConsultation(description, opponent, tag, clientID) {
         };
 
         const csrfToken = Cookies.get("csrftoken");
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': csrfToken,
-                'Authorization': `Token ${token}`
             },
             body: JSON.stringify(newConsult),
         })

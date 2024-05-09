@@ -48,10 +48,8 @@ export async function getClientList() {
     const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
       + process.env.REACT_APP_PATH_CLIENTS;
 
-      const token = window.localStorage.getItem('loggedCaseManagerUser');
       const response = await fetch(url, {
         method: 'GET',
-        headers: {'Authorization': `Token ${token}`}
     });
 
     if (response.ok) {
@@ -81,14 +79,12 @@ export async function createClient(clientData) {
       + process.env.REACT_APP_PATH_CLIENTS;
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       },
       body: JSON.stringify(clientData)
       });
@@ -121,14 +117,12 @@ export async function deleteClient(clientID) {
       + clientID + '/';
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'DELETE',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
         },
     });
     if (response.ok) {
@@ -162,14 +156,12 @@ export async function updateClient(clientData) {
       + "/";
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'PUT',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       },
       body: JSON.stringify(clientData)
     });
@@ -196,14 +188,12 @@ export async function addPhoneNumer(phone){
       + process.env.REACT_APP_PATH_TEL;
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       },
       body: JSON.stringify(phone)
     });
@@ -232,13 +222,11 @@ export async function deletePhoneNumer(phone){
       + phone.id + '/';
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'DELETE',
       credentials: 'same-origin',
       headers: {
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       }
     });
 
@@ -274,14 +262,12 @@ export async function createFamily(family){
       + process.env.REACT_APP_PATH_CREATE_CHILDS;
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       },
       body: JSON.stringify(family)
     });
@@ -318,13 +304,11 @@ export async function deleteChild(child){
       + child.id + '/';
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'DELETE',
       credentials: 'same-origin',
       headers: {
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       }
     });
 
@@ -368,14 +352,12 @@ export async function addChild(child){
   }
 
     const csrfToken = Cookies.get("csrftoken");
-    const token = window.localStorage.getItem('loggedCaseManagerUser');
     const response = await fetch(url, {
       method: 'POST',
       credentials: 'same-origin',
       headers: {
         'Content-Type': 'application/json',
         'X-CSRFToken': csrfToken,
-        'Authorization': `Token ${token}`
       },
       body: JSON.stringify(childFormatted)
     });
