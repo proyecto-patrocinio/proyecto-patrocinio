@@ -12,10 +12,8 @@ export async function getNationalityList() {
     try {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_NATIONALITY;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const nationalityList = await response.json();
@@ -42,10 +40,8 @@ export async function getProvinceList( NationalityID ) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_NATIONALITY
             + NationalityID;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
             if (response.ok) {
             const provinceList = await response.json();
@@ -72,10 +68,8 @@ export async function getLocalityList( ProvinceID ) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_PROVINCE
             + ProvinceID;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const localityList = await response.json();
@@ -102,10 +96,8 @@ export async function getLocalityByID( localityID ) {
         const url = process.env.REACT_APP_URL_BASE_API_REST_PATROCINIO
             + process.env.REACT_APP_PATH_LOCALITY
             + localityID;
-        const token = window.localStorage.getItem('loggedCaseManagerUser');
         const response = await fetch(url, {
             method: 'GET',
-            headers: {'Authorization': `Token ${token}`}
         });
         if (response.ok) {
             const locality = await response.json();

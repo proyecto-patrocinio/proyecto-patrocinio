@@ -69,7 +69,7 @@ const Comment = ({consultationID}) => {
 
             <TextField
                 id="outlined-textarea"
-                placeholder="Add a comment"
+                placeholder="Agregar comentario"
                 label="Agregar comentario"
                 multiline
                 variant="outlined"

@@ -1,4 +1,7 @@
 from django.contrib import admin
 from BoardUser.models import BoardUser
-# Register your models here.
-admin.site.register(BoardUser)
+
+
+@admin.register(BoardUser)
+class BoardUserAdmin(admin.ModelAdmin):
+    autocomplete_fields = ['user', 'board']

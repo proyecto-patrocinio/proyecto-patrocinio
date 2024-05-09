@@ -89,24 +89,22 @@ const Consultancy = () => {
    */
   const updateBackend = async(sourcePanel, destinationPanel, sourceCardIndex, newConsultancy) => {
     const cardToMove = sourcePanel.cards[sourceCardIndex];
-    const requestAndConsultationID = cardToMove.consultation;
+    const consultationID = cardToMove.consultation;
+    // const requestID = cardToMove.id;
     const destinyPanelID = destinationPanel.id; // Destination boards OR Input panel with the consultations.
     const originPanelID = sourcePanel.id;
 
     try {
-      if (originPanelID !== PANEL_INPUT_CONSULTATION_ID){
-        // Canceler current Request Consultation.
-        await deleteRequest(requestAndConsultationID);
-      } else {
-        // ELSE No have a current request consultation.
+      if (originPanelID === PANEL_INPUT_CONSULTATION_ID){
+        // No have a current request consultation.
         newConsultancy.panels[0].number_cards --;
       }
 
       if( destinyPanelID !== PANEL_INPUT_CONSULTATION_ID){
         // Generate new Request Consultation
-        await createRequest(requestAndConsultationID, destinyPanelID);
+        await createRequest(consultationID, destinyPanelID);
       } else {
-        // ELSE No generate a new request consultation.
+        await deleteRequest(consultationID);
         newConsultancy.panels[0].number_cards ++;
       }
       setConsultancy(newConsultancy);

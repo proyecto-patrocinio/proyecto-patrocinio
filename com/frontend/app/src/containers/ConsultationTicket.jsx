@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import {useState} from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import { deleteConsultation } from '../utils/caseTaker.jsx';
+import { archiveRequest } from '../utils/caseTaker.jsx';
 import TicketMenu from '../components/ticket/TicketMenu.jsx';
 import BaseTicket from '../components/ticket/BaseTicket.jsx';
 
@@ -30,7 +30,7 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   }
 
   const handleDeleteClick = async() => {
-    await deleteConsultation(card.consultation);
+    await archiveRequest(card.consultation);
     setIsDeleted(true);
     reduce_number_cards();
   };
@@ -43,7 +43,7 @@ const ConsultationTicket = ({card, index, reduce_number_cards}) => {
   return (
     <BaseTicket ticket={card} index={index} cardContentProps={cardContentProps}>
       <TicketMenu showMenu={showMenu}>
-        <MenuItem onClick={handleDeleteClick}>Eliminar Consulta</MenuItem>
+        <MenuItem onClick={handleDeleteClick}>Archivar Consulta</MenuItem>
       </TicketMenu>
     </BaseTicket>
   );

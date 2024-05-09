@@ -37,7 +37,7 @@ class Client(Person):
 
     class Meta:
         verbose_name_plural = "Consultantes"
-        verbose_name = "Consulta"
+        verbose_name = "Consultante"
 
 
 
