@@ -1,4 +1,7 @@
 import json
+from unittest import mock
+from unittest.mock import Mock, patch
+from django.db import DEFAULT_DB_ALIAS
 from rest_framework.test import APITestCase, APIRequestFactory
 from rest_framework.test import force_authenticate
 from rest_framework.test import APIClient
@@ -77,20 +80,25 @@ class RequestConsultationViewSetTestCase(APITestCase):
         RequestConsultation.objects.all().delete()
         return super().tearDown()
 
-    def test_create_request_consultation(self):
+    @mock.patch('Consultation.api.views.connection')
+    def test_create_request_consultation(self, mock_connections):
+        mock_connections.__getitem__(DEFAULT_DB_ALIAS).cursor.return_value.__enter__.return_value
+
         data = {
             'consultation': self.consultation.pk,
             'destiny_board': self.board.pk,
             'resolution_timestamp': "",
             "state": "PENDING",
         }
+
         request = self.factory.post(self.url, data)
         force_authenticate(request, user=self.user)
         response = self.view(request)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-
-    def test_create_request_consultation_failed(self):
+    @mock.patch('Consultation.api.views.connection')
+    def test_create_request_consultation_failed(self, mock_connections):
+        mock_connections.__getitem__(DEFAULT_DB_ALIAS).cursor.return_value.__enter__.return_value
         consultation_assigned = Consultation.objects.create(
             availability_state="ASSIGNED", progress_state="TODO", time_stamp=dt.now(),
             description="dummy", client=self.consultant, opponent="dummy", tag="dummy"
@@ -106,7 +114,7 @@ class RequestConsultationViewSetTestCase(APITestCase):
         response = self.view(request)
         self.assertEqual(response.status_code, status.HTTP_409_CONFLICT)
         self.assertEqual(
-            "Consultation 2 is already assigned or there exists a pending request" ,
+            "La consulta 2 ya está asignada o rechazada" ,
             response.data['error']
         )
 

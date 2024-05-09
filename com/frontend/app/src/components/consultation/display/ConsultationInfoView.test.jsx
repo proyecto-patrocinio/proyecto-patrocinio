@@ -36,7 +36,7 @@ describe('ConsutationInfoView Component', () => {
     expect(screen.getByText('Por hacer')).toBeInTheDocument();
     expect(screen.getByText('Descripción:')).toBeInTheDocument();
     expect(screen.getByText('Test Description')).toBeInTheDocument();
-    expect(screen.getByText('Tiempo de creación (UTC):')).toBeInTheDocument();
+    expect(screen.getByText('Tiempo de creación:')).toBeInTheDocument();
 
     // Change the value in the edit field
     fireEvent.click(component.container.querySelector("tr:nth-of-type(6) [data-testid='EditIcon']"));
